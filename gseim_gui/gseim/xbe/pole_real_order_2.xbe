@@ -1,0 +1,79 @@
+xbe name=pole_real_order_2 integrate=yes
+#
+#           a
+# y = ------------ x
+#     (s-alpha)**2
+#
+Jacobian: constant
+input_vars: x
+output_vars: y
+aux_vars: z1
+iparms:
+sparms:
+rparms: a=1  alpha=1
+stparms: y_st=0
+igparms:
+outparms:
+n_f= 2
+f_1: d_dt(y)
+f_2: d_dt(z1)
+n_g= 2
+g_1: z1 y
+g_2: z1 x
+C:
+prototypes:
+variables:
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr [nvr_y] = 0.0;
+     X.val_aux[na_z1] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.stprm[nst_y_st];
+       X.val_aux[na_z1] = 0.0;
+     } else if (G.flags[G.i_implicit]) {
+       X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
+       X.h[nf_2] = X.val_aux[na_z1];
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     a = X.rprm[nr_a];
+     alpha = X.rprm[nr_alpha];
+     x = X.val_vr[nvr_x];
+     y = X.val_vr[nvr_y];
+     z1 = X.val_aux[na_z1];
+
+     if (G.flags[G.i_explicit]) {
+       if (G.flags[G.i_alg_loop]) {
+         X.h[nf_1] = y - X.val_vr_u[nvr_y];
+         X.h[nf_2] = z1 - X.val_aux_u[na_z1];
+       } else {
+         X.f[nf_1] = alpha*y + a*x;
+         X.f[nf_2] = alpha*z1 + x;
+       }
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = alpha*y + a*x;
+         X.g[ng_2] = alpha*z1 + x;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_x] = a;
+         J.dgdvr[ng_1][nvr_y] = alpha;
+
+         J.dgdvr [ng_2][nvr_x] = 1.0;
+         J.dgdaux[ng_2][na_z1] = alpha;
+       }
+     }
+     return;
+   }
+endC
+endxbe

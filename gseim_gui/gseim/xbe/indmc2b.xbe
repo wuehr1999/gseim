@@ -1,0 +1,131 @@
+xbe name=indmc2b evaluate=yes
+# induction motor model: current calculation
+# (use this along with indmc2a.xbe)
+Jacobian: variable
+input_vars: psids psidr psiqs psiqr
+output_vars: ia ib ic
+aux_vars:
+iparms:
+sparms:
+rparms:
++  lls=0.002
++  lm=0.0693
++  llr=0.002
++  ls=0
++  lr=0
++  le=0
++  l1=0
+stparms:
+igparms:
+outparms:
++  ia
++  ib
++  ic
+n_f= 0
+n_g= 3
+g_1: ia psiqs psiqr
+g_2: ib psiqs psiqr psids psidr
+g_3: ic psiqs psiqr psids psidr
+C:
+prototypes:
+variables:
+   double ids,iqs,idr,iqr,wr;
+   double ids_psids,ids_psidr,iqs_psiqs,iqs_psiqr;
+   static double k4=0;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     k4 = 0.5*(sqrt(3.0));
+
+     lls = X.rprm[nr_lls];
+     lm  = X.rprm[nr_lm ];
+     llr = X.rprm[nr_llr];
+
+     ls = lls + lm;
+     lr = llr + lm;
+     le = (ls*lr/lm) - lm;
+     l1 = lr/(lm*le);
+
+     X.rprm[nr_ls] = ls;
+     X.rprm[nr_lr] = lr;
+     X.rprm[nr_le] = le;
+     X.rprm[nr_l1] = l1;
+
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_ia] = 0.0;
+     X.val_vr[nvr_ib] = 0.0;
+     X.val_vr[nvr_ic] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_ia] = X.val_vr[nvr_ia];
+     X.outprm[no_ib] = X.val_vr[nvr_ib];
+     X.outprm[no_ic] = X.val_vr[nvr_ic];
+     return;
+   }
+
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       le  = X.rprm[nr_le];
+       l1  = X.rprm[nr_l1];
+
+       psids = X.val_vr[nvr_psids];
+       psidr = X.val_vr[nvr_psidr];
+       psiqs = X.val_vr[nvr_psiqs];
+       psiqr = X.val_vr[nvr_psiqr];
+
+       ids = (l1*psids) - (psidr/le);
+       iqs = (l1*psiqs) - (psiqr/le);
+
+       X.val_vr[nvr_ia] = iqs;
+       X.val_vr[nvr_ib] = -0.5*iqs-k4*ids;
+       X.val_vr[nvr_ic] = -0.5*iqs+k4*ids;
+     } else if (G.flags[G.i_implicit]) {
+       le  = X.rprm[nr_le ];
+       l1  = X.rprm[nr_l1 ];
+
+       ia = X.val_vr[nvr_ia];
+       ib = X.val_vr[nvr_ib];
+       ic = X.val_vr[nvr_ic];
+
+       psids = X.val_vr[nvr_psids];
+       psidr = X.val_vr[nvr_psidr];
+       psiqs = X.val_vr[nvr_psiqs];
+       psiqr = X.val_vr[nvr_psiqr];
+
+       ids = (l1*psids) - (psidr/le);
+       ids_psids = l1;
+       ids_psidr = -1.0/le;
+
+       iqs = (l1*psiqs) - (psiqr/le);
+       iqs_psiqs = l1;
+       iqs_psiqr = -1.0/le;
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = ia - iqs;
+         X.g[ng_2] = ib -(-0.5*iqs-k4*ids);
+         X.g[ng_3] = ic -(-0.5*iqs+k4*ids);
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_ia] = 1.0;
+         J.dgdvr[ng_1][nvr_psiqs] = -iqs_psiqs;
+         J.dgdvr[ng_1][nvr_psiqr] = -iqs_psiqr;
+
+         J.dgdvr[ng_2][nvr_ib] = 1.0;
+         J.dgdvr[ng_2][nvr_psids] = k4*ids_psids;
+         J.dgdvr[ng_2][nvr_psidr] = k4*ids_psidr;
+         J.dgdvr[ng_2][nvr_psiqs] = 0.5*iqs_psiqs;
+         J.dgdvr[ng_2][nvr_psiqr] = 0.5*iqs_psiqr;
+
+         J.dgdvr[ng_3][nvr_ic] = 1.0;
+         J.dgdvr[ng_3][nvr_psids] = -k4*ids_psids;
+         J.dgdvr[ng_3][nvr_psidr] = -k4*ids_psidr;
+         J.dgdvr[ng_3][nvr_psiqs] = 0.5*iqs_psiqs;
+         J.dgdvr[ng_3][nvr_psiqr] = 0.5*iqs_psiqr;
+       }
+     }
+     return;
+   }
+endC
+endxbe

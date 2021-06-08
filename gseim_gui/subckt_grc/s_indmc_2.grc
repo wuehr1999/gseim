@@ -1,0 +1,252 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    generate_options: hb
+    id: s_indmc_2
+    placement: (0,0)
+    run: 'True'
+    sizing_mode: fixed
+    title: s_indmc_2
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: abc_to_dq$0
+  id: abc_to_dq
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 72.0]
+    rotation: 0
+    state: true
+- name: indmc2a$0
+  id: indmc2a
+  parameters:
+    comment: ''
+    j: j
+    llr: llr
+    lls: lls
+    lm: lm
+    name: none
+    poles: poles
+    rr: rr
+    rs: rs
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 56.0]
+    rotation: 0
+    state: true
+- name: indmc2b$0
+  id: indmc2b
+  parameters:
+    comment: ''
+    llr: llr
+    lls: lls
+    lm: lm
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 88.0]
+    rotation: 0
+    state: true
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    label: wrm
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 32.0]
+    rotation: 0
+    state: true
+- name: pad_sink$1
+  id: pad_sink
+  parameters:
+    comment: ''
+    label: ia
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [880, 96.0]
+    rotation: 0
+    state: true
+- name: pad_sink$2
+  id: pad_sink
+  parameters:
+    comment: ''
+    label: ib
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [880, 136.0]
+    rotation: 0
+    state: true
+- name: pad_sink$3
+  id: pad_sink
+  parameters:
+    comment: ''
+    label: ic
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [880, 176.0]
+    rotation: 0
+    state: true
+- name: pad_source$0
+  id: pad_source
+  parameters:
+    comment: ''
+    label: va
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [392, 64.0]
+    rotation: 0
+    state: true
+- name: pad_source$1
+  id: pad_source
+  parameters:
+    comment: ''
+    label: vb
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [392, 104.0]
+    rotation: 0
+    state: true
+- name: pad_source$2
+  id: pad_source
+  parameters:
+    comment: ''
+    label: vc
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [392, 144.0]
+    rotation: 0
+    state: true
+- name: pad_source$3
+  id: pad_source
+  parameters:
+    comment: ''
+    label: tl
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [528, 184.0]
+    rotation: 0
+    state: true
+connections:
+- [abc_to_dq$0, '0', indmc2a$0, '0']
+- [abc_to_dq$0, '1', indmc2a$0, '1']
+- [indmc2a$0, '0', pad_sink$0, '0']
+- [indmc2a$0, '1', indmc2b$0, '0']
+- [indmc2a$0, '2', indmc2b$0, '1']
+- [indmc2a$0, '3', indmc2b$0, '2']
+- [indmc2a$0, '4', indmc2b$0, '3']
+- [indmc2b$0, '0', pad_sink$1, '0']
+- [indmc2b$0, '1', pad_sink$2, '0']
+- [indmc2b$0, '2', pad_sink$3, '0']
+- [pad_source$0, '0', abc_to_dq$0, '0']
+- [pad_source$1, '0', abc_to_dq$0, '1']
+- [pad_source$2, '0', abc_to_dq$0, '2']
+- [pad_source$3, '0', indmc2a$0, '2']
+gparms:
+  j: '0.089'
+  llr: '0.002'
+  lls: '0.002'
+  lm: '0.0693'
+  poles: '4'
+  rr: '0.816'
+  rs: '0.435'
+outvars:
+  ia:
+  - outvar
+  - - indmc2b$0
+    - ia
+  ib:
+  - outvar
+  - - indmc2b$0
+    - ib
+  ic:
+  - outvar
+  - - indmc2b$0
+    - ic
+  tem:
+  - outvar
+  - - indmc2a$0
+    - tem
+  wrm:
+  - outvar
+  - - indmc2a$0
+    - wrm
+solve_blocks: []
+output_blocks:
+- d_parms:
+    append: 'no'
+    filename: m_indmc_1.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: none
+    t_start: none
+  index_slv: '0'
+  name: out$0
+  outvars: []

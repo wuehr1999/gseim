@@ -1,0 +1,38 @@
+id: integrator_1
+label: integrator_1
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: k
+    label: k
+    dtype: float
+    default: '1.0'
+-   id: tau
+    label: tau
+    dtype: float
+    default: '1.0'
+-   id: y_st
+    label: y_st
+    dtype: float
+    default: '0.0'
+-   id: y_ig
+    label: y_ig
+    dtype: float
+    default: '0.0'
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- x
+- y

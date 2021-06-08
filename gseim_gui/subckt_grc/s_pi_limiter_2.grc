@@ -1,0 +1,158 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    generate_options: hb
+    hier_block_src_path: '.:'
+    id: s_pi_limiter_2
+    max_nouts: '0'
+    placement: (0,0)
+    run: 'True'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: PI control (limiter)
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: integrator_1$0
+  id: integrator_1
+  parameters:
+    comment: ''
+    k: k
+    name: none
+    tau: tau
+    y_ig: '0.0'
+    y_st: y20
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 184.0]
+    rotation: 0
+    state: true
+- name: limiter$0
+  id: limiter
+  parameters:
+    comment: ''
+    name: none
+    xmax: xmax
+    xmin: xmin
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [448, 184.0]
+    rotation: 0
+    state: true
+- name: limiter$1
+  id: limiter
+  parameters:
+    comment: ''
+    name: none
+    xmax: xmax
+    xmin: xmin
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [656, 136.0]
+    rotation: 0
+    state: true
+- name: multscl$0
+  id: multscl
+  parameters:
+    comment: ''
+    k: k
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 120.0]
+    rotation: 0
+    state: true
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    label: y
+    num_streams: '1'
+    optional: 'False'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 136.0]
+    rotation: 0
+    state: true
+- name: pad_source$0
+  id: pad_source
+  parameters:
+    comment: ''
+    label: x
+    num_streams: '1'
+    optional: 'False'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 152.0]
+    rotation: 0
+    state: true
+- name: sum_2$0
+  id: sum_2
+  parameters:
+    comment: ''
+    k1: '1.0'
+    k2: '1.0'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [552, 120.0]
+    rotation: 0
+    state: true
+connections:
+- [integrator_1$0, '0', limiter$0, '0']
+- [limiter$0, '0', sum_2$0, '1']
+- [limiter$1, '0', pad_sink$0, '0']
+- [multscl$0, '0', sum_2$0, '0']
+- [pad_source$0, '0', integrator_1$0, '0']
+- [pad_source$0, '0', multscl$0, '0']
+- [sum_2$0, '0', limiter$1, '0']
+gparms:
+  k: '1'
+  tau: '1'
+  xmax: '10'
+  xmin: '-10'
+  y20: '0'
+outvars:
+  x:
+  - connection
+  - - pad_source$0
+    - '0'
+    - multscl$0
+    - '0'
+  y:
+  - connection
+  - - limiter$1
+    - '0'
+    - pad_sink$0
+    - '0'
+solve_blocks: []
+output_blocks: []

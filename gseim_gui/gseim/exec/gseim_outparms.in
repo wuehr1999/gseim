@@ -1,0 +1,34 @@
+# used only by GSIEM
+
+begin_file
+  begin_parm
+    keyword: filename
+    options: none
+    default: none
+  end_parm
+  begin_parm
+    keyword: append
+    options: yes no
+    default: no
+  end_parm
+  begin_parm
+    keyword: limit_lines
+    options: none
+    default: 1000000
+  end_parm
+  begin_parm
+    keyword: fixed_interval
+    options: none
+    default: none
+  end_parm
+  begin_parm
+    keyword: t_start
+    options: none
+    default: none
+  end_parm
+  begin_parm
+    keyword: t_end
+    options: none
+    default: none
+  end_parm
+end_file

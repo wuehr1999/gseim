@@ -1,0 +1,39 @@
+id: s_pi_limiter_2
+label: PI control (limiter)
+category: '[GRC Hier Blocks]'
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: y20
+    label: y20
+    default: '0'
+-   id: k
+    label: k
+    default: '1'
+-   id: tau
+    label: tau
+    default: '1'
+-   id: xmin
+    label: xmin
+    default: '-10'
+-   id: xmax
+    label: xmax
+    default: '10'
+outvars:
+- x
+- y
+
+inputs:
+-   label: x
+    dtype: float
+    vlen: 1
+
+outputs:
+-   label: y
+    dtype: float
+    vlen: 1
+grc_source: ~/gseim_gui/subckt_grc/s_pi_limiter_2.grc
+

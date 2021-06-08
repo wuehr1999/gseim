@@ -1,0 +1,50 @@
+id: sum_4
+label: sum_4
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: k1
+    label: k1
+    dtype: float
+    default: '1.0'
+-   id: k2
+    label: k2
+    dtype: float
+    default: '1.0'
+-   id: k3
+    label: k3
+    dtype: float
+    default: '1.0'
+-   id: k4
+    label: k4
+    dtype: float
+    default: '1.0'
+
+inputs:
+-   domain: stream
+    label: x1
+    dtype: float
+-   domain: stream
+    label: x2
+    dtype: float
+-   domain: stream
+    label: x3
+    dtype: float
+-   domain: stream
+    label: x4
+    dtype: float
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- x1
+- x2
+- x3
+- x4
+- y

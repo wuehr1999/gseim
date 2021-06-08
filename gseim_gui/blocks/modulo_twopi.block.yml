@@ -1,0 +1,16 @@
+id: modulo_twopi
+label: modulo_twopi
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+
+outvars:
+- x

@@ -1,0 +1,168 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    generate_options: circuit
+    id: test_filter_2
+    placement: (0,0)
+    run: 'True'
+    sizing_mode: fixed
+    title: test_filter_2
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: filter_1$0
+  id: filter_1
+  parameters:
+    a0: '1'
+    a1: '0'
+    a2: '0'
+    a3: '0'
+    a4: '0'
+    a5: '0'
+    b0: '10000'
+    b1: '20'
+    b2: '1'
+    b3: '0'
+    b4: '0'
+    b5: '0'
+    comment: ''
+    f0: '0.0'
+    name: none
+    scale_coef: '0'
+    x_sv: '0.0'
+    y_sv: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [360, 192.0]
+    rotation: 0
+    state: true
+- name: filter_1$0$0
+  id: filter_1
+  parameters:
+    a0: '0'
+    a1: '100000'
+    a2: '0'
+    a3: '0'
+    a4: '0'
+    a5: '0'
+    b0: '1'
+    b1: '1'
+    b2: '0'
+    b3: '0'
+    b4: '0'
+    b5: '0'
+    comment: ''
+    f0: '0.0'
+    name: none
+    scale_coef: '0'
+    x_sv: '0.0'
+    y_sv: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [472, 192.0]
+    rotation: 0
+    state: true
+- name: srcac$0
+  id: srcac
+  parameters:
+    a: '1'
+    comment: ''
+    dc: '0'
+    f_hz: '100'
+    name: none
+    phi_deg: '0'
+    t0: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [240, 192.0]
+    rotation: 0
+    state: true
+connections:
+- [filter_1$0, '0', filter_1$0$0, '0']
+- [srcac$0, '0', filter_1$0, '0']
+gparms: {}
+outvars:
+  x:
+  - outvar
+  - - filter_1$0
+    - x
+  y1:
+  - outvar
+  - - filter_1$0$0
+    - y
+solve_blocks:
+- d_parms:
+    algorithm_x_startup: explicit
+    algorithm_x_trns: modified_euler
+    block_index: '0'
+    bs23_fctr_max: '1.1'
+    bs23_fctr_min: '0.8'
+    bs23_tolr: '1.0e-8'
+    delt_max_x: none
+    delt_min_x: none
+    delt_small: '1.0e-12'
+    factor_step_decrease: '0.6'
+    factor_step_increase: '1.5'
+    initial_sol: initialize
+    initial_sol_file: none
+    itmax_stepred: '20'
+    itmax_trbdf2: '20'
+    itmax_trns: '100000'
+    output_solution_file: none
+    rkf45_fctr_max: '1.1'
+    rkf45_fctr_min: '0.8'
+    rkf45_tolr: '1.0e-8'
+    solve_type: trns
+    t_end: 1000m
+    t_start: '0'
+    t_startup: '0.0'
+    trbdf2_tolr: '1.0e-5'
+    tstep0_x: 0.05m
+    write_iter_n_x: '1000'
+    write_matrix_x: 'no'
+    write_time_x: 'no'
+    x_fixed_tstep: 'no'
+    x_nr_check_rhs2: 'yes'
+    x_nr_dmp: 'no'
+    x_nr_dmp0: 'no'
+    x_nr_dmp_itermax: '50'
+    x_nr_dmp_itermax0: '50'
+    x_nr_dmp_k: '0.2'
+    x_nr_dmp_k0: '0.2'
+    x_nr_eps_rhs: '1.0e-10'
+    x_nr_itermax: '500'
+    x_nr_itermax0: '500'
+    x_nr_write_rhs2: 'no'
+  index: '0'
+  name: s1
+  output_blocks:
+  - out$0
+output_blocks:
+- d_parms:
+    append: 'no'
+    filename: filter_2.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: none
+    t_start: none
+  index_slv: '0'
+  name: out$0
+  outvars:
+  - x
+  - y1

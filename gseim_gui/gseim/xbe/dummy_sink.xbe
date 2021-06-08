@@ -1,0 +1,22 @@
+xbe name=dummy_sink evaluate=yes
+#
+# This template will be used only by the GUI, not by the engine.
+#
+Jacobian: constant
+input_vars: y
+output_vars:
+aux_vars:
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: y
+n_f= 0
+n_g= 0
+C:
+prototypes:
+variables:
+source:
+endC
+endxbe

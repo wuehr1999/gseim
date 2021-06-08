@@ -1,0 +1,73 @@
+MAKEFILE = mkgsiem
+GPP = g++
+OPT = -O3
+#OPT = -g -W -Wall
+OPT1 = -O2
+
+OBJ  = \
+  gsmain.o \
+  cctfile.o \
+  global.o \
+  utils.o \
+  routines1.o \
+  xbelib.o \
+  xbeusr.o \
+  xbejac.o \
+  circuit.o \
+  solveblocks.o \
+  solveparm.o \
+  sysmat.o \
+  ijmat.o \
+  knuthmat.o \
+  matop.o \
+  matgnrl1.o \
+  matrix_2.o \
+  user_f.o \
+  getxbe.o \
+  subxbe.o
+
+PROGRAM = gsmain
+all: $(PROGRAM)
+gsmain: $(OBJ) 
+	$(GPP) $(OPT) $(OBJ) -o gsmain
+
+gsmain.o: gsmain.cpp
+	$(GPP) $(OPT) -c gsmain.cpp
+cctfile.o: cctfile.cpp
+	$(GPP) $(OPT) -c cctfile.cpp
+global.o: global.cpp
+	$(GPP) $(OPT) -c global.cpp
+utils.o: utils.cpp
+	$(GPP) $(OPT) -c utils.cpp
+routines1.o: routines1.cpp
+	$(GPP) $(OPT1) -c routines1.cpp
+xbelib.o: xbelib.cpp
+	$(GPP) $(OPT) -c xbelib.cpp
+xbeusr.o: xbeusr.cpp
+	$(GPP) $(OPT) -c xbeusr.cpp
+xbejac.o: xbejac.cpp
+	$(GPP) $(OPT) -c xbejac.cpp
+circuit.o: circuit.cpp
+	$(GPP) $(OPT) -c circuit.cpp
+solveblocks.o: solveblocks.cpp
+	$(GPP) $(OPT) -c solveblocks.cpp
+solveparm.o: solveparm.cpp
+	$(GPP) $(OPT) -c solveparm.cpp
+sysmat.o: sysmat.cpp
+	$(GPP) $(OPT) -c sysmat.cpp
+ijmat.o: ijmat.cpp
+	$(GPP) $(OPT) -c ijmat.cpp
+knuthmat.o: knuthmat.cpp
+	$(GPP) $(OPT) -c knuthmat.cpp
+matop.o: matop.cpp
+	$(GPP) $(OPT) -c matop.cpp
+matgnrl1.o: matgnrl1.cpp
+	$(GPP) $(OPT) -c matgnrl1.cpp
+matrix_2.o: matrix_2.cpp
+	$(GPP) $(OPT) -c matrix_2.cpp
+user_f.o: user_f.cpp
+	$(GPP) $(OPT1) -c user_f.cpp
+getxbe.o: getxbe.cpp
+	$(GPP) $(OPT) -c getxbe.cpp
+subxbe.o: subxbe.cpp
+	$(GPP) $(OPT) -c subxbe.cpp

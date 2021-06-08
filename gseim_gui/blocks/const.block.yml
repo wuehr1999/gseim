@@ -1,0 +1,24 @@
+id: const
+label: const
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: k
+    label: k
+    dtype: float
+    default: '0'
+-   id: k_scale
+    label: k_scale
+    dtype: float
+    default: '1'
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- y

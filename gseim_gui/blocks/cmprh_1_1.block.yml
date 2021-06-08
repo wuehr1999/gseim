@@ -1,0 +1,58 @@
+id: cmprh_1_1
+label: cmprh_1_1
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: y_low
+    label: y_low
+    dtype: float
+    default: '-1.0'
+-   id: y_high
+    label: y_high
+    dtype: float
+    default: '1.0'
+-   id: x0
+    label: x0
+    dtype: float
+    default: '0.0'
+-   id: h
+    label: h
+    dtype: float
+    default: '0.1'
+-   id: epsl
+    label: epsl
+    dtype: float
+    default: '1.0e-6'
+-   id: delt_min
+    label: delt_min
+    dtype: float
+    default: '0.001'
+-   id: delt_nrml
+    label: delt_nrml
+    dtype: float
+    default: '0.01'
+-   id: flag_invert
+    label: flag_invert
+    dtype: float
+    default: '0'
+-   id: flag_quad
+    label: flag_quad
+    dtype: float
+    default: '0'
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- x
+- y

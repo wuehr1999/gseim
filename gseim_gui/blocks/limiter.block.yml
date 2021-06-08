@@ -1,0 +1,29 @@
+id: limiter
+label: limiter
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: xmin
+    label: xmin
+    dtype: float
+    default: '-1'
+-   id: xmax
+    label: xmax
+    dtype: float
+    default: '1'
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- x
+- y

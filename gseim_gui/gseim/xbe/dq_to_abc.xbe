@@ -1,0 +1,102 @@
+xbe name=dq_to_abc evaluate=yes
+Jacobian: variable
+input_vars: d q cost sint
+output_vars: a b c
+aux_vars: alpha beta
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: d q a b c
+n_f= 0
+n_g= 5
+g_1: alpha cost sint d q 
+g_2: beta cost sint d q 
+g_3: a alpha
+g_4: b alpha beta
+g_5: c alpha beta
+C:
+prototypes:
+variables:
+   static double k1=0,k2=0,k3=0;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     k1 = 2.0/3.0;
+     k2 = 1.0/3.0;
+     k3 = 1.0/(sqrt(3.0));
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_d] = X.val_vr[nvr_d];
+     X.outprm[no_q] = X.val_vr[nvr_q];
+     X.outprm[no_a] = X.val_vr[nvr_a];
+     X.outprm[no_b] = X.val_vr[nvr_b];
+     X.outprm[no_c] = X.val_vr[nvr_c];
+     return;
+   }
+   cost = X.val_vr[nvr_cost];
+   sint = X.val_vr[nvr_sint];
+   d = X.val_vr[nvr_d];
+   q = X.val_vr[nvr_q];
+
+   if (G.flags[G.i_init_guess]) {
+     alpha = cost*d - sint*q;
+     beta  = sint*d + cost*q;
+
+     X.val_aux[na_alpha] = alpha;
+     X.val_aux[na_beta ] = beta;
+     X.val_vr[nvr_a] =  k1*alpha;
+     X.val_vr[nvr_b] = -k2*alpha + k3*beta;
+     X.val_vr[nvr_c] = -k2*alpha - k3*beta;
+
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       alpha = cost*d - sint*q;
+       beta  = sint*d + cost*q;
+       X.val_vr[nvr_a] =  k1*alpha;
+       X.val_vr[nvr_b] = -k2*alpha + k3*beta;
+       X.val_vr[nvr_c] = -k2*alpha - k3*beta;
+     } else if (G.flags[G.i_implicit]) {
+       alpha = X.val_aux[na_alpha];
+       beta  = X.val_aux[na_beta ];
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = alpha - cost*d + sint*q;
+         X.g[ng_2] = beta - sint*d - cost*q;
+
+         X.g[ng_3] = a - k1*alpha;
+         X.g[ng_4] = b + k2*alpha - k3*beta;
+         X.g[ng_5] = c + k2*alpha + k3*beta;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdaux[ng_1][na_alpha] =  1.0;
+         J.dgdvr [ng_1][nvr_cost] = -d;
+         J.dgdvr [ng_1][nvr_sint] =  q;
+         J.dgdvr [ng_1][nvr_d   ] = -cost;
+         J.dgdvr [ng_1][nvr_q   ] =  sint;
+
+         J.dgdaux[ng_2][na_beta ] =  1.0;
+         J.dgdvr [ng_2][nvr_cost] = -q;
+         J.dgdvr [ng_2][nvr_sint] = -d;
+         J.dgdvr [ng_2][nvr_d   ] = -sint;
+         J.dgdvr [ng_2][nvr_q   ] = -cost;
+
+         J.dgdvr [ng_3][nvr_a   ] =  1.0;
+         J.dgdaux[ng_3][na_alpha] = -k1;
+
+         J.dgdvr [ng_4][nvr_b   ] =  1.0;
+         J.dgdaux[ng_4][na_alpha] =  k2;
+         J.dgdaux[ng_4][na_beta ] = -k3;
+
+         J.dgdvr [ng_5][nvr_c   ] =  1.0;
+         J.dgdaux[ng_5][na_alpha] =  k2;
+         J.dgdaux[ng_5][na_beta ] =  k3;
+       }
+     }
+     return;
+   }
+endC
+endxbe

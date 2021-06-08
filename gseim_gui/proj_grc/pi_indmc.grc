@@ -1,0 +1,566 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    generate_options: circuit
+    hier_block_src_path: '.:'
+    id: pi_indmc
+    max_nouts: '0'
+    placement: (0,0)
+    run: 'True'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: PI control of induction motor
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [144, 12.0]
+    rotation: 0
+    state: enabled
+blocks:
+- name: const$0
+  id: const
+  parameters:
+    comment: ''
+    k: '0'
+    k_scale: '1'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 192.0]
+    rotation: 0
+    state: true
+- name: const$0$0
+  id: const
+  parameters:
+    comment: ''
+    k: '-2.094395'
+    k_scale: '1'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 288.0]
+    rotation: 0
+    state: true
+- name: const$0$0$0
+  id: const
+  parameters:
+    comment: ''
+    k: '2.094395'
+    k_scale: '1'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 384.0]
+    rotation: 0
+    state: true
+- name: const$2
+  id: const
+  parameters:
+    comment: ''
+    k: '100'
+    k_scale: '1'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [112, 128.0]
+    rotation: 0
+    state: true
+- name: diff$0
+  id: diff
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 128.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$0
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: wrm
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1312, 336.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$1
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: A
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [504, 144.0]
+    rotation: 0
+    state: true
+- name: dummy_source$0
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: wrm
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [88, 176.0]
+    rotation: 0
+    state: true
+- name: dummy_source$1
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: A
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [736, 344.0]
+    rotation: 0
+    state: true
+- name: integrator$0
+  id: integrator
+  parameters:
+    comment: ''
+    k: '314.1593'
+    name: none
+    y_ig: '0.0'
+    y_st: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [480, 240.0]
+    rotation: 0
+    state: true
+- name: lag_1$0
+  id: lag_1
+  parameters:
+    comment: ''
+    name: none
+    tr: '1.25'
+    y_st: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 144.0]
+    rotation: 0
+    state: true
+- name: mult_2$0
+  id: mult_2
+  parameters:
+    comment: ''
+    k: '1.0'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 208.0]
+    rotation: 0
+    state: true
+- name: mult_2$1
+  id: mult_2
+  parameters:
+    comment: ''
+    k: '1.0'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 304.0]
+    rotation: 0
+    state: true
+- name: mult_2$2
+  id: mult_2
+  parameters:
+    comment: ''
+    k: '1.0'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 400.0]
+    rotation: 0
+    state: true
+- name: pwl20$0
+  id: pwl20
+  parameters:
+    comment: ''
+    n: '4'
+    name: none
+    t1: '40'
+    t10: '10'
+    t11: '11'
+    t12: '12'
+    t13: '13'
+    t14: '14'
+    t15: '15'
+    t16: '16'
+    t17: '17'
+    t18: '18'
+    t19: '19'
+    t2: '40.1'
+    t20: '20'
+    t3: '55'
+    t4: '55.1'
+    t5: '5'
+    t6: '6'
+    t7: '7'
+    t8: '8'
+    t9: '9'
+    v1: '0'
+    v10: '10'
+    v11: '11'
+    v12: '12'
+    v13: '13'
+    v14: '14'
+    v15: '15'
+    v16: '16'
+    v17: '17'
+    v18: '18'
+    v19: '19'
+    v2: 1.9e3
+    v20: '20'
+    v3: 1.9e3
+    v4: '0'
+    v5: '5'
+    v6: '6'
+    v7: '7'
+    v8: '8'
+    v9: '9'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1088, 448.0]
+    rotation: 0
+    state: true
+- name: s_indmc_1$0
+  id: s_indmc_1
+  parameters:
+    comment: ''
+    j: '11.06'
+    llr: '3.2e-3'
+    lls: '3.2e-3'
+    lm: '143.25e-3'
+    name: none
+    poles: '4'
+    rr: '0.187'
+    rs: '0.262'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1192, 288.0]
+    rotation: 0
+    state: true
+- name: s_pi$0
+  id: s_pi
+  parameters:
+    Ki: '2.5e-3'
+    Kp: '2.5e-2'
+    comment: ''
+    name: none
+    y20: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [368, 144.0]
+    rotation: 0
+    state: true
+- name: s_pwm_1$0
+  id: s_pwm_1
+  parameters:
+    T: 1m
+    cmpr_high: '1'
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    flag_invert: '0'
+    flag_quad: '0'
+    name: none
+    tri_high: '1'
+    tri_low: '-1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [968, 240.0]
+    rotation: 0
+    state: true
+- name: sine$0
+  id: sine
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 208.0]
+    rotation: 0
+    state: true
+- name: sine$1
+  id: sine
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 304.0]
+    rotation: 0
+    state: true
+- name: sine$2
+  id: sine
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 400.0]
+    rotation: 0
+    state: true
+- name: sum_2$0
+  id: sum_2
+  parameters:
+    comment: ''
+    k1: '1.0'
+    k2: '1.0'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 192.0]
+    rotation: 0
+    state: true
+- name: sum_2$0$0
+  id: sum_2
+  parameters:
+    comment: ''
+    k1: '1.0'
+    k2: '1.0'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 288.0]
+    rotation: 0
+    state: true
+- name: sum_2$0$0$0
+  id: sum_2
+  parameters:
+    comment: ''
+    k1: '1.0'
+    k2: '1.0'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 384.0]
+    rotation: 0
+    state: true
+- name: vsi_3ph_1$0
+  id: vsi_3ph_1
+  parameters:
+    L: '1.0'
+    comment: ''
+    name: none
+    vdc: '3000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1072, 240.0]
+    rotation: 0
+    state: true
+connections:
+- [const$0, '0', sum_2$0, '0']
+- [const$0$0, '0', sum_2$0$0, '0']
+- [const$0$0$0, '0', sum_2$0$0$0, '0']
+- [const$2, '0', diff$0, '0']
+- [diff$0, '0', lag_1$0, '0']
+- [dummy_source$0, '0', diff$0, '1']
+- [dummy_source$1, '0', mult_2$0, '1']
+- [dummy_source$1, '0', mult_2$1, '1']
+- [dummy_source$1, '0', mult_2$2, '1']
+- [integrator$0, '0', sum_2$0, '1']
+- [integrator$0, '0', sum_2$0$0, '1']
+- [integrator$0, '0', sum_2$0$0$0, '1']
+- [lag_1$0, '0', s_pi$0, '0']
+- [mult_2$0, '0', s_pwm_1$0, '0']
+- [mult_2$1, '0', s_pwm_1$0, '1']
+- [mult_2$2, '0', s_pwm_1$0, '2']
+- [pwl20$0, '0', s_indmc_1$0, '3']
+- [s_indmc_1$0, '0', dummy_sink$0, '0']
+- [s_pi$0, '0', dummy_sink$1, '0']
+- [s_pi$0, '0', integrator$0, '0']
+- [s_pwm_1$0, '0', vsi_3ph_1$0, '0']
+- [s_pwm_1$0, '1', vsi_3ph_1$0, '1']
+- [s_pwm_1$0, '2', vsi_3ph_1$0, '2']
+- [s_pwm_1$0, '3', vsi_3ph_1$0, '3']
+- [s_pwm_1$0, '4', vsi_3ph_1$0, '4']
+- [s_pwm_1$0, '5', vsi_3ph_1$0, '5']
+- [sine$0, '0', mult_2$0, '0']
+- [sine$1, '0', mult_2$1, '0']
+- [sine$2, '0', mult_2$2, '0']
+- [sum_2$0, '0', sine$0, '0']
+- [sum_2$0$0, '0', sine$1, '0']
+- [sum_2$0$0$0, '0', sine$2, '0']
+- [vsi_3ph_1$0, '0', s_indmc_1$0, '0']
+- [vsi_3ph_1$0, '1', s_indmc_1$0, '1']
+- [vsi_3ph_1$0, '2', s_indmc_1$0, '2']
+gparms:
+  delt_max: 20e-6
+  delt_min: 2e-6
+  delt_nrml: '10.0e-6'
+outvars:
+  TL:
+  - connection
+  - - pwl20$0
+    - '0'
+    - s_indmc_1$0
+    - '3'
+  ia:
+  - outvar
+  - - s_indmc_1$0
+    - ia
+  ib:
+  - outvar
+  - - s_indmc_1$0
+    - ib
+  ic:
+  - outvar
+  - - s_indmc_1$0
+    - ic
+  tem:
+  - outvar
+  - - s_indmc_1$0
+    - tem
+  va:
+  - outvar
+  - - vsi_3ph_1$0
+    - va
+  wrm:
+  - outvar
+  - - s_indmc_1$0
+    - wrm
+solve_blocks:
+- d_parms:
+    algorithm_x_startup: explicit
+    algorithm_x_trns: RKF45
+    block_index: '0'
+    bs23_fctr_max: '1.1'
+    bs23_fctr_min: '0.8'
+    bs23_tolr: '1.0e-8'
+    delt_max_x: delt_max
+    delt_min_x: '0.1e-6'
+    delt_small: '1.0e-12'
+    factor_step_decrease: '0.6'
+    factor_step_increase: '1.5'
+    initial_sol: initialize
+    initial_sol_file: none
+    itmax_trbdf2: '20'
+    itmax_trns: '20000000'
+    output_solution_file: none
+    rkf45_fctr_max: '2.5'
+    rkf45_fctr_min: '0.8'
+    rkf45_tolr: '1.0e-4'
+    solve_type: trns
+    t_end: '65'
+    t_start: '0'
+    t_startup: '0.0'
+    trbdf2_tolr: '1.0e-5'
+    tstep0_x: delt_nrml
+    write_iter_n_x: '1000'
+    write_matrix_x: 'no'
+    write_time_x: 'no'
+    x_fixed_tstep: 'no'
+    x_nr_check_rhs2: 'yes'
+    x_nr_dmp: 'no'
+    x_nr_dmp0: 'no'
+    x_nr_dmp_itermax: '50'
+    x_nr_dmp_itermax0: '50'
+    x_nr_dmp_k: '0.2'
+    x_nr_dmp_k0: '0.2'
+    x_nr_eps_rhs: '1.0e-10'
+    x_nr_itermax: '500'
+    x_nr_itermax0: '500'
+    x_nr_write_rhs2: 'no'
+  index: '0'
+  name: s1
+  output_blocks:
+  - out$0
+  - out$1
+  - out$2
+output_blocks:
+- d_parms:
+    append: 'no'
+    filename: pi_indmc1.dat
+    fixed_interval: 200u
+    limit_lines: '1000000'
+    t_end: none
+    t_start: none
+  index_slv: '0'
+  name: out$0
+  outvars:
+  - tem
+  - wrm
+  - TL
+- d_parms:
+    append: 'no'
+    filename: pi_indmc2.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: '63.04'
+    t_start: '63'
+  index_slv: '0'
+  name: out$1
+  outvars:
+  - va
+- d_parms:
+    append: 'no'
+    filename: pi_indmc3.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: '63.04'
+    t_start: '63'
+  index_slv: '0'
+  name: out$2
+  outvars:
+  - ia
+  - ib
+  - ic

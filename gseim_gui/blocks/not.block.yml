@@ -1,0 +1,26 @@
+id: not
+label: not
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: y_high
+    label: y_high
+    dtype: float
+    default: '1.0'
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- x
+- y

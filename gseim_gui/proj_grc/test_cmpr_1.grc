@@ -1,0 +1,134 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    generate_options: circuit
+    hier_block_src_path: '.:'
+    id: test_cmpr_1
+    max_nouts: '0'
+    placement: (0,0)
+    run: 'True'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Comparator test
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: cmpr_1_1$0
+  id: cmpr_1_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    epsl: '1.0e-6'
+    name: none
+    x0: '0.0'
+    y_high: '1.0'
+    y_low: '-1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [480, 200.0]
+    rotation: 0
+    state: true
+- name: srcac$0
+  id: srcac
+  parameters:
+    a: '1'
+    comment: ''
+    dc: '0'
+    f_hz: '1'
+    name: none
+    phi_deg: '0'
+    t0: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [368, 200.0]
+    rotation: 0
+    state: true
+connections:
+- [srcac$0, '0', cmpr_1_1$0, '0']
+gparms:
+  delt_min: '0.001'
+  delt_nrml: '0.02'
+outvars:
+  x:
+  - outvar
+  - - cmpr_1_1$0
+    - x
+  y:
+  - outvar
+  - - cmpr_1_1$0
+    - y
+solve_blocks:
+- d_parms:
+    algorithm_x_startup: explicit
+    algorithm_x_trns: Heun
+    block_index: '0'
+    bs23_fctr_max: '1.1'
+    bs23_fctr_min: '0.8'
+    bs23_tolr: '1.0e-8'
+    delt_max_x: none
+    delt_min_x: none
+    delt_small: '1.0e-12'
+    factor_step_decrease: '0.6'
+    factor_step_increase: '1.5'
+    initial_sol: initialize
+    initial_sol_file: none
+    itmax_trbdf2: '20'
+    itmax_trns: '100000'
+    output_solution_file: none
+    rkf45_fctr_max: '1.1'
+    rkf45_fctr_min: '0.8'
+    rkf45_tolr: '1.0e-8'
+    solve_type: trns
+    t_end: '3'
+    t_start: '0'
+    t_startup: '0.0'
+    trbdf2_tolr: '1.0e-5'
+    tstep0_x: '0.02'
+    write_iter_n_x: '1000'
+    write_matrix_x: 'no'
+    write_time_x: 'no'
+    x_fixed_tstep: 'no'
+    x_nr_check_rhs2: 'yes'
+    x_nr_dmp: 'no'
+    x_nr_dmp0: 'no'
+    x_nr_dmp_itermax: '50'
+    x_nr_dmp_itermax0: '50'
+    x_nr_dmp_k: '0.2'
+    x_nr_dmp_k0: '0.2'
+    x_nr_eps_rhs: '1.0e-10'
+    x_nr_itermax: '500'
+    x_nr_itermax0: '500'
+    x_nr_write_rhs2: 'no'
+  index: '0'
+  name: s1
+  output_blocks:
+  - out$0
+output_blocks:
+- d_parms:
+    append: 'no'
+    filename: test.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: none
+    t_start: none
+  index_slv: '0'
+  name: out$0
+  outvars:
+  - x
+  - y

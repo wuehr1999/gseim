@@ -1,0 +1,32 @@
+id: triangle_2
+label: triangle_2
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: T
+    label: T
+    dtype: float
+    default: '1'
+-   id: L1
+    label: L1
+    dtype: float
+    default: '0'
+-   id: L2
+    label: L2
+    dtype: float
+    default: '0'
+-   id: t0
+    label: t0
+    dtype: float
+    default: '0'
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- y

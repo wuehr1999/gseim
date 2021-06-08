@@ -1,0 +1,69 @@
+xbe name=user_fn_3_1 evaluate=yes
+Jacobian: constant
+input_vars: x1 x2 x3
+output_vars: y1
+aux_vars:
+iparms:
++  iprm1=0
++  iprm2=0
++  index_fn=1
+sparms:
+rparms:
++  rprm1=0
++  rprm2=0
++  rprm3=0
++  rprm4=0
++  rprm5=0
++  rprm6=0
++  rprm7=0
++  rprm8=0
++  rprm9=0
++  rprm10=0
+stparms:
+igparms:
+outparms: y1
+n_f= 0
+n_g= 1
+g_1: y1
+C:
+prototypes:
+variables:
+// declare large enough size to serve other user_fn_x_x
+// elements as well
+
+   double time0;
+   double x_uf[20];
+   double y_uf[20];
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y1] = X.val_vr[nvr_y1];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     return;
+   }
+   time0 = G.time_given_x;
+   index_fn = X.iprm[ni_index_fn];
+   x_uf[0] = X.val_vr[nvr_x1];
+   x_uf[1] = X.val_vr[nvr_x2];
+   x_uf[2] = X.val_vr[nvr_x3];
+   user_function(index_fn,time0,x_uf,y_uf,X.iprm,X.rprm);
+
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y1] = y_uf[0];
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y1] - y_uf[0];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y1] =  1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

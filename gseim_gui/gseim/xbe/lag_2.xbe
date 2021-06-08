@@ -1,0 +1,77 @@
+xbe name=lag_2 integrate=yes
+# This is used to create a "lag".
+# d_dt(y)=(1.0/tr)*(-y+x)
+# tr is computed s.t., at t=t_delay, y=v_high/2 (assuming
+# a step from 0 to v_high is applied)
+#
+Jacobian: constant
+input_vars: x
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+rparms:
++  t_delay=1
++  k=1
+stparms: y_st=0
+igparms: y_ig=0
+outparms: x y
+n_f= 1
+f_1: d_dt(y)
+n_g= 1
+g_1: x y
+C:
+prototypes:
+variables:
+   double tr,y0;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     tr = X.rprm[nr_t_delay]/log(2.0);
+     k = 1.0/tr;
+     X.rprm[nr_k] = k;
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr [nvr_y] = X.igprm[nig_y_ig];
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.stprm[nst_y_st];
+     } else if (G.flags[G.i_implicit]) {
+       X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     if (G.flags[G.i_explicit]) {
+       if (G.flags[G.i_alg_loop]) {
+         X.h[nf_1] = X.val_vr[nvr_y] - X.val_vr_u[nvr_y];
+       } else {
+         k = X.rprm[nr_k];
+         x = X.val_vr[nvr_x];
+         y = X.val_vr[nvr_y];
+         X.f[nf_1] = k*(-y+x);
+       }
+     } else if (G.flags[G.i_implicit]) {
+       k = X.rprm[nr_k];
+       x = X.val_vr[nvr_x];
+       y = X.val_vr[nvr_y];
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = k*(-y+x);
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_x] =  k;
+         J.dgdvr[ng_1][nvr_y] = -k;
+       }
+     }
+     return;
+   }
+endC
+endxbe

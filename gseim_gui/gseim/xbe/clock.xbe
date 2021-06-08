@@ -1,0 +1,187 @@
+xbe name=clock evaluate=yes limit_tstep=yes
+# clock source
+Jacobian: constant
+input_vars:
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+# Note: L1 is the level in the first interval, L2 in the second.
+rparms:
++  T1=1
++  T2=1
++  L1=1
++  L2=-1
++  t0=0
++  delta1=0.01
++  delta2=0.01
++  T=0
++  L0=0
++  tk1=0
++  tk2=0
++  tk3=0
++  tk4=0
++  tk5=0
++  slope1=0
++  slope2=0
++  epsl=0
+stparms:
+igparms:
+outparms: y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   double y0,t0_new,delta_min,del1,del2,t_a,t_b,tnext_p;
+   int n;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     T1 = X.rprm[nr_T1];
+     T2 = X.rprm[nr_T2];
+     L1 = X.rprm[nr_L1];
+     L2 = X.rprm[nr_L2];
+     delta1 = X.rprm[nr_delta1];
+     delta2 = X.rprm[nr_delta2];
+
+//   make sure that there is a flat part in each half:
+     delta_min = 0.1*min(delta1,delta2);
+     del1 = T1-0.5*(delta1+delta2);
+     del2 = T2-0.5*(delta1+delta2);
+
+     if (del1 < delta_min) {
+       cout << "clock.xbe: T1 is too small. Halting..." << endl; exit(1);
+     }
+     if (del2 < delta_min) {
+       cout << "clock.xbe: T2 is too small. Halting..." << endl; exit(1);
+     }
+     T = T1 + T2;
+     tk1 = 0.5*delta1;
+     tk2 = T1 - 0.5*delta2;
+     tk3 = T1 + 0.5*delta2;
+     tk4 = T  - 0.5*delta1;
+     tk5 = T  + 0.5*delta1;
+
+     slope1 = (L1-L2)/delta1;
+     slope2 = (L2-L1)/delta2;
+     epsl = min(delta1,delta2)/10.0;
+     L0 = 0.5*(L1+L2);
+
+     X.rprm[nr_T] = T;
+     X.rprm[nr_tk1] = tk1;
+     X.rprm[nr_tk2] = tk2;
+     X.rprm[nr_tk3] = tk3;
+     X.rprm[nr_tk4] = tk4;
+     X.rprm[nr_tk5] = tk5;
+     X.rprm[nr_slope1] = slope1;
+     X.rprm[nr_slope2] = slope2;
+     X.rprm[nr_epsl] = epsl;
+     X.rprm[nr_L0] = L0;
+
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+
+   t0   = X.rprm[nr_t0  ];
+   T    = X.rprm[nr_T   ];
+   epsl = X.rprm[nr_epsl];
+   tk1  = X.rprm[nr_tk1 ];
+   tk2  = X.rprm[nr_tk2 ];
+   tk3  = X.rprm[nr_tk3 ];
+   tk4  = X.rprm[nr_tk4 ];
+   tk5  = X.rprm[nr_tk5 ];
+
+   if (G.time_given_x < t0) {
+     n = ((t0-G.time_given_x)/T) + 1;
+     t0_new = t0-n*T;
+   } else {
+     t0_new = t0;
+   }
+   t_a = G.time_given_x-t0_new;
+   t_b = fmod(t_a,T);
+
+   if (abs(t_b-T) < epsl) t_b = 0.0;
+
+   if (G.flags[G.i_next_time]) {
+//   cout << " t0 = " << t0 << endl;
+//   cout << " t0_new = " << t0_new << endl;
+//   cout << " t_a = " << t_a << endl;
+//   cout << " t_b = " << t_b << endl;
+//   cout << " T = " << T << endl;
+
+     if (t_b < tk1) {
+//     cout << "clock: debug 1" << endl;
+       tnext_p = tk1;
+     } else if (t_b < tk2) {
+//     cout << "clock: debug 2" << endl;
+       tnext_p = tk2;
+     } else if (t_b < tk3) {
+//     cout << "clock: debug 3" << endl;
+       tnext_p = tk3;
+     } else if (t_b < tk4) {
+//     cout << "clock: debug 4" << endl;
+       tnext_p = tk4;
+     } else {
+//     cout << "clock: debug 5" << endl;
+       tnext_p = tk5;
+     }
+     G.time_nextbreak_x = G.time_given_x + (tnext_p-t_b);
+//   cout << " G.time_nextbreak_x = " << G.time_nextbreak_x << endl;
+     return;
+   }
+
+// compute y0, the y value at time_given_x:
+// This should work even if L1 and L2 are both positive or both negative.
+
+   L0 = X.rprm[nr_L0];
+   L1 = X.rprm[nr_L1];
+   L2 = X.rprm[nr_L2];
+   slope1 = X.rprm[nr_slope1];
+   slope2 = X.rprm[nr_slope2];
+
+// cout << " L1 = " << L1 << endl;
+// cout << " L2 = " << L2 << endl;
+// cout << " slope1 = " << slope1 << endl;
+// cout << " slope2 = " << slope2 << endl;
+
+   if (t_b < tk1) {
+     y0 = L0 + slope1*t_b;
+//   cout << "clock: debug 1A: t_a = " << t_a << ", y0 =" << y0 << endl;
+   } else if (t_b < tk2) {
+     y0 = L1;
+//   cout << "clock: debug 2A: t_a = " << t_a << ", y0 =" << y0 << endl;
+   } else if (t_b < tk3) {
+     y0 = L1 + slope2*(t_b-tk2);
+//   cout << "clock: debug 3A: t_a = " << t_a << ", y0 =" << y0 << endl;
+   } else if (t_b < tk4) {
+     y0 = L2;
+//   cout << "clock: debug 4A: t_a = " << t_a << ", y0 =" << y0 << endl;
+   } else {
+     y0 = L2 + slope1*(t_b-tk4);
+//   cout << "clock: debug 5A: t_a = " << t_a << ", y0 =" << y0 << endl;
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     cout << "clock: init_guess: y0 =" << y0 << endl;
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

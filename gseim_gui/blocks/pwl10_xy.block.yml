@@ -1,0 +1,105 @@
+id: pwl10_xy
+label: PWL10_xy
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: n
+    label: n
+    dtype: float
+    default: '2'
+-   id: x1
+    label: x1
+    dtype: float
+    default: '1'
+-   id: y1
+    label: y1
+    dtype: float
+    default: '1'
+-   id: x2
+    label: x2
+    dtype: float
+    default: '2'
+-   id: y2
+    label: y2
+    dtype: float
+    default: '2'
+-   id: x3
+    label: x3
+    dtype: float
+    default: '3'
+-   id: y3
+    label: y3
+    dtype: float
+    default: '3'
+-   id: x4
+    label: x4
+    dtype: float
+    default: '4'
+-   id: y4
+    label: y4
+    dtype: float
+    default: '4'
+-   id: x5
+    label: x5
+    dtype: float
+    default: '5'
+-   id: y5
+    label: y5
+    dtype: float
+    default: '5'
+-   id: x6
+    label: x6
+    dtype: float
+    default: '6'
+-   id: y6
+    label: y6
+    dtype: float
+    default: '6'
+-   id: x7
+    label: x7
+    dtype: float
+    default: '7'
+-   id: y7
+    label: y7
+    dtype: float
+    default: '7'
+-   id: x8
+    label: x8
+    dtype: float
+    default: '8'
+-   id: y8
+    label: y8
+    dtype: float
+    default: '8'
+-   id: x9
+    label: x9
+    dtype: float
+    default: '9'
+-   id: y9
+    label: y9
+    dtype: float
+    default: '9'
+-   id: x10
+    label: x10
+    dtype: float
+    default: '10'
+-   id: y10
+    label: y10
+    dtype: float
+    default: '10'
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- y

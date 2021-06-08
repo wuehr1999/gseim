@@ -1,0 +1,269 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    generate_options: hb
+    hier_block_src_path: '.:'
+    id: s_gate_pulses_1ph_1
+    max_nouts: '0'
+    placement: (0,0)
+    run: 'True'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Gate pulses (1ph)-1
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: and_2$0
+  id: and_2
+  parameters:
+    comment: ''
+    name: none
+    y_high: y_high
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [632, 264.0]
+    rotation: 0
+    state: true
+- name: and_2$1
+  id: and_2
+  parameters:
+    comment: ''
+    name: none
+    y_high: y_high
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [632, 112.0]
+    rotation: 0
+    state: true
+- name: cmpr_1_1$0
+  id: cmpr_1_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    epsl: '1.0e-6'
+    flag_invert: '1'
+    flag_quad: '0'
+    name: none
+    x0: hb2
+    y_high: y_high
+    y_low: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 128.0]
+    rotation: 0
+    state: true
+- name: cmpr_1_1$0$0
+  id: cmpr_1_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    epsl: '1.0e-6'
+    flag_invert: '1'
+    flag_quad: '0'
+    name: none
+    x0: hb2
+    y_high: y_high
+    y_low: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 280.0]
+    rotation: 0
+    state: true
+- name: cmpr_2_1$0
+  id: cmpr_2_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    epsl: '1.0e-6'
+    flag_invert: '0'
+    flag_quad: '0'
+    name: none
+    y_high: y_high
+    y_low: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 144.0]
+    rotation: 0
+    state: true
+- name: cmpr_2_1$1
+  id: cmpr_2_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    epsl: '1.0e-6'
+    flag_invert: '0'
+    flag_quad: '0'
+    name: none
+    y_high: y_high
+    y_low: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 232.0]
+    rotation: 0
+    state: true
+- name: lag_2$0
+  id: lag_2
+  parameters:
+    comment: ''
+    name: none
+    t_delay: t_delay
+    y_st: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 128.0]
+    rotation: 0
+    state: true
+- name: lag_2$1
+  id: lag_2
+  parameters:
+    comment: ''
+    name: none
+    t_delay: t_delay
+    y_st: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 280.0]
+    rotation: 0
+    state: true
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    label: y1
+    num_streams: '1'
+    optional: 'False'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 280.0]
+    rotation: 0
+    state: true
+- name: pad_sink$1
+  id: pad_sink
+  parameters:
+    comment: ''
+    label: y2
+    num_streams: '1'
+    optional: 'False'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 128.0]
+    rotation: 0
+    state: true
+- name: pad_source$0
+  id: pad_source
+  parameters:
+    comment: ''
+    label: x1
+    num_streams: '1'
+    optional: 'False'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 144.0]
+    rotation: 0
+    state: true
+- name: pad_source$1
+  id: pad_source
+  parameters:
+    comment: ''
+    label: x2
+    num_streams: '1'
+    optional: 'False'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [144, 200.0]
+    rotation: 0
+    state: true
+connections:
+- [and_2$0, '0', pad_sink$0, '0']
+- [and_2$1, '0', pad_sink$1, '0']
+- [cmpr_1_1$0, '0', and_2$1, '0']
+- [cmpr_1_1$0$0, '0', and_2$0, '1']
+- [cmpr_2_1$0, '0', and_2$0, '0']
+- [cmpr_2_1$0, '0', lag_2$0, '0']
+- [cmpr_2_1$1, '0', and_2$1, '1']
+- [cmpr_2_1$1, '0', lag_2$1, '0']
+- [lag_2$0, '0', cmpr_1_1$0, '0']
+- [lag_2$1, '0', cmpr_1_1$0$0, '0']
+- [pad_source$0, '0', cmpr_2_1$0, '0']
+- [pad_source$0, '0', cmpr_2_1$1, '1']
+- [pad_source$1, '0', cmpr_2_1$0, '1']
+- [pad_source$1, '0', cmpr_2_1$1, '0']
+gparms:
+  delt_min: 1e-6
+  delt_nrml: 10e-6
+  t_delay: 1e-3
+  y_high: '1'
+outvars:
+  x1:
+  - connection
+  - - pad_source$0
+    - '0'
+    - cmpr_2_1$0
+    - '0'
+  x2:
+  - connection
+  - - pad_source$1
+    - '0'
+    - cmpr_2_1$1
+    - '0'
+  y1:
+  - connection
+  - - and_2$0
+    - '0'
+    - pad_sink$0
+    - '0'
+  y2:
+  - connection
+  - - and_2$1
+    - '0'
+    - pad_sink$1
+    - '0'
+solve_blocks: []
+output_blocks: []

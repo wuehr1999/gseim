@@ -1,0 +1,57 @@
+id: s_indmc_1
+label: s_indmc_1
+category: '[GRC Hier Blocks]'
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: j
+    label: j
+    default: '0.089'
+-   id: llr
+    label: llr
+    default: '0.002'
+-   id: lls
+    label: lls
+    default: '0.002'
+-   id: lm
+    label: lm
+    default: '0.0693'
+-   id: poles
+    label: poles
+    default: '4'
+-   id: rr
+    label: rr
+    default: '0.816'
+-   id: rs
+    label: rs
+    default: '0.435'
+outvars:
+- ia
+- ib
+- ic
+- tem
+- wrm
+
+inputs:
+-   label: va
+    dtype: float
+    vlen: 1
+-   label: vb
+    dtype: float
+    vlen: 1
+-   label: vc
+    dtype: float
+    vlen: 1
+-   label: tl
+    dtype: float
+    vlen: 1
+
+outputs:
+-   label: wrm
+    dtype: float
+    vlen: 1
+grc_source: ~/gseim_gui/subckt_grc/s_indmc_1.grc
+

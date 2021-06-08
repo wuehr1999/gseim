@@ -1,0 +1,154 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: 'compare triangle with constant and generate non-overlapping
+
+      gate pulses'
+    copyright: ''
+    description: testing of gate_pulses_1ph_1
+    generate_options: circuit
+    id: test_gate_pulse_1
+    placement: (0,0)
+    run: 'True'
+    sizing_mode: fixed
+    title: test gate pulse
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: const$0
+  id: const
+  parameters:
+    comment: ''
+    k: '0'
+    k_scale: '1'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [216, 240.0]
+    rotation: 0
+    state: true
+- name: s_gate_pulses_1ph_1$0
+  id: s_gate_pulses_1ph_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    name: none
+    t_delay: '0.5e-3'
+    y_high: y_high
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 192.0]
+    rotation: 0
+    state: true
+- name: triangle_2$0
+  id: triangle_2
+  parameters:
+    L1: '1'
+    L2: '-1'
+    T: 8m
+    comment: ''
+    name: none
+    t0: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 168.0]
+    rotation: 0
+    state: true
+connections:
+- [const$0, '0', s_gate_pulses_1ph_1$0, '1']
+- [triangle_2$0, '0', s_gate_pulses_1ph_1$0, '0']
+gparms:
+  delt_min: '0.02e-6'
+  delt_nrml: '0.2e-3'
+  y_high: '1'
+outvars:
+  x1:
+  - outvar
+  - - s_gate_pulses_1ph_1$0
+    - x1
+  x2:
+  - outvar
+  - - s_gate_pulses_1ph_1$0
+    - x2
+  y1:
+  - outvar
+  - - s_gate_pulses_1ph_1$0
+    - y1
+  y2:
+  - outvar
+  - - s_gate_pulses_1ph_1$0
+    - y2
+solve_blocks:
+- d_parms:
+    algorithm_x_startup: explicit
+    algorithm_x_trns: forward_euler
+    block_index: '0'
+    bs23_fctr_max: '1.1'
+    bs23_fctr_min: '0.8'
+    bs23_tolr: '1.0e-8'
+    delt_max_x: none
+    delt_min_x: none
+    delt_small: '1.0e-12'
+    factor_step_decrease: '0.6'
+    factor_step_increase: '1.5'
+    initial_sol: initialize
+    initial_sol_file: none
+    itmax_trbdf2: '20'
+    itmax_trns: '100000'
+    output_solution_file: none
+    rkf45_fctr_max: '1.1'
+    rkf45_fctr_min: '0.8'
+    rkf45_tolr: '1.0e-8'
+    solve_type: trns
+    t_end: 20m
+    t_start: '0'
+    t_startup: '0.0'
+    trbdf2_tolr: '1.0e-5'
+    tstep0_x: 0.2m
+    write_iter_n_x: '1000'
+    write_matrix_x: 'no'
+    write_time_x: 'no'
+    x_fixed_tstep: 'no'
+    x_nr_check_rhs2: 'yes'
+    x_nr_dmp: 'no'
+    x_nr_dmp0: 'no'
+    x_nr_dmp_itermax: '50'
+    x_nr_dmp_itermax0: '50'
+    x_nr_dmp_k: '0.2'
+    x_nr_dmp_k0: '0.2'
+    x_nr_eps_rhs: '1.0e-10'
+    x_nr_itermax: '500'
+    x_nr_itermax0: '500'
+    x_nr_write_rhs2: 'no'
+  index: '0'
+  name: s1
+  output_blocks:
+  - out$0
+output_blocks:
+- d_parms:
+    append: 'no'
+    filename: gate_pulse.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: none
+    t_start: none
+  index_slv: '0'
+  name: out$0
+  outvars:
+  - x1
+  - x2
+  - y1
+  - y2

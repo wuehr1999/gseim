@@ -1,0 +1,26 @@
+id: multscl
+label: multscl
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: k
+    label: k
+    dtype: float
+    default: '1.0'
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- x
+- y

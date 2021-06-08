@@ -1,0 +1,36 @@
+id: srcac
+label: src_ac
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: a
+    label: a
+    dtype: float
+    default: '1'
+-   id: f_hz
+    label: f_hz
+    dtype: float
+    default: '1'
+-   id: phi_deg
+    label: phi_deg
+    dtype: float
+    default: '0'
+-   id: t0
+    label: t0
+    dtype: float
+    default: '0'
+-   id: dc
+    label: dc
+    dtype: float
+    default: '0'
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- y

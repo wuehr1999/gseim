@@ -1,0 +1,875 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    generate_options: circuit
+    hier_block_src_path: '.:'
+    id: indmc_vctr
+    max_nouts: '0'
+    placement: (0,0)
+    run: 'True'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: vector control
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: abc_to_dq_2$0
+  id: abc_to_dq_2
+  parameters:
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [776, 472.0]
+    rotation: 0
+    state: true
+- name: const$0
+  id: const
+  parameters:
+    comment: ''
+    k: '0'
+    k_scale: '1'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 600.0]
+    rotation: 0
+    state: true
+- name: const$1
+  id: const
+  parameters:
+    comment: ''
+    k: '104.72'
+    k_scale: '1'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 144.0]
+    rotation: 0
+    state: true
+- name: const$2
+  id: const
+  parameters:
+    comment: ''
+    k: '5.7'
+    k_scale: '1'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 256.0]
+    rotation: 0
+    state: true
+- name: cosine$0
+  id: cosine
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [584, 760.0]
+    rotation: 0
+    state: true
+- name: diff$0
+  id: diff
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [256, 144.0]
+    rotation: 0
+    state: true
+- name: diff$1
+  id: diff
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [256, 256.0]
+    rotation: 0
+    state: true
+- name: diff$2
+  id: diff
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [512, 144.0]
+    rotation: 0
+    state: true
+- name: diff$3
+  id: diff
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [512, 256.0]
+    rotation: 0
+    state: true
+- name: dq_to_abc$0
+  id: dq_to_abc
+  parameters:
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [216, 408.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$0
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: vsq_star
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 176.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$1
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: vsd_star
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 288.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$10
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: imr
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1064, 632.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$2
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: wrm
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 392.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$3
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: wmr
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1192, 520.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$4
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: vsq_a
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1192, 488.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$5
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: vsd_a
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1192, 456.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$6
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: sint
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 712.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$7
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: cost
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 760.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$8
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: isd
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [920, 464.0]
+    rotation: 0
+    state: true
+- name: dummy_sink$9
+  id: dummy_sink
+  parameters:
+    comment: ''
+    n: isq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [944, 640.0]
+    rotation: 0
+    state: true
+- name: dummy_source$0
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: wrm
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [144, 184.0]
+    rotation: 0
+    state: true
+- name: dummy_source$1
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: imr
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [152, 296.0]
+    rotation: 0
+    state: true
+- name: dummy_source$12
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: wmr
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 712.0]
+    rotation: 0
+    state: true
+- name: dummy_source$2
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: isq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 200.0]
+    rotation: 0
+    state: true
+- name: dummy_source$3
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: isd
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 312.0]
+    rotation: 0
+    state: true
+- name: dummy_source$4
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: vsq_a
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [648, 208.0]
+    rotation: 0
+    state: true
+- name: dummy_source$5
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: vsd_a
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [648, 320.0]
+    rotation: 0
+    state: true
+- name: dummy_source$6
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: vsd_star
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [80, 400.0]
+    rotation: 0
+    state: true
+- name: dummy_source$7
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: vsq_star
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [80, 440.0]
+    rotation: 0
+    state: true
+- name: dummy_source$8
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: cost
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [96, 480.0]
+    rotation: 0
+    state: true
+- name: dummy_source$8$0
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: cost
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [672, 568.0]
+    rotation: 0
+    state: true
+- name: dummy_source$9
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: sint
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [104, 520.0]
+    rotation: 0
+    state: true
+- name: dummy_source$9$0
+  id: dummy_source
+  parameters:
+    comment: ''
+    n: sint
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 600.0]
+    rotation: 0
+    state: true
+- name: integrator$0
+  id: integrator
+  parameters:
+    comment: ''
+    k: '1.0'
+    name: none
+    y_ig: '0.0'
+    y_st: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [448, 712.0]
+    rotation: 0
+    state: true
+- name: lag_1$0
+  id: lag_1
+  parameters:
+    comment: ''
+    name: none
+    tr: tr
+    y_st: '0.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 592.0]
+    rotation: 0
+    state: true
+- name: limiter$0
+  id: limiter
+  parameters:
+    comment: ''
+    name: none
+    xmax: '1.3'
+    xmin: '-1.3'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 176.0]
+    rotation: 0
+    state: true
+- name: limiter$1
+  id: limiter
+  parameters:
+    comment: ''
+    name: none
+    xmax: '1.3'
+    xmin: '-1.3'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 288.0]
+    rotation: 0
+    state: true
+- name: modulo_twopi$0
+  id: modulo_twopi
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [584, 664.0]
+    rotation: 0
+    state: true
+- name: s_gate_pulses_3ph_1$0
+  id: s_gate_pulses_3ph_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    name: none
+    t_delay: 2u
+    y_high: x_high
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 392.0]
+    rotation: 0
+    state: true
+- name: s_indmc_2$0
+  id: s_indmc_2
+  parameters:
+    comment: ''
+    j: '0.25'
+    llr: 6.2m
+    lls: 6.2m
+    lm: 139m
+    name: none
+    poles: '4'
+    rr: '1.157'
+    rs: '1.157'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [648, 440.0]
+    rotation: 0
+    state: true
+- name: s_pi_limiter_2$0
+  id: s_pi_limiter_2
+  parameters:
+    comment: ''
+    k: '1.55'
+    name: none
+    tau: '31.83'
+    xmax: '13'
+    xmin: '-13'
+    y20: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 160.0]
+    rotation: 0
+    state: true
+- name: s_pi_limiter_2$1
+  id: s_pi_limiter_2
+  parameters:
+    comment: ''
+    k: '39.5'
+    name: none
+    tau: '0.0032'
+    xmax: '10'
+    xmin: '-10'
+    y20: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 272.0]
+    rotation: 0
+    state: true
+- name: s_pi_limiter_2$2
+  id: s_pi_limiter_2
+  parameters:
+    comment: ''
+    k: '0.0496'
+    name: none
+    tau: '0.0105'
+    xmax: '1.3'
+    xmin: '-1.3'
+    y20: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 160.0]
+    rotation: 0
+    state: true
+- name: s_pi_limiter_2$3
+  id: s_pi_limiter_2
+  parameters:
+    comment: ''
+    k: '0.0496'
+    name: none
+    tau: '0.0105'
+    xmax: '0.293'
+    xmin: '-0.293'
+    y20: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 272.0]
+    rotation: 0
+    state: true
+- name: sine$0
+  id: sine
+  parameters:
+    comment: ''
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [584, 712.0]
+    rotation: 0
+    state: true
+- name: sum_2$0
+  id: sum_2
+  parameters:
+    comment: ''
+    k1: '1.0'
+    k2: '1.0'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 160.0]
+    rotation: 0
+    state: true
+- name: sum_2$1
+  id: sum_2
+  parameters:
+    comment: ''
+    k1: '1.0'
+    k2: '1.0'
+    name: none
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 272.0]
+    rotation: 0
+    state: true
+- name: triangle_2$0
+  id: triangle_2
+  parameters:
+    L1: x_high
+    L2: x_low
+    T: 204.9u
+    comment: ''
+    name: none
+    t0: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [216, 552.0]
+    rotation: 0
+    state: true
+- name: user_fn_4_3$0
+  id: user_fn_4_3
+  parameters:
+    comment: ''
+    index_fn: '3'
+    iprm1: poles
+    iprm2: '1'
+    name: none
+    rprm1: sigma
+    rprm10: '1'
+    rprm2: ls
+    rprm3: vdc
+    rprm4: tr
+    rprm5: '1'
+    rprm6: '1'
+    rprm7: '1'
+    rprm8: '1'
+    rprm9: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1040, 440.0]
+    rotation: 0
+    state: true
+- name: vsi_3ph_1$0
+  id: vsi_3ph_1
+  parameters:
+    L: x_high
+    comment: ''
+    name: none
+    vdc: vdc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 392.0]
+    rotation: 0
+    state: true
+connections:
+- [abc_to_dq_2$0, '0', dummy_sink$8, '0']
+- [abc_to_dq_2$0, '0', lag_1$0, '0']
+- [abc_to_dq_2$0, '0', user_fn_4_3$0, '1']
+- [abc_to_dq_2$0, '1', dummy_sink$9, '0']
+- [abc_to_dq_2$0, '1', user_fn_4_3$0, '2']
+- [const$0, '0', s_indmc_2$0, '3']
+- [const$1, '0', diff$0, '0']
+- [const$2, '0', diff$1, '0']
+- [cosine$0, '0', dummy_sink$7, '0']
+- [diff$0, '0', s_pi_limiter_2$0, '0']
+- [diff$1, '0', s_pi_limiter_2$1, '0']
+- [diff$2, '0', s_pi_limiter_2$2, '0']
+- [diff$3, '0', s_pi_limiter_2$3, '0']
+- [dq_to_abc$0, '0', s_gate_pulses_3ph_1$0, '0']
+- [dq_to_abc$0, '1', s_gate_pulses_3ph_1$0, '1']
+- [dq_to_abc$0, '2', s_gate_pulses_3ph_1$0, '2']
+- [dummy_source$0, '0', diff$0, '1']
+- [dummy_source$1, '0', diff$1, '1']
+- [dummy_source$12, '0', integrator$0, '0']
+- [dummy_source$2, '0', diff$2, '1']
+- [dummy_source$3, '0', diff$3, '1']
+- [dummy_source$4, '0', sum_2$0, '1']
+- [dummy_source$5, '0', sum_2$1, '1']
+- [dummy_source$6, '0', dq_to_abc$0, '0']
+- [dummy_source$7, '0', dq_to_abc$0, '1']
+- [dummy_source$8, '0', dq_to_abc$0, '2']
+- [dummy_source$8$0, '0', abc_to_dq_2$0, '3']
+- [dummy_source$9, '0', dq_to_abc$0, '3']
+- [dummy_source$9$0, '0', abc_to_dq_2$0, '4']
+- [integrator$0, '0', cosine$0, '0']
+- [integrator$0, '0', modulo_twopi$0, '0']
+- [integrator$0, '0', sine$0, '0']
+- [lag_1$0, '0', dummy_sink$10, '0']
+- [lag_1$0, '0', user_fn_4_3$0, '3']
+- [limiter$0, '0', dummy_sink$0, '0']
+- [limiter$1, '0', dummy_sink$1, '0']
+- [s_gate_pulses_3ph_1$0, '0', vsi_3ph_1$0, '0']
+- [s_gate_pulses_3ph_1$0, '1', vsi_3ph_1$0, '1']
+- [s_gate_pulses_3ph_1$0, '2', vsi_3ph_1$0, '2']
+- [s_gate_pulses_3ph_1$0, '3', vsi_3ph_1$0, '3']
+- [s_gate_pulses_3ph_1$0, '4', vsi_3ph_1$0, '4']
+- [s_gate_pulses_3ph_1$0, '5', vsi_3ph_1$0, '5']
+- [s_indmc_2$0, '0', dummy_sink$2, '0']
+- [s_indmc_2$0, '0', user_fn_4_3$0, '0']
+- [s_indmc_2$0, '1', abc_to_dq_2$0, '0']
+- [s_indmc_2$0, '2', abc_to_dq_2$0, '1']
+- [s_indmc_2$0, '3', abc_to_dq_2$0, '2']
+- [s_pi_limiter_2$0, '0', diff$2, '0']
+- [s_pi_limiter_2$1, '0', diff$3, '0']
+- [s_pi_limiter_2$2, '0', sum_2$0, '0']
+- [s_pi_limiter_2$3, '0', sum_2$1, '0']
+- [sine$0, '0', dummy_sink$6, '0']
+- [sum_2$0, '0', limiter$0, '0']
+- [sum_2$1, '0', limiter$1, '0']
+- [triangle_2$0, '0', s_gate_pulses_3ph_1$0, '3']
+- [user_fn_4_3$0, '0', dummy_sink$5, '0']
+- [user_fn_4_3$0, '1', dummy_sink$4, '0']
+- [user_fn_4_3$0, '2', dummy_sink$3, '0']
+- [vsi_3ph_1$0, '0', s_indmc_2$0, '0']
+- [vsi_3ph_1$0, '1', s_indmc_2$0, '1']
+- [vsi_3ph_1$0, '2', s_indmc_2$0, '2']
+gparms:
+  delt_max: 40u
+  delt_min: 0.1u
+  delt_nrml: 20u
+  ls: 0.1455m
+  poles: '4'
+  sigma: '0.0834'
+  tr: '0.1257'
+  vdc: '615'
+  x_high: '1'
+  x_low: '-1'
+outvars:
+  ia:
+  - outvar
+  - - s_indmc_2$0
+    - ia
+  ib:
+  - outvar
+  - - s_indmc_2$0
+    - ib
+  ic:
+  - outvar
+  - - s_indmc_2$0
+    - ic
+  tem:
+  - outvar
+  - - s_indmc_2$0
+    - tem
+  wrm:
+  - outvar
+  - - s_indmc_2$0
+    - wrm
+solve_blocks:
+- d_parms:
+    algorithm_x_startup: explicit
+    algorithm_x_trns: RKF45
+    block_index: '0'
+    bs23_fctr_max: '1.1'
+    bs23_fctr_min: '0.8'
+    bs23_tolr: '1.0e-8'
+    delt_max_x: delt_max
+    delt_min_x: delt_min
+    delt_small: '1.0e-12'
+    factor_step_decrease: '0.6'
+    factor_step_increase: '1.5'
+    initial_sol: initialize
+    initial_sol_file: none
+    itmax_trbdf2: '20'
+    itmax_trns: '20000000'
+    output_solution_file: none
+    rkf45_fctr_max: '1.1'
+    rkf45_fctr_min: '0.8'
+    rkf45_tolr: '1.0e-2'
+    solve_type: trns
+    t_end: '4'
+    t_start: '0'
+    t_startup: '0.0'
+    trbdf2_tolr: '1.0e-5'
+    tstep0_x: delt_nrml
+    write_iter_n_x: '1000'
+    write_matrix_x: 'no'
+    write_time_x: 'no'
+    x_fixed_tstep: 'no'
+    x_nr_check_rhs2: 'yes'
+    x_nr_dmp: 'no'
+    x_nr_dmp0: 'no'
+    x_nr_dmp_itermax: '50'
+    x_nr_dmp_itermax0: '50'
+    x_nr_dmp_k: '0.2'
+    x_nr_dmp_k0: '0.2'
+    x_nr_eps_rhs: '1.0e-2'
+    x_nr_itermax: '500'
+    x_nr_itermax0: '500'
+    x_nr_write_rhs2: 'no'
+  index: '0'
+  name: s1
+  output_blocks:
+  - out$0
+  - out$1
+output_blocks:
+- d_parms:
+    append: 'no'
+    filename: indmc_vctr.dat
+    fixed_interval: 50u
+    limit_lines: '1000000'
+    t_end: none
+    t_start: none
+  index_slv: '0'
+  name: out$0
+  outvars:
+  - ia
+  - ib
+  - ic
+  - tem
+  - wrm
+- d_parms:
+    append: 'no'
+    filename: indmc_vctr1.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: '3.48'
+    t_start: '3.44'
+  index_slv: '0'
+  name: out$1
+  outvars:
+  - ia
+  - ib
+  - ic

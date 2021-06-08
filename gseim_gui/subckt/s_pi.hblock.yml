@@ -1,0 +1,33 @@
+id: s_pi
+label: PI control
+category: '[GRC Hier Blocks]'
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: Kp
+    label: Kp
+    default: '1'
+-   id: Ki
+    label: Ki
+    default: '1'
+-   id: y20
+    label: y20
+    default: '0'
+outvars:
+- x
+- y
+
+inputs:
+-   label: x
+    dtype: float
+    vlen: 1
+
+outputs:
+-   label: out
+    dtype: float
+    vlen: 1
+grc_source: ~/gseim_gui/subckt_grc/s_pi.grc
+

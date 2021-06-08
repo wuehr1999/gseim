@@ -1,0 +1,23 @@
+#
+# This template will be used only by the GUI, not by the engine.
+#
+xbe name=dummy_source evaluate=yes
+# y = const
+Jacobian: constant
+input_vars:
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: y
+n_f= 0
+n_g= 0
+C:
+prototypes:
+variables:
+source:
+endC
+endxbe

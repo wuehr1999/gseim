@@ -1,0 +1,16 @@
+id: dummy_source
+label: dummy Source
+
+parameters:
+-   id: n
+    label: n
+    dtype: string
+    default: none
+
+outputs:
+-   domain: stream
+    dtype: float
+
+documentation: |-
+    To be used along with dummy sink.
+

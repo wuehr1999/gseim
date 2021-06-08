@@ -1,0 +1,111 @@
+id: s_indmc
+label: s_indmc
+category: '[GRC Hier Blocks]'
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: i1_k
+    label: i1_k
+    default: computed
+-   id: j
+    label: j
+    default: '0.089'
+-   id: llr
+    label: llr
+    default: '0.002'
+-   id: lls
+    label: lls
+    default: '0.002'
+-   id: lm
+    label: lm
+    default: '0.0693'
+-   id: m1_k
+    label: m1_k
+    default: computed
+-   id: poles
+    label: poles
+    default: '4'
+-   id: rr
+    label: rr
+    default: '0.816'
+-   id: rs
+    label: rs
+    default: '0.435'
+-   id: s1_k1
+    label: s1_k1
+    default: computed
+-   id: s1_k2
+    label: s1_k2
+    default: computed
+-   id: s2_k1
+    label: s2_k1
+    default: computed
+-   id: s2_k2
+    label: s2_k2
+    default: computed
+-   id: s3_k1
+    label: s3_k1
+    default: computed
+-   id: s3_k2
+    label: s3_k2
+    default: computed
+-   id: s4_k1
+    label: s4_k1
+    default: computed
+-   id: s4_k2
+    label: s4_k2
+    default: computed
+-   id: s6_k1
+    label: s6_k1
+    default: computed
+-   id: s6_k2
+    label: s6_k2
+    default: computed
+-   id: s7_k1
+    label: s7_k1
+    default: computed
+-   id: s7_k2
+    label: s7_k2
+    default: computed
+-   id: s8_k1
+    label: s8_k1
+    default: computed
+-   id: s8_k2
+    label: s8_k2
+    default: computed
+-   id: s9_k1
+    label: s9_k1
+    default: computed
+-   id: s9_k2
+    label: s9_k2
+    default: computed
+-   id: x2
+    label: x2
+    default: computed
+outvars:
+- tem
+- wrm
+
+inputs:
+-   label: tl
+    dtype: float
+    vlen: 1
+-   label: va
+    dtype: float
+    vlen: 1
+-   label: vb
+    dtype: float
+    vlen: 1
+-   label: vc
+    dtype: float
+    vlen: 1
+
+outputs:
+-   label: wrm
+    dtype: float
+    vlen: 1
+grc_source: ~/gseim_gui/subckt_grc/s_indmc.grc
+

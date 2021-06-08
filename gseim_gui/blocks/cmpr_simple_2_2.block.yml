@@ -1,0 +1,42 @@
+id: cmpr_simple_2_2
+label: cmpr_simple_2_2
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: y_low
+    label: y_low
+    dtype: float
+    default: '-1.0'
+-   id: y_high
+    label: y_high
+    dtype: float
+    default: '1.0'
+-   id: flag_invert
+    label: flag_invert
+    dtype: float
+    default: '0'
+
+inputs:
+-   domain: stream
+    label: x1
+    dtype: float
+-   domain: stream
+    label: x2
+    dtype: float
+
+outputs:
+-   domain: stream
+    label: y1
+    dtype: float
+-   domain: stream
+    label: y2
+    dtype: float
+
+outvars:
+- x1
+- x2
+- y1
+- y2

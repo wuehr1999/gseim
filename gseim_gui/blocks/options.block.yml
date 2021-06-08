@@ -1,0 +1,66 @@
+id: options
+label: Options
+
+parameters:
+-   id: title
+    label: Title
+    dtype: string
+    hide: ${ ('none' if title else 'part') }
+-   id: author
+    label: Author
+    dtype: string
+    hide: ${ ('none' if author else 'part') }
+-   id: copyright
+    label: Copyright
+    dtype: string
+    hide: ${ ('none' if copyright else 'part') }
+-   id: description
+    label: Description
+    dtype: string
+    hide: ${ ('none' if description else 'part') }
+-   id: generate_options
+    label: Generate Options
+    dtype: enum
+    default: circuit
+    options: [circuit, hb]
+    option_labels: [Circuit, Hier Block]
+-   id: category
+    label: Category
+    dtype: string
+    default: '[GRC Hier Blocks]'
+    hide: ${ ('none' if generate_options.startswith('hb') else 'all') }
+-   id: placement
+    label: Widget Placement
+    dtype: int_vector
+    default: (0,0)
+    hide: ${ ('part' if generate_options == 'bokeh_gui' else 'all') }
+-   id: sizing_mode
+    label: Sizing Mode
+    dtype: enum
+    default: fixed
+    options: [fixed, stretch_both, scale_width, scale_height, scale_both]
+    option_labels: [Fixed, Stretch Both, Scale Width, Scale Height, Scale Both]
+    hide: ${ ('part' if generate_options == 'bokeh_gui' else 'all') }
+-   id: run
+    label: Run
+    dtype: bool
+    default: 'True'
+    options: ['True', 'False']
+    option_labels: [Autostart, 'Off']
+    hide: ${ ('all' if generate_options not in ('qt_gui', 'bokeh_gui') else ('part'
+        if run else 'none')) }
+
+asserts:
+- ${ not window_size or len(window_size) == 2 }
+- ${ not window_size or 300 <= window_size[0] <= 4096 }
+- ${ not window_size or 300 <= window_size[1] <= 4096 }
+- ${ len(placement) == 4 or len(placement) == 2 }
+- ${ all(i >= 0 for i in placement) }
+
+documentation: |-
+    The options block sets special parameters for the flow graph. Only one option block is allowed per flow graph.
+
+    Title, author, and description parameters are for identification purposes.
+
+    The category parameter determines the placement of the block in the block selection window. The category only applies when creating hier blocks.
+

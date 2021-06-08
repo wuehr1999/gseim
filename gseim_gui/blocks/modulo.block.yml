@@ -1,0 +1,24 @@
+id: modulo
+label: modulo
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: x1
+    label: x1
+    dtype: float
+    default: '-1'
+-   id: x2
+    label: x2
+    dtype: float
+    default: '1'
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+
+outvars:
+- x

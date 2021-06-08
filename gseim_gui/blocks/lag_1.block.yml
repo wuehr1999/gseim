@@ -1,0 +1,30 @@
+id: lag_1
+label: lag_1
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: tr
+    label: tr
+    dtype: float
+    default: '1.0'
+-   id: y_st
+    label: y_st
+    dtype: float
+    default: '0.0'
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- x
+- y
