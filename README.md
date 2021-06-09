@@ -15,7 +15,7 @@ and a few additional python pieces.
 # Installation instructions (for Linux only)
 
 - Make sure you have ``` python3 ``` and ``` g++ ``` installed.
-- Download the ```gseim_gui``` folder in your home directory.
+- Download the ```gseim_gui``` folder in your **home directory**.
 - ```cd ~/gseim_gui/gseim/cppsrc```
 - ```make -f mkgseim```
 - ```make -f mkfilter_so```
