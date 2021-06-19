@@ -44,8 +44,6 @@ The use and redistribution of GSEIM is governed by GPLv3.
     [Simulink example](https://www.youtube.com/watch?v=iOmqgewj5XI)
   - allow text on canvas with user-specified font, symbols;
     allow moving text around in the canvas with the mouse.
-  - bus facility, as in
-    [this example](https://www.youtube.com/watch?v=LWnZXSuRt0I)
   - allow panning with the mouse (in addition to using scroll bars)
 - Plotting GUI
   - include post-processing features such as average, rms, Fourier spectrum
