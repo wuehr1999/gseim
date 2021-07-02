@@ -41,41 +41,53 @@ source:
 
    if (g1 > Lby2) {
      if (g4 > Lby2) {
-       val_a = 0.5*vdc;
+//     val_a = 0.5*vdc;
+       val_a = 0.0;
      } else {
-       val_a = vdc;
+//     val_a = vdc;
+       val_a = 0.5*vdc;
      }
    } else {
      if (g4 > Lby2) {
-       val_a = 0.0;
+//     val_a = 0.0;
+       val_a = -0.5*vdc;
      } else {
-       val_a = 0.5*vdc;
+//     val_a = 0.5*vdc;
+       val_a = 0.0;
      }
    }
    if (g3 > Lby2) {
      if (g6 > Lby2) {
-       val_b = 0.5*vdc;
+//     val_b = 0.5*vdc;
+       val_b = 0.0;
      } else {
-       val_b = vdc;
+//     val_b = vdc;
+       val_b = 0.5*vdc;
      }
    } else {
      if (g6 > Lby2) {
-       val_b = 0.0;
+//     val_b = 0.0;
+       val_b = -0.5*vdc;
      } else {
-       val_b = 0.5*vdc;
+//     val_b = 0.5*vdc;
+       val_b = 0.0;
      }
    }
    if (g5 > Lby2) {
      if (g2 > Lby2) {
-       val_c = 0.5*vdc;
+//     val_c = 0.5*vdc;
+       val_c = 0.0;
      } else {
-       val_c = vdc;
+//     val_c = vdc;
+       val_c = 0.5*vdc;
      }
    } else {
      if (g2 > Lby2) {
-       val_c = 0.0;
+//     val_c = 0.0;
+       val_c = -0.5*vdc;
      } else {
-       val_c = 0.5*vdc;
+//     val_c = 0.5*vdc;
+       val_c = 0.0;
      }
    }
 

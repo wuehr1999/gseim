@@ -1,7 +1,6 @@
 id: indmc1
 label: indmc1
 
-# todo
 parameters:
 -   id: name
     label: name

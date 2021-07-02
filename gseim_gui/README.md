@@ -15,7 +15,7 @@ and a few additional python pieces.
 # Installation instructions (for Linux only)
 
 - Make sure you have ``` python3 ``` and ``` g++ ``` installed.
-- Download the ```gseim_gui``` folder in your home directory.
+- Download the ```gseim_gui``` folder in your **home directory**.
 - ```cd ~/gseim_gui/gseim/cppsrc```
 - ```make -f mkgseim```
 - ```make -f mkfilter_so```
@@ -44,8 +44,6 @@ The use and redistribution of GSEIM is governed by GPLv3.
     [Simulink example](https://www.youtube.com/watch?v=iOmqgewj5XI)
   - allow text on canvas with user-specified font, symbols;
     allow moving text around in the canvas with the mouse.
-  - bus facility, as in
-    [this example](https://www.youtube.com/watch?v=LWnZXSuRt0I)
   - allow panning with the mouse (in addition to using scroll bars)
 - Plotting GUI
   - include post-processing features such as average, rms, Fourier spectrum

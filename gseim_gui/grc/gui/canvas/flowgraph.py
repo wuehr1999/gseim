@@ -271,17 +271,6 @@ class FlowGraph(CoreFlowgraph, Drawable):
         self.selected_elements = selected
 
     # Modify Selected
-    def type_controller_modify_selected(self, direction):
-        """
-        Change the registered type controller for the selected signal blocks.
-
-        Args:
-            direction: +1 or -1
-
-        Returns:
-            true for change
-        """
-        return any(sb.type_controller_modify(direction) for sb in self.selected_blocks())
 
     def port_controller_modify_selected(self, direction):
         """

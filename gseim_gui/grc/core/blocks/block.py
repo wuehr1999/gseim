@@ -392,37 +392,6 @@ class Block(Element):
         buslist = [p for p in ports if p.dtype == 'bus']
         return buslist or ports
 
-    def type_controller_modify(self, direction):
-        """
-        Change the type controller.
-
-        Args:
-            direction: +1 or -1
-
-        Returns:
-            true for change
-        """
-        changed = False
-        type_param = None
-        for param in filter(lambda p: p.is_enum(), self.get_params()):
-            children = self.get_ports() + self.get_params()
-            # Priority to the type controller
-            if param.get_key() in ' '.join(map(lambda p: p._type, children)): type_param = param
-            # Use param if type param is unset
-            if not type_param:
-                type_param = param
-        if type_param:
-            # Try to increment the enum by direction
-            try:
-                keys = type_param.get_option_keys()
-                old_index = keys.index(type_param.get_value())
-                new_index = (old_index + direction + len(keys)) % len(keys)
-                type_param.set_value(keys[new_index])
-                changed = True
-            except:
-                pass
-        return changed
-
     def form_bus_structure(self, direc):
         if direc == 'source':
             ports = self.sources

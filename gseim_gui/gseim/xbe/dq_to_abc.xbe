@@ -56,6 +56,10 @@ source:
      if (G.flags[G.i_explicit]) {
        alpha = cost*d - sint*q;
        beta  = sint*d + cost*q;
+
+       X.val_aux[na_alpha] = alpha;
+       X.val_aux[na_beta ] = beta;
+
        X.val_vr[nvr_a] =  k1*alpha;
        X.val_vr[nvr_b] = -k2*alpha + k3*beta;
        X.val_vr[nvr_c] = -k2*alpha - k3*beta;

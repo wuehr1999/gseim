@@ -1614,6 +1614,10 @@ void x_dq_to_abc(Global &G,XbeUsr &X,XbeJac &J) {
      if (G.flags[G.i_explicit]) {
        alpha = cost*d - sint*q;
        beta  = sint*d + cost*q;
+
+       X.val_aux[na_alpha] = alpha;
+       X.val_aux[na_beta ] = beta;
+
        X.val_vr[nvr_a] =  k1*alpha;
        X.val_vr[nvr_b] = -k2*alpha + k3*beta;
        X.val_vr[nvr_c] = -k2*alpha - k3*beta;
@@ -4947,41 +4951,53 @@ void x_vsi_3ph_1(Global &G,XbeUsr &X,XbeJac &J) {
 
    if (g1 > Lby2) {
      if (g4 > Lby2) {
-       val_a = 0.5*vdc;
+//     val_a = 0.5*vdc;
+       val_a = 0.0;
      } else {
-       val_a = vdc;
+//     val_a = vdc;
+       val_a = 0.5*vdc;
      }
    } else {
      if (g4 > Lby2) {
-       val_a = 0.0;
+//     val_a = 0.0;
+       val_a = -0.5*vdc;
      } else {
-       val_a = 0.5*vdc;
+//     val_a = 0.5*vdc;
+       val_a = 0.0;
      }
    }
    if (g3 > Lby2) {
      if (g6 > Lby2) {
-       val_b = 0.5*vdc;
+//     val_b = 0.5*vdc;
+       val_b = 0.0;
      } else {
-       val_b = vdc;
+//     val_b = vdc;
+       val_b = 0.5*vdc;
      }
    } else {
      if (g6 > Lby2) {
-       val_b = 0.0;
+//     val_b = 0.0;
+       val_b = -0.5*vdc;
      } else {
-       val_b = 0.5*vdc;
+//     val_b = 0.5*vdc;
+       val_b = 0.0;
      }
    }
    if (g5 > Lby2) {
      if (g2 > Lby2) {
-       val_c = 0.5*vdc;
+//     val_c = 0.5*vdc;
+       val_c = 0.0;
      } else {
-       val_c = vdc;
+//     val_c = vdc;
+       val_c = 0.5*vdc;
      }
    } else {
      if (g2 > Lby2) {
-       val_c = 0.0;
+//     val_c = 0.0;
+       val_c = -0.5*vdc;
      } else {
-       val_c = 0.5*vdc;
+//     val_c = 0.5*vdc;
+       val_c = 0.0;
      }
    }
 

@@ -135,7 +135,7 @@ class lib_entity:
 #       indicates subckt
 
         with open(os.path.expanduser(filename)) as f:
-            data = yaml.load(f, Loader=yaml.FullLoader)
+            data = yaml.safe_load(f)
 
         self.flag_subckt = False
         self.flag_block = False
@@ -167,7 +167,7 @@ class lib_entity:
             grc_filename = data['grc_source']
 
             with open(os.path.expanduser(grc_filename)) as f:
-                data = yaml.load(f, Loader=yaml.FullLoader)
+                data = yaml.safe_load(f)
             data = treat_virtual(data)
             for i in data['blocks']:
                 if 'name' in i.keys():
@@ -245,13 +245,13 @@ def parse_1(parent, child_name, dir_block, dir_sub, n_sub):
                 n_sub[1] = cct0.pos[0]
 #           get elements called by this subckt:
             with open(os.path.expanduser(filename)) as f:
-                data = yaml.load(f, Loader=yaml.FullLoader)
+                data = yaml.safe_load(f)
 
             grc_filename = data['grc_source']
             cct0.grc_file_name = grc_filename
 
             with open(os.path.expanduser(grc_filename)) as f:
-                data = yaml.load(f, Loader=yaml.FullLoader)
+                data = yaml.safe_load(f)
             data = treat_virtual(data)
             l_connections = data['connections']
             l_unique = get_unique_names_1(l_connections)
@@ -405,14 +405,14 @@ def assign_gseim_prm(input_entity, l_lib, cct_file, dir_block, dir_sub):
 #       main cct: take parms from grc file of the cct:
         filename = cct_file
         with open(os.path.expanduser(filename)) as f:
-            data = yaml.load(f, Loader=yaml.FullLoader)
+            data = yaml.safe_load(f)
         input_entity.gseim_prm = data['gparms']
     else:
 #       subckt: take parms from grc file of the parent:
         lib_name = l_lib[input_entity.lib_map].name
         filename = input_entity.parent.grc_file_name
         with open(os.path.expanduser(filename)) as f:
-            data = yaml.load(f, Loader=yaml.FullLoader)
+            data = yaml.safe_load(f)
 
         for d in data['blocks']:
             if d['name'] == input_entity.name:
@@ -659,7 +659,7 @@ dir_exec = dir_xbe.replace('xbe', 'exec')
 
 print('main: cct_file:', cct_file, flush=True)
 with open(os.path.expanduser(cct_file)) as f:
-    data = yaml.load(f, Loader=yaml.FullLoader)
+    data = yaml.safe_load(f)
 data = treat_virtual(data)
 
 cct1 = cct('top_cct', True)
