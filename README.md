@@ -36,22 +36,6 @@ online [(https://gseim.github.io)](https://gseim.github.io).
 
 The use and redistribution of GSEIM is governed by GPLv3.
 
-**Contributions** are sought in the following areas:
-
-- Schematic entry GUI
-  - allow images within element symbols
-  - allow rectilinear wires, with features like this
-    [Simulink example](https://www.youtube.com/watch?v=iOmqgewj5XI)
-  - allow text on canvas with user-specified font, symbols;
-    allow moving text around in the canvas with the mouse.
-  - allow panning with the mouse (in addition to using scroll bars)
-- Plotting GUI
-  - include post-processing features such as average, rms, Fourier spectrum
-  - dynamic plotting: plot should get updated as simulation proceeds
-
-In addition, suggestions for improving the package, examples,
-documentation are welcome.
-
 **Future Plans:**
 
 - enhance the element library
