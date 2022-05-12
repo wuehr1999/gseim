@@ -1,0 +1,134 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=dq0_to_abc_2 evaluate=yes
+Jacobian: variable
+input_vars: xd xq x0 theta
+output_vars: xa xb xc
+aux_vars: c s
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: xd xq x0 xa xb xc
+n_f= 0
+n_g= 5
+g_1: xa xd xq x0 c s 
+g_2: xb xd xq x0 c s 
+g_3: xc xd xq x0 c s 
+g_4: c theta
+g_5: s theta
+C:
+prototypes:
+variables:
+   static double k1=0.5,k2=0;
+   double c1,s1;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     k2 = 0.5*sqrt(3.0);
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_xd] = X.val_vr[nvr_xd];
+     X.outprm[no_xq] = X.val_vr[nvr_xq];
+     X.outprm[no_x0] = X.val_vr[nvr_x0];
+     X.outprm[no_xa] = X.val_vr[nvr_xa];
+     X.outprm[no_xb] = X.val_vr[nvr_xb];
+     X.outprm[no_xc] = X.val_vr[nvr_xc];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     xd = X.val_vr[nvr_xd];
+     xq = X.val_vr[nvr_xq];
+     x0 = X.val_vr[nvr_x0];
+
+     theta = X.val_vr[nvr_theta];
+
+     c = cos(theta);
+     s = sin(theta);
+
+     X.val_vr [nvr_xa] = xd*c + xq*s + x0;
+     X.val_vr [nvr_xb] = - xd*(k1*c-k2*s) - xq*(k2*c+k1*s) + x0;
+     X.val_vr [nvr_xc] = - xd*(k1*c+k2*s) - xq*(-k2*c+k1*s) + x0;
+     X.val_aux[na_c  ] = c;
+     X.val_aux[na_s  ] = s;
+
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     xd = X.val_vr[nvr_xd];
+     xq = X.val_vr[nvr_xq];
+     x0 = X.val_vr[nvr_x0];
+
+     theta = X.val_vr[nvr_theta];
+
+     c1 = cos(theta);
+     s1 = sin(theta);
+
+     if (G.flags[G.i_explicit]) {
+       X.val_vr [nvr_xa] = xd*c1 + xq*s1 + x0;
+       X.val_vr [nvr_xb] = - xd*(k1*c1-k2*s1) - xq*(k2*c1+k1*s1) + x0;
+       X.val_vr [nvr_xc] = - xd*(k1*c1+k2*s1) - xq*(-k2*c1+k1*s1) + x0;
+       X.val_aux[na_c  ] = c1;
+       X.val_aux[na_s  ] = s1;
+     } else if (G.flags[G.i_implicit]) {
+       xa = X.val_vr [nvr_xa];
+       xb = X.val_vr [nvr_xb];
+       xc = X.val_vr [nvr_xc];
+       c  = X.val_aux[na_c  ];
+       s  = X.val_aux[na_s  ];
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = xa + xd*(-c) + xq*(-s) - x0;
+         X.g[ng_2] = xb + xd*(k1*c-k2*s) + xq*(k2*c+k1*s) - x0;
+         X.g[ng_3] = xc + xd*(k1*c+k2*s) + xq*(-k2*c+k1*s) - x0;
+         X.g[ng_4] = c - c1;
+         X.g[ng_5] = s - s1;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr [ng_1][nvr_xa] = 1.0;
+         J.dgdvr [ng_1][nvr_xd] = -c;
+         J.dgdvr [ng_1][nvr_xq] = -s;
+         J.dgdvr [ng_1][nvr_x0] = -1.0;
+         J.dgdaux[ng_1][na_c  ] = -xd;
+         J.dgdaux[ng_1][na_s  ] = -xq;
+
+         J.dgdvr [ng_2][nvr_xb] = 1.0;
+         J.dgdvr [ng_2][nvr_xd] = k1*c-k2*s;
+         J.dgdvr [ng_2][nvr_xq] = k2*c+k1*s;
+         J.dgdvr [ng_2][nvr_x0] = -1.0;
+         J.dgdaux[ng_2][na_c  ] = xd*k1+xq*k2;
+         J.dgdaux[ng_2][na_s  ] = -xd*k2+xq*k1;
+
+         J.dgdvr [ng_3][nvr_xc] = 1.0;
+         J.dgdvr [ng_3][nvr_xd] = k1*c+k2*s;
+         J.dgdvr [ng_3][nvr_xq] = -k2*c+k1*s;
+         J.dgdvr [ng_3][nvr_x0] = -1.0;
+         J.dgdaux[ng_3][na_c  ] = xd*k1-xq*k2;
+         J.dgdaux[ng_3][na_s  ] = xd*k2+xq*k1;
+
+         J.dgdaux[ng_4][na_c     ] = 1.0;
+         J.dgdvr [ng_4][nvr_theta] =  s1;
+
+         J.dgdaux[ng_5][na_s     ] = 1.0;
+         J.dgdvr [ng_5][nvr_theta] = -c1;
+       }
+     }
+     return;
+   }
+endC
+endxbe

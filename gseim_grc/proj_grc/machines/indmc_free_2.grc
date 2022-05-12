@@ -1,0 +1,277 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    delta_show_grid: '0'
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: circuit
+    id: indmc_free_2
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: indmc_free_2
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: const$0
+  id: const
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    k: '0'
+    k_scale: '1'
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [417, 255]
+    rotation: 0
+    state: true
+- name: s_indmc_2$0
+  id: s_indmc_2
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    j: '0.089'
+    llr: '0.002'
+    lls: '0.002'
+    lm: '0.693'
+    mirror: none
+    name: none
+    poles: '4'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    rr: '0.816'
+    rs: '0.435'
+  states:
+    coordinate: [489, 183]
+    rotation: 0
+    state: true
+- name: src_ac$0
+  id: src_ac
+  parameters:
+    a: Vm
+    comment: ''
+    dc: '0'
+    drawing_scheme: symbol
+    f_hz: f_hz
+    mirror: none
+    name: none
+    phi_deg: '0'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t0: '0'
+  states:
+    coordinate: [417, 183]
+    rotation: 0
+    state: true
+- name: src_ac$1
+  id: src_ac
+  parameters:
+    a: Vm
+    comment: ''
+    dc: '0'
+    drawing_scheme: symbol
+    f_hz: f_hz
+    mirror: none
+    name: none
+    phi_deg: '-120'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t0: '0'
+  states:
+    coordinate: [417, 207]
+    rotation: 0
+    state: true
+- name: src_ac$2
+  id: src_ac
+  parameters:
+    a: Vm
+    comment: ''
+    dc: '0'
+    drawing_scheme: symbol
+    f_hz: f_hz
+    mirror: none
+    name: none
+    phi_deg: '-240'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t0: '0'
+  states:
+    coordinate: [417, 231]
+    rotation: 0
+    state: true
+connections:
+- [const$0, '0', s_indmc_2$0, '3']
+- [src_ac$0, '0', s_indmc_2$0, '0']
+- [src_ac$1, '0', s_indmc_2$0, '1']
+- [src_ac$2, '0', s_indmc_2$0, '2']
+gparms:
+  Vm: '180'
+  f_hz: '60'
+outvars:
+  ia:
+  - outvar
+  - - s_indmc_2$0
+    - ia
+  ib:
+  - outvar
+  - - s_indmc_2$0
+    - ib
+  ic:
+  - outvar
+  - - s_indmc_2$0
+    - ic
+  tem:
+  - outvar
+  - - s_indmc_2$0
+    - tem
+  wrm:
+  - outvar
+  - - s_indmc_2$0
+    - wrm
+solve_blocks:
+- d_parms:
+    algorithm_e: backward_euler
+    algorithm_ex: backward_euler
+    algorithm_x_startup: explicit
+    algorithm_x_trns: RK4
+    block_index: '0'
+    bs23_fctr_max: '1.1'
+    bs23_fctr_min: '0.8'
+    bs23_tolr: '1.0e-8'
+    delt_max_e: none
+    delt_max_ex: none
+    delt_max_x: none
+    delt_min_e: none
+    delt_min_ex: none
+    delt_min_x: none
+    e_nr_check_delx_all: 'no'
+    e_nr_check_spice: 'no'
+    e_nr_dmp: 'no'
+    e_nr_dmp0: 'no'
+    e_nr_dmp_itermax: '50'
+    e_nr_dmp_itermax0: '50'
+    e_nr_dmp_k: '0.2'
+    e_nr_dmp_k0: '0.2'
+    e_nr_eps_delx_all: '1.0e-4'
+    e_nr_itermax: '500'
+    e_nr_itermax0: '500'
+    e_nr_spice_abstol: '1.0e-12'
+    e_nr_spice_reltol: '1.0e-3'
+    e_nr_spice_vntol: '1.0e-6'
+    e_nr_write_rhs2: 'no'
+    ex_nr_check_delx_all: 'no'
+    ex_nr_dmp: 'no'
+    ex_nr_dmp0: 'no'
+    ex_nr_dmp_itermax: '50'
+    ex_nr_dmp_itermax0: '50'
+    ex_nr_dmp_k: '0.2'
+    ex_nr_dmp_k0: '0.2'
+    ex_nr_eps_delx_all: '1.0e-4'
+    ex_nr_itermax: '500'
+    ex_nr_itermax0: '500'
+    ex_nr_write_rhs2: 'no'
+    factor_step_decrease: '0.6'
+    factor_step_increase: '1.5'
+    initial_sol: initialize
+    initial_sol_file: none
+    itmax_stepred: '20'
+    itmax_trbdf2: '20'
+    itmax_trns: '1000000'
+    output_solution_file: none
+    rkf45_fctr_max: '1.1'
+    rkf45_fctr_min: '0.8'
+    rkf45_tolr: '1.0e-8'
+    solve_type: trns
+    ssw_frequency: none
+    ssw_ndiv: '200'
+    ssw_nr_dmp: 'no'
+    ssw_nr_dmp_itermax: '10'
+    ssw_nr_dmp_k: '0.6'
+    ssw_nr_eps_rhs: '1.0e-10'
+    ssw_nr_itermax: '50'
+    ssw_period: none
+    ssw_period_mult: '2'
+    t_end: '1'
+    t_start: '0'
+    t_startup: '0.0'
+    trbdf2_tolr: '1.0e-5'
+    tstep0_e: none
+    tstep0_ex: none
+    tstep0_x: 0.1m
+    write_iter_n_e: '1000'
+    write_iter_n_x: '1000'
+    write_time_x: 'no'
+    x_nr_check_delx_all: 'no'
+    x_nr_dmp: 'no'
+    x_nr_dmp0: 'no'
+    x_nr_dmp_itermax: '50'
+    x_nr_dmp_itermax0: '50'
+    x_nr_dmp_k: '0.2'
+    x_nr_dmp_k0: '0.2'
+    x_nr_eps_delx_all: '1.0e-4'
+    x_nr_itermax: '500'
+    x_nr_itermax0: '500'
+    x_nr_write_rhs2: 'no'
+  index: '0'
+  name: S1
+  output_blocks:
+  - out$0
+output_blocks:
+- d_parms:
+    append: 'no'
+    filename: output.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: none
+    t_start: none
+  index_slv: '0'
+  name: out$0
+  outvars:
+  - ia
+  - ib
+  - ic
+  - tem
+  - wrm

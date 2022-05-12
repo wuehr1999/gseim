@@ -1,0 +1,135 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=xfmr_level2_1ph
+#
+# two-winding transformer
+# n1, n2, lm model
+#
+Jacobian: constant
+nodes: p_p  s_p  p_n  s_n 
+state_vars:
+aux_vars: cur_p_p  cur_s_p  im
+aux_vars_startup:
+x_vars:
+iparms:
+sparms:
+rparms:
++  p_turns=1
++  s_turns=1
++  lm=15m
+stparms: ip0=0  is0=0
+igparms:
+outparms: ip is vp vs
+n_f=7
+f_1: cur_p_p
+f_2: cur_s_p
+f_3: cur_p_p
+f_4: cur_s_p
+f_5: v(p_p) v(p_n) v(s_p) v(s_n)
+f_6: cur_p_p cur_s_p im
+f_7: d_dt(im) v(p_p) v(p_n)
+n_g=0
+n_h=4
+h_1:
+h_2:
+h_3:
+h_4:
+C:
+#
+# cur_p_p: current entering the p terminal of the primary
+# cur_s_p: current entering the p terminal of the secondary
+#
+variables:
+   int nfp_p_p=0;
+   int nfp_s_p=1;
+   int nfp_p_n=2;
+   int nfp_s_n=3;
+source:
+   if (G.flags[G.i_dc]) {
+     cout << "xfmr_level2_1ph.ebe: dc not implemented." << endl;
+     cout << "  Halting..." << endl; exit(1);
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_aux[na_cur_p_p] = 0.0;
+     X.val_aux[na_cur_s_p] = 0.0;
+     X.val_aux[na_im     ] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     p_turns = X.rprm[nr_p_turns];
+     s_turns = X.rprm[nr_s_turns];
+     lm      = X.rprm[nr_lm     ];
+
+     cur_p_p = X.val_aux[na_cur_p_p];
+     cur_s_p = X.val_aux[na_cur_s_p];
+     im      = X.val_aux[na_im     ];
+
+     if (G.flags[G.i_function]) {
+       X.f[nfp_p_p] =  cur_p_p;
+       X.f[nfp_p_n] = -cur_p_p;
+       X.f[nfp_s_p] =  cur_s_p;
+       X.f[nfp_s_n] = -cur_s_p;
+
+       X.f[nf_5] = (X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n])/p_turns -
+                   (X.val_nd[nnd_s_p]-X.val_nd[nnd_s_n])/s_turns;
+       X.f[nf_6] = p_turns*(cur_p_p-im) + s_turns*cur_s_p;
+       X.f[nf_7] = (X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n])/lm;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdaux[nfp_p_p][na_cur_p_p] =  1.0;
+       J.dfdaux[nfp_p_n][na_cur_p_p] = -1.0;
+       J.dfdaux[nfp_s_p][na_cur_s_p] =  1.0;
+       J.dfdaux[nfp_s_n][na_cur_s_p] = -1.0;
+
+       J.dfdv[nf_5][nnd_p_p] =  1.0/p_turns;
+       J.dfdv[nf_5][nnd_p_n] = -1.0/p_turns;
+       J.dfdv[nf_5][nnd_s_p] = -1.0/s_turns;
+       J.dfdv[nf_5][nnd_s_n] =  1.0/s_turns;
+
+       J.dfdaux[nf_6][na_cur_p_p] =  p_turns;
+       J.dfdaux[nf_6][na_im     ] = -p_turns;
+       J.dfdaux[nf_6][na_cur_s_p] =  s_turns;
+
+       J.dfdv[nf_7][nnd_p_p] =  1.0/lm;
+       J.dfdv[nf_7][nnd_p_n] = -1.0/lm;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+      ip0 = X.stprm[nst_ip0];
+      is0 = X.stprm[nst_is0];
+      cout << "xfmr_level2_1ph.ebe: startup not implemented. Halting..." << endl;
+      exit(1);
+      if (G.flags[G.i_function]) {
+         X.h[nh_1] =  ip0;
+         X.h[nh_2] = -ip0;
+         X.h[nh_3] =  is0;
+         X.h[nh_4] = -is0;
+      }
+      X.val_aux[na_cur_p_p] = ip0;
+      X.val_aux[na_cur_s_p] = is0;
+      return;
+   }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_vp] = X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n];
+      X.outprm[no_vs] = X.val_nd[nnd_s_p]-X.val_nd[nnd_s_n];
+      X.outprm[no_ip] = X.cur_nd[nnd_p_p];
+      X.outprm[no_is] = X.cur_nd[nnd_s_p];
+      return;
+   }
+endC
+endebe

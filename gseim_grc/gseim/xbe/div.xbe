@@ -1,0 +1,96 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=div evaluate=yes
+# y = k*x1/x2
+# (if abs(x2) < delta, then x2 is treated to be equal to delta)
+Jacobian: variable
+input_vars: x1 x2
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+rparms:
++  k=1
++  delta=1.0e-6
+stparms:
+igparms:
+outparms: x1 x2 y
+n_f= 0
+n_g= 1
+g_1: x1 x2 y
+C:
+prototypes:
+variables:
+   double x20,x2inv;
+source:
+   k = X.rprm[nr_k];
+   delta = X.rprm[nr_delta];
+
+   if (G.flags[G.i_init_guess]) {
+     x1 = X.val_vr[nvr_x1];
+     x2 = X.val_vr[nvr_x2];
+     if (abs(x2) <= delta) {
+       if (x2 < 0) {
+         x20 = -delta;
+       } else {
+         x20 = delta;
+       }
+     } else {
+       x20 = x2;
+     }
+     X.val_vr[nvr_y] = k*x1/x20;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
+
+   x1 = X.val_vr[nvr_x1];
+   x2 = X.val_vr[nvr_x2];
+   if (abs(x2) <= delta) {
+     if (x2 < 0) {
+       x20 = -delta;
+     } else {
+       x20 = delta;
+     }
+   } else {
+     x20 = x2;
+   }
+   x2inv = 1.0/x20;
+
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = k*x1*x2inv;
+     } else if (G.flags[G.i_implicit]) {
+       y = X.val_vr[nvr_y];
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = y - k*x1*x2inv;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y ] =  1.0;
+         J.dgdvr[ng_1][nvr_x1] = -k*x2inv;
+         J.dgdvr[ng_1][nvr_x2] =  k*x1*x2inv*x2inv;
+       }
+     }
+     return;
+   }
+endC
+endxbe

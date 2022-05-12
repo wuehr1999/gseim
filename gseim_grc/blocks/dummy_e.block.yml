@@ -1,0 +1,43 @@
+id: dummy_e
+label: e dummy
+
+parameters:
+-   id: n
+    label: n
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'no'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'name'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '0'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '0'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '0'
+
+e_left_nodes:
+-   dtype: float
+
+documentation: |-
+    Can be used for avoiding long wires.
+

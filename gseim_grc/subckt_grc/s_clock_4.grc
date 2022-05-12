@@ -1,0 +1,232 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_clock_4
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: s_clock_4
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: clock_3$0
+  id: clock_3
+  parameters:
+    T: T
+    alpha: alpha
+    beta: beta
+    comment: ''
+    delta1: delta1
+    delta2: delta2
+    drawing_scheme: symbol
+    indx: '1'
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    y_high: y_high
+  states:
+    coordinate: [276, 135]
+    rotation: 0
+    state: true
+- name: clock_3$1
+  id: clock_3
+  parameters:
+    T: T
+    alpha: alpha
+    beta: beta
+    comment: ''
+    delta1: delta1
+    delta2: delta2
+    drawing_scheme: symbol
+    indx: '2'
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    y_high: y_high
+  states:
+    coordinate: [276, 183]
+    rotation: 0
+    state: true
+- name: clock_3$2
+  id: clock_3
+  parameters:
+    T: T
+    alpha: alpha
+    beta: beta
+    comment: ''
+    delta1: delta1
+    delta2: delta2
+    drawing_scheme: symbol
+    indx: '3'
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    y_high: y_high
+  states:
+    coordinate: [276, 234]
+    rotation: 0
+    state: true
+- name: clock_3$3
+  id: clock_3
+  parameters:
+    T: T
+    alpha: alpha
+    beta: beta
+    comment: ''
+    delta1: delta1
+    delta2: delta2
+    drawing_scheme: symbol
+    indx: '4'
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    y_high: y_high
+  states:
+    coordinate: [276, 288]
+    rotation: 0
+    state: true
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y1
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [348, 135]
+    rotation: 0
+    state: true
+- name: pad_sink$1
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y2
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [348, 183]
+    rotation: 0
+    state: true
+- name: pad_sink$2
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y3
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [348, 234]
+    rotation: 0
+    state: true
+- name: pad_sink$3
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y4
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [348, 288]
+    rotation: 0
+    state: true
+connections:
+- [clock_3$0, '0', pad_sink$0, '0']
+- [clock_3$1, '0', pad_sink$1, '0']
+- [clock_3$2, '0', pad_sink$2, '0']
+- [clock_3$3, '0', pad_sink$3, '0']
+gparms:
+  T: 20m
+  alpha: '10'
+  beta: '0'
+  delta1: 0.01m
+  delta2: 0.01m
+  drawing_scheme: symbol
+  port_block_x: '8'
+  port_block_y: '3'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
+  port_sep_x: '0'
+  port_sep_y: '4'
+  rotate_strict: 'yes'
+  y_high: '1'
+outvars: {}
+solve_blocks: []
+output_blocks: []

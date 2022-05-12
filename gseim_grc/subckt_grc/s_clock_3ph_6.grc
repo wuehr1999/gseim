@@ -1,0 +1,339 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    drawing_scheme: symbol
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_clock_3ph_6
+    mirror: none
+    placement: (0,0)
+    rotate_strict: 'yes'
+    run: 'True'
+    sizing_mode: fixed
+    title: Clock_3ph_6
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: clock_3ph$0
+  id: clock_3ph
+  parameters:
+    D: D
+    T: T
+    alpha: alpha
+    comment: ''
+    drawing_scheme: symbol
+    dt: dt
+    flag_frequency: flag_frequency
+    flag_period: flag_period
+    frequency: frequency
+    index1: '2'
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    x_high: '1'
+    x_low: '0'
+  states:
+    coordinate: [249, 159]
+    rotation: 0
+    state: true
+- name: clock_3ph$1
+  id: clock_3ph
+  parameters:
+    D: D
+    T: T
+    alpha: alpha
+    comment: ''
+    drawing_scheme: symbol
+    dt: dt
+    flag_frequency: flag_frequency
+    flag_period: flag_period
+    frequency: frequency
+    index1: '1'
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    x_high: '1'
+    x_low: '0'
+  states:
+    coordinate: [249, 120]
+    rotation: 0
+    state: true
+- name: clock_3ph$2
+  id: clock_3ph
+  parameters:
+    D: D
+    T: T
+    alpha: alpha
+    comment: ''
+    drawing_scheme: symbol
+    dt: dt
+    flag_frequency: flag_frequency
+    flag_period: flag_period
+    frequency: frequency
+    index1: '3'
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    x_high: '1'
+    x_low: '0'
+  states:
+    coordinate: [249, 201]
+    rotation: 0
+    state: true
+- name: clock_3ph$3
+  id: clock_3ph
+  parameters:
+    D: D
+    T: T
+    alpha: alpha
+    comment: ''
+    drawing_scheme: symbol
+    dt: dt
+    flag_frequency: flag_frequency
+    flag_period: flag_period
+    frequency: frequency
+    index1: '4'
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    x_high: '1'
+    x_low: '0'
+  states:
+    coordinate: [249, 243]
+    rotation: 0
+    state: true
+- name: clock_3ph$4
+  id: clock_3ph
+  parameters:
+    D: D
+    T: T
+    alpha: alpha
+    comment: ''
+    drawing_scheme: symbol
+    dt: dt
+    flag_frequency: flag_frequency
+    flag_period: flag_period
+    frequency: frequency
+    index1: '5'
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    x_high: '1'
+    x_low: '0'
+  states:
+    coordinate: [249, 285]
+    rotation: 0
+    state: true
+- name: clock_3ph$5
+  id: clock_3ph
+  parameters:
+    D: D
+    T: T
+    alpha: alpha
+    comment: ''
+    drawing_scheme: symbol
+    dt: dt
+    flag_frequency: flag_frequency
+    flag_period: flag_period
+    frequency: frequency
+    index1: '6'
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    x_high: '1'
+    x_low: '0'
+  states:
+    coordinate: [249, 327]
+    rotation: 0
+    state: true
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y1
+    mirror: none
+    num_streams: '1'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [336, 120]
+    rotation: 0
+    state: true
+- name: pad_sink$1
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y2
+    mirror: none
+    num_streams: '1'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [336, 159]
+    rotation: 0
+    state: true
+- name: pad_sink$2
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y3
+    mirror: none
+    num_streams: '1'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [336, 201]
+    rotation: 0
+    state: true
+- name: pad_sink$3
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y4
+    mirror: none
+    num_streams: '1'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [336, 243]
+    rotation: 0
+    state: true
+- name: pad_sink$4
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y5
+    mirror: none
+    num_streams: '1'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [336, 285]
+    rotation: 0
+    state: true
+- name: pad_sink$5
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y6
+    mirror: none
+    num_streams: '1'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [336, 327]
+    rotation: 0
+    state: true
+connections:
+- [clock_3ph$0, '0', pad_sink$1, '0']
+- [clock_3ph$1, '0', pad_sink$0, '0']
+- [clock_3ph$2, '0', pad_sink$2, '0']
+- [clock_3ph$3, '0', pad_sink$3, '0']
+- [clock_3ph$4, '0', pad_sink$4, '0']
+- [clock_3ph$5, '0', pad_sink$5, '0']
+gparms:
+  D: '0.5'
+  T: 1m
+  alpha: '0'
+  drawing_scheme: symbol
+  dt: 0.01m
+  flag_frequency: '1'
+  flag_period: '0'
+  frequency: 1k
+  port_block_x: '8'
+  port_block_y: '3'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
+  port_sep_x: '0'
+  port_sep_y: '4'
+  rotate_strict: 'yes'
+outvars:
+  y1:
+  - outvar
+  - - clock_3ph$1
+    - y
+  y2:
+  - outvar
+  - - clock_3ph$0
+    - y
+  y3:
+  - outvar
+  - - clock_3ph$2
+    - y
+  y4:
+  - outvar
+  - - clock_3ph$3
+    - y
+  y5:
+  - outvar
+  - - clock_3ph$4
+    - y
+  y6:
+  - outvar
+  - - clock_3ph$5
+    - y
+solve_blocks: []
+output_blocks: []

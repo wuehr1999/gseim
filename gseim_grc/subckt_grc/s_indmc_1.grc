@@ -1,0 +1,201 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_indmc_1
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: indmc_1
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: abc_to_dq$0
+  id: abc_to_dq
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [384, 114]
+    rotation: 0
+    state: true
+- name: indmc1$0
+  id: indmc1
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    j: j
+    llr: llr
+    lls: lls
+    lm: lm
+    mirror: none
+    name: none
+    poles: poles
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    rr: rr
+    rs: rs
+  states:
+    coordinate: [477, 126]
+    rotation: 0
+    state: true
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: wrm
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [561, 150]
+    rotation: 0
+    state: true
+- name: pad_source$0
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: va
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [309, 114]
+    rotation: 0
+    state: true
+- name: pad_source$1
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: vb
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [309, 138]
+    rotation: 0
+    state: true
+- name: pad_source$2
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: vc
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [309, 162]
+    rotation: 0
+    state: true
+- name: pad_source$3
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: tl
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [390, 201]
+    rotation: 0
+    state: true
+connections:
+- [abc_to_dq$0, '0', indmc1$0, '0']
+- [abc_to_dq$0, '1', indmc1$0, '1']
+- [indmc1$0, '0', pad_sink$0, '0']
+- [pad_source$0, '0', abc_to_dq$0, '0']
+- [pad_source$1, '0', abc_to_dq$0, '1']
+- [pad_source$2, '0', abc_to_dq$0, '2']
+- [pad_source$3, '0', indmc1$0, '2']
+gparms:
+  drawing_scheme: name
+  j: '0.089'
+  llr: '0.002'
+  lls: '0.002'
+  lm: '0.0693'
+  poles: '4'
+  port_block_x: '4'
+  port_block_y: '4'
+  port_sep_x: '4'
+  port_sep_y: '4'
+  rotate_strict: 'no'
+  rr: '0.816'
+  rs: '0.435'
+outvars:
+  ia:
+  - outvar
+  - - indmc1$0
+    - ia
+  ib:
+  - outvar
+  - - indmc1$0
+    - ib
+  ic:
+  - outvar
+  - - indmc1$0
+    - ic
+  tem:
+  - outvar
+  - - indmc1$0
+    - tem
+  wrm:
+  - outvar
+  - - indmc1$0
+    - wrm
+solve_blocks: []
+output_blocks: []

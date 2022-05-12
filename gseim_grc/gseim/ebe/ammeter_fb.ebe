@@ -1,0 +1,95 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=ammeter_fb x_outputs=yes
+Jacobian: constant
+nodes: p n
+state_vars:
+aux_vars:
+aux_vars_startup:
+x_vars: i_fb
+iparms:
+sparms:
+rparms: k_scale=1
+stparms:
+igparms:
+outparms: i i_fb
+n_f=3
+f_1: i_fb
+f_2: i_fb
+f_3: v(p) v(n)
+n_g=0
+n_h=3
+h_1: i_fb
+h_2: i_fb
+h_3: v(p) v(n)
+C:
+variables:
+   double c1,c2;
+source:
+   k_scale = X.rprm[nr_k_scale];
+
+   if (k_scale == 0.0) {
+     cout << "ammeter_fb: k_scale = 0 ? Halting..." << endl;
+     exit(1);
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     i_fb = X.val_xvr[nx_i_fb];
+
+     if (G.flags[G.i_function]) {
+       c1 = i_fb/k_scale;
+       X.f[nf_1] =  c1;
+       X.f[nf_2] = -c1;
+       X.f[nf_3] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     }
+     if (G.flags[G.i_jacobian]) {
+       c2 = 1.0/k_scale;
+       J.dfdxvr[nf_1][nx_i_fb] =  c2;
+       J.dfdxvr[nf_2][nx_i_fb] = -c2;
+       J.dfdv  [nf_3][nnd_p  ] =  1.0;
+       J.dfdv  [nf_3][nnd_n  ] = -1.0;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     i_fb = X.val_xvr[nx_i_fb];
+
+     if (G.flags[G.i_function]) {
+       c1 = i_fb/k_scale;
+       X.h[nh_1] =  c1;
+       X.h[nh_2] = -c1;
+       X.h[nh_3] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     }
+     if (G.flags[G.i_jacobian]) {
+       c2 = 1.0/k_scale;
+       J.dhdxvr[nh_1][nx_i_fb] =  c2;
+       J.dhdxvr[nh_2][nx_i_fb] = -c2;
+       J.dhdv  [nh_3][nnd_p  ] =  1.0;
+       J.dhdv  [nh_3][nnd_n  ] = -1.0;
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_i] = X.cur_nd[nnd_p];
+      X.outprm[no_i_fb] = X.rprm[nr_k_scale]*X.cur_nd[nnd_p];
+      return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_xvr[nx_i_fb] = 0.0;
+     return;
+   }
+endC
+endebe

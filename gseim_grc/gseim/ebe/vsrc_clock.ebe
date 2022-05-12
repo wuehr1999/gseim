@@ -1,0 +1,206 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=vsrc_clock limit_tstep=yes
+# clock voltage source
+Jacobian: constant
+nodes: p n
+state_vars:
+aux_vars: cur_p
+aux_vars_startup: cur_p_s
+x_vars:
+iparms:
+sparms:
+# Note: L1, L2 are levels in the 1st and 2nd itervals.
+rparms:
++  T1=1
++  T2=1
++  L1=1
++  L2=-1
++  t0=0
++  delta1=0.01
++  delta2=0.01
++  T=0
++  L0=0
++  tk1=0
++  tk2=0
++  tk3=0
++  tk4=0
++  tk5=0
++  slope1=0
++  slope2=0
++  epsl=0
+stparms:
+igparms:
+outparms: i v
+n_f=3
+f_1: cur_p
+f_2: cur_p
+f_3: v(p) v(n)
+n_g=0
+n_h=3
+h_1: cur_p_s
+h_2: cur_p_s
+h_3: v(p) v(n)
+C:
+variables:
+   double y0,t0_new,delta_min,del1,del2,t_a,t_b,tnext_p;
+   int n;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     T1 = X.rprm[nr_T1];
+     T2 = X.rprm[nr_T2];
+     L1 = X.rprm[nr_L1];
+     L2 = X.rprm[nr_L2];
+     delta1 = X.rprm[nr_delta1];
+     delta2 = X.rprm[nr_delta2];
+
+     delta_min = 0.1*min(delta1,delta2);
+     del1 = T1-0.5*(delta1+delta2);
+     del2 = T2-0.5*(delta1+delta2);
+
+     if (del1 < delta_min) {
+       cout << "vsrc_clock.ebe: T1 is too small. Halting..." << endl; exit(1);
+     }
+     if (del2 < delta_min) {
+       cout << "vsrc_clock.ebe: T2 is too small. Halting..." << endl; exit(1);
+     }
+     T = T1 + T2;
+     tk1 = 0.5*delta1;
+     tk2 = T1 - 0.5*delta2;
+     tk3 = T1 + 0.5*delta2;
+     tk4 = T  - 0.5*delta1;
+     tk5 = T  + 0.5*delta1;
+
+     slope1 = (L1-L2)/delta1;
+     slope2 = (L2-L1)/delta2;
+     epsl = min(delta1,delta2)/10.0;
+     L0 = 0.5*(L1+L2);
+
+     X.rprm[nr_T] = T;
+     X.rprm[nr_tk1] = tk1;
+     X.rprm[nr_tk2] = tk2;
+     X.rprm[nr_tk3] = tk3;
+     X.rprm[nr_tk4] = tk4;
+     X.rprm[nr_tk5] = tk5;
+     X.rprm[nr_slope1] = slope1;
+     X.rprm[nr_slope2] = slope2;
+     X.rprm[nr_epsl] = epsl;
+     X.rprm[nr_L0] = L0;
+
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+      X.outprm[no_i] = X.cur_nd[nnd_n];
+      return;
+   }
+   if (G.flags[G.i_dc]) {
+     cout << "vsrc_clock.ebe: DC not allowed. Halting..." << endl; exit(1);
+   }
+
+   t0   = X.rprm[nr_t0  ];
+   T    = X.rprm[nr_T   ];
+   epsl = X.rprm[nr_epsl];
+   tk1  = X.rprm[nr_tk1 ];
+   tk2  = X.rprm[nr_tk2 ];
+   tk3  = X.rprm[nr_tk3 ];
+   tk4  = X.rprm[nr_tk4 ];
+   tk5  = X.rprm[nr_tk5 ];
+
+   if (G.time_given_e < t0) {
+     n = ((t0-G.time_given_e)/T) + 1;
+     t0_new = t0-n*T;
+   } else {
+     t0_new = t0;
+   }
+   t_a = G.time_given_e-t0_new;
+   t_b = fmod(t_a,T);
+
+   if (abs(t_b-T) < epsl) t_b = 0.0;
+
+   if (G.flags[G.i_next_time]) {
+     if (t_b < tk1) {
+       tnext_p = tk1;
+     } else if (t_b < tk2) {
+       tnext_p = tk2;
+     } else if (t_b < tk3) {
+       tnext_p = tk3;
+     } else if (t_b < tk4) {
+       tnext_p = tk4;
+     } else {
+       tnext_p = tk5;
+     }
+     G.time_nextbreak_e = G.time_given_e + (tnext_p-t_b);
+     return;
+   }
+
+   L0 = X.rprm[nr_L0];
+   L1 = X.rprm[nr_L1];
+   L2 = X.rprm[nr_L2];
+   slope1 = X.rprm[nr_slope1];
+   slope2 = X.rprm[nr_slope2];
+
+   if (t_b < tk1) {
+     y0 = L0 + slope1*t_b;
+   } else if (t_b < tk2) {
+     y0 = L1;
+   } else if (t_b < tk3) {
+     y0 = L1 + slope2*(t_b-tk2);
+   } else if (t_b < tk4) {
+     y0 = L2;
+   } else {
+     y0 = L2 + slope1*(t_b-tk4);
+   }
+
+   if (G.flags[G.i_trns]) {
+     cur_p = X.val_aux[na_cur_p];
+
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] =  cur_p;
+       X.f[nf_2] = -cur_p;
+       X.f[nf_3] = X.val_nd[nnd_p]-X.val_nd[nnd_n]-y0;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdaux[nf_1][na_cur_p] =  1.0;
+       J.dfdaux[nf_2][na_cur_p] = -1.0;
+       J.dfdv  [nf_3][nnd_p   ] =  1.0;
+       J.dfdv  [nf_3][nnd_n   ] = -1.0;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     cur_p_s = X.val_auxs[nas_cur_p_s];
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] =  cur_p_s;
+       X.h[nh_2] = -cur_p_s;
+       X.h[nh_3] = X.val_nd[nnd_p]-X.val_nd[nnd_n]-y0;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdauxs[nh_1][nas_cur_p_s] =  1.0;
+       J.dhdauxs[nh_2][nas_cur_p_s] = -1.0;
+       J.dhdv   [nh_3][nnd_p      ] =  1.0;
+       J.dhdv   [nh_3][nnd_n      ] = -1.0;
+     }
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
+endC
+endebe

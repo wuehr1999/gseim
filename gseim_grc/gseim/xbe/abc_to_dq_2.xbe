@@ -1,0 +1,110 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=abc_to_dq_2 evaluate=yes
+Jacobian: variable
+input_vars: a b c cost sint
+output_vars: d q
+aux_vars: alpha beta
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: a b c d q
+n_f= 0
+n_g= 4
+g_1: alpha a
+g_2: beta b c 
+g_3: q cost sint alpha beta
+g_4: d cost sint alpha beta
+C:
+prototypes:
+variables:
+   static double k4=0;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     k4 = 0.5*(sqrt(3.0));
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_d] = X.val_vr[nvr_d];
+     X.outprm[no_q] = X.val_vr[nvr_q];
+     X.outprm[no_a] = X.val_vr[nvr_a];
+     X.outprm[no_b] = X.val_vr[nvr_b];
+     X.outprm[no_c] = X.val_vr[nvr_c];
+     return;
+   }
+   a = X.val_vr[nvr_a];
+   b = X.val_vr[nvr_b];
+   c = X.val_vr[nvr_c];
+   cost = X.val_vr[nvr_cost];
+   sint = X.val_vr[nvr_sint];
+
+   if (G.flags[G.i_init_guess]) {
+     alpha = 1.5*a;
+     beta  = k4*(b-c);
+ 
+     X.val_aux[na_alpha] = alpha;
+     X.val_aux[na_beta ] = beta;
+
+     X.val_vr[nvr_q] = -sint*alpha + cost*beta;
+     X.val_vr[nvr_d] =  cost*alpha + sint*beta;
+
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       alpha = 1.5*a;
+       beta  = k4*(b-c);
+       X.val_vr[nvr_q] = -sint*alpha + cost*beta;
+       X.val_vr[nvr_d] =  cost*alpha + sint*beta;
+     } else if (G.flags[G.i_implicit]) {
+       alpha = X.val_aux[na_alpha];
+       beta  = X.val_aux[na_beta ];
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = alpha - 1.5*a;
+         X.g[ng_2] = beta - k4*(b-c);
+
+         X.g[ng_3] = q + sint*alpha - cost*beta;
+         X.g[ng_4] = d - cost*alpha - sint*beta;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdaux[ng_1][na_alpha] =  1.0;
+         J.dgdvr [ng_1][nvr_a   ] = -1.5;
+
+         J.dgdaux[ng_2][na_beta] =  1.0;
+         J.dgdvr [ng_2][nvr_b  ] = -k4;
+         J.dgdvr [ng_2][nvr_c  ] =  k4; 
+
+         J.dgdvr [ng_3][nvr_q   ] =  1.0;
+         J.dgdvr [ng_3][nvr_sint] =  alpha;
+         J.dgdvr [ng_3][nvr_cost] = -beta;
+         J.dgdaux[ng_3][na_alpha] =  sint;
+         J.dgdaux[ng_3][na_beta ] = -cost;
+
+         J.dgdvr [ng_4][nvr_d   ] =  1.0;
+         J.dgdvr [ng_4][nvr_sint] = -beta;
+         J.dgdvr [ng_4][nvr_cost] = -alpha;
+         J.dgdaux[ng_4][na_alpha] = -cost;
+         J.dgdaux[ng_4][na_beta ] = -sint;
+       }
+     }
+     return;
+   }
+endC
+endxbe

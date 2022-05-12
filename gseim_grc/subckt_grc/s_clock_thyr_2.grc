@@ -1,0 +1,161 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_clock_thyr_2
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: s_clock_thyr_2
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: clock_thyr$0
+  id: clock_thyr
+  parameters:
+    T: T
+    alpha: alpha
+    beta: '0'
+    comment: ''
+    drawing_scheme: symbol
+    dt: dt
+    flag_frequency: flag_frequency
+    flag_period: flag_period
+    flag_tw_degrees: '1'
+    frequency: frequency
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    tw: '0'
+    tw_deg: tw_deg
+    x_high: x_high
+    x_low: '0'
+  states:
+    coordinate: [273, 162]
+    rotation: 0
+    state: true
+- name: clock_thyr$1
+  id: clock_thyr
+  parameters:
+    T: T
+    alpha: alpha
+    beta: '180'
+    comment: ''
+    drawing_scheme: symbol
+    dt: dt
+    flag_frequency: flag_frequency
+    flag_period: flag_period
+    flag_tw_degrees: '1'
+    frequency: frequency
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    tw: '0'
+    tw_deg: tw_deg
+    x_high: x_high
+    x_low: '0'
+  states:
+    coordinate: [273, 195]
+    rotation: 0
+    state: true
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y1
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [351, 162]
+    rotation: 0
+    state: true
+- name: pad_sink$1
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y2
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [351, 195]
+    rotation: 0
+    state: true
+connections:
+- [clock_thyr$0, '0', pad_sink$0, '0']
+- [clock_thyr$1, '0', pad_sink$1, '0']
+gparms:
+  T: '1'
+  alpha: '0'
+  drawing_scheme: symbol
+  dt: 1u
+  flag_frequency: '1'
+  flag_period: '0'
+  frequency: '1'
+  mirror: none
+  port_block_x: '8'
+  port_block_y: '3'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
+  port_sep_x: '0'
+  port_sep_y: '4'
+  rotate_strict: 'no'
+  tw_deg: '0'
+  x_high: '1'
+outvars:
+  y1:
+  - outvar
+  - - clock_thyr$0
+    - y
+  y2:
+  - outvar
+  - - clock_thyr$1
+    - y
+solve_blocks: []
+output_blocks: []

@@ -1,0 +1,76 @@
+id: s_gate_pulses_3ph_1
+label: gate pulses
+category: '[GRC Hier Blocks]'
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: delt_min
+    label: delt_min
+    default: 0.1u
+-   id: delt_nrml
+    label: delt_nrml
+    default: 10u
+-   id: t_delay
+    label: t_delay
+    default: 0.1m
+-   id: y_high
+    label: y_high
+    default: '1'
+-   id: rotate_strict
+    label: rotate_strict
+    default: 'no'
+-   id: mirror
+    label: mirror
+    default: none
+-   id: port_sep_x
+    label: port_sep_x
+    default: '4'
+-   id: port_sep_y
+    label: port_sep_y
+    default: '4'
+-   id: port_block_x
+    label: port_block_x
+    default: '4'
+-   id: port_block_y
+    label: port_block_y
+    default: '4'
+-   id: drawing_scheme
+    label: drawing_scheme
+    default: name
+outvars: []
+
+inputs:
+-   label: a
+    dtype: float
+-   label: b
+    dtype: float
+-   label: c
+    dtype: float
+-   label: ref
+    dtype: float
+
+outputs:
+-   label: g1
+    dtype: float
+-   label: g2
+    dtype: float
+-   label: g3
+    dtype: float
+-   label: g4
+    dtype: float
+-   label: g5
+    dtype: float
+-   label: g6
+    dtype: float
+
+e_left_nodes: []
+
+e_right_nodes: []
+
+e_top_nodes: []
+
+e_bottom_nodes: []
+grc_source: ~/gseim_grc/subckt_grc/s_gate_pulses_3ph_1.grc

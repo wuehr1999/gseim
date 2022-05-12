@@ -1,0 +1,314 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=edge_delay evaluate=yes limit_tstep=yes save_history=yes allow_ssw=no
+#
+# shift input signal by the given delay. The input signal is assumed
+# to be x_high or x_low (like clock signals)
+#
+# the total delay is n_delay*(theta_delay)+theta_delay_1, converted to time
+#
+Jacobian: variable
+input_vars: x
+output_vars: y
+aux_vars:
+iparms:
++  n_delay=1
++  flag_frequency=1
++  flag_period=0
++  flag_zero_delay=0
+sparms:
+# Note: frequency (or T) is used only to convert theta_delay
+# to t_delay. The input signal is not required to be periodic.
+rparms:
++  x_low=0
++  x_high=1
++  frequency=0
++  T=0
++  theta_delay=0.0
++  theta_delay_1=0.0
++  t_delay=0
++  x_last=0.0
++  t_low_to_high=0
++  t_high_to_low=0
++  x_cross=0
++  epsl2=0
++  epsl3=0
+stparms:
+igparms:
+outparms: x y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   const int flag_empty=0;
+   const int flag_ltoh =1;
+   const int flag_htol =2;
+
+   double t0,t1,time0,delta,tmin;
+   double y0,t_next_1,t_next_2;
+   int flag1,flag2,nloc,nextloc,top,l;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     X.edge_delay_nmax = 50;
+     X.edge_delay_nloc = X.edge_delay_nmax;
+     X.edge_delay_tchange.resize(X.edge_delay_nmax);
+     X.edge_delay_flag.resize(X.edge_delay_nmax);
+
+     flag_frequency = X.iprm[ni_flag_frequency];
+     flag_period    = X.iprm[ni_flag_period   ];
+
+     if ((flag_frequency == 0) && (flag_period == 0)) {
+       cout << "edge_delay.xbe: check flag_frequency and flag_period" << endl;
+       cout << "  Both cannot be zero." << endl;
+       cout << "  Halting..." << endl; exit(1);
+     }
+     if ((flag_frequency != 0) && (flag_period != 0)) {
+       cout << "edge_delay.xbe: check flag_frequency and flag_period" << endl;
+       cout << "  Both cannot be non-zero." << endl;
+       cout << "  Halting..." << endl; exit(1);
+     }
+     if (flag_frequency != 0) {
+       frequency = X.rprm[nr_frequency];
+       T = 1.0/frequency;
+       X.rprm[nr_T] = T;
+     }
+     if (flag_period != 0) {
+       T = X.rprm[nr_T];
+       frequency = 1.0/T;
+       X.rprm[nr_frequency] = frequency;
+     }
+
+     x_high = X.rprm[nr_x_high];
+     x_low  = X.rprm[nr_x_low ];
+     if (x_high < x_low) {
+       cout << "edge_delay.xbe: x_high and x_low are not defined correctly." << endl;
+       cout << "  x_high=" << x_high << " x_low=" << x_low << endl;
+       cout << "  Halting..." << endl; exit(1);
+     }
+     X.rprm[nr_x_cross] = 0.5*(x_high+x_low);
+
+     n_delay = X.iprm[ni_n_delay];
+     theta_delay = X.rprm[nr_theta_delay];
+     theta_delay_1 = X.rprm[nr_theta_delay_1];
+     t_delay = (T/360.0)*(theta_delay*((double)(n_delay))+theta_delay_1);
+     X.rprm[nr_t_delay] = t_delay;
+     if (t_delay < 1.0e-8) {
+       X.iprm[ni_flag_zero_delay] = 1;
+     } else {
+       X.iprm[ni_flag_zero_delay] = 0;
+     }
+
+     epsl2 = 0.001*T/360.0;
+     X.rprm[nr_epsl2] = epsl2;
+     X.rprm[nr_epsl3] = 1.1*epsl2;
+
+     X.rprm[nr_t_low_to_high] = G.time_end;
+     X.rprm[nr_t_high_to_low] = G.time_end;
+
+     X.rprm[nr_x_last] = x_low;
+
+//   initialise
+
+     X.edge_delay_nextloc = 0;
+     X.edge_delay_top     = 0;
+
+     nloc = X.edge_delay_nloc;
+     for (int i=0; i < nloc; i++) {
+       X.edge_delay_flag[i] = flag_empty;
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = 0.0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+
+   flag_zero_delay = X.iprm[ni_flag_zero_delay];
+
+   t_delay = X.rprm[nr_t_delay];
+   nloc    = X.edge_delay_nloc;
+   nextloc = X.edge_delay_nextloc;
+   top     = X.edge_delay_top;
+
+   time0 = G.time_given_x;
+
+   if (G.flags[G.i_save_history]) {
+     if (flag_zero_delay == 0) {
+       x_last   = X.rprm[nr_x_last ];
+       x = X.val_vr[nvr_x];
+       x_cross = X.rprm[nr_x_cross];
+       if ((x >= x_cross) && (x_last <= x_cross)) {
+         t0 = time0 + t_delay;
+
+         X.edge_delay_tchange[nextloc] = t0;
+         X.edge_delay_flag   [nextloc] = flag_ltoh;
+
+         for (int i=0; i < nloc; i++) {
+           if (X.edge_delay_flag[i] == flag_empty) {
+             X.edge_delay_nextloc = i;
+             if (i > top) X.edge_delay_top = i;
+             goto jump0;
+           }
+         }
+         cout << "edge_delay: empty location not found (1). Halting..." << endl;
+         exit(1);
+         jump0:;
+       }
+       if ((x <= x_cross) && (x_last >= x_cross)) {
+         t0 = time0 + t_delay;
+         X.edge_delay_tchange[nextloc] = t0;
+         X.edge_delay_flag   [nextloc] = flag_htol;
+
+         for (int i=0; i < nloc; i++) {
+           if (X.edge_delay_flag[i] == flag_empty) {
+             X.edge_delay_nextloc = i;
+             if (i > top) X.edge_delay_top = i;
+             goto jump1;
+           }
+         }
+         cout << "edge_delay: empty location not found (2). Halting..." << endl;
+         exit(1);
+         jump1:;
+       }
+       X.rprm[nr_x_last] = x;
+
+       top = X.edge_delay_top;
+       for (int i=0; i <= top; i++) {
+         if (time0 > X.edge_delay_tchange[i]) {
+           X.edge_delay_flag[i] = flag_empty;
+         }
+       }
+       for (int i=0; i < nloc; i++) {
+         if (X.edge_delay_flag[i] == flag_empty) {
+           X.edge_delay_nextloc = i;
+           if (i > top) X.edge_delay_top = i;
+           goto jump2;
+         }
+       }
+       cout << "edge_delay: empty location not found (3). Halting..." << endl;
+       exit(1);
+       jump2:;
+     }
+     return;
+   }
+
+   if (G.flags[G.i_next_time]) {
+     if (flag_zero_delay == 0) {
+       epsl2 = X.rprm[nr_epsl2];
+       epsl3 = X.rprm[nr_epsl3];
+
+       tmin = G.time_end;
+       l = -1;
+
+       for (int i=0; i <= top; i++) {
+         flag1 = X.edge_delay_flag[i];
+         if (flag1 != flag_empty) {
+           t1 = X.edge_delay_tchange[i];
+           if (t1 < tmin) {
+             tmin = t1;
+             l = i;
+           }
+         }
+       }
+
+       if (l == -1) {
+         t_next_1 = G.time_end;
+       } else {
+         if (time0 < tmin) {
+           delta = tmin - time0;
+           if (delta < epsl3) {
+             t_next_1 = tmin + epsl2;
+           } else {
+             t_next_1 = tmin - epsl2;
+           }
+         }
+       }
+       G.time_nextbreak_x = t_next_1;
+     }
+     return;
+   }
+
+   if (G.flags[G.i_trns]) {
+     if (flag_zero_delay == 1) {
+       y0 = X.val_vr[nvr_x];
+     } else {
+       tmin = G.time_end;
+       l = -1;
+
+       for (int i=0; i <= top; i++) {
+         flag1 = X.edge_delay_flag[i];
+         if (flag1 != flag_empty) {
+           t1 = X.edge_delay_tchange[i];
+           if (t1 < tmin) {
+             tmin = t1;
+             l = i;
+           }
+         }
+       }
+
+       if (l == -1) {
+         y0 = X.val_vr[nvr_y];
+       } else {
+         if (time0 >= tmin) {
+           flag2 = X.edge_delay_flag[l];
+           if (flag2 == flag_ltoh) {
+             y0 = X.rprm[nr_x_high];
+           } else if (flag2 == flag_htol) {
+             y0 = X.rprm[nr_x_low];
+           } else {
+             cout << "edge_delay: flag2=" << flag2 << " is not expected." << endl;
+             cout << "   Halting..." << endl; exit(1);
+           }
+         } else {
+           y0 = X.val_vr[nvr_y];
+         }
+       }
+     }
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

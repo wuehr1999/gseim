@@ -1,0 +1,135 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=abc_to_dq0_2 evaluate=yes
+Jacobian: variable
+input_vars: xa xb xc theta
+output_vars: xd xq x0
+aux_vars: c s
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: xa xb xc xd xq x0
+n_f= 0
+n_g= 5
+g_1: xd xa xb xc c s
+g_2: xq xa xb xc c s
+g_3: x0 xa xb xc
+g_4: c theta
+g_5: s theta
+C:
+prototypes:
+variables:
+   static double k1=0,k2=0,k3=0;
+   double c1,s1;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     k1 = 1.0/3.0;
+     k2 = 1.0/(sqrt(3.0));
+     k3 = 2.0/3.0;
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     xa    = X.val_vr[nvr_xa   ];
+     xb    = X.val_vr[nvr_xb   ];
+     xc    = X.val_vr[nvr_xc   ];
+     theta = X.val_vr[nvr_theta];
+
+     c = cos(theta);
+     s = sin(theta);
+
+     X.val_aux[na_c] = c;
+     X.val_aux[na_s] = s;
+
+     X.val_vr[nvr_xd] = - xa*(-k3*c) - xb*(k1*c-k2*s) - xc*( k1*c+k2*s);
+     X.val_vr[nvr_xq] = - xa*(-k3*s) - xb*(k2*c+k1*s) - xc*(-k2*c+k1*s);
+     X.val_vr[nvr_x0] = k1*(xa + xb + xc);
+
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     xa    = X.val_vr[nvr_xa   ];
+     xb    = X.val_vr[nvr_xb   ];
+     xc    = X.val_vr[nvr_xc   ];
+     theta = X.val_vr[nvr_theta];
+
+     c1 = cos(theta);
+     s1 = sin(theta);
+
+     if (G.flags[G.i_explicit]) {
+       X.val_aux[na_c] = c1;
+       X.val_aux[na_s] = s1;
+
+       X.val_vr[nvr_xd] = - xa*(-k3*c) - xb*(k1*c-k2*s) - xc*( k1*c+k2*s);
+       X.val_vr[nvr_xq] = - xa*(-k3*s) - xb*(k2*c+k1*s) - xc*(-k2*c+k1*s);
+       X.val_vr[nvr_x0] = k1*(xa + xb + xc);
+     } else if (G.flags[G.i_implicit]) {
+       xd = X.val_vr[nvr_xd];
+       xq = X.val_vr[nvr_xq];
+       x0 = X.val_vr[nvr_x0];
+
+       c = X.val_aux[na_c];
+       s = X.val_aux[na_s];
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = xd + xa*(-k3*c) + xb*(k1*c-k2*s) +xc*( k1*c+k2*s);
+         X.g[ng_2] = xq + xa*(-k3*s) + xb*(k2*c+k1*s) +xc*(-k2*c+k1*s);
+         X.g[ng_3] = x0 + xa*(-k1) + xb*(-k1) +xc*(-k1);
+         X.g[ng_4] = c - c1;
+         X.g[ng_5] = s - s1;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr [ng_1][nvr_xd] = 1.0;
+         J.dgdvr [ng_1][nvr_xa] = -k3*c;
+         J.dgdvr [ng_1][nvr_xb] = k1*c-k2*s;
+         J.dgdvr [ng_1][nvr_xc] = k1*c+k2*s;
+         J.dgdaux[ng_1][na_c  ] = -xa*k3 + (xb+xc)*k1;
+         J.dgdaux[ng_1][na_s  ] = -xb*k2 + xc*k2;
+
+         J.dgdvr [ng_2][nvr_xq] = 1.0;
+         J.dgdvr [ng_2][nvr_xa] = -k3*s;
+         J.dgdvr [ng_2][nvr_xb] = k2*c+k1*s;
+         J.dgdvr [ng_2][nvr_xc] = -k2*c+k1*s;
+         J.dgdaux[ng_2][na_c  ] = (xb-xc)*k2;
+         J.dgdaux[ng_2][na_s  ] = -xa*k3 + (xb+xc)*k1;
+
+         J.dgdvr [ng_3][nvr_x0] = 1.0;
+         J.dgdvr [ng_3][nvr_xa] = -k1;
+         J.dgdvr [ng_3][nvr_xb] = -k1;
+         J.dgdvr [ng_3][nvr_xc] = -k1;
+
+         J.dgdaux[ng_4][na_c     ] = 1.0;
+         J.dgdvr [ng_4][nvr_theta] =  s1;
+
+         J.dgdaux[ng_5][na_s     ] = 1.0;
+         J.dgdvr [ng_5][nvr_theta] = -c1;
+       }
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_xa] = X.val_vr[nvr_xa];
+     X.outprm[no_xb] = X.val_vr[nvr_xb];
+     X.outprm[no_xc] = X.val_vr[nvr_xc];
+     X.outprm[no_xd] = X.val_vr[nvr_xd];
+     X.outprm[no_xq] = X.val_vr[nvr_xq];
+     X.outprm[no_x0] = X.val_vr[nvr_x0];
+     return;
+   }
+endC
+endxbe

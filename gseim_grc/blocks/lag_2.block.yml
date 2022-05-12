@@ -1,0 +1,58 @@
+id: lag_2
+label: lag_2
+
+parameters:
+-   id: t_delay
+    label: t_delay
+    dtype: float
+    default: '1.0'
+-   id: y_st
+    label: y_st
+    dtype: float
+    default: '0.0'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'no'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'name'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '0'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '4'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '4'
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- x
+- y

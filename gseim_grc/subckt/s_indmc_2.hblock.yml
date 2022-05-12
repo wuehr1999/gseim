@@ -1,0 +1,86 @@
+id: s_indmc_2
+label: indmc_2
+category: '[GRC Hier Blocks]'
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: j
+    label: j
+    default: '0.089'
+-   id: llr
+    label: llr
+    default: '0.002'
+-   id: lls
+    label: lls
+    default: '0.002'
+-   id: lm
+    label: lm
+    default: '0.693'
+-   id: poles
+    label: poles
+    default: '4'
+-   id: rr
+    label: rr
+    default: '0.816'
+-   id: rs
+    label: rs
+    default: '0.435'
+-   id: drawing_scheme
+    label: drawing_scheme
+    default: name
+-   id: port_block_x
+    label: port_block_x
+    default: '4'
+-   id: port_block_y
+    label: port_block_y
+    default: '4'
+-   id: port_sep_x
+    label: port_sep_x
+    default: '4'
+-   id: port_sep_y
+    label: port_sep_y
+    default: '4'
+-   id: rotate_strict
+    label: rotate_strict
+    default: 'no'
+-   id: mirror
+    label: mirror
+    default: none
+outvars:
+- ia
+- ib
+- ic
+- tem
+- wrm
+
+inputs:
+-   label: va
+    dtype: float
+-   label: vb
+    dtype: float
+-   label: vc
+    dtype: float
+-   label: tl
+    dtype: float
+
+outputs:
+-   label: wrm
+    dtype: float
+-   label: ia
+    dtype: float
+-   label: ib
+    dtype: float
+-   label: ic
+    dtype: float
+
+e_left_nodes: []
+
+e_right_nodes: []
+
+e_top_nodes: []
+
+e_bottom_nodes: []
+grc_source: ~/gseim_grc/subckt_grc/s_indmc_2.grc

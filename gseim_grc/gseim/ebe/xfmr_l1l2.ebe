@@ -1,0 +1,145 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=xfmr_l1l2
+#
+# l1,l2,m model (m is computed)
+# leakage inductances and winding resistances are not included
+#
+Jacobian: constant
+nodes: p_p  s_p  p_n  s_n
+state_vars:
+aux_vars: i1  i2  i1d  i2d
+aux_vars_startup:
+x_vars:
+iparms:
+sparms:
+rparms:
++  l1=1m
++  l2=1m
++  k=1
++  m=0
+stparms:
++  i10=0 i20=0
+igparms:
+outparms: ip is vp vs
+n_f=8
+f_1: i1
+f_2: i2
+f_3: i1
+f_4: i2
+f_5: d_dt(i1) i1d
+f_6: d_dt(i2) i2d
+f_7: v(p_p) v(p_n) i1d i2d
+f_8: v(s_p) v(s_n) i1d i2d
+n_g=0
+n_h=4
+h_1:
+h_2:
+h_3:
+h_4:
+C:
+variables:
+   double v1a,v2a;
+   int nfp_p_p=0;
+   int nfp_s_p=1;
+   int nfp_p_n=2;
+   int nfp_s_n=3;
+source:
+   if (G.flags[G.i_dc]) {
+     cout << "xfmr_basic.ebe: dc not implemented." << endl;
+     cout << "  Halting..." << endl; exit(1);
+   }
+   l1 = X.rprm[nr_l1];
+   l2 = X.rprm[nr_l2];
+   m  = X.rprm[nr_m ];
+
+   if (G.flags[G.i_one_time_parms]) {
+     k = X.rprm[nr_k];
+     m = k*sqrt(l1*l2);
+     X.rprm[nr_m] = m;
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_aux[na_i1 ] = 0.0;
+     X.val_aux[na_i2 ] = 0.0;
+     X.val_aux[na_i1d] = 0.0;
+     X.val_aux[na_i2d] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     i1  = X.val_aux[na_i1 ];
+     i2  = X.val_aux[na_i2 ];
+     i1d = X.val_aux[na_i1d];
+     i2d = X.val_aux[na_i2d];
+
+     v1a = X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n];
+     v2a = X.val_nd[nnd_s_p]-X.val_nd[nnd_s_n];
+
+     if (G.flags[G.i_function]) {
+       X.f[nfp_p_p] =  i1;
+       X.f[nfp_p_n] = -i1;
+       X.f[nfp_s_p] =  i2;
+       X.f[nfp_s_n] = -i2;
+       X.f[nf_5] = i1d;
+       X.f[nf_6] = i2d;
+       X.f[nf_7] = v1a - l1*i1d - m*i2d;
+       X.f[nf_8] = v2a - l2*i2d - m*i1d;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdaux[nfp_p_p][na_i1] =  1.0;
+       J.dfdaux[nfp_p_n][na_i1] = -1.0;
+       J.dfdaux[nfp_s_p][na_i2] =  1.0;
+       J.dfdaux[nfp_s_n][na_i2] = -1.0;
+
+       J.dfdaux[nf_5][na_i1d] = 1.0;
+       J.dfdaux[nf_6][na_i2d] = 1.0;
+
+       J.dfdv  [nf_7][nnd_p_p] =  1.0;
+       J.dfdv  [nf_7][nnd_p_n] = -1.0;
+       J.dfdaux[nf_7][na_i1d] = -l1;
+       J.dfdaux[nf_7][na_i2d] = -m;
+
+       J.dfdv  [nf_8][nnd_s_p] =  1.0;
+       J.dfdv  [nf_8][nnd_s_n] = -1.0;
+       J.dfdaux[nf_8][na_i2d] = -l2;
+       J.dfdaux[nf_8][na_i1d] = -m;
+     }
+   }
+   if (G.flags[G.i_startup]) {
+      i10 = X.stprm[nst_i10];
+      i20 = X.stprm[nst_i20];
+      cout << "xfmr_l1l2.ebe: startup not implemented. Halting..." << endl;
+      exit(1);
+      if (G.flags[G.i_function]) {
+         X.h[nh_1] =  i10;
+         X.h[nh_2] = -i10;
+         X.h[nh_3] =  i20;
+         X.h[nh_4] = -i20;
+      }
+      X.val_aux[na_i1] = i10;
+      X.val_aux[na_i2] = i20;
+      return;
+   }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_vp] = X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n];
+      X.outprm[no_vs] = X.val_nd[nnd_s_p]-X.val_nd[nnd_s_n];
+      X.outprm[no_ip] = X.cur_nd[nnd_p_p];
+      X.outprm[no_is] = X.cur_nd[nnd_s_p];
+      return;
+   }
+endC
+endebe

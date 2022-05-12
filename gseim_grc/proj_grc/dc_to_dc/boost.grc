@@ -1,0 +1,554 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: circuit
+    id: boost
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: boost
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: c$1
+  id: c
+  parameters:
+    c: 100u
+    comment: ''
+    drawing_scheme: symbol
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '10'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+    v0: '0.0'
+  states:
+    coordinate: [552, 147]
+    rotation: 270
+    state: true
+- name: clock_1$1
+  id: clock_1
+  parameters:
+    D: '0.8'
+    comment: ''
+    delta1: 0.1u
+    delta2: 0.1u
+    drawing_scheme: symbol
+    f_hz: 25k
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+    t0: '0'
+    y_high: '1'
+  states:
+    coordinate: [327, 165]
+    rotation: 0
+    state: true
+- name: connector_e_3$4
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [387, 243]
+    rotation: 0
+    state: true
+- name: connector_e_3$5
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [510, 108]
+    rotation: 180
+    state: true
+- name: connector_e_3$6
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [510, 243]
+    rotation: 0
+    state: true
+- name: connector_e_3$7
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [387, 108]
+    rotation: 180
+    state: true
+- name: connector_e_3$8
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [261, 243]
+    rotation: 270
+    state: true
+- name: diode_r$1
+  id: diode_r
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '10'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r_off: 10M
+    r_on: 1m
+    rotate_strict: 'no'
+    v_on: '0.0'
+  states:
+    coordinate: [420, 99]
+    rotation: 0
+    state: true
+- name: ground$1
+  id: ground
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [252, 249]
+    rotation: 0
+    state: true
+- name: r$1
+  id: r
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '10'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r: '50'
+    rotate_strict: 'no'
+  states:
+    coordinate: [501, 147]
+    rotation: 270
+    state: true
+- name: s_rl_series$0
+  id: s_rl_series
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    i0: '0'
+    l: 100u
+    mirror: none
+    name: none
+    port_block_x: '10'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r: '1'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [294, 99]
+    rotation: 0
+    state: true
+- name: show_parameter$0
+  id: show_parameter
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    element_name: s_rl_series$0
+    mirror: none
+    name: none
+    parameter_name: l
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    show_name: show
+  states:
+    coordinate: [306, 81]
+    rotation: 0
+    state: true
+- name: show_parameter$1
+  id: show_parameter
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    element_name: s_rl_series$0
+    mirror: none
+    name: none
+    parameter_name: r
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    show_name: show
+  states:
+    coordinate: [318, 63]
+    rotation: 0
+    state: true
+- name: show_parameter$3
+  id: show_parameter
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    element_name: clock_1$1
+    mirror: none
+    name: none
+    parameter_name: D
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    show_name: show
+  states:
+    coordinate: [324, 216]
+    rotation: 0
+    state: true
+- name: show_parameter$6
+  id: show_parameter
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    element_name: r$1
+    mirror: none
+    name: none
+    parameter_name: r
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    show_name: do_not_show
+  states:
+    coordinate: [486, 168]
+    rotation: 0
+    state: true
+- name: show_parameter$7
+  id: show_parameter
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    element_name: c$1
+    mirror: none
+    name: none
+    parameter_name: c
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    show_name: do_not_show
+  states:
+    coordinate: [582, 168]
+    rotation: 0
+    state: true
+- name: show_parameter$8
+  id: show_parameter
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    element_name: vsrc_dc$1
+    mirror: none
+    name: none
+    parameter_name: vdc
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    show_name: do_not_show
+  states:
+    coordinate: [228, 168]
+    rotation: 0
+    state: true
+- name: show_parameter$9
+  id: show_parameter
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    element_name: clock_1$1
+    mirror: none
+    name: none
+    parameter_name: f_hz
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    show_name: show
+  states:
+    coordinate: [312, 195]
+    rotation: 0
+    state: true
+- name: switch_1$1
+  id: switch_1
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '10'
+    port_block_y: '7'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r_off: 10M
+    r_on: 1m
+    rotate_strict: 'yes'
+    v_on: '0.0'
+    x_high: '1'
+  states:
+    coordinate: [369, 147]
+    rotation: 0
+    state: true
+- name: vsrc_dc$1
+  id: vsrc_dc
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '5'
+    port_block_y: '10'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+    vdc: '50'
+  states:
+    coordinate: [249, 147]
+    rotation: 0
+    state: true
+connections:
+- [c$1, er0, connector_e_3$6, er0]
+- [clock_1$1, '0', switch_1$1, '0']
+- [connector_e_3$4, el0, connector_e_3$8, et0]
+- [connector_e_3$4, er0, connector_e_3$6, el0]
+- [connector_e_3$5, el0, c$1, el0]
+- [connector_e_3$5, et0, r$1, el0]
+- [connector_e_3$7, el0, diode_r$1, el0]
+- [connector_e_3$7, et0, switch_1$1, et0]
+- [connector_e_3$8, el0, vsrc_dc$1, eb0]
+- [diode_r$1, er0, connector_e_3$5, er0]
+- [ground$1, et0, connector_e_3$8, er0]
+- [r$1, er0, connector_e_3$6, et0]
+- [s_rl_series$0, er0, connector_e_3$7, er0]
+- [switch_1$1, eb0, connector_e_3$4, et0]
+- [vsrc_dc$1, et0, s_rl_series$0, el0]
+gparms: {}
+outvars:
+  i_diode:
+  - outvar
+  - - diode_r$1
+    - i
+  i_src:
+  - outvar
+  - - vsrc_dc$1
+    - i
+  i_switch:
+  - outvar
+  - - switch_1$1
+    - i
+  v_R:
+  - outvar
+  - - r$1
+    - v
+solve_blocks:
+- d_parms:
+    algorithm_e: backward_euler
+    algorithm_ex: backward_euler
+    algorithm_x_startup: explicit
+    algorithm_x_trns: RK4
+    block_index: '1'
+    bs23_fctr_max: '1.1'
+    bs23_fctr_min: '0.8'
+    bs23_tolr: '1.0e-8'
+    delt_max_e: none
+    delt_max_ex: none
+    delt_max_x: none
+    delt_min_e: none
+    delt_min_ex: none
+    delt_min_x: none
+    e_nr_check_spice: 'yes'
+    e_nr_dmp: 'no'
+    e_nr_dmp0: 'no'
+    e_nr_dmp_itermax: '50'
+    e_nr_dmp_itermax0: '50'
+    e_nr_dmp_k: '0.2'
+    e_nr_dmp_k0: '0.2'
+    e_nr_itermax: '500'
+    e_nr_itermax0: '500'
+    e_nr_spice_abstol: '1.0e-6'
+    e_nr_spice_reltol: '1.0e-3'
+    e_nr_spice_vntol: '1.0e-4'
+    e_nr_write_rhs2: 'no'
+    ex_nr_dmp: 'no'
+    ex_nr_dmp0: 'no'
+    ex_nr_dmp_itermax: '50'
+    ex_nr_dmp_itermax0: '50'
+    ex_nr_dmp_k: '0.2'
+    ex_nr_dmp_k0: '0.2'
+    ex_nr_itermax: '500'
+    ex_nr_itermax0: '500'
+    ex_nr_write_rhs2: 'no'
+    factor_step_decrease: '0.6'
+    factor_step_increase: '1.5'
+    initial_sol: initialize
+    initial_sol_file: none
+    itmax_stepred: '20'
+    itmax_trbdf2: '20'
+    itmax_trns: '1000000'
+    output_solution_file: none
+    rkf45_fctr_max: '1.1'
+    rkf45_fctr_min: '0.8'
+    rkf45_tolr: '1.0e-8'
+    solve_type: ssw
+    ssw_frequency: none
+    ssw_ndiv: none
+    ssw_nr_dmp: 'no'
+    ssw_nr_dmp_itermax: '10'
+    ssw_nr_dmp_k: '0.6'
+    ssw_nr_eps_rhs: '1.0e-10'
+    ssw_nr_itermax: '50'
+    ssw_period: 40u
+    ssw_period_mult: '2'
+    t_end: '0'
+    t_start: '0'
+    t_startup: '0.0'
+    trbdf2_tolr: '1.0e-5'
+    tstep0_e: none
+    tstep0_ex: 0.1u
+    tstep0_x: none
+    write_iter_n_e: '1000'
+    write_iter_n_x: '1000'
+    write_time_x: 'no'
+    x_nr_dmp: 'no'
+    x_nr_dmp0: 'no'
+    x_nr_dmp_itermax: '50'
+    x_nr_dmp_itermax0: '50'
+    x_nr_dmp_k: '0.2'
+    x_nr_dmp_k0: '0.2'
+    x_nr_itermax: '500'
+    x_nr_itermax0: '500'
+    x_nr_write_rhs2: 'no'
+  index: '1'
+  name: S2
+  output_blocks:
+  - out$0
+output_blocks:
+- d_parms:
+    append: 'no'
+    filename: out1.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: none
+    t_start: none
+  index_slv: '0'
+  name: out$0
+  outvars:
+  - i_diode
+  - i_src
+  - i_switch
+  - v_R

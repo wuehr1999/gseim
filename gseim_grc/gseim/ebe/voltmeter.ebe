@@ -1,0 +1,63 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=voltmeter
+# ideal voltmeter without feedback
+Jacobian: constant
+nodes: p n
+state_vars:
+aux_vars:
+aux_vars_startup:
+x_vars:
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: v
+n_f=2
+f_1:
+f_2:
+n_g=0
+n_h=2
+h_1:
+h_2:
+C:
+variables:
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] = 0.0;
+       X.f[nf_2] = 0.0;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] = 0.0;
+       X.h[nh_2] = 0.0;
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     return;
+   }
+endC
+endebe

@@ -1,0 +1,447 @@
+begin_file
+  begin_parm
+    keyword: solve_type
+    options:
++     trns
++     startup
++     ssw
+    default: trns
+  end_parm
+  begin_parm
+    keyword: initial_sol
+    options:
++     initialize
++     previous
++     read_from_file
+    default: initialize
+  end_parm
+  begin_parm
+    keyword: initial_sol_file
+    options: none
+    default: none
+  end_parm
+  begin_parm
+    keyword: output_solution_file
+    options: none
+    default: none
+  end_parm
+  begin_parm force_write
+    keyword: algorithm_x_trns
+    options:
++     forward_euler
++     RK4
++     RKF45
++     BS23
++     modified_euler
++     Heun
++     backward_euler
++     backward_euler_auto
++     backward_euler_const
++     trz
++     trz_auto
++     trz_const
++     trbdf2
+    default: RK4
+  end_parm
+  begin_parm force_write
+    keyword: algorithm_x_startup
+    options:
++     explicit
++     implicit
+    default: explicit
+  end_parm
+  begin_parm force_write
+    keyword: algorithm_e
+    options:
++     backward_euler
++     backward_euler_auto
++     backward_euler_const
++     trz
++     trz_auto
++     trz_const
++     trbdf2
+    default: backward_euler
+  end_parm
+  begin_parm force_write
+    keyword: algorithm_ex
+    options:
++     backward_euler
++     backward_euler_auto
++     backward_euler_const
++     trz
++     trz_auto
++     trz_const
++     trbdf2
+    default: backward_euler
+  end_parm
+  begin_parm
+    keyword: itmax_trns
+    options: none
+    default: 1000000
+  end_parm
+  begin_parm force_write
+    keyword: t_start
+    options: none
+    default: 0
+  end_parm
+  begin_parm force_write
+    keyword: t_end
+    options: none
+    default: 0
+  end_parm
+  begin_parm category=time_step_x
+    keyword: tstep0_x
+    options: none
+    default: none
+  end_parm
+  begin_parm category=time_step_x
+    keyword: delt_min_x
+    options: none
+    default: none
+  end_parm
+  begin_parm category=time_step_x
+    keyword: delt_max_x
+    options: none
+    default: none
+  end_parm
+  begin_parm category=time_step_e
+    keyword: tstep0_e
+    options: none
+    default: none
+  end_parm
+  begin_parm category=time_step_e
+    keyword: delt_min_e
+    options: none
+    default: none
+  end_parm
+  begin_parm category=time_step_e
+    keyword: delt_max_e
+    options: none
+    default: none
+  end_parm
+  begin_parm category=time_step_ex
+    keyword: tstep0_ex
+    options: none
+    default: none
+  end_parm
+  begin_parm category=time_step_ex
+    keyword: delt_min_ex
+    options: none
+    default: none
+  end_parm
+  begin_parm category=time_step_ex
+    keyword: delt_max_ex
+    options: none
+    default: none
+  end_parm
+  begin_parm
+    keyword: t_startup
+    options: none
+    default: 0.0
+  end_parm
+  begin_parm category=auto_step
+    keyword: factor_step_increase
+    options: none
+    default: 1.5
+  end_parm
+  begin_parm category=auto_step
+    keyword: factor_step_decrease
+    options: none
+    default: 0.6
+  end_parm
+  begin_parm category=rkf45
+    keyword: rkf45_tolr
+    options: none
+    default: 1.0e-8
+  end_parm
+  begin_parm category=rkf45
+    keyword: rkf45_fctr_min
+    options: none
+    default: 0.8
+  end_parm
+  begin_parm category=rkf45
+    keyword: rkf45_fctr_max
+    options: none
+    default: 1.1
+  end_parm
+  begin_parm category=bs23
+    keyword: bs23_tolr
+    options: none
+    default: 1.0e-8
+  end_parm
+  begin_parm category=bs23
+    keyword: bs23_fctr_min
+    options: none
+    default: 0.8
+  end_parm
+  begin_parm category=bs23
+    keyword: bs23_fctr_max
+    options: none
+    default: 1.1
+  end_parm
+  begin_parm category=TRBDF2
+    keyword: trbdf2_tolr
+    options: none
+    default: 1.0e-5
+  end_parm
+  begin_parm category=TRBDF2
+    keyword: itmax_trbdf2
+    options: none
+    default: 20
+  end_parm
+  begin_parm category=auto_step
+    keyword: itmax_stepred
+    options: none
+    default: 20
+  end_parm
+  begin_parm category=write_to_console
+    keyword: write_time_e
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=write_to_console
+    keyword: write_time_x
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=write_to_console
+    keyword: write_iter_n_x
+    options: none
+    default: 1000
+  end_parm
+  begin_parm category=write_to_console
+    keyword: write_iter_n_e
+    options: none
+    default: 1000
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_itermax0
+    options: none
+    default: 500
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_dmp0
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_dmp_itermax0
+    options: none
+    default: 50
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_dmp_k0
+    options: none
+    default: 0.2
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_dmp
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_itermax
+    options: none
+    default: 500
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_dmp_itermax
+    options: none
+    default: 50
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_dmp_k
+    options: none
+    default: 0.2
+  end_parm
+  begin_parm category=x_nr force_write
+    keyword: x_nr_check_delx_all
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_write_rhs2
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_eps_delx_all
+    options: none
+    default: 1.0e-4
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_itermax0
+    options: none
+    default: 500 
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_dmp0
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_dmp_itermax0
+    options: none
+    default: 50
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_dmp_k0
+    options: none
+    default: 0.2 
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_dmp
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_itermax
+    options: none
+    default: 500 
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_dmp_itermax
+    options: none
+    default: 50
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_dmp_k
+    options: none
+    default: 0.2
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_check_spice
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=e_nr force_write
+    keyword: e_nr_check_delx_all
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_write_rhs2
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_eps_delx_all
+    options: none
+    default: 1.0e-4
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_spice_vntol
+    options: none
+    default: 1.0e-4
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_spice_abstol
+    options: none
+    default: 1.0e-6
+  end_parm
+  begin_parm category=e_nr
+    keyword: e_nr_spice_reltol
+    options: none
+    default: 1.0e-3
+  end_parm
+  begin_parm category=ex_nr
+    keyword: ex_nr_itermax0
+    options: none
+    default: 500
+  end_parm
+  begin_parm category=ex_nr
+    keyword: ex_nr_dmp0
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=ex_nr
+    keyword: ex_nr_dmp_itermax0
+    options: none
+    default: 50
+  end_parm
+  begin_parm category=ex_nr
+    keyword: ex_nr_dmp_k0
+    options: none
+    default: 0.2
+  end_parm
+  begin_parm category=ex_nr
+    keyword: ex_nr_dmp
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=ex_nr
+    keyword: ex_nr_itermax
+    options: none
+    default: 500
+  end_parm
+  begin_parm category=ex_nr
+    keyword: ex_nr_dmp_itermax
+    options: none
+    default: 50
+  end_parm
+  begin_parm category=ex_nr
+    keyword: ex_nr_dmp_k
+    options: none
+    default: 0.2
+  end_parm
+  begin_parm category=ex_nr force_write
+    keyword: ex_nr_check_delx_all
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=ex_nr
+    keyword: ex_nr_write_rhs2
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=ex_nr
+    keyword: ex_nr_eps_delx_all
+    options: none
+    default: 1.0e-4
+  end_parm
+  begin_parm category=SSW
+    keyword: ssw_nr_itermax
+    options: none
+    default: 50
+  end_parm
+  begin_parm category=SSW
+    keyword: ssw_nr_dmp
+    options: yes no
+    default: no
+  end_parm
+  begin_parm category=SSW
+    keyword: ssw_nr_dmp_k
+    options: none
+    default: 0.6
+  end_parm
+  begin_parm category=SSW
+    keyword: ssw_nr_dmp_itermax
+    options: none
+    default: 10
+  end_parm
+  begin_parm category=SSW
+    keyword: ssw_period
+    options: none
+    default: none
+  end_parm
+  begin_parm category=SSW
+    keyword: ssw_frequency
+    options: none
+    default: none
+  end_parm
+  begin_parm category=SSW
+    keyword: ssw_nr_eps_rhs
+    options: none
+    default: 1.0e-10
+  end_parm
+  begin_parm category=SSW
+    keyword: ssw_ndiv
+    options: none
+    default: 200
+  end_parm
+  begin_parm category=SSW
+    keyword: ssw_period_mult
+    options: none
+    default: 2
+  end_parm
+end_file

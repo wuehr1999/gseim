@@ -1,0 +1,98 @@
+MAKEFILE = mkgseim
+GPP = g++
+
+OPT = -O3
+OPT1 = -O2
+OPT2 =
+
+#OPT = -g -Wall
+#OPT1 = -g -Wall
+
+#OPT = -O1
+#OPT1 = -O1
+
+OBJ  = \
+  gsmain.o \
+  cctfile.o \
+  global.o \
+  utils.o \
+  routines1.o \
+  routines2.o \
+  xbelib.o \
+  xbeusr.o \
+  xbejac.o \
+  ebelib.o \
+  ebeusr.o \
+  ebejac.o \
+  circuit.o \
+  solveblocks.o \
+  solveparm.o \
+  sysmat.o \
+  ijmat.o \
+  knuthmat.o \
+  matop.o \
+  matgnrl1.o \
+  matrix_2.o \
+  user_f.o \
+  getebe.o \
+  subebe.o \
+  getxbe.o \
+  subxbe.o
+
+PROGRAM = gsmain
+all: $(PROGRAM)
+gsmain: $(OBJ) 
+	$(GPP) $(OPT) $(OBJ) -o gsmain
+
+gsmain.o: gsmain.cpp
+	$(GPP) $(OPT) -c gsmain.cpp
+cctfile.o: cctfile.cpp
+	$(GPP) $(OPT) -c cctfile.cpp
+global.o: global.cpp
+	$(GPP) $(OPT) -c global.cpp
+utils.o: utils.cpp
+	$(GPP) $(OPT) -c utils.cpp
+routines1.o: routines1.cpp
+	$(GPP) $(OPT) -c routines1.cpp
+routines2.o: routines2.cpp
+	$(GPP) $(OPT) -c routines2.cpp
+xbelib.o: xbelib.cpp
+	$(GPP) $(OPT) -c xbelib.cpp
+xbeusr.o: xbeusr.cpp
+	$(GPP) $(OPT) -c xbeusr.cpp
+xbejac.o: xbejac.cpp
+	$(GPP) $(OPT) -c xbejac.cpp
+ebelib.o: ebelib.cpp
+	$(GPP) $(OPT) -c ebelib.cpp
+ebeusr.o: ebeusr.cpp
+	$(GPP) $(OPT) -c ebeusr.cpp
+ebejac.o: ebejac.cpp
+	$(GPP) $(OPT) -c ebejac.cpp
+circuit.o: circuit.cpp
+	$(GPP) $(OPT) -c circuit.cpp
+solveblocks.o: solveblocks.cpp
+	$(GPP) $(OPT) -c solveblocks.cpp
+solveparm.o: solveparm.cpp
+	$(GPP) $(OPT) -c solveparm.cpp
+sysmat.o: sysmat.cpp
+	$(GPP) $(OPT) -c sysmat.cpp
+ijmat.o: ijmat.cpp
+	$(GPP) $(OPT) -c ijmat.cpp
+knuthmat.o: knuthmat.cpp
+	$(GPP) $(OPT) -c knuthmat.cpp
+matop.o: matop.cpp
+	$(GPP) $(OPT) -c matop.cpp
+matgnrl1.o: matgnrl1.cpp
+	$(GPP) $(OPT) -c matgnrl1.cpp
+matrix_2.o: matrix_2.cpp
+	$(GPP) $(OPT) -c matrix_2.cpp
+user_f.o: user_f.cpp
+	$(GPP) $(OPT) -c user_f.cpp
+getebe.o: getebe.cpp
+	$(GPP) $(OPT) -c getebe.cpp -o getebe.o
+subebe.o: subebe.cpp
+	$(GPP) $(OPT) -c subebe.cpp -o subebe.o
+getxbe.o: getxbe.cpp
+	$(GPP) $(OPT) -c getxbe.cpp -o getxbe.o
+subxbe.o: subxbe.cpp
+	$(GPP) $(OPT) -c subxbe.cpp -o subxbe.o

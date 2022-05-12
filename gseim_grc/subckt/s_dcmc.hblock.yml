@@ -1,0 +1,82 @@
+id: s_dcmc
+label: s_dcmc
+category: '[GRC Hier Blocks]'
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: C
+    label: C
+    default: '1'
+-   id: J
+    label: J
+    default: '0.25'
+-   id: La
+    label: La
+    default: 1m
+-   id: Ra
+    label: Ra
+    default: '1'
+-   id: b_damp
+    label: b_damp
+    default: '0'
+-   id: drawing_scheme
+    label: drawing_scheme
+    default: symbol
+-   id: port_block_x
+    label: port_block_x
+    default: '8'
+-   id: port_block_y
+    label: port_block_y
+    default: '12'
+-   id: port_offset_b
+    label: port_offset_b
+    default: '0'
+-   id: port_offset_l
+    label: port_offset_l
+    default: '0'
+-   id: port_offset_r
+    label: port_offset_r
+    default: '0'
+-   id: port_offset_t
+    label: port_offset_t
+    default: '0'
+-   id: port_sep_x
+    label: port_sep_x
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    default: '0'
+-   id: rotate_strict
+    label: rotate_strict
+    default: 'yes'
+-   id: mirror
+    label: mirror
+    default: none
+outvars:
+- wrm
+- tem
+- ia
+
+inputs:
+-   label: TL
+    dtype: float
+
+outputs:
+-   label: wrm
+    dtype: float
+
+e_left_nodes: []
+
+e_right_nodes: []
+
+e_top_nodes:
+-   label: p
+    dtype: float
+
+e_bottom_nodes:
+-   label: n
+    dtype: float
+grc_source: ~/gseim_grc/subckt_grc/s_dcmc.grc

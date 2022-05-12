@@ -1,0 +1,150 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=pulse10 evaluate=yes limit_tstep=yes
+# pulses with up to 20 transitions (i.e., 10 pulses)
+Jacobian: constant
+input_vars:
+output_vars: y
+aux_vars:
+iparms: i0=0 n1=2
+sparms:
+rparms:
++  t1 =1  t2 =2  t3 =3  t4 =4  t5 =5
++  t6 =6  t7 =7  t8 =8  t9 =9  t10=10
++  t11=11 t12=12 t13=13 t14=14 t15=15
++  t16=16 t17=17 t18=18 t19=19 t20=20
++  y_low=0 y_high=5 t_rise=10n t_fall=10n
++  epsl=0
+stparms:
+igparms:
+outparms: y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   int intrvl;
+   double time0,g_value,g_1,g_2,delt_trns,delt_1,t_trns;
+   bool l_high;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     t_rise = X.rprm[nr_t_rise];
+     t_fall = X.rprm[nr_t_fall];
+     epsl=0.02*min(t_rise,t_fall);
+     X.rprm[nr_epsl] = epsl;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+
+   y_low  = X.rprm[nr_y_low ];
+   y_high = X.rprm[nr_y_high];
+   t_rise = X.rprm[nr_t_rise];
+   t_fall = X.rprm[nr_t_fall];
+   epsl   = X.rprm[nr_epsl  ];
+
+   i0 = X.iprm[ni_i0];
+   n1 = X.iprm[ni_n1];
+
+   time0 = G.time_given_x;
+
+   intrvl = n1+1;
+   for (int i=0; i < n1; i++) {
+      if (X.rprm[i] >= time0) {
+         intrvl = i+1;
+         break;
+      }
+   }
+   if (intrvl % 2 == 1) {
+      l_high = (i0 != 0);
+   } else {
+      l_high = (i0 == 0);
+   }
+   if (l_high) {
+      g_1 = y_low;
+      g_2 = y_high;
+      delt_trns = t_fall;
+      if (intrvl > 1) delt_1 = t_rise;
+   } else {
+      g_1 = y_high;
+      g_2 = y_low;
+      delt_trns = t_rise;
+      if (intrvl > 1) delt_1 = t_fall;
+   }
+
+   if (G.flags[G.i_next_time]) {
+     G.time_nextbreak_x = G.time_end;
+     if (intrvl == 1) {
+       if ((X.rprm[0]-time0) < epsl) {
+         G.time_nextbreak_x = X.rprm[0] + delt_trns;
+       } else {
+         G.time_nextbreak_x = X.rprm[0];
+       }
+       return;
+     } else if (intrvl == (n1+1)) {
+       if ((X.rprm[intrvl-2] + delt_1-time0) > epsl) {
+         G.time_nextbreak_x = X.rprm[intrvl-2] + delt_1;
+       } else {
+         G.time_nextbreak_x = G.time_end;
+       }
+     } else {
+       t_trns = X.rprm[intrvl];
+
+       if ((X.rprm[intrvl-2] + delt_1-time0) > epsl) {
+         G.time_nextbreak_x = X.rprm[intrvl-2] + delt_1;
+       } else if ((X.rprm[intrvl-1]-time0) < epsl) {
+         G.time_nextbreak_x = X.rprm[intrvl-1] + delt_trns;
+       } else {
+         G.time_nextbreak_x = X.rprm[intrvl-1];
+       }
+     }
+     return;
+   }
+
+   if (intrvl == 1) {
+      g_value = g_2;
+   } else {
+      t_trns = X.rprm[intrvl-2];
+      if (time0 < (t_trns+delt_1)) {
+         g_value = g_1 + (g_2-g_1)*(time0-t_trns)/delt_1;
+      } else {
+         g_value = g_2;
+      }
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = g_value;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = g_value;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - g_value;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

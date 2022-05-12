@@ -1,0 +1,107 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=pole_real_order_3 integrate=yes
+#
+#           a
+# y = ------------ x
+#     (s-alpha)**3
+#
+Jacobian: constant
+input_vars: x
+output_vars: y
+aux_vars: z1 z2
+iparms:
+sparms:
+rparms: a=1  alpha=1
+stparms: y_st=0
+igparms:
+outparms:
+n_f= 3
+f_1: d_dt(y)
+f_2: d_dt(z1)
+f_3: d_dt(z2)
+n_g= 3
+g_1: y z1
+g_2: z1 z2
+g_3: z2 x
+C:
+prototypes:
+variables:
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr [nvr_y] = 0.0;
+     X.val_aux[na_z1] = 0.0;
+     X.val_aux[na_z2] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.stprm[nst_y_st];
+       X.val_aux[na_z1] = 0.0;
+       X.val_aux[na_z2] = 0.0;
+     } else if (G.flags[G.i_implicit]) {
+       X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
+       X.h[nf_2] = X.val_aux[na_z1];
+       X.h[nf_3] = X.val_aux[na_z2];
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     a = X.rprm[nr_a];
+     alpha = X.rprm[nr_alpha];
+     x = X.val_vr[nvr_x];
+     y = X.val_vr[nvr_y];
+     z1 = X.val_aux[na_z1];
+     z2 = X.val_aux[na_z2];
+
+     if (G.flags[G.i_explicit]) {
+       if (G.flags[G.i_alg_loop]) {
+         X.h[nf_1] = y - X.val_vr_u[nvr_y];
+         X.h[nf_2] = z1 - X.val_aux_u[na_z1];
+         X.h[nf_3] = z2 - X.val_aux_u[na_z2];
+       } else {
+         X.f[nf_1] = alpha*y + a*z1;
+         X.f[nf_2] = alpha*z1 + z2;
+         X.f[nf_3] = alpha*z2 + x;
+       }
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = alpha*y + a*z1;
+         X.g[ng_2] = alpha*z1 + z2;
+         X.g[ng_3] = alpha*z2 + x;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr [ng_1][nvr_y] = alpha;
+         J.dgdaux[ng_1][na_z1] = a;
+
+         J.dgdaux[ng_2][na_z1] = alpha;
+         J.dgdaux[ng_2][na_z2] = 1.0;
+
+         J.dgdaux[ng_3][na_z2] = alpha;
+         J.dgdvr [ng_3][nvr_x] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

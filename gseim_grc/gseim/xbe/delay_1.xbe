@@ -1,0 +1,96 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=delay_1 integrate=yes
+#
+# y = int (x - y)dt * (1/tau)
+#
+#
+Jacobian: constant
+input_vars: x
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+rparms:
++  t_delay=1
++  t0=0
++  rt0=0
+stparms: y_st=0
+igparms: y_ig=0
+outparms: x y
+n_f= 1
+f_1: d_dt(y)
+n_g= 1
+g_1: x y
+C:
+prototypes:
+variables:
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     t_delay = X.rprm[nr_t_delay];
+
+     t0 = t_delay/log(2.0);
+     rt0 = 1.0/t0;
+
+     X.rprm[nr_t0 ] = t0 ;
+     X.rprm[nr_rt0] = rt0;
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr [nvr_y] = X.igprm[nig_y_ig];
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.stprm[nst_y_st];
+     } else if (G.flags[G.i_implicit]) {
+       X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     if (G.flags[G.i_explicit]) {
+       if (G.flags[G.i_alg_loop]) {
+//       use h[..] for both startup and explicit/alg loop:
+         X.h[nf_1] = X.val_vr[nvr_y] - X.val_vr_u[nvr_y];
+       } else {
+         rt0 = X.rprm[nr_rt0];
+         x = X.val_vr[nvr_x];
+         y = X.val_vr[nvr_y];
+         X.f[nf_1] = rt0*(x-y);
+       }
+     } else if (G.flags[G.i_implicit]) {
+       rt0 = X.rprm[nr_rt0];
+       x = X.val_vr[nvr_x];
+       y = X.val_vr[nvr_y];
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = rt0*(x-y);
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_x] =  rt0;
+         J.dgdvr[ng_1][nvr_y] = -rt0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

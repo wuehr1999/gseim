@@ -1,0 +1,326 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_gate_pulses_3ph_1
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: gate pulses
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: connector_f_3a$0
+  id: connector_f_3a
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: top
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [306, 156]
+    rotation: 270
+    state: true
+- name: connector_f_3a$1
+  id: connector_f_3a
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: top
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [306, 237]
+    rotation: 270
+    state: true
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: g1
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [501, 123]
+    rotation: 0
+    state: true
+- name: pad_sink$1
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: g2
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [501, 312]
+    rotation: 0
+    state: true
+- name: pad_sink$2
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: g3
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [501, 204]
+    rotation: 0
+    state: true
+- name: pad_sink$3
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: g4
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [501, 147]
+    rotation: 0
+    state: true
+- name: pad_sink$4
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: g5
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [501, 288]
+    rotation: 0
+    state: true
+- name: pad_sink$5
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: g6
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [501, 228]
+    rotation: 0
+    state: true
+- name: pad_source$0
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: a
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [246, 123]
+    rotation: 0
+    state: true
+- name: pad_source$1
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: b
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [246, 204]
+    rotation: 0
+    state: true
+- name: pad_source$2
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: c
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [246, 288]
+    rotation: 0
+    state: true
+- name: pad_source$3
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: ref
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [243, 78]
+    rotation: 0
+    state: true
+- name: s_gate_pulses_1ph_1$0
+  id: s_gate_pulses_1ph_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    t_delay: t_delay
+    y_high: y_high
+  states:
+    coordinate: [345, 123]
+    rotation: 0
+    state: true
+- name: s_gate_pulses_1ph_1$1
+  id: s_gate_pulses_1ph_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    t_delay: t_delay
+    y_high: y_high
+  states:
+    coordinate: [345, 204]
+    rotation: 0
+    state: true
+- name: s_gate_pulses_1ph_1$2
+  id: s_gate_pulses_1ph_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    t_delay: t_delay
+    y_high: y_high
+  states:
+    coordinate: [345, 288]
+    rotation: 0
+    state: true
+connections:
+- [connector_f_3a$0, '0', s_gate_pulses_1ph_1$0, '1']
+- [connector_f_3a$0, '1', connector_f_3a$1, '0']
+- [connector_f_3a$1, '0', s_gate_pulses_1ph_1$1, '1']
+- [connector_f_3a$1, '1', s_gate_pulses_1ph_1$2, '1']
+- [pad_source$0, '0', s_gate_pulses_1ph_1$0, '0']
+- [pad_source$1, '0', s_gate_pulses_1ph_1$1, '0']
+- [pad_source$2, '0', s_gate_pulses_1ph_1$2, '0']
+- [pad_source$3, '0', connector_f_3a$0, '0']
+- [s_gate_pulses_1ph_1$0, '0', pad_sink$0, '0']
+- [s_gate_pulses_1ph_1$0, '1', pad_sink$3, '0']
+- [s_gate_pulses_1ph_1$1, '0', pad_sink$2, '0']
+- [s_gate_pulses_1ph_1$1, '1', pad_sink$5, '0']
+- [s_gate_pulses_1ph_1$2, '0', pad_sink$4, '0']
+- [s_gate_pulses_1ph_1$2, '1', pad_sink$1, '0']
+gparms:
+  delt_min: 0.1u
+  delt_nrml: 10u
+  t_delay: 0.1m
+  y_high: '1'
+outvars: {}
+solve_blocks: []
+output_blocks: []

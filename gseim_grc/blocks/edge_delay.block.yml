@@ -1,0 +1,101 @@
+id: edge_delay
+label: edge\ndelay
+
+parameters:
+-   id: n_delay
+    label: n_delay
+    dtype: float
+    default: '1'
+-   id: flag_frequency
+    label: flag_frequency
+    dtype: float
+    default: '1'
+-   id: flag_period
+    label: flag_period
+    dtype: float
+    default: '0'
+-   id: x_low
+    label: x_low
+    dtype: float
+    default: '0'
+-   id: x_high
+    label: x_high
+    dtype: float
+    default: '1'
+-   id: frequency
+    label: frequency
+    dtype: float
+    default: '0'
+-   id: t_period
+    label: t_period
+    dtype: float
+    default: '0'
+-   id: theta_delay
+    label: theta_delay
+    dtype: float
+    default: '0'
+-   id: theta_delay_1
+    label: theta_delay_1
+    dtype: float
+    default: '0'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'yes'
+-   id: port_offset_l
+    label: port_offset_l
+    dtype: string
+    default: '0'
+-   id: port_offset_r
+    label: port_offset_r
+    dtype: string
+    default: '0'
+-   id: port_offset_t
+    label: port_offset_t
+    dtype: string
+    default: '0'
+-   id: port_offset_b
+    label: port_offset_b
+    dtype: string
+    default: '0'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'name'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '0'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '4'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '4'
+
+inputs:
+-   domain: stream
+    label: x
+    dtype: float
+outputs:
+-   domain: stream
+    label: y
+    dtype: float
+
+outvars:
+- x
+- y

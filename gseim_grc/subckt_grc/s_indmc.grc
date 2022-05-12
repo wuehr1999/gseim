@@ -1,0 +1,1144 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_indmc
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: indmc
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: abc_to_dq$0
+  id: abc_to_dq
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [273, 51]
+    rotation: 0
+    state: true
+- name: connector_f_2B$0
+  id: connector_f_2B
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    output1: bottom
+    port_block_x: '1'
+    port_block_y: '1'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [345, 21]
+    rotation: 90
+    state: true
+- name: connector_f_3a$0
+  id: connector_f_3a
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: top
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [690, 87]
+    rotation: 0
+    state: true
+- name: connector_f_3a$1
+  id: connector_f_3a
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: top
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [690, 204]
+    rotation: 0
+    state: true
+- name: connector_f_3a$2
+  id: connector_f_3a
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: top
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [555, 429]
+    rotation: 0
+    state: true
+- name: connector_f_3b$0
+  id: connector_f_3b
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: bottom
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [576, 150]
+    rotation: 0
+    state: true
+- name: connector_f_3b$1
+  id: connector_f_3b
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: bottom
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [576, 33]
+    rotation: 0
+    state: true
+- name: connector_f_3c$0
+  id: connector_f_3c
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: top
+    output2: bottom
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [309, 297]
+    rotation: 0
+    state: true
+- name: dummy_sink$0
+  id: dummy_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: ids
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [789, 81]
+    rotation: 0
+    state: true
+- name: dummy_sink$1
+  id: dummy_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: idr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [789, 39]
+    rotation: 0
+    state: true
+- name: dummy_sink$2
+  id: dummy_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: iqs
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [789, 198]
+    rotation: 0
+    state: true
+- name: dummy_sink$3
+  id: dummy_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: iqr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [789, 156]
+    rotation: 0
+    state: true
+- name: dummy_sink$4
+  id: dummy_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: psidr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [552, 231]
+    rotation: 0
+    state: true
+- name: dummy_sink$5
+  id: dummy_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: psiqr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [552, 327]
+    rotation: 0
+    state: true
+- name: dummy_sink$6
+  id: dummy_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: wr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [648, 378]
+    rotation: 0
+    state: true
+- name: dummy_source$0
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: iqs
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [114, 384]
+    rotation: 0
+    state: true
+- name: dummy_source$1
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: idr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [114, 408]
+    rotation: 0
+    state: true
+- name: dummy_source$10
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: ids
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [360, 39]
+    rotation: 0
+    state: true
+- name: dummy_source$11
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: psiqr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [552, 210]
+    rotation: 0
+    state: true
+- name: dummy_source$12
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: psidr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [546, 93]
+    rotation: 0
+    state: true
+- name: dummy_source$2
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: ids
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [114, 465]
+    rotation: 0
+    state: true
+- name: dummy_source$3
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: iqr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [114, 489]
+    rotation: 0
+    state: true
+- name: dummy_source$4
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: wr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [252, 291]
+    rotation: 0
+    state: true
+- name: dummy_source$5
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: psiqr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [249, 231]
+    rotation: 0
+    state: true
+- name: dummy_source$6
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: psidr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [246, 351]
+    rotation: 0
+    state: true
+- name: dummy_source$7
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: iqr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [351, 303]
+    rotation: 0
+    state: true
+- name: dummy_source$8
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: idr
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [351, 207]
+    rotation: 0
+    state: true
+- name: dummy_source$9
+  id: dummy_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: iqs
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [357, 156]
+    rotation: 0
+    state: true
+- name: integrator$0
+  id: integrator
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '5'
+    port_block_y: '5'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    y_ig: '0.0'
+    y_st: '0.0'
+  states:
+    coordinate: [489, 21]
+    rotation: 0
+    state: true
+- name: integrator$1
+  id: integrator
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '5'
+    port_block_y: '5'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    y_ig: '0.0'
+    y_st: '0.0'
+  states:
+    coordinate: [489, 138]
+    rotation: 0
+    state: true
+- name: integrator$2
+  id: integrator
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '5'
+    port_block_y: '5'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    y_ig: '0.0'
+    y_st: '0.0'
+  states:
+    coordinate: [489, 225]
+    rotation: 0
+    state: true
+- name: integrator$3
+  id: integrator
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '5'
+    port_block_y: '5'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    y_ig: '0.0'
+    y_st: '0.0'
+  states:
+    coordinate: [489, 321]
+    rotation: 0
+    state: true
+- name: integrator$4
+  id: integrator
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: i1_k
+    mirror: none
+    name: i1
+    port_block_x: '5'
+    port_block_y: '5'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    y_ig: '0.0'
+    y_st: '0.0'
+  states:
+    coordinate: [489, 417]
+    rotation: 0
+    state: true
+- name: mult_2$0
+  id: mult_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [174, 384]
+    rotation: 0
+    state: true
+- name: mult_2$1
+  id: mult_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [174, 465]
+    rotation: 0
+    state: true
+- name: mult_2$2
+  id: mult_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [333, 231]
+    rotation: 0
+    state: true
+- name: mult_2$3
+  id: mult_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [333, 327]
+    rotation: 0
+    state: true
+- name: multscl$0
+  id: multscl
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: m1_k
+    mirror: none
+    name: m1
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [306, 432]
+    rotation: 0
+    state: true
+- name: multscl$1
+  id: multscl
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k: x2
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [591, 375]
+    rotation: 0
+    state: true
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: wrm
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [603, 420]
+    rotation: 0
+    state: true
+- name: pad_source$0
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: va
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [204, 51]
+    rotation: 0
+    state: true
+- name: pad_source$1
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: vb
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [204, 75]
+    rotation: 0
+    state: true
+- name: pad_source$2
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: vc
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [204, 99]
+    rotation: 0
+    state: true
+- name: pad_source$3
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: tl
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [351, 408]
+    rotation: 0
+    state: true
+- name: sum_2$0
+  id: sum_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k1: '1.0'
+    k2: '-1.0'
+    mirror: none
+    name: none
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [246, 423]
+    rotation: 0
+    state: true
+- name: sum_2$1
+  id: sum_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k1: s1_k1
+    k2: s1_k2
+    mirror: none
+    name: s1
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [417, 15]
+    rotation: 0
+    state: true
+- name: sum_2$2
+  id: sum_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k1: s2_k1
+    k2: s2_k2
+    mirror: none
+    name: s2
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [417, 132]
+    rotation: 0
+    state: true
+- name: sum_2$3
+  id: sum_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k1: s3_k1
+    k2: s3_k2
+    mirror: none
+    name: s3
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [417, 219]
+    rotation: 0
+    state: true
+- name: sum_2$4
+  id: sum_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k1: s4_k1
+    k2: s4_k2
+    mirror: none
+    name: s4
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [417, 315]
+    rotation: 0
+    state: true
+- name: sum_2$5
+  id: sum_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k1: '-1.0'
+    k2: '1.0'
+    mirror: none
+    name: s5
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [417, 411]
+    rotation: 0
+    state: true
+- name: sum_2$6
+  id: sum_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k1: s7_k1
+    k2: s7_k2
+    mirror: none
+    name: s7
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [618, 186]
+    rotation: 0
+    state: true
+- name: sum_2$7
+  id: sum_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k1: s6_k1
+    k2: s6_k2
+    mirror: none
+    name: s6
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [618, 69]
+    rotation: 0
+    state: true
+- name: sum_2$8
+  id: sum_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k1: s8_k1
+    k2: s8_k2
+    mirror: none
+    name: s8
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [723, 27]
+    rotation: 0
+    state: true
+- name: sum_2$9
+  id: sum_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k1: s9_k1
+    k2: s9_k2
+    mirror: none
+    name: s9
+    port_block_x: '5'
+    port_block_y: '3'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [723, 144]
+    rotation: 0
+    state: true
+connections:
+- [abc_to_dq$0, '0', sum_2$2, '0']
+- [abc_to_dq$0, '1', connector_f_2B$0, '0']
+- [connector_f_2B$0, '0', sum_2$1, '0']
+- [connector_f_3a$0, '0', sum_2$8, '1']
+- [connector_f_3a$0, '1', dummy_sink$0, '0']
+- [connector_f_3a$1, '0', sum_2$9, '1']
+- [connector_f_3a$1, '1', dummy_sink$2, '0']
+- [connector_f_3a$2, '0', multscl$1, '0']
+- [connector_f_3a$2, '1', pad_sink$0, '0']
+- [connector_f_3b$0, '0', sum_2$6, '0']
+- [connector_f_3b$0, '1', sum_2$9, '0']
+- [connector_f_3b$1, '0', sum_2$7, '0']
+- [connector_f_3b$1, '1', sum_2$8, '0']
+- [connector_f_3c$0, '0', mult_2$2, '1']
+- [connector_f_3c$0, '1', mult_2$3, '0']
+- [dummy_source$0, '0', mult_2$0, '0']
+- [dummy_source$1, '0', mult_2$0, '1']
+- [dummy_source$10, '0', sum_2$1, '1']
+- [dummy_source$11, '0', sum_2$6, '1']
+- [dummy_source$12, '0', sum_2$7, '1']
+- [dummy_source$2, '0', mult_2$1, '0']
+- [dummy_source$3, '0', mult_2$1, '1']
+- [dummy_source$4, '0', connector_f_3c$0, '0']
+- [dummy_source$5, '0', mult_2$2, '0']
+- [dummy_source$6, '0', mult_2$3, '1']
+- [dummy_source$7, '0', sum_2$4, '0']
+- [dummy_source$8, '0', sum_2$3, '0']
+- [dummy_source$9, '0', sum_2$2, '1']
+- [integrator$0, '0', connector_f_3b$1, '0']
+- [integrator$1, '0', connector_f_3b$0, '0']
+- [integrator$2, '0', dummy_sink$4, '0']
+- [integrator$3, '0', dummy_sink$5, '0']
+- [integrator$4, '0', connector_f_3a$2, '0']
+- [mult_2$0, '0', sum_2$0, '0']
+- [mult_2$1, '0', sum_2$0, '1']
+- [mult_2$2, '0', sum_2$3, '1']
+- [mult_2$3, '0', sum_2$4, '1']
+- [multscl$0, '0', sum_2$5, '1']
+- [multscl$1, '0', dummy_sink$6, '0']
+- [pad_source$0, '0', abc_to_dq$0, '0']
+- [pad_source$1, '0', abc_to_dq$0, '1']
+- [pad_source$2, '0', abc_to_dq$0, '2']
+- [pad_source$3, '0', sum_2$5, '0']
+- [sum_2$0, '0', multscl$0, '0']
+- [sum_2$1, '0', integrator$0, '0']
+- [sum_2$2, '0', integrator$1, '0']
+- [sum_2$3, '0', integrator$2, '0']
+- [sum_2$4, '0', integrator$3, '0']
+- [sum_2$5, '0', integrator$4, '0']
+- [sum_2$6, '0', connector_f_3a$1, '0']
+- [sum_2$7, '0', connector_f_3a$0, '0']
+- [sum_2$8, '0', dummy_sink$1, '0']
+- [sum_2$9, '0', dummy_sink$3, '0']
+gparms:
+  drawing_scheme: name
+  i1_k: computed
+  j: '0.089'
+  llr: '0.002'
+  lls: '0.002'
+  lm: '0.0693'
+  m1_k: computed
+  mirror: none
+  poles: '4'
+  port_block_x: '4'
+  port_block_y: '4'
+  port_sep_x: '4'
+  port_sep_y: '4'
+  rotate_strict: 'no'
+  rr: '0.816'
+  rs: '0.435'
+  s1_k1: computed
+  s1_k2: computed
+  s2_k1: computed
+  s2_k2: computed
+  s3_k1: computed
+  s3_k2: computed
+  s4_k1: computed
+  s4_k2: computed
+  s6_k1: computed
+  s6_k2: computed
+  s7_k1: computed
+  s7_k2: computed
+  s8_k1: computed
+  s8_k2: computed
+  s9_k1: computed
+  s9_k2: computed
+  x2: computed
+outvars:
+  tem:
+  - connection
+  - - multscl$0
+    - '0'
+    - sum_2$5
+    - '1'
+  wrm:
+  - outvar
+  - - integrator$4
+    - y
+solve_blocks: []
+output_blocks: []

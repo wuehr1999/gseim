@@ -1,0 +1,248 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_vsrc_ac_3ph
+    mirror: none
+    placement: (0,0)
+    port_block_x: '20'
+    port_block_y: '4'
+    port_sep_x: '0'
+    port_sep_y: '8'
+    rotate_strict: 'yes'
+    run: 'True'
+    sizing_mode: fixed
+    title: AC-3ph
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: connector_e_3$0
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [342, 252]
+    rotation: 270
+    state: true
+- name: connector_e_3$1
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [393, 252]
+    rotation: 0
+    state: true
+- name: pad_e_bottom$0
+  id: pad_e_bottom
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: n
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [333, 282]
+    rotation: 0
+    state: true
+- name: pad_e_right$0
+  id: pad_e_right
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: a
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [492, 72]
+    rotation: 0
+    state: true
+- name: pad_e_right$1
+  id: pad_e_right
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: b
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [492, 102]
+    rotation: 0
+    state: true
+- name: pad_e_right$2
+  id: pad_e_right
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: c
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [492, 132]
+    rotation: 0
+    state: true
+- name: vsrc_ac$0
+  id: vsrc_ac
+  parameters:
+    a: v_a
+    comment: ''
+    drawing_scheme: symbol
+    f_hz: f_hz
+    mirror: none
+    name: none
+    phi_deg: phi_a_deg
+    port_block_x: '5'
+    port_block_y: '10'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t0: '0'
+    vdc: '0'
+  states:
+    coordinate: [330, 171]
+    rotation: 0
+    state: true
+- name: vsrc_ac$1
+  id: vsrc_ac
+  parameters:
+    a: v_b
+    comment: ''
+    drawing_scheme: symbol
+    f_hz: f_hz
+    mirror: none
+    name: none
+    phi_deg: phi_b_deg
+    port_block_x: '5'
+    port_block_y: '10'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t0: '0'
+    vdc: '0'
+  states:
+    coordinate: [381, 171]
+    rotation: 0
+    state: true
+- name: vsrc_ac$2
+  id: vsrc_ac
+  parameters:
+    a: v_c
+    comment: ''
+    drawing_scheme: symbol
+    f_hz: f_hz
+    mirror: none
+    name: none
+    phi_deg: phi_c_deg
+    port_block_x: '5'
+    port_block_y: '10'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t0: '0'
+    vdc: '0'
+  states:
+    coordinate: [429, 171]
+    rotation: 0
+    state: true
+connections:
+- [connector_e_3$0, er0, pad_e_bottom$0, et0]
+- [connector_e_3$0, et0, connector_e_3$1, el0]
+- [connector_e_3$1, er0, vsrc_ac$2, eb0]
+- [connector_e_3$1, et0, vsrc_ac$1, eb0]
+- [vsrc_ac$0, eb0, connector_e_3$0, el0]
+- [vsrc_ac$0, et0, pad_e_right$0, el0]
+- [vsrc_ac$1, et0, pad_e_right$1, el0]
+- [vsrc_ac$2, et0, pad_e_right$2, el0]
+gparms:
+  drawing_scheme: name
+  f_hz: '50'
+  phi_a_deg: '0'
+  phi_b_deg: '-120'
+  phi_c_deg: '-240'
+  port_block_x: '10'
+  port_block_y: '4'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
+  port_sep_x: '0'
+  port_sep_y: '8'
+  rotate_strict: 'yes'
+  v_a: '1'
+  v_b: '1'
+  v_c: '1'
+outvars:
+  i_a:
+  - outvar
+  - - vsrc_ac$0
+    - i
+  i_b:
+  - outvar
+  - - vsrc_ac$1
+    - i
+  i_c:
+  - outvar
+  - - vsrc_ac$2
+    - i
+solve_blocks: []
+output_blocks: []

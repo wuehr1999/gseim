@@ -1,0 +1,56 @@
+id: show_parameter
+label: show_parameter
+
+parameters:
+-   id: font_size
+    label: font_size
+    dtype: float
+    default: '9'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'no'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'text'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '4'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '4'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '4'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '4'
+-   id: element_name
+    label: element_name
+    dtype: string
+    default: 'dummy'
+-   id: parameter_name
+    label: parameter_name
+    dtype: string
+    default: 'dummy'
+-   id: show_name
+    label: show_name
+    dtype: enum
+    default: do_not_show
+    options: [do_not_show, show]
+    option_labels: [do_not_show, show]
+
+outvars: []

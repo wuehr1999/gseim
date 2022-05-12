@@ -1,0 +1,119 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=pwl20 evaluate=yes limit_tstep=yes
+# pwl20 source
+Jacobian: constant
+input_vars:
+output_vars: y
+aux_vars:
+iparms: n=2
+sparms:
+rparms:
++  t1 =1  t2 =2  t3 =3  t4 =4  t5 =5
++  t6 =6  t7 =7  t8 =8  t9 =9  t10=10
++  t11=11 t12=12 t13=13 t14=14 t15=15
++  t16=16 t17=17 t18=18 t19=19 t20=20
++  v1 =1  v2 =2  v3 =3  v4 =4  v5 =5
++  v6 =6  v7 =7  v8 =8  v9 =9  v10=10
++  v11=11 v12=12 v13=13 v14=14 v15=15
++  v16=16 v17=17 v18=18 v19=19 v20=20
+stparms:
+igparms:
+outparms: y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   const int nmax=20;
+   int i,intrvl;
+   double time0,y0,slp1;
+   const double epsl=1.0e-15;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+
+   n = X.iprm[ni_n];
+   time0 = G.time_given_x;
+
+   if (G.flags[G.i_next_time]) {
+     if (time0 >= X.rprm[n-1]) {
+       G.time_nextbreak_x = G.time_end;
+     } else if (time0 < X.rprm[0]) {
+       G.time_nextbreak_x = X.rprm[0];
+     } else {
+       for (int i=1; i < n; i++) {
+         if (time0 < X.rprm[i]) {
+           if (abs(X.rprm[i]-time0) < epsl) {
+             intrvl = i;
+           } else {
+             intrvl = i-1;
+           }
+           break;
+         }
+       }
+       G.time_nextbreak_x = X.rprm[intrvl+1];
+     }
+     return;
+   }
+   if (time0 >= X.rprm[n-1]) {
+     y0 = X.rprm[nmax+n-1];
+   } else if (time0 < X.rprm[0]) {
+     y0 = X.rprm[nmax];
+   } else {
+     for (int i=1; i < n; i++) {
+       if (time0 < X.rprm[i]) {
+         if (abs(X.rprm[i]-time0) < epsl) {
+           intrvl = i;
+         } else {
+           intrvl = i-1;
+         }
+         break;
+       }
+     }
+     slp1 = (X.rprm[nmax+intrvl+1]-X.rprm[nmax+intrvl])/
+            (X.rprm[intrvl+1]-X.rprm[intrvl]);
+     y0 = X.rprm[nmax+intrvl]+
+             slp1*(time0-X.rprm[intrvl]);
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     cout << "pwl20: init_guess: y0 =" << y0 << endl;
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

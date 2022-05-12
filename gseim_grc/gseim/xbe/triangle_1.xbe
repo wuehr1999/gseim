@@ -1,0 +1,126 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=triangle_1 evaluate=yes limit_tstep=yes
+# triangle source
+Jacobian: constant
+input_vars:
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+# L1 is the level at the beginning of the first interval
+rparms:
++  T1=1
++  T2=1
++  L1=-1
++  L2=1
++  t0=0
++  T=0
++  slope1=0
++  slope2=0
++  epsl=0
+stparms:
+igparms:
+outparms: y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   double y0,t0_new,delta_min,t_a,t_b,tnext_p;
+   int n;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     T1 = X.rprm[nr_T1];
+     T2 = X.rprm[nr_T2];
+     L1 = X.rprm[nr_L1];
+     L2 = X.rprm[nr_L2];
+
+     T = T1 + T2;
+     slope1 = (L2-L1)/T1;
+     slope2 = (L1-L2)/T2;
+     epsl = T/1000.0;
+
+     X.rprm[nr_T] = T;
+     X.rprm[nr_slope1] = slope1;
+     X.rprm[nr_slope2] = slope2;
+     X.rprm[nr_epsl] = epsl;
+
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+
+   t0   = X.rprm[nr_t0  ];
+   T    = X.rprm[nr_T   ];
+   T1   = X.rprm[nr_T1  ];
+   epsl = X.rprm[nr_epsl];
+
+   if (G.time_given_x < t0) {
+     n = ((t0-G.time_given_x)/T) + 1;
+     t0_new = t0-n*T;
+   } else {
+     t0_new = t0;
+   }
+   t_a = G.time_given_x-t0_new;
+   t_b = fmod(t_a,T);
+
+   if (abs(t_b-T) < epsl) t_b = 0.0;
+
+   if (G.flags[G.i_next_time]) {
+     if (t_b < T1) {
+       tnext_p = T1;
+     } else {
+       tnext_p = T;
+     }
+     G.time_nextbreak_x = G.time_given_x + (tnext_p-t_b);
+     return;
+   }
+
+   L1 = X.rprm[nr_L1];
+   L2 = X.rprm[nr_L2];
+   slope1 = X.rprm[nr_slope1];
+   slope2 = X.rprm[nr_slope2];
+
+   if (t_b < T1) {
+     y0 = L1 + slope1*t_b;
+   } else {
+     y0 = L2 + slope2*(t_b-T1);
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

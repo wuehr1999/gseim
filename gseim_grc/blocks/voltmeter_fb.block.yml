@@ -1,0 +1,57 @@
+id: voltmeter_fb
+label: V
+
+parameters:
+-   id: k_scale
+    label: k_scale
+    dtype: float
+    default: '1.0'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'yes'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'name'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '0'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '4'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '4'
+
+e_top_nodes:
+-   dtype: float
+    label: p
+
+e_bottom_nodes:
+-   dtype: float
+    label: n
+
+outputs:
+-   domain: stream
+    label: v_fb
+    dtype: float
+
+outvars:
+- v
+- v_fb

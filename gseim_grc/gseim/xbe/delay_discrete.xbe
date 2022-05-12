@@ -1,0 +1,159 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=delay_discrete evaluate=yes save_history=yes allow_ssw=no
+#
+# The input (x) is assumed to be a sampled quantity (or a function
+# of sampled quantities). The output is a delayed version of the
+# input. (delay of up to 3 periods is allowed)
+#
+Jacobian: variable
+input_vars: x
+output_vars: y
+aux_vars:
+iparms: n_delay=1
+sparms:
+rparms:
++  T=10u
++  t0=0
++  dt=1u
++  y_current=0
++  y_old_1=0
++  y_old_2=0
++  y_old_3=0
++  y_old_4=0
++  epsl1=0
++  epsl2=0
+stparms: y_st=0
+igparms:
+outparms: x y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   double time0,rsd1,rsd2;
+   double t0_new,t_a,t_b,t_c,t_d,y0;
+   int n;
+   int l_cross;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     n_delay = X.iprm[ni_n_delay];
+     if ((n_delay < 1) || (n_delay > 4)) {
+       cout << "delay_discrete: n_delay must be 1, 2, or 3. Halting.." << endl;
+       exit (1);
+     }
+     dt = X.rprm[nr_dt];
+     epsl1 = dt/10.0;
+     epsl2 = dt/100.0;
+     X.rprm[nr_epsl1] = epsl1;
+     X.rprm[nr_epsl2] = epsl2;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.stprm[nst_y_st];
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
+       }   
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }   
+     }   
+     return;
+   }   
+   if (G.flags[G.i_trns] || G.flags[G.i_save_history]) {
+     time0 = G.time_given_x;
+     T = X.rprm[nr_T];
+     y_current = X.rprm[nr_y_current];
+
+     t0 = X.rprm[nr_t0];
+     dt = X.rprm[nr_dt];
+
+     epsl1 = X.rprm[nr_epsl1];
+     epsl2 = X.rprm[nr_epsl2];
+
+     n_delay = X.iprm[ni_n_delay];
+
+     if (time0 < t0) {
+       n = ((int)((t0-time0)/T)) + 1;
+       t0_new = t0 - n*T;
+     } else {
+       t0_new = t0;
+     }
+               
+     t_a = (time0-t0_new);
+     t_b = fmod(t_a,T);
+     if (abs(t_b-T) < epsl2) t_b = 0.0;
+     t_c = T - dt;
+
+     t_d = abs(t_b-T);
+     l_cross = 0;
+     if ((t_d < epsl1) || (abs(t_b) < epsl1)) {
+       l_cross = 1;
+     }
+     if (G.flags[G.i_function]) {
+       if (l_cross == 1) {
+         if (n_delay == 1) {
+           y0 = X.rprm[nr_y_current];
+         } else if (n_delay == 2) {
+           y0 = X.rprm[nr_y_old_1];
+         } else if (n_delay == 3) {
+           y0 = X.rprm[nr_y_old_2];
+         } else if (n_delay == 4) {
+           y0 = X.rprm[nr_y_old_3];
+         }
+       } else {
+         if (n_delay == 1) {
+           y0 = X.rprm[nr_y_old_1];
+         } else if (n_delay == 2) {
+           y0 = X.rprm[nr_y_old_2];
+         } else if (n_delay == 3) {
+           y0 = X.rprm[nr_y_old_3];
+         } else if (n_delay == 4) {
+           y0 = X.rprm[nr_y_old_4];
+         }
+       }
+       X.g[ng_1] = X.val_vr[nvr_y] - y0;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dgdvr[ng_1][nvr_y] = 1.0;
+     }
+     if (G.flags[G.i_save_history]) {
+       if (l_cross == 1) {
+         X.rprm[nr_y_old_4] = X.rprm[nr_y_old_3];
+         X.rprm[nr_y_old_3] = X.rprm[nr_y_old_2];
+         X.rprm[nr_y_old_2] = X.rprm[nr_y_old_1];
+         X.rprm[nr_y_old_1] = X.rprm[nr_y_current];
+
+         X.rprm[nr_y_current] = X.val_vr[nvr_x];
+       }
+     }
+     return;
+   }
+endC
+endxbe

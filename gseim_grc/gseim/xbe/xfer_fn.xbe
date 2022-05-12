@@ -1,0 +1,53 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=xfer_fn integrate=yes
+#
+#
+# generic xfer function (up to order 5)
+# This file does not have the actual implementation.
+# It will only serve as a block in the GSEIM GUI.
+# The GUI python parser will process it and include
+# suitable filter elements in the circuit file.
+#
+#     a0 + a1*s + a2*s^2 + a3*s^3 + a4*s^4 + a5*s^5
+# y = ---------------------------------------------  x
+#     b0 + b1*s + b2*s^2 + b3*s^3 + b4*s^4 + b5*s^5
+#
+#
+#
+Jacobian: constant
+input_vars: x
+output_vars: y
+aux_vars:
+iparms: scale_coef=0
+sparms:
+rparms:
++  a0=0  a1=0  a2=0  a3=0  a4=0  a5=0
++  b0=0  b1=0  b2=0  b3=0  b4=0  b5=0
++  f0=0
+stparms:
++  y_sv=0
+igparms:
+outparms:
+n_f= 0
+n_g= 0
+C:
+prototypes:
+variables:
+source:
+endC
+endxbe

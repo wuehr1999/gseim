@@ -1,0 +1,83 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=pole_real_order_1 integrate=yes
+#
+#         a
+# y = --------- x
+#     (s-alpha)
+#
+Jacobian: constant
+input_vars: x
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+rparms: a=1  alpha=1
+stparms: y_st=0
+igparms:
+outparms:
+n_f= 1
+f_1: d_dt(y)
+n_g= 1
+g_1: x y
+C:
+prototypes:
+variables:
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr [nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.stprm[nst_y_st];
+     } else if (G.flags[G.i_implicit]) {
+       X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     a = X.rprm[nr_a];
+     alpha = X.rprm[nr_alpha];
+     x = X.val_vr[nvr_x];
+     y = X.val_vr[nvr_y];
+
+     if (G.flags[G.i_explicit]) {
+       if (G.flags[G.i_alg_loop]) {
+         X.h[nf_1] = y - X.val_vr_u[nvr_y];
+       } else {
+         X.f[nf_1] = alpha*y + a*x;
+       }
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = alpha*y + a*x;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_x] = a;
+         J.dgdvr[ng_1][nvr_y] = alpha;
+       }
+     }
+     return;
+   }
+endC
+endxbe

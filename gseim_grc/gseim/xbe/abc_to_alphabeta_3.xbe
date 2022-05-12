@@ -1,0 +1,92 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=abc_to_alphabeta_3 evaluate=yes
+Jacobian: constant
+input_vars: a b c
+output_vars: alpha beta
+aux_vars:
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: a b c alpha beta
+n_f= 0
+n_g= 2
+g_1: alpha a b c
+g_2: beta b c
+C:
+prototypes:
+variables:
+   static double k1=0.0, k2=0.0, k3=0.0;
+source:
+// cout << "abc_to_alphabeta_1.xbe" << endl;
+
+   if (G.flags[G.i_one_time_parms]) {
+     k1 = sqrt(2.0/3.0);
+     k2 = sqrt(1.0/6.0);
+     k3 = 1.0/(sqrt(2.0));
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     a = X.val_vr[nvr_a];
+     b = X.val_vr[nvr_b];
+     c = X.val_vr[nvr_c];
+
+     X.val_vr[nvr_alpha] = k1*a - k2*(b+c);
+     X.val_vr[nvr_beta ] = k3*(b-c);
+
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     a = X.val_vr[nvr_a];
+     b = X.val_vr[nvr_b];
+     c = X.val_vr[nvr_c];
+
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_alpha] = k1*a - k2*(b+c);
+       X.val_vr[nvr_beta ] = k3*(b-c);
+     } else if (G.flags[G.i_implicit]) {
+       alpha = X.val_vr[nvr_alpha];
+       beta  = X.val_vr[nvr_beta ];
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = alpha - k1*a + k2*(b+c);
+         X.g[ng_2] = beta - k3*(b-c);
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_alpha] = 1.0;
+         J.dgdvr[ng_1][nvr_a    ] = -k1;
+         J.dgdvr[ng_1][nvr_b    ] =  k2;
+         J.dgdvr[ng_1][nvr_c    ] =  k2;
+
+         J.dgdvr[ng_2][nvr_beta] = 1.0;
+         J.dgdvr[ng_2][nvr_b   ] = -k3;
+         J.dgdvr[ng_2][nvr_c   ] =  k3;
+       }
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_a] = X.val_vr[nvr_a];
+     X.outprm[no_b] = X.val_vr[nvr_b];
+     X.outprm[no_c] = X.val_vr[nvr_c];
+     X.outprm[no_alpha] = X.val_vr[nvr_alpha];
+     X.outprm[no_beta ] = X.val_vr[nvr_beta ];
+     return;
+   }
+endC
+endxbe

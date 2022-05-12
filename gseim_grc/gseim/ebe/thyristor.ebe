@@ -1,0 +1,146 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=thyristor save_history=yes x_inputs=yes
+Jacobian: variable
+nodes: anode cathode
+state_vars:
+aux_vars:
+aux_vars_startup:
+x_vars: g_in
+iparms: flag_on=0 flag1=0
+sparms:
+rparms:
++  r_on=1m
++  r_off=10M
++  v_on=0
++  x_high=1
++  xhb2=0
+stparms: l_closed_st=0
+igparms:
+outparms: i v
+n_f=2
+f_1: v(anode) v(cathode)
+f_2: v(anode) v(cathode)
+n_g=0
+n_h=2
+h_1: v(anode) v(cathode)
+h_2: v(anode) v(cathode)
+C:
+variables:
+   double vp,vn,r,g,v1a;
+   bool l_closed;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     x_high  = X.rprm[nr_x_high];
+     xhb2 = 0.5*x_high;
+     X.rprm[nr_xhb2] = xhb2;
+     return;
+   }
+   if (G.flags[G.i_dc]) {
+     cout << "thyristor.ebe: DC not allowed. Halting..." << endl;
+     exit(1);
+   }
+   xhb2 = X.rprm[nr_xhb2];
+   r_on = X.rprm[nr_r_on];
+   r_off = X.rprm[nr_r_off];
+   v_on = X.rprm[nr_v_on];
+   vp = X.val_nd[nnd_anode];
+   vn = X.val_nd[nnd_cathode];
+   v1a = vp-vn;
+
+   if (G.flags[G.i_startup]) {
+     l_closed = (X.stprm[nst_l_closed_st] > xhb2);
+   }
+   if (G.flags[G.i_trns]) {
+     l_closed = (X.iprm[ni_flag_on] == 1);
+     if (!l_closed) {
+       if (X.val_xvr[nx_g_in] > xhb2) {
+         if (v1a >= v_on) {
+           l_closed = true;
+         }
+       }
+     } else {
+       if (v1a <= v_on) {
+         l_closed = false;
+       }
+     }
+   }
+   if (G.flags[G.i_startup] || G.flags[G.i_trns]) {
+     if (l_closed) {
+       X.iprm[ni_flag1] = 1;
+       r = r_on;
+     } else {
+       X.iprm[ni_flag1] = 0;
+       r = r_off;
+     }
+     if (r < 1.0e-9) {
+       cout << "thyristor.ebe: r: " << r << " is too small!" << endl;
+       cout << "  Halting..." << endl; exit(1);
+     }
+     g = 1.0/r;
+   }
+   if (G.flags[G.i_trns]) {
+     if (G.flags[G.i_function]) {
+       if (l_closed) {
+         X.f[nf_1] = g*(vp-vn-v_on);
+       } else {
+         X.f[nf_1] = g*(vp-vn);
+       }
+       X.f[nf_2] = - X.f[nf_1];
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdv[nf_1][nnd_anode  ] =  g;
+       J.dfdv[nf_1][nnd_cathode] = -g;
+       J.dfdv[nf_2][nnd_anode  ] = -g;
+       J.dfdv[nf_2][nnd_cathode] =  g;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_function]) {
+       if (l_closed) {
+         X.h[nh_1] = g*(vp-vn-v_on);
+       } else {
+         X.h[nh_1] = g*(vp-vn);
+       }
+       X.h[nh_2] = - X.h[nh_1];
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdv[nh_1][nnd_anode  ] =  g;
+       J.dhdv[nh_1][nnd_cathode] = -g;
+       J.dhdv[nh_2][nnd_anode  ] = -g;
+       J.dhdv[nh_2][nnd_cathode] =  g;
+     }
+     return;
+   }
+   if (G.flags[G.i_save_history]) {
+     X.iprm[ni_flag_on] = X.iprm[ni_flag1];
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_anode]-X.val_nd[nnd_cathode];
+     X.outprm[no_i] = X.cur_nd[nnd_anode];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+//    Assume the switch to be closed
+      X.val_nd[nnd_anode] = 0.0;
+      X.val_nd[nnd_cathode] = 0.0;
+      return;
+   }
+endC
+endebe

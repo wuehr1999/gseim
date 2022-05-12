@@ -1,0 +1,129 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=sampler evaluate=yes limit_tstep=yes save_history=yes allow_ssw=no
+#
+# sample and hold
+#
+Jacobian: variable
+input_vars: x
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+rparms:
++  T=10u
++  t0=0
++  v_previous=0
++  dt=1u
++  epsl1=0
++  epsl2=0
+stparms: y_st=0
+igparms:
+outparms: x y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   double time0,rsd1,rsd2;
+   int n;
+   double t0_new,t_a,t_b,t_c,t_d,y0;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     dt = X.rprm[nr_dt];
+     X.rprm[nr_epsl1] = dt/10.0;
+     X.rprm[nr_epsl2] = dt/100.0;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.stprm[nst_y_st];
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
+       }   
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }   
+     }   
+     return;
+   }   
+   if (G.flags[G.i_save_history]) {
+     X.rprm[nr_v_previous] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_next_time]) {
+     T          = X.rprm[nr_T         ];
+     t0         = X.rprm[nr_t0        ];
+     v_previous = X.rprm[nr_v_previous];
+     dt         = X.rprm[nr_dt        ];
+
+     time0 = G.time_given_x;
+
+     if (time0 < t0) {
+       n = ((t0-time0)/T)+1;
+       t0_new = t0 - n*T;
+     } else {
+       t0_new = t0;
+     }
+
+     epsl1 = X.rprm[nr_epsl1];
+     epsl2 = X.rprm[nr_epsl2];
+     t_a = time0 - t0_new;
+     t_b = fmod(t_a,T);
+     if (abs(t_b-T) < epsl2) t_b = 0.0;
+     t_c = T - dt;
+
+     if (G.flags[G.i_next_time]) {
+       if (t_b == 0.0) {
+         G.time_nextbreak_x = time0 + t_c;
+       } else if (abs(t_b-t_c) <= epsl2) {
+         G.time_nextbreak_x = time0 + dt;
+       } else if (t_b < t_c) {
+         G.time_nextbreak_x = time0 - t_b + t_c;
+       } else {
+         G.time_nextbreak_x = time0 - t_b + T;
+       }
+       return;
+     } else {
+       t_d = abs(t_b-T);
+       if ((t_d < epsl1) || (abs(t_b) < epsl1)) {
+         y0 = X.val_vr[nvr_x];
+       } else {
+         y0 = v_previous;
+       }
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

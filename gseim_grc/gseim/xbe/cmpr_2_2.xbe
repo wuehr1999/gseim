@@ -1,0 +1,151 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=cmpr_2_2 evaluate=yes limit_tstep=yes save_history=yes
+# if x1 > x2, y1 = high, else low
+# (reverse if flag_inverting=1)
+# y2 = not(y1)
+Jacobian: variable
+input_vars: x1 x2
+output_vars: y1 y2
+aux_vars:
+iparms:
++  flag_invert=0
++  flag_quad=0
+sparms:
+rparms:
++  y_low=0
++  y_high=1
++  x1_1=0
++  x1_2=0
++  x2_1=0
++  x2_2=0
++  t_1=0
++  t_2=0
++  epsl=1.0e-6
++  delt_min=1.0e-6
++  delt_nrml=0.001
+stparms:
+igparms:
+outparms: x1 x2 y1 y2
+n_f= 0
+n_g= 2
+g_1: y1
+g_2: y2
+C:
+prototypes:
+variables:
+   int iter;
+   double y10,y20,time0;
+source:
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y1] = X.val_vr[nvr_y1];
+     X.outprm[no_y2] = X.val_vr[nvr_y2];
+     return;
+   }
+
+   flag_invert = X.iprm[ni_flag_invert];
+   flag_quad = X.iprm[ni_flag_quad];
+
+   x1 = X.val_vr[nvr_x1];
+   x2 = X.val_vr[nvr_x2];
+
+   if (G.flags[G.i_save_history]) {
+
+     x1_1 = X.rprm[nr_x1_1];
+     x2_1 = X.rprm[nr_x2_1];
+     t_1 = X.rprm[nr_t_1];
+
+     x1_2 = x1_1;
+     x2_2 = x2_1;
+     t_2 = t_1;
+
+     x1_1 = x1;
+     x2_1 = x2;
+     t_1 = G.time_given_x;
+
+     X.rprm[nr_x1_1] = x1_1;
+     X.rprm[nr_x1_2] = x1_2;
+     X.rprm[nr_x2_1] = x2_1;
+     X.rprm[nr_x2_2] = x2_2;
+     X.rprm[nr_t_1] = t_1;
+     X.rprm[nr_t_2] = t_2;
+     return;
+   }
+   if (G.flags[G.i_next_time]) {
+     iter = G.iter_trns_x;
+     time0 = G.time_given_x;
+
+     x1_1 = X.rprm[nr_x1_1];
+     x1_2 = X.rprm[nr_x1_2];
+     x2_1 = X.rprm[nr_x2_1];
+     x2_2 = X.rprm[nr_x2_2];
+     t_1  = X.rprm[nr_t_1 ];
+     t_2  = X.rprm[nr_t_2 ];
+     epsl      = X.rprm[nr_epsl     ];
+     delt_min  = X.rprm[nr_delt_min ];
+     delt_nrml = X.rprm[nr_delt_nrml];
+
+     G.time_nextbreak_x = get_tnext(iter,flag_quad,
+       t_1,t_2,(x1_1-x2_1),(x1_2-x2_2),
+       time0,(x1-x2),epsl,delt_min,delt_nrml);
+
+     return;
+   }
+
+   if (flag_invert == 0) {
+     if (x1 >= x2) {
+       y10 = X.rprm[nr_y_high];
+       y20 = X.rprm[nr_y_low];
+     } else {
+       y10 = X.rprm[nr_y_low];
+       y20 = X.rprm[nr_y_high];
+     }   
+   } else {
+     if (x1 >= x2) {
+       y10 = X.rprm[nr_y_low];
+       y20 = X.rprm[nr_y_high];
+     } else {
+       y10 = X.rprm[nr_y_high];
+       y20 = X.rprm[nr_y_low];
+     }   
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y1] = y10;
+     X.val_vr[nvr_y2] = y20;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y1] = y10;
+       X.val_vr[nvr_y2] = y20;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y1] - y10;
+         X.g[ng_2] = X.val_vr[nvr_y2] - y20;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y1] = 1.0;
+         J.dgdvr[ng_2][nvr_y2] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

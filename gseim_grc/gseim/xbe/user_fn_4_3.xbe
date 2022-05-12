@@ -1,0 +1,94 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=user_fn_4_3 evaluate=yes
+Jacobian: constant
+input_vars: x1 x2 x3 x4
+output_vars: y1 y2 y3
+aux_vars:
+iparms:
++  iprm1=0
++  iprm2=0
++  index_fn=1
+sparms:
+rparms:
++  rprm1=0
++  rprm2=0
++  rprm3=0
++  rprm4=0
++  rprm5=0
++  rprm6=0
++  rprm7=0
++  rprm8=0
++  rprm9=0
++  rprm10=0
+stparms:
+igparms:
+outparms: y1 y2 y3
+n_f= 0
+n_g= 3
+g_1: y1
+g_2: y2
+g_3: y3
+C:
+prototypes:
+variables:
+// declare large enough size to serve other user_fn_x_x
+// elements as well
+
+   double time0;
+   double x_uf[20];
+   double y_uf[20];
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y1] = X.val_vr[nvr_y1];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     return;
+   }
+   time0 = G.time_given_x;
+   index_fn = X.iprm[ni_index_fn];
+   x_uf[0] = X.val_vr[nvr_x1];
+   x_uf[1] = X.val_vr[nvr_x2];
+   x_uf[2] = X.val_vr[nvr_x3];
+   x_uf[3] = X.val_vr[nvr_x4];
+   user_function(index_fn,time0,x_uf,y_uf,X.iprm,X.rprm);
+
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y1] = y_uf[0];
+       X.val_vr[nvr_y2] = y_uf[1];
+       X.val_vr[nvr_y3] = y_uf[2];
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y1] - y_uf[0];
+         X.g[ng_2] = X.val_vr[nvr_y2] - y_uf[1];
+         X.g[ng_3] = X.val_vr[nvr_y3] - y_uf[2];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y1] = 1.0;
+         J.dgdvr[ng_2][nvr_y2] = 1.0;
+         J.dgdvr[ng_3][nvr_y3] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

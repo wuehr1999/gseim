@@ -1,0 +1,160 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=xfmr_level0_1ph_1_2
+#
+# one primary winding, two secondary windings
+# (No magnetizing inductance)
+#
+Jacobian: constant
+nodes: s1_n  s2_p  p_p  s1_p  p_n  s2_n
+state_vars:
+aux_vars: cur_p_p  cur_s1_p  cur_s2_p
+aux_vars_startup:
+x_vars:
+iparms:
+sparms:
+rparms:
++  p_turns=1
++  s1_turns=1
++  s2_turns=1
+stparms:
++  ip0=0 is10=0 is20=0
+igparms:
+outparms: ip is1 is2 vp vs1 vs2
+n_f=9
+f_1: cur_s1_p
+f_2: cur_s2_p
+f_3: cur_p_p
+f_4: cur_s1_p
+f_5: cur_p_p
+f_6: cur_s2_p
+f_7: v(p_p) v(p_n) v(s1_p) v(s1_n)
+f_8: v(p_p) v(p_n) v(s2_p) v(s2_n)
+f_9: cur_p_p cur_s1_p cur_s2_p
+n_g=0
+n_h=6
+h_1:
+h_2:
+h_3:
+h_4:
+h_5:
+h_6:
+C:
+#
+# n1,n2 model
+# p_xx: primary, s1_xx: secondary 1, s2_xx: secondary 2
+# cur_p_p: current entering the p terminal of the primary
+# cur_s1_p: current entering the p terminal of s1
+# cur_s2_p: current entering the p terminal of s2
+#
+variables:
+   int nfp_s1_n=0;
+   int nfp_s2_p=1;
+   int nfp_p_p =2;
+   int nfp_s1_p=3;
+   int nfp_p_n =4;
+   int nfp_s2_n=5;
+source:
+   if (G.flags[G.i_dc]) {
+     cout << "xfmr_level0_1ph_1_2.ebe: dc not implemented." << endl;
+     cout << "  Halting..." << endl; exit(1);
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_aux[na_cur_p_p ] = 0.0;
+     X.val_aux[na_cur_s1_p] = 0.0;
+     X.val_aux[na_cur_s2_p] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     p_turns  = X.rprm[nr_p_turns ];
+     s1_turns = X.rprm[nr_s1_turns];
+     s2_turns = X.rprm[nr_s2_turns];
+
+     cur_p_p  = X.val_aux[na_cur_p_p ];
+     cur_s1_p = X.val_aux[na_cur_s1_p];
+     cur_s2_p = X.val_aux[na_cur_s2_p];
+
+     if (G.flags[G.i_function]) {
+       X.f[nfp_p_p ] =  cur_p_p;
+       X.f[nfp_p_n ] = -cur_p_p;
+       X.f[nfp_s1_p] =  cur_s1_p;
+       X.f[nfp_s1_n] = -cur_s1_p;
+       X.f[nfp_s2_p] =  cur_s2_p;
+       X.f[nfp_s2_n] = -cur_s2_p;
+
+       X.f[nf_7] = (X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n])/p_turns -
+                   (X.val_nd[nnd_s1_p]-X.val_nd[nnd_s1_n])/s1_turns;
+       X.f[nf_8] = (X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n])/p_turns -
+                   (X.val_nd[nnd_s2_p]-X.val_nd[nnd_s2_n])/s2_turns;
+       X.f[nf_9] = p_turns*cur_p_p +
+                   s1_turns*cur_s1_p +
+                   s2_turns*cur_s2_p;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdaux[nfp_p_p ][na_cur_p_p ] =  1.0;
+       J.dfdaux[nfp_p_n ][na_cur_p_p ] = -1.0;
+       J.dfdaux[nfp_s1_p][na_cur_s1_p] =  1.0;
+       J.dfdaux[nfp_s1_n][na_cur_s1_p] = -1.0;
+       J.dfdaux[nfp_s2_p][na_cur_s2_p] =  1.0;
+       J.dfdaux[nfp_s2_n][na_cur_s2_p] = -1.0;
+
+       J.dfdv[nf_7][nnd_p_p] =  1.0/p_turns;
+       J.dfdv[nf_7][nnd_p_n] = -1.0/p_turns;
+       J.dfdv[nf_7][nnd_s1_p] = -1.0/s1_turns;
+       J.dfdv[nf_7][nnd_s1_n] =  1.0/s1_turns;
+
+       J.dfdv[nf_8][nnd_p_p] =  1.0/p_turns;
+       J.dfdv[nf_8][nnd_p_n] = -1.0/p_turns;
+       J.dfdv[nf_8][nnd_s2_p] = -1.0/s2_turns;
+       J.dfdv[nf_8][nnd_s2_n] =  1.0/s2_turns;
+
+       J.dfdaux[nf_9][na_cur_p_p] = p_turns;
+       J.dfdaux[nf_9][na_cur_s1_p] = s1_turns;
+       J.dfdaux[nf_9][na_cur_s2_p] = s2_turns;
+     }
+   }
+   if (G.flags[G.i_startup]) {
+      ip0  = X.stprm[nst_ip0 ];
+      is10 = X.stprm[nst_is10];
+      is20 = X.stprm[nst_is20];
+
+      cout << "xfmr_level0_1ph_1_2.ebe: startup not implemented. Halting..." << endl;
+      exit(1);
+      if (G.flags[G.i_function]) {
+         X.h[nh_1] =  ip0;
+         X.h[nh_2] = -ip0;
+         X.h[nh_3] =  is10;
+         X.h[nh_4] = -is10;
+         X.h[nh_5] =  is20;
+         X.h[nh_6] = -is20;
+      }
+      X.val_aux[na_cur_p_p ] = ip0;
+      X.val_aux[na_cur_s1_p] = is10;
+      X.val_aux[na_cur_s2_p] = is20;
+      return;
+   }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_vp ] = X.val_nd[nnd_p_p ]-X.val_nd[nnd_p_n ];
+      X.outprm[no_vs1] = X.val_nd[nnd_s1_p]-X.val_nd[nnd_s1_n];
+      X.outprm[no_vs2] = X.val_nd[nnd_s2_p]-X.val_nd[nnd_s2_n];
+      X.outprm[no_ip ] = X.cur_nd[nnd_p_p ];
+      X.outprm[no_is1] = X.cur_nd[nnd_s1_p];
+      X.outprm[no_is2] = X.cur_nd[nnd_s2_p];
+      return;
+   }
+endC
+endebe

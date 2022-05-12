@@ -1,0 +1,57 @@
+id: s_pi
+label: PI
+category: '[GRC Hier Blocks]'
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: y20
+    label: y20
+    default: '0'
+-   id: Ki
+    label: Ki
+    default: '1'
+-   id: Kp
+    label: Kp
+    default: '1'
+-   id: drawing_scheme
+    label: drawing_scheme
+    default: name
+-   id: port_block_x
+    label: port_block_x
+    default: '5'
+-   id: port_block_y
+    label: port_block_y
+    default: '5'
+-   id: port_sep_x
+    label: port_sep_x
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    default: '0'
+-   id: rotate_strict
+    label: rotate_strict
+    default: 'no'
+-   id: mirror
+    label: mirror
+    default: none
+outvars: []
+
+inputs:
+-   label: x
+    dtype: float
+
+outputs:
+-   label: y
+    dtype: float
+
+e_left_nodes: []
+
+e_right_nodes: []
+
+e_top_nodes: []
+
+e_bottom_nodes: []
+grc_source: ~/gseim_grc/subckt_grc/s_pi.grc

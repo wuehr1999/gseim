@@ -1,0 +1,109 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=r
+Jacobian: constant
+nodes: p n
+state_vars:
+aux_vars:
+aux_vars_startup:
+x_vars:
+iparms:
+sparms:
+rparms:
++  r=1.0
++  k_scale=1
++  g=0
+stparms:
+igparms:
+outparms: i v
+n_f=2
+f_1: v(p) v(n)
+f_2: v(p) v(n)
+n_g=0
+n_h=2
+h_1: v(p) v(n)
+h_2: v(p) v(n)
+C:
+variables:
+   double vp,vn,r_eff;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     r = X.rprm[nr_r];
+     k_scale = X.rprm[nr_k_scale];
+     if (r*k_scale < 1.0e-9) {
+       cout << "r.ebe: r too small!" << endl;
+       cout << "r.ebe: r=" << r << endl;
+       cout << "r.ebe: k_scale=" << k_scale << endl;
+       cout << "r.ebe: Halting..." << endl;
+       exit(1);
+     }
+     r_eff = r*k_scale;
+
+     g = 1.0e0/r_eff;
+     X.rprm[nr_g] = g;
+     return;
+   }
+
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     vp = X.val_nd[nnd_p];
+     vn = X.val_nd[nnd_n];
+
+     g = X.rprm[nr_g];
+
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] = g*(vp-vn);
+       X.f[nf_2] = -X.f[nf_1];
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdv[nf_1][nnd_p] =  g;
+       J.dfdv[nf_1][nnd_n] = -g;
+       J.dfdv[nf_2][nnd_p] = -g;
+       J.dfdv[nf_2][nnd_n] =  g;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     vp = X.val_nd[nnd_p];
+     vn = X.val_nd[nnd_n];
+
+     g = X.rprm[nr_g];
+
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] = g*(vp-vn);
+       X.h[nh_2] = -X.f[nf_1];
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdv[nh_1][nnd_p] =  g;
+       J.dhdv[nh_1][nnd_n] = -g;
+       J.dhdv[nh_2][nnd_p] = -g;
+       J.dhdv[nh_2][nnd_n] =  g;
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     g = X.rprm[nr_g];
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = g*(X.val_nd[nnd_p]-X.val_nd[nnd_n]);
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
+endC
+endebe

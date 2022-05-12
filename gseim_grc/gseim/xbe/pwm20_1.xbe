@@ -1,0 +1,239 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=pwm20_1 evaluate=yes limit_tstep=yes save_history=yes allow_ssw=no
+#
+# generate PWM signals using angle values (in degrees)
+#
+Jacobian: variable
+input_vars:
+output_vars: y
+aux_vars:
+iparms:
++  ndata=2
++  index_last=0
++  level_0minus=0
+sparms:
+rparms:
++  t_1=0   t_2=0   t_3=0   t_4=0   t_5=0
++  t_6=0   t_7=0   t_8=0   t_9=0   t_10=0
++  t_11=0  t_12=0  t_13=0  t_14=0  t_15=0
++  t_16=0  t_17=0  t_18=0  t_19=0  t_20=0
++  theta_1=0   theta_2=0   theta_3=0   theta_4=0   theta_5=0
++  theta_6=0   theta_7=0   theta_8=0   theta_9=0   theta_10=0
++  theta_11=0  theta_12=0  theta_13=0  theta_14=0  theta_15=0
++  theta_16=0  theta_17=0  theta_18=0  theta_19=0  theta_20=0
++  frequency=1
++  y_low=0
++  y_high=1
++  theta_delay=0.0
++  t_delay=0
++  t_period=0
++  epsl1=0
++  epsl2=0
++  epsl3=0
+stparms:
+igparms:
+outparms: y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   int k,indx0,n_periods;
+   double t_add,tp,tp0,tp1,tp_last,time0,time0p,time0pp;
+   double t_diff,t_next_1,y0;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     frequency = X.rprm[nr_frequency];
+     t_period = 1.0/frequency;
+     X.rprm[nr_t_period] = t_period;
+
+     ndata = X.iprm[ni_ndata];
+
+     if ((ndata % 2) != 0) {
+       cout << "pwm20_1.xbe: ndata=" << ndata << " is not allowed" << endl;
+       cout << "  Halting..." << endl; exit(1);
+     }
+     y_high = X.rprm[nr_y_high];
+     y_low  = X.rprm[nr_y_low ];
+     if (y_high < y_low) {
+       cout << "pwm20_1.xbe: y_high and y_low are not defined correctly." << endl;
+       cout << "  y_high=" << y_high << " y_low=" << y_low << endl;
+       cout << "  Halting..." << endl; exit(1);
+     }
+     for (int i = 0; i < ndata; i++) {
+       X.rprm[i] = (t_period/360.0)*X.rprm[i+20];
+     }
+     if ((abs(X.rprm[ndata-1+20]-360.0) < 0.1) && (abs(X.rprm[0+20]) < 0.1)) {
+       cout << "pwm20_1.xbe: time points at both 0 and 360 are" << endl;
+       cout << "  not allowed. Halting..." << endl; exit(1);
+     }
+     if (abs(X.rprm[ndata-1+20]-360.0) < 0.1) {
+       for (int i = (ndata-2); i >= 0; i--) {
+         X.rprm[i+1] = X.rprm[i];
+       }
+       X.rprm[0] = 0.0;
+     }
+
+     X.iprm[ni_index_last] = -1;
+
+     X.rprm[nr_t_delay] = (t_period/360.0)*X.rprm[nr_theta_delay];
+     X.rprm[nr_epsl1] = (t_period/1000.0);
+     epsl2 = 0.01*t_period/360.0;
+     X.rprm[nr_epsl2] = epsl2;
+     X.rprm[nr_epsl3] = 1.1*epsl2;
+
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = 0.0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+   index_last = X.iprm[ni_index_last];
+
+   t_delay  = X.rprm[nr_t_delay ];
+   t_period = X.rprm[nr_t_period];
+   epsl1    = X.rprm[nr_epsl1   ];
+   epsl2    = X.rprm[nr_epsl2   ];
+   epsl3    = X.rprm[nr_epsl3   ];
+
+   ndata = X.iprm[ni_ndata];
+   time0 = G.time_given_x;
+
+   if (time0 < 0.0) {
+     cout << "pwm20_1.gbe: time0=" << time0 << " is not allowed." << endl;
+     cout << "  Halting..." << endl; exit(1);
+   }
+
+   time0p = time0 - t_delay;
+   if (time0p < 0) time0p = time0p + t_period;
+   time0pp = fmod(time0p,t_period);
+   if (time0pp < 0) time0pp = 0.0;
+
+   if (G.flags[G.i_save_history]) {
+     tp_last = X.rprm[ndata-1];
+     indx0 = X.iprm[ni_index_last];
+
+     if (time0pp > tp_last) {
+       index_last = -1;
+     } else {
+       for (int i=(indx0+1);i < ndata;i++) {
+         tp = X.rprm[i];
+         if (tp > time0pp) {
+           index_last = i-2;
+           if (index_last < -1) index_last = -1;
+           break;
+         }
+       }
+     }
+     X.iprm[ni_index_last] = index_last;
+   }
+
+   if (G.flags[G.i_next_time]) {
+     t_diff = (time0-t_delay)/t_period;
+     n_periods = (int)(t_diff);
+     t_add = n_periods*t_period + t_delay;
+     tp_last = X.rprm[ndata-1];
+
+     if (time0pp > tp_last) {
+       if (abs(X.rprm[0]) < epsl1) {
+         if ((t_period-time0pp) < epsl3) {
+           t_next_1 = t_period + epsl2;
+         } else {
+           t_next_1 = t_period - epsl2;
+         }
+       } else {
+         t_next_1 = t_period + X.rprm[0] - epsl2;
+       }
+     } else {
+       for (int i = (index_last+1); i < ndata; i++) {
+         tp1 = X.rprm[i];
+         if (time0pp < tp1) {
+           if ((tp1-time0pp) < epsl3) {
+             t_next_1 = tp1 + epsl2;
+           } else {
+             t_next_1 = tp1 - epsl2;
+           }
+           break;
+         }
+       }
+     }
+     G.time_nextbreak_x = t_next_1 + t_add;
+     return;
+   }
+
+   if (G.flags[G.i_trns]) {
+     level_0minus = X.iprm[ni_level_0minus];
+
+     for (int i = (index_last+1); i < ndata; i++) {
+       tp1 = X.rprm[i];
+       if (time0pp < tp1) {
+         k = i % 2;
+         if (level_0minus == 0) {
+           if (k == 0) {
+             y0 = X.rprm[nr_y_low];
+           } else {
+             y0 = X.rprm[nr_y_high];
+           }
+         } else {
+           if (k == 0) {
+             y0 = X.rprm[nr_y_high];
+           } else {
+             y0 = X.rprm[nr_y_low];
+           }
+         }
+         goto jump1;
+       }
+     }
+     if (level_0minus == 0) {
+       y0 = X.rprm[nr_y_low];
+     } else {
+       y0 = X.rprm[nr_y_high];
+     }
+     jump1:;
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

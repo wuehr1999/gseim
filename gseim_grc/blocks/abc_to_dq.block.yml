@@ -1,0 +1,62 @@
+id: abc_to_dq
+label: abc-dq
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'no'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'name'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '4'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '4'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '4'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '4'
+
+inputs:
+-   domain: stream
+    label: van
+    dtype: float
+-   domain: stream
+    label: vbn
+    dtype: float
+-   domain: stream
+    label: vcn
+    dtype: float
+
+outputs:
+-   domain: stream
+    label: vqs
+    dtype: float
+-   domain: stream
+    label: vds
+    dtype: float
+
+outvars:
+- van
+- vbn
+- vcn
+- vqs
+- vds

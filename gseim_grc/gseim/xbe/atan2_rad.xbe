@@ -1,0 +1,67 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=atan2_rad evaluate=yes
+Jacobian: variable
+input_vars: x y
+output_vars: theta
+aux_vars:
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: x y theta
+n_f= 0
+n_g= 1
+g_1: theta
+C:
+prototypes:
+variables:
+source:
+   if (G.flags[G.i_init_guess]) {
+     x = X.val_vr[nvr_x];
+     y = X.val_vr[nvr_y];
+
+     X.val_vr[nvr_theta] = atan2(y,x);
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     x = X.val_vr[nvr_x];
+     y = X.val_vr[nvr_y];
+
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_theta] = atan2(y,x);
+     } else if (G.flags[G.i_implicit]) {
+       theta = X.val_vr[nvr_theta];
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = theta - atan2(y,x);
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_theta] = 1.0;
+       }
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x    ] = X.val_vr[nvr_x    ];
+     X.outprm[no_y    ] = X.val_vr[nvr_y    ];
+     X.outprm[no_theta] = X.val_vr[nvr_theta];
+     return;
+   }
+endC
+endxbe

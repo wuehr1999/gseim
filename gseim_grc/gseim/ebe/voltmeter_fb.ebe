@@ -1,0 +1,86 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=voltmeter_fb x_outputs=yes
+# ideal voltmeter with feedback
+Jacobian: constant
+nodes: p n
+state_vars:
+aux_vars:
+aux_vars_startup:
+x_vars: v_fb
+iparms:
+sparms:
+rparms: k_scale=1
+stparms:
+igparms:
+outparms: v v_fb
+n_f=3
+f_1:
+f_2:
+f_3: v_fb v(p) v(n)
+n_g=0
+n_h=3
+h_1:
+h_2:
+h_3: v_fb v(p) v(n)
+C:
+variables:
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     k_scale = X.rprm[nr_k_scale];
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] = 0.0;
+       X.f[nf_2] = 0.0;
+       X.f[nf_3] = X.val_xvr[nx_v_fb]
+         -k_scale*(X.val_nd[nnd_p]-X.val_nd[nnd_n]);
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdxvr[nf_3][nx_v_fb] =  1.0;
+       J.dfdv  [nf_3][nnd_p  ] = -k_scale;
+       J.dfdv  [nf_3][nnd_n  ] =  k_scale;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     k_scale = X.rprm[nr_k_scale];
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] = 0.0;
+       X.h[nh_2] = 0.0;
+       X.h[nh_3] = X.val_xvr[nx_v_fb]
+         -k_scale*(X.val_nd[nnd_p]-X.val_nd[nnd_n]);
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdxvr[nh_3][nx_v_fb] =  1.0;
+       J.dhdv  [nh_3][nnd_p  ] = -k_scale;
+       J.dhdv  [nh_3][nnd_n  ] =  k_scale;
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_v_fb] = X.val_xvr[nx_v_fb];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_xvr[nx_v_fb] = 0.0;
+     return;
+   }
+endC
+endebe

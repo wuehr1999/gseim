@@ -1,0 +1,83 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=l
+Jacobian: constant
+nodes: p n
+state_vars:
+aux_vars: cur_p
+aux_vars_startup:
+x_vars:
+iparms:
+sparms:
+rparms:
++  l=1.0
++  k_scale=1
+stparms: i0=0
+igparms:
+outparms: i v
+n_f=3
+f_1: cur_p
+f_2: cur_p
+f_3: d_dt(cur_p) v(p) v(n)
+n_g=0
+n_h=2
+h_1:
+h_2:
+C:
+variables:
+   double l1;
+source:
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     l = X.rprm[nr_l];
+     k_scale = X.rprm[nr_k_scale];
+     l1 = l*k_scale;
+
+     cur_p = X.val_aux[na_cur_p];
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] =  cur_p;
+       X.f[nf_2] = -cur_p;
+       X.f[nf_3] = (X.val_nd[nnd_p]-X.val_nd[nnd_n])/l1;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdaux[nf_1][na_cur_p] =  1.0;
+       J.dfdaux[nf_2][na_cur_p] = -1.0;
+       J.dfdv  [nf_3][nnd_p   ] =  1.0/l1;
+       J.dfdv  [nf_3][nnd_n   ] = -1.0/l1;
+     }
+   }
+
+   if (G.flags[G.i_startup]) {
+      i0 = X.stprm[nst_i0];
+      if (G.flags[G.i_function]) {
+         X.h[nh_1] =  i0;
+         X.h[nh_2] = -i0;
+      }
+      X.val_aux[na_cur_p] = i0;
+      return;
+   }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+      X.outprm[no_i] = X.cur_nd[nnd_p];
+      return;
+   }
+   if (G.flags[G.i_init_guess]) {
+      X.val_nd[nnd_p] = 0.0;
+      X.val_nd[nnd_n] = 0.0;
+      return;
+   }
+endC
+endebe

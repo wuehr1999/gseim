@@ -1,0 +1,63 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=sin evaluate=yes
+Jacobian: variable
+input_vars: x
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: x y
+n_f= 0
+n_g= 1
+g_1: x y
+C:
+prototypes:
+variables:
+   double y0;
+source:
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = sin(X.val_vr[nvr_x]);
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = sin(X.val_vr[nvr_x]);
+     } else if (G.flags[G.i_implicit]) {
+       x = X.val_vr[nvr_x];
+       y = X.val_vr[nvr_y];
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = y - sin(x);
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] =  1.0;
+         J.dgdvr[ng_1][nvr_x] = -cos(x);
+       }
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+endC
+endxbe
