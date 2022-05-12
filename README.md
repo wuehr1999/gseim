@@ -23,7 +23,8 @@ a Qt-python plotting GUI, and a few additional python programs.
 - ```make -f mkgseim```
 - ```make -f mkfilter_so```
 - ```mv libfilter.so ~/gseim_grc/gseim/exec/.```
-- ```cd ~/gseim_grc```
+- ```cd ~/gseim_grc/gseim```
+- ```mkdir output```
 - ```python3 ~/gseim_grc/grc/scripts/run_gseim```
 - The GSEIM GUI should show up. Change the window to full size;
   quit the GUI and run ```run_gseim``` again.
