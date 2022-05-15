@@ -1,5 +1,6 @@
 
-GSEIM (General-purpose Simulator with Explicit and Implicit
+[GSEIM](https://arxiv.org/abs/2204.12924)
+(General-purpose Simulator with Explicit and Implicit
 Methods) is meant for simulation of electrical circuits,
 especially power electronic circuits, and also for numerical
 solution of ordinary differential equations (ODEs). In terms of
