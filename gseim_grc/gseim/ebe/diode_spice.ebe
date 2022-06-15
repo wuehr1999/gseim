@@ -1,0 +1,249 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=diode_spice
+Jacobian: variable
+nodes: p n
+state_vars: qd0 qd1
+aux_vars:
+aux_vars_startup: id_s
+x_vars:
+iparms:
+sparms:
+rparms:
++  af=0.0
++  area=1.0
++  bv=100
++  bvj=100
++  cjo=1p
++  eg=1.11
++  fc=0.5
++  ibv=0.001
++  is=1e-14
++  kf=0.0
++  m=0.5
++  n0=1.0
++  tnom=300.15
++  tt=0.0
++  vj=1.0
++  xti=3.0
++  t1=300.15
++  vth=0
++  vth_nom=0
++  f1=0
++  f2=0
++  f3=0
++  fcp=0
++  ibv_calc=0
++  is_temp=0
++  cur_max=1e3
++  k_crit=0
+stparms:
+igparms:
+outparms: i v
+n_f=2
+f_1: d_dt(qd0) v(p) v(n)
+f_2: d_dt(qd1) v(p) v(n)
+n_g=2
+g_1: qd0 v(p) v(n)
+g_2: qd1 v(p) v(n)
+n_h=3
+h_1: id_s
+h_2: id_s
+h_3: v(p) v(n)
+C:
+variables:
+   const double p_k=1.3806226e-23;
+   const double p_q=1.6021918e-19;
+   double vd,id,qd,qd_vd;
+   double e1,e1d,id_vd;
+   double k1;
+   double gmin0;
+source:
+   gmin0 = G.gmin0;
+
+   if (G.flags[G.i_one_time_parms]) {
+     bv   = X.rprm[nr_bv  ];
+     eg   = X.rprm[nr_eg  ];
+     fc   = X.rprm[nr_fc  ];
+     ibv  = X.rprm[nr_ibv ];
+     is   = X.rprm[nr_is  ];
+     m    = X.rprm[nr_m   ];
+     n0   = X.rprm[nr_n0  ];
+     tnom = X.rprm[nr_tnom];
+     vj   = X.rprm[nr_vj  ];
+     xti  = X.rprm[nr_xti ];
+     t1   = X.rprm[nr_t1  ];
+
+     vth = p_k*t1/p_q;
+     vth_nom = p_k*tnom/p_q;
+
+     f1 = (vj/(1.0-m))*(1.0-(pow((1.0-fc),(1.0-m))));
+     f2 = pow((1.0-fc),(1.0+m));
+     f3 = 1.0-fc*(1.0+m);
+     fcp = fc*vj;
+
+     if (ibv != 0.0) {
+       ibv_calc = ibv;
+     } else {
+       ibv_calc = is*bv/vth;
+     }
+     is_temp = is*(pow((t1/tnom),(xti/n0)))*exp((eg/vth_nom)-(eg/vth));
+
+     X.rprm[nr_vth] = vth;
+     X.rprm[nr_vth_nom] = vth_nom;
+     X.rprm[nr_f1] = f1;
+     X.rprm[nr_f2] = f2;
+     X.rprm[nr_f3] = f3;
+     X.rprm[nr_fcp] = fcp;
+     X.rprm[nr_ibv_calc] = ibv_calc;
+     X.rprm[nr_is_temp] = is_temp;
+
+     k_crit = log(X.rprm[nr_cur_max]/is_temp);
+     X.rprm[nr_k_crit] = k_crit;
+
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+      X.outprm[no_i] = X.cur_nd[nnd_p];
+      return;
+   }
+   vth      = X.rprm[nr_vth     ];
+   f1       = X.rprm[nr_f1      ];
+   f2       = X.rprm[nr_f2      ];
+   f3       = X.rprm[nr_f3      ];
+   fcp      = X.rprm[nr_fcp     ];
+   ibv_calc = X.rprm[nr_ibv_calc];
+   is_temp  = X.rprm[nr_is_temp ];
+   k_crit   = X.rprm[nr_k_crit  ];
+
+   af      = X.rprm[nr_af    ];
+   area    = X.rprm[nr_area  ];
+   bv      = X.rprm[nr_bv    ];
+   bvj     = X.rprm[nr_bvj   ];
+   cjo     = X.rprm[nr_cjo   ];
+   eg      = X.rprm[nr_eg    ];
+   fc      = X.rprm[nr_fc    ];
+   ibv     = X.rprm[nr_ibv   ];
+   is      = X.rprm[nr_is    ];
+   kf      = X.rprm[nr_kf    ];
+   m       = X.rprm[nr_m     ];
+   n0      = X.rprm[nr_n0    ];
+   tnom    = X.rprm[nr_tnom  ];
+   tt      = X.rprm[nr_tt    ];
+   vj      = X.rprm[nr_vj    ];
+   xti     = X.rprm[nr_xti   ];
+   t1      = X.rprm[nr_t1    ];
+
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     vd = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+
+     if (vd < 0.0) {
+       if (vd < -bv) {
+//       past breakdown
+
+         exp_lmt_1(-(bv+vd)/vth,k_crit,e1,e1d);
+         id = -area*is_temp*(e1 + bv/vth) + vd*gmin0;
+         id_vd = area*is_temp*e1d/vth + gmin0;
+       } else if (vd == -bv) {
+//       at breakdown
+         id = -area*ibv_calc + vd*gmin0;
+         id_vd = gmin0;
+       } else if (vd <= -5.0*n0*vth) {
+//       -bv < vd < -5 nkt/q
+         id = -area*is_temp + vd*gmin0;
+         id_vd = gmin0;
+       } else {
+//       -5 nkT/q <= vd < 0
+
+         exp_lmt_1((vd/vth),k_crit,e1,e1d);
+         id = area*is_temp*(e1-1.0) + vd*gmin0;
+         id_vd = area*is_temp*e1d/vth + gmin0;
+       }
+     } else {
+       exp_lmt_1((vd/(n0*vth)),k_crit,e1,e1d);
+       id = area*is_temp*(e1-1.0) + vd*gmin0;
+
+       id_vd = area*is_temp*e1d/(n0*vth) + gmin0;
+     }
+
+     if (vd <= fcp) {
+       k1 = area*cjo*vj/(1.0-m);
+       qd = tt*id +
+            k1*(1.0-(pow((1.0-vd/vj),(1.0-m))));
+       qd_vd = tt*id_vd + (area*cjo)*pow((1.0-(vd/vj)),(-m));
+     } else {
+       qd = tt*id +
+         area*cjo*
+         (f1+(1.0/f2)*(f3*(vd-fcp)+(0.5*m/vj)*(vd*vd-fcp*fcp)));
+       qd_vd = tt*id_vd + (area*cjo/f2)*(f3+(m*vd/vj));
+     }
+
+     if (flag_nan(id_vd)) {
+       cout << "diode_spice: id_vd is NaN. Halting..." << endl; exit(1);
+     }
+     if (flag_nan(qd_vd)) {
+       cout << "diode_spice: qd_vd is NaN. Halting..." << endl; exit(1);
+     }
+
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] =  id;
+       X.f[nf_2] = -id;
+
+       X.g[ng_1] =  qd;
+       X.g[ng_2] = -qd;
+
+       X.val_stv[nstv_qd0] =  qd;
+       X.val_stv[nstv_qd1] = -qd;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdv[nf_1][nnd_p] =  id_vd;
+       J.dfdv[nf_1][nnd_n] = -id_vd;
+
+       J.dfdv[nf_2][nnd_p] = -id_vd;
+       J.dfdv[nf_2][nnd_n] =  id_vd;
+
+       J.dgdv[ng_1][nnd_p] =  qd_vd;
+       J.dgdv[ng_1][nnd_n] = -qd_vd;
+
+       J.dgdv[ng_2][nnd_p] = -qd_vd;
+       J.dgdv[ng_2][nnd_n] =  qd_vd;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     id_s = X.val_auxs[nas_id_s];
+     if (G.flags[G.i_function]) {
+        X.h[nh_1] =  id_s;
+        X.h[nh_2] = -id_s;
+        X.h[nh_3] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     }
+     if (G.flags[G.i_jacobian]) {
+        J.dhdauxs[nh_1][nas_id_s] =  1.0;
+        J.dhdauxs[nh_2][nas_id_s] = -1.0;
+        J.dhdv   [nh_3][nnd_p   ] =  1.0;
+        J.dhdv   [nh_3][nnd_n   ] = -1.0;
+     }
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+      X.val_nd[nnd_n] = 0.0;
+      X.val_nd[nnd_p] = 0.0;
+      return;
+   }
+endC
+endebe

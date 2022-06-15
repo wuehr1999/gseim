@@ -1,0 +1,187 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    delta_show_grid: '0'
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_r_star_bus_1
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: ' R\nstar'
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: bus_e_3$0
+  id: bus_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '2'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [564, 261]
+    rotation: 0
+    state: true
+- name: connector_e_4$0
+  id: connector_e_4
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [729, 288]
+    rotation: 0
+    state: true
+- name: pad_b_left$0
+  id: pad_b_left
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: abc
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [489, 279]
+    rotation: 0
+    state: true
+- name: pad_e_right$0
+  id: pad_e_right
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: n
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [774, 279]
+    rotation: 0
+    state: true
+- name: r$0
+  id: r
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '10'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r: R
+    rotate_strict: 'yes'
+  states:
+    coordinate: [618, 255]
+    rotation: 0
+    state: true
+- name: r$1
+  id: r
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '10'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r: R
+    rotate_strict: 'yes'
+  states:
+    coordinate: [618, 279]
+    rotation: 0
+    state: true
+- name: r$2
+  id: r
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '10'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r: R
+    rotate_strict: 'yes'
+  states:
+    coordinate: [618, 303]
+    rotation: 0
+    state: true
+connections:
+- [bus_e_3$0, er0, r$0, el0]
+- [bus_e_3$0, er1, r$1, el0]
+- [bus_e_3$0, er2, r$2, el0]
+- [connector_e_4$0, el0, r$1, er0]
+- [connector_e_4$0, er0, pad_e_right$0, el0]
+- [connector_e_4$0, et0, r$0, er0]
+- [pad_b_left$0, br0, bus_e_3$0, bl0]
+- [r$2, er0, connector_e_4$0, eb0]
+gparms:
+  R: '10'
+  drawing_scheme: name
+  mirror: none
+  port_block_x: '4'
+  port_block_y: '8'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
+  port_sep_x: '0'
+  port_sep_y: '0'
+  rotate_strict: 'no'
+outvars: {}
+solve_blocks: []
+output_blocks: []

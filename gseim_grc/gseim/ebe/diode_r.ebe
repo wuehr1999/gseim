@@ -52,6 +52,11 @@ source:
 
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_p];
+     return;
+   }
    v_on = X.rprm[nr_v_on];
 
    if (G.flags[G.i_dc] || G.flags[G.i_trns] || G.flags[G.i_startup]) {
@@ -108,11 +113,6 @@ source:
        J.dhdv[nh_2][nnd_p] = -g;
        J.dhdv[nh_2][nnd_n] =  g;
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
-     X.outprm[no_i] = X.cur_nd[nnd_p];
      return;
    }
    if (G.flags[G.i_init_guess]) {

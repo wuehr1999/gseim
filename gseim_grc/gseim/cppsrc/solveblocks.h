@@ -40,6 +40,7 @@ public:
    vector<SolveParm> parms;
 
    bool flag_startup,flag_trns,flag_dc,flag_ssw;
+   bool flag_ssw_final_trns;
 
    int outf_real_precision,outf_real_word_width;
    int outf_time_precision,outf_time_word_width;

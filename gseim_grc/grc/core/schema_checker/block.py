@@ -57,6 +57,11 @@ BLOCK_SCHEME = expand(
     e_top_nodes=Spec(types=list, required=False, item_scheme=PORT_SCHEME),
     e_bottom_nodes=Spec(types=list, required=False, item_scheme=PORT_SCHEME),
 
+    b_left_nodes=Spec(types=list, required=False, item_scheme=PORT_SCHEME),
+    b_right_nodes=Spec(types=list, required=False, item_scheme=PORT_SCHEME),
+    b_top_nodes=Spec(types=list, required=False, item_scheme=PORT_SCHEME),
+    b_bottom_nodes=Spec(types=list, required=False, item_scheme=PORT_SCHEME),
+
     outvars=(list, str_),
 
     asserts=(list, str_),

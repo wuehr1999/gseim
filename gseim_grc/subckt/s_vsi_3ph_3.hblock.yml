@@ -7,9 +7,6 @@ parameters:
     label: name
     dtype: string
     default: none
--   id: c_s
-    label: c_s
-    default: 10p
 -   id: frequency
     label: frequency
     default: '1'
@@ -25,9 +22,6 @@ parameters:
 -   id: r_on
     label: r_on
     default: 1m
--   id: r_s
-    label: r_s
-    default: '0.01'
 -   id: theta_1
     label: theta_1
     default: '90'
@@ -156,4 +150,12 @@ e_top_nodes:
 e_bottom_nodes:
 -   label: m
     dtype: float
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_vsi_3ph_3.grc

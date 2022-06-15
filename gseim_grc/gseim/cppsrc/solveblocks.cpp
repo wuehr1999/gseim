@@ -68,6 +68,9 @@ void SolveBlocks::set_values_1(
 
    flag_ssw_period = false;
    flag_ssw_frequency = false;
+   flag_ssw_final_trns = false;
+
+   flag_const_tstep_ex = false;
 
 // assign default values to method parameters and trns constants
 

@@ -2,10 +2,13 @@ ammeter
 ammeter_fb
 c
 diode_r
+diode_spice
 dummy_e
 ground
 l
 r
+solar_module_1
+solar_module_rs
 switch_1
 thyristor
 voltmeter

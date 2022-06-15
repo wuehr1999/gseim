@@ -60,17 +60,25 @@ outputs: []
 
 e_left_nodes:
 -   label: a
-    dtype: float
+    dtype: ''
 -   label: b
-    dtype: float
+    dtype: ''
 
 e_right_nodes:
 -   label: p
-    dtype: float
+    dtype: ''
 -   label: m
-    dtype: float
+    dtype: ''
 
 e_top_nodes: []
 
 e_bottom_nodes: []
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_diode_bridge_1ph.grc

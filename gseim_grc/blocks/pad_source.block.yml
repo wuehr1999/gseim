@@ -47,7 +47,7 @@ parameters:
     hide: part
 
 outputs:
--   dtype: float
+-   label: x
 
 documentation: |-
     The outputs of this block will become the inputs to this flow graph when it is instantiated as a hierarchical block.

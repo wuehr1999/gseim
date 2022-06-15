@@ -36,6 +36,7 @@ class Config(object):
     gseim_output_dir   = home_dir + '/gseim_grc/gseim/output'
     gseim_xbe_dir      = home_dir + '/gseim_grc/gseim/xbe'
     gseim_ebe_dir      = home_dir + '/gseim_grc/gseim/ebe'
+    gseim_bbe_dir      = home_dir + '/gseim_grc/gseim/bbe'
     gseim_exec_dir     = home_dir + '/gseim_grc/gseim/exec'
     gseim_cpp_dir      = home_dir + '/gseim_grc/gseim/cppsrc'
 

@@ -167,7 +167,6 @@ source:
      return;
    }
 
-// todo
    t0   = X.rprm[nr_t0  ];
    T    = X.rprm[nr_T   ];
    epsl = X.rprm[nr_epsl];

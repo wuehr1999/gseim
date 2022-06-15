@@ -52,6 +52,14 @@ source:
 
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_a] = X.val_vr[nvr_a];
+     X.outprm[no_b] = X.val_vr[nvr_b];
+     X.outprm[no_c] = X.val_vr[nvr_c];
+     X.outprm[no_alpha] = X.val_vr[nvr_alpha];
+     X.outprm[no_beta ] = X.val_vr[nvr_beta ];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      a = X.val_vr[nvr_a];
      b = X.val_vr[nvr_b];
@@ -78,14 +86,6 @@ source:
          J.dgdvr[ng_2][nvr_c   ] =  k3;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_a] = X.val_vr[nvr_a];
-     X.outprm[no_b] = X.val_vr[nvr_b];
-     X.outprm[no_c] = X.val_vr[nvr_c];
-     X.outprm[no_alpha] = X.val_vr[nvr_alpha];
-     X.outprm[no_beta ] = X.val_vr[nvr_beta ];
      return;
    }
 endC

@@ -44,9 +44,7 @@ parameters:
     default: '4'
 
 inputs:
--   domain: stream
-    label: x
-    dtype: float
+-   label: x
 
 outvars:
 - x

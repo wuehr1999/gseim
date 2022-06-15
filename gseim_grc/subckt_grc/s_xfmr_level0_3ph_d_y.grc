@@ -4,6 +4,7 @@ options:
     category: '[GRC Hier Blocks]'
     comment: ''
     copyright: ''
+    delta_show_grid: '0'
     description: ''
     drawing_scheme: name
     engine_output: GUI_window
@@ -43,6 +44,46 @@ blocks:
     rotate_strict: 'yes'
   states:
     coordinate: [555, 360]
+    rotation: 0
+    state: true
+- name: connector_e_2A$1
+  id: connector_e_2A
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [384, 360]
+    rotation: 0
+    state: true
+- name: connector_e_2A$2
+  id: connector_e_2A
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [468, 360]
     rotation: 0
     state: true
 - name: connector_e_3$0
@@ -325,8 +366,11 @@ blocks:
     state: true
 connections:
 - [connector_e_2A$0, et0, connector_e_3$5, el0]
+- [connector_e_2A$1, el0, xfmr_level0_1ph$1, eb0]
+- [connector_e_2A$1, et0, connector_e_3$1, er0]
+- [connector_e_2A$2, el0, xfmr_level0_1ph$0, eb0]
+- [connector_e_2A$2, et0, connector_e_3$0, er0]
 - [connector_e_3$0, et0, xfmr_level0_1ph$2, et0]
-- [connector_e_3$1, er0, xfmr_level0_1ph$1, eb0]
 - [connector_e_3$1, et0, xfmr_level0_1ph$0, et0]
 - [connector_e_3$2, el0, connector_e_3$3, er0]
 - [connector_e_3$2, et0, xfmr_level0_1ph$2, eb1]
@@ -339,7 +383,6 @@ connections:
 - [pad_e_right$1, el0, xfmr_level0_1ph$0, et1]
 - [pad_e_right$2, el0, xfmr_level0_1ph$2, et1]
 - [pad_e_right$3, el0, connector_e_3$2, er0]
-- [xfmr_level0_1ph$0, eb0, connector_e_3$0, er0]
 - [xfmr_level0_1ph$1, eb1, connector_e_3$3, el0]
 - [xfmr_level0_1ph$2, eb0, connector_e_2A$0, el0]
 gparms:

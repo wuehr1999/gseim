@@ -64,32 +64,16 @@ parameters:
     default: '4'
 
 inputs:
--   domain: stream
-    label: vqs
-    dtype: float
--   domain: stream
-    label: vds
-    dtype: float
--   domain: stream
-    label: tl
-    dtype: float
+-   label: vqs
+-   label: vds
+-   label: tl
 
 outputs:
--   domain: stream
-    label: wrm
-    dtype: float
--   domain: stream
-    label: psids
-    dtype: float
--   domain: stream
-    label: psidr
-    dtype: float
--   domain: stream
-    label: psiqs
-    dtype: float
--   domain: stream
-    label: psiqr
-    dtype: float
+-   label: wrm
+-   label: psids
+-   label: psidr
+-   label: psiqs
+-   label: psiqr
 
 outvars:
 - wrm 

@@ -9222,6 +9222,7 @@ void solve_ssw_e(
 // Do one more trns step for output.
 
    cout << "solve_ssw_e: calling solve_ssw_1_e for one more trns step" << endl;
+   slv.flag_ssw_final_trns = true;
 
    solve_ssw_1_e(true,xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
      smat,cct,slv,cct_file,global);
@@ -9731,6 +9732,7 @@ void solve_ssw_1_x(
 
    slv.time_present_x = global.time_begin;
    global.time_end = global.time_begin + slv.ssw_period_1;
+
    global.time_given_x = slv.time_present_x;
 
    if (l_write_1) {
@@ -12168,6 +12170,7 @@ void solve_ssw_ex(
    jump1: ;
 
    cout << "solve_ssw_ex: calling solve_ssw_1_ex for one more trns step" << endl;
+   slv.flag_ssw_final_trns = true;
 
    solve_ssw_1_ex(true,xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
      smat,cct,slv,cct_file,global);
@@ -12273,6 +12276,7 @@ void solve_ssw_x(
    jump1: ;
 
    cout << "solve_ssw_x: calling solve_ssw_1_x for one more trns step" << endl;
+   slv.flag_ssw_final_trns = true;
 
    solve_ssw_1_x(true,xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
      smat,cct,slv,cct_file,global);

@@ -68,13 +68,13 @@ parameters:
     label: rotate_strict
     default: 'no'
 outvars:
-- triangle
 - g1
 - g2
 - g3
 - g4
 - g5
 - g6
+- triangle
 
 inputs:
 -   label: va
@@ -105,4 +105,12 @@ e_right_nodes: []
 e_top_nodes: []
 
 e_bottom_nodes: []
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_pwm_2.grc

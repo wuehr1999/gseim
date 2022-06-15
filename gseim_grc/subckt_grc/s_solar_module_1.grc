@@ -1,0 +1,207 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    delta_show_grid: '0'
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_solar_module_1
+    mirror: none
+    placement: (0,0)
+    port_block_x: '6'
+    port_block_y: '3'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: solar module
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: connector_f_3a$0
+  id: connector_f_3a
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: top
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [408, 270]
+    rotation: 0
+    state: true
+- name: pad_e_bottom$0
+  id: pad_e_bottom
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: n
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [456, 324]
+    rotation: 0
+    state: true
+- name: pad_e_top$0
+  id: pad_e_top
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: p
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [456, 126]
+    rotation: 0
+    state: true
+- name: pad_source$0
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: g
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [345, 180]
+    rotation: 0
+    state: true
+- name: pad_source$1
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: ta
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [339, 261]
+    rotation: 0
+    state: true
+- name: solar_module_1$0
+  id: solar_module_1
+  parameters:
+    coef_iscm: coef_iscm
+    coef_vocm: coef_vocm
+    comment: ''
+    drawing_scheme: name
+    iscmr: iscmr
+    mirror: none
+    name: none
+    noct: noct
+    ns: ns
+    pmaxr: pmaxr
+    port_block_x: '2'
+    port_block_y: '2'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+    tr: tr
+    vocmr: vocmr
+  states:
+    coordinate: [441, 183]
+    rotation: 0
+    state: true
+- name: solar_module_rs$0
+  id: solar_module_rs
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    iscmr: iscmr
+    mirror: none
+    name: none
+    ns: ns
+    pmaxr: pmaxr
+    port_block_x: '2'
+    port_block_y: '2'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'yes'
+    vocmr: vocmr
+  states:
+    coordinate: [447, 252]
+    rotation: 0
+    state: true
+connections:
+- [connector_f_3a$0, '0', solar_module_1$0, '1']
+- [connector_f_3a$0, '1', solar_module_rs$0, '0']
+- [pad_e_top$0, eb0, solar_module_1$0, et0]
+- [pad_source$0, '0', solar_module_1$0, '0']
+- [pad_source$1, '0', connector_f_3a$0, '0']
+- [solar_module_rs$0, eb0, pad_e_bottom$0, et0]
+- [solar_module_rs$0, et0, solar_module_1$0, eb0]
+gparms:
+  coef_iscm: 1e-4
+  coef_vocm: '-0.1'
+  drawing_scheme: symbol
+  iscmr: '0.3'
+  mirror: none
+  noct: '20'
+  ns: '1'
+  pmaxr: '1'
+  port_block_x: '5'
+  port_block_y: '4'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
+  port_sep_x: '0'
+  port_sep_y: '3'
+  rotate_strict: 'no'
+  tr: '25'
+  vocmr: '0.6'
+outvars:
+  g:
+  - connection
+  - - pad_source$0
+    - '0'
+    - solar_module_1$0
+    - '0'
+  i:
+  - outvar
+  - - solar_module_1$0
+    - i
+  p_net:
+  - outvar
+  - - solar_module_1$0
+    - p_net
+solve_blocks: []
+output_blocks: []

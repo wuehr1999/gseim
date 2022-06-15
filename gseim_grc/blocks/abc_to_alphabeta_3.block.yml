@@ -36,23 +36,13 @@ parameters:
     default: '4'
 
 inputs:
--   domain: stream
-    label: a
-    dtype: float
--   domain: stream
-    label: b
-    dtype: float
--   domain: stream
-    label: c
-    dtype: float
+-   label: a
+-   label: b
+-   label: c
 
 outputs:
--   domain: stream
-    label: alpha
-    dtype: float
--   domain: stream
-    label: beta
-    dtype: float
+-   label: alpha
+-   label: beta
 
 outvars:
 - a

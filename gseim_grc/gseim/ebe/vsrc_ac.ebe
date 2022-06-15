@@ -60,6 +60,14 @@ source:
      X.rprm[nr_omega  ] = omega;
      X.rprm[nr_phi_rad] = phi_rad;
    }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+      X.outprm[no_i] = X.cur_nd[nnd_n];
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+   }
    if (G.flags[G.i_dc]) {
      vdc = X.rprm[nr_vdc];
      v0 = vdc;
@@ -100,14 +108,6 @@ source:
        J.dhdv   [nh_3][nnd_p      ] =  1.0;
        J.dhdv   [nh_3][nnd_n      ] = -1.0;
      }
-   }
-   if (G.flags[G.i_outvar]) {
-      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
-      X.outprm[no_i] = X.cur_nd[nnd_n];
-   }
-   if (G.flags[G.i_init_guess]) {
-     X.val_nd[nnd_n] = 0.0;
-     X.val_nd[nnd_p] = 0.0;
    }
 endC
 endebe

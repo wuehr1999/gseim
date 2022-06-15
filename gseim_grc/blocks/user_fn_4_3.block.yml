@@ -88,29 +88,15 @@ parameters:
     default: '4'
 
 inputs:
--   domain: stream
-    label: x1
-    dtype: float
--   domain: stream
-    label: x2
-    dtype: float
--   domain: stream
-    label: x3
-    dtype: float
--   domain: stream
-    label: x4
-    dtype: float
+-   label: x1
+-   label: x2
+-   label: x3
+-   label: x4
 
 outputs:
--   domain: stream
-    label: y1
-    dtype: float
--   domain: stream
-    label: y2
-    dtype: float
--   domain: stream
-    label: y3
-    dtype: float
+-   label: y1
+-   label: y2
+-   label: y3
 
 outvars:
 - y1

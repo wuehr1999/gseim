@@ -57,7 +57,7 @@ def treat_connector_e_1(l_in, connector_name, d_connector):
 
     return l_out, d_connector
 
-def treat_connectors_e(d):
+def treat_connectors_e(d, keyword):
 
     _l_connections = d['connections']
 
@@ -65,7 +65,7 @@ def treat_connectors_e(d):
 
     for l1 in _l_connections:
         for x in l1:
-            if x.startswith('connector_e'):
+            if x.startswith(keyword):
                 l_connector_names.append(x)
 
     if not _l_connections: return d
@@ -83,13 +83,13 @@ def treat_connectors_e(d):
         flag_break = True
         for connector_name in s_connector_names:
             l = d_connector[connector_name]
-            if any(x.startswith('connector_e') for x in l):
+            if any(x.startswith(keyword) for x in l):
                 flag_break = False
-                if l[0].startswith('connector_e'):
-                    if not any(x.startswith('connector_e') for x in d_connector[l[0]]):
+                if l[0].startswith(keyword):
+                    if not any(x.startswith(keyword) for x in d_connector[l[0]]):
                         d_connector[connector_name] = d_connector[l[0]]
-                elif l[2].startswith('connector_e'):
-                    if not any(x.startswith('connector_e') for x in d_connector[l[2]]):
+                elif l[2].startswith(keyword):
+                    if not any(x.startswith(keyword) for x in d_connector[l[2]]):
                         d_connector[connector_name] = d_connector[l[2]]
         if flag_break: break
 
@@ -99,7 +99,7 @@ def treat_connectors_e(d):
 
     lnew = []
     for i in d['blocks']:
-        if not i['name'].startswith('connector_e'):
+        if not i['name'].startswith(keyword):
             lnew.append(i)
     d['blocks'] = lnew
 
@@ -107,10 +107,10 @@ def treat_connectors_e(d):
 
     for k, v in d['outvars'].items():
         if v[0] == 'connection':
-            if v[1][0].startswith('connector_e'):
+            if v[1][0].startswith(keyword):
                 connector_name = v[1][0]
                 d['outvars'][k] = ['connection', d_connector[connector_name]]
-            elif v[1][2].startswith('connector_e'):
+            elif v[1][2].startswith(keyword):
                 connector_name = v[1][2]
                 d['outvars'][k] = ['connection', d_connector[connector_name]]
 
@@ -309,6 +309,11 @@ class lib_entity:
         self.pad_e_top_names = []
         self.pad_e_bottom_names = []
 
+        self.pad_b_left_names = []
+        self.pad_b_right_names = []
+        self.pad_b_top_names = []
+        self.pad_b_bottom_names = []
+
         self.gseim_in_names = []
         self.gseim_out_names = []
 
@@ -316,6 +321,11 @@ class lib_entity:
         self.gseim_e_right_names = []
         self.gseim_e_top_names = []
         self.gseim_e_bottom_names = []
+
+        self.gseim_b_left_names = []
+        self.gseim_b_right_names = []
+        self.gseim_b_top_names = []
+        self.gseim_b_bottom_names = []
 
         self.l_outvars = []
         self.d_outvars = {}
@@ -327,8 +337,16 @@ class lib_entity:
 #       file for the subckt.
 #       category: '[GRC Hier Blocks]' indicates subckt
 
-        with open(os.path.expanduser(filename)) as f:
-            data = yaml.safe_load(f)
+        if flag_read_yml_once:
+            if filename in d_yml.keys():
+                data = d_yml[filename]
+            else:
+                with open(os.path.expanduser(filename)) as f:
+                    data = yaml.safe_load(f)
+                d_yml[filename] = data
+        else:
+            with open(os.path.expanduser(filename)) as f:
+                data = yaml.safe_load(f)
 
         self.flag_subckt = False
         self.flag_block = False
@@ -348,29 +366,51 @@ class lib_entity:
 
         self.n_in       = len(data['inputs'        ]) if 'inputs'         in data.keys() else 0
         self.n_out      = len(data['outputs'       ]) if 'outputs'        in data.keys() else 0
+
         self.n_e_left   = len(data['e_left_nodes'  ]) if 'e_left_nodes'   in data.keys() else 0
         self.n_e_right  = len(data['e_right_nodes' ]) if 'e_right_nodes'  in data.keys() else 0
         self.n_e_top    = len(data['e_top_nodes'   ]) if 'e_top_nodes'    in data.keys() else 0
         self.n_e_bottom = len(data['e_bottom_nodes']) if 'e_bottom_nodes' in data.keys() else 0
 
+        self.n_b_left   = len(data['b_left_nodes'  ]) if 'b_left_nodes'   in data.keys() else 0
+        self.n_b_right  = len(data['b_right_nodes' ]) if 'b_right_nodes'  in data.keys() else 0
+        self.n_b_top    = len(data['b_top_nodes'   ]) if 'b_top_nodes'    in data.keys() else 0
+        self.n_b_bottom = len(data['b_bottom_nodes']) if 'b_bottom_nodes' in data.keys() else 0
+
+        self.has_flow_nodes = any([
+          self.n_in,
+          self.n_out,
+        ])
         self.has_e_nodes = any([
           self.n_e_left,
           self.n_e_right,
           self.n_e_top,
           self.n_e_bottom,
         ])
-        self.has_flow_nodes = any([
-          self.n_in,
-          self.n_out,
+        self.has_b_nodes = any([
+          self.n_b_left,
+          self.n_b_right,
+          self.n_b_top,
+          self.n_b_bottom,
         ])
 
         if self.flag_subckt:
 #           assign pad_in_names, pad_out_names
             grc_filename = data['grc_source']
 
-            with open(os.path.expanduser(grc_filename)) as f:
-                data = yaml.safe_load(f)
-            data = treat_connectors_e(data)
+            if flag_read_yml_once:
+                if grc_filename in d_yml.keys():
+                    data = d_yml[grc_filename]
+                else:
+                    with open(os.path.expanduser(grc_filename)) as f:
+                        data = yaml.safe_load(f)
+                    d_yml[grc_filename] = data
+            else:
+                with open(os.path.expanduser(grc_filename)) as f:
+                    data = yaml.safe_load(f)
+
+            data = treat_connectors_e(data, 'connector_e')
+            data = treat_connectors_e(data, 'connector_b')
             data = treat_connectors_f(data)
             data = treat_virtual(data)
 
@@ -380,6 +420,7 @@ class lib_entity:
                         self.pad_in_names.append(block['name'])
                     elif block['name'].startswith('pad_sink'):
                         self.pad_out_names.append(block['name'])
+
                     elif block['name'].startswith('pad_e_left'):
                         self.pad_e_left_names.append(block['name'])
                     elif block['name'].startswith('pad_e_right'):
@@ -388,6 +429,15 @@ class lib_entity:
                         self.pad_e_top_names.append(block['name'])
                     elif block['name'].startswith('pad_e_bottom'):
                         self.pad_e_bottom_names.append(block['name'])
+
+                    elif block['name'].startswith('pad_b_left'):
+                        self.pad_b_left_names.append(block['name'])
+                    elif block['name'].startswith('pad_b_right'):
+                        self.pad_b_right_names.append(block['name'])
+                    elif block['name'].startswith('pad_b_top'):
+                        self.pad_b_top_names.append(block['name'])
+                    elif block['name'].startswith('pad_b_bottom'):
+                        self.pad_b_bottom_names.append(block['name'])
 
             self.l_connections = data['connections']
             self.d_outvars = data['outvars']
@@ -421,6 +471,11 @@ class cct:
         self.l_e_right_names = []
         self.l_e_top_names = []
         self.l_e_bottom_names = []
+
+        self.l_b_left_names = []
+        self.l_b_right_names = []
+        self.l_b_top_names = []
+        self.l_b_bottom_names = []
 
         self.l_connections = []
         self.d_outvars = {}
@@ -463,16 +518,35 @@ def parse_1(parent, child_name, dir_block, dir_sub, n_sub):
             if cct0.pos[0] > n_sub[1]:
                 n_sub[1] = cct0.pos[0]
 #           get elements called by this subckt:
-            with open(os.path.expanduser(filename)) as f:
-                data = yaml.safe_load(f)
+
+            if flag_read_yml_once:
+                if filename in d_yml.keys():
+                    data = d_yml[filename]
+                else:
+                    with open(os.path.expanduser(filename)) as f:
+                        data = yaml.safe_load(f)
+                    d_yml[filename] = data
+            else:
+                with open(os.path.expanduser(filename)) as f:
+                    data = yaml.safe_load(f)
 
             grc_filename = data['grc_source']
             cct0.grc_file_name = grc_filename
 
-            with open(os.path.expanduser(grc_filename)) as f:
-                data = yaml.safe_load(f)
+            if flag_read_yml_once:
+                if grc_filename in d_yml.keys():
+                    data = d_yml[grc_filename]
+                else:
+                    with open(os.path.expanduser(grc_filename)) as f:
+                        data = yaml.safe_load(f)
+                    d_yml[grc_filename] = data
+            else:
+                with open(os.path.expanduser(grc_filename)) as f:
+                    data = yaml.safe_load(f)
+
             data = treat_text_blocks(data)
-            data = treat_connectors_e(data)
+            data = treat_connectors_e(data, 'connector_e')
+            data = treat_connectors_e(data, 'connector_b')
             data = treat_connectors_f(data)
             data = treat_virtual(data)
             l_connections = data['connections']
@@ -532,6 +606,9 @@ def add_in_out(l_connections, l_c):
         if c[1].startswith('e'):
             l_c1 = [c[0], c[1], 'e']
             l_c2 = [c[2], c[3], 'e']
+        elif c[1].startswith('b'):
+            l_c1 = [c[0], c[1], 'b']
+            l_c2 = [c[2], c[3], 'b']
         else:
             l_c1 = [c[0], c[1], 'out']
             l_c2 = [c[2], c[3], 'in']
@@ -692,6 +769,66 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 i.l_e_bottom_names.append('n' + str(node_counter))
                 node_counter += 1
 
+        for i1 in range(l_lib[i.lib_map].n_b_left):
+            x2 = 'bl' + str(i1)
+            node0 = [i.name, x2, 'b']
+            flag_found = False
+            for i_wire, wire in enumerate(wires):
+                if node0 in wire:
+                    flag_found = True
+                    node_name = 'n' \
+                      + str(d_names[i.parent.name]) \
+                      + '_' + str(i_wire)
+                    i.l_b_left_names.append(node_name)
+            if not flag_found:
+                i.l_b_left_names.append('n' + str(node_counter))
+                node_counter += 1
+
+        for i1 in range(l_lib[i.lib_map].n_b_right):
+            x2 = 'br' + str(i1)
+            node0 = [i.name, x2, 'b']
+            flag_found = False
+            for i_wire, wire in enumerate(wires):
+                if node0 in wire:
+                    flag_found = True
+                    node_name = 'n' \
+                      + str(d_names[i.parent.name]) \
+                      + '_' + str(i_wire)
+                    i.l_b_right_names.append(node_name)
+            if not flag_found:
+                i.l_b_right_names.append('n' + str(node_counter))
+                node_counter += 1
+
+        for i1 in range(l_lib[i.lib_map].n_b_top):
+            x2 = 'bt' + str(i1)
+            node0 = [i.name, x2, 'b']
+            flag_found = False
+            for i_wire, wire in enumerate(wires):
+                if node0 in wire:
+                    flag_found = True
+                    node_name = 'n' \
+                      + str(d_names[i.parent.name]) \
+                      + '_' + str(i_wire)
+                    i.l_b_top_names.append(node_name)
+            if not flag_found:
+                i.l_b_top_names.append('n' + str(node_counter))
+                node_counter += 1
+
+        for i1 in range(l_lib[i.lib_map].n_b_bottom):
+            x2 = 'bb' + str(i1)
+            node0 = [i.name, x2, 'b']
+            flag_found = False
+            for i_wire, wire in enumerate(wires):
+                if node0 in wire:
+                    flag_found = True
+                    node_name = 'n' \
+                      + str(d_names[i.parent.name]) \
+                      + '_' + str(i_wire)
+                    i.l_b_bottom_names.append(node_name)
+            if not flag_found:
+                i.l_b_bottom_names.append('n' + str(node_counter))
+                node_counter += 1
+
     for i in input_entity.children:
         if i.flag_subckt:
             assign_node_names(i, l_lib, cct_file,
@@ -701,15 +838,34 @@ def assign_gseim_prm(input_entity, l_lib, cct_file, dir_block, dir_sub):
     if input_entity.flag_top:
 #       main cct: take parms from grc file of the cct:
         filename = cct_file
-        with open(os.path.expanduser(filename)) as f:
-            data = yaml.safe_load(f)
+
+        if flag_read_yml_once:
+            if filename in d_yml.keys():
+                data = d_yml[filename]
+            else:
+                with open(os.path.expanduser(filename)) as f:
+                    data = yaml.safe_load(f)
+                d_yml[filename] = data
+        else:
+            with open(os.path.expanduser(filename)) as f:
+                data = yaml.safe_load(f)
+
         input_entity.gseim_prm = data['gparms']
     else:
 #       subckt: take parms from grc file of the parent:
         lib_name = l_lib[input_entity.lib_map].name
         filename = input_entity.parent.grc_file_name
-        with open(os.path.expanduser(filename)) as f:
-            data = yaml.safe_load(f)
+
+        if flag_read_yml_once:
+            if filename in d_yml.keys():
+                data = d_yml[filename]
+            else:
+                with open(os.path.expanduser(filename)) as f:
+                    data = yaml.safe_load(f)
+                d_yml[filename] = data
+        else:
+            with open(os.path.expanduser(filename)) as f:
+                data = yaml.safe_load(f)
 
         for d in data['blocks']:
             if d['name'] == input_entity.name:
@@ -724,33 +880,61 @@ def assign_gseim_prm(input_entity, l_lib, cct_file, dir_block, dir_sub):
 
 def get_pad_in_name(subckt, input_pad_name, l_lib):
 
-    index1 = l_lib[subckt.lib_map].pad_out_names.index(input_pad_name)
+    index1 = sorted(l_lib[subckt.lib_map].pad_out_names, key = lambda x: int(x.split('$')[-1])).index(input_pad_name)
+
     node_name = subckt.l_out_names[index1]
     return node_name
 
 def get_pad_out_name(subckt, output_pad_name, l_lib):
-    index1 = l_lib[subckt.lib_map].pad_in_names.index(output_pad_name)
+
+    index1 = sorted(l_lib[subckt.lib_map].pad_in_names, key = lambda x: int(x.split('$')[-1])).index(output_pad_name)
+
     node_name = subckt.l_in_names[index1]
     return node_name
 
 def get_pad_e_left_name(subckt, pad_name, l_lib):
-    index1 = l_lib[subckt.lib_map].pad_e_left_names.index(pad_name)
+    index1 = sorted(l_lib[subckt.lib_map].pad_e_left_names, key = lambda x: int(x.split('$')[-1])).index(pad_name)
+
     node_name = subckt.l_e_left_names[index1]
     return node_name
 
 def get_pad_e_right_name(subckt, pad_name, l_lib):
-    index1 = l_lib[subckt.lib_map].pad_e_right_names.index(pad_name)
+
+    index1 = sorted(l_lib[subckt.lib_map].pad_e_right_names, key = lambda x: int(x.split('$')[-1])).index(pad_name)
+
     node_name = subckt.l_e_right_names[index1]
     return node_name
 
 def get_pad_e_top_name(subckt, pad_name, l_lib):
-    index1 = l_lib[subckt.lib_map].pad_e_top_names.index(pad_name)
+    index1 = sorted(l_lib[subckt.lib_map].pad_e_top_names, key = lambda x: int(x.split('$')[-1])).index(pad_name)
+
     node_name = subckt.l_e_top_names[index1]
     return node_name
 
 def get_pad_e_bottom_name(subckt, pad_name, l_lib):
-    index1 = l_lib[subckt.lib_map].pad_e_bottom_names.index(pad_name)
+    index1 = sorted(l_lib[subckt.lib_map].pad_e_bottom_names, key = lambda x: int(x.split('$')[-1])).index(pad_name)
+
     node_name = subckt.l_e_bottom_names[index1]
+    return node_name
+
+def get_pad_b_left_name(subckt, pad_name, l_lib):
+    index1 = sorted(l_lib[subckt.lib_map].pad_b_left_names, key = lambda x: int(x.split('$')[-1])).index(pad_name)
+    node_name = subckt.l_b_left_names[index1]
+    return node_name
+
+def get_pad_b_right_name(subckt, pad_name, l_lib):
+    index1 = sorted(l_lib[subckt.lib_map].pad_b_right_names, key = lambda x: int(x.split('$')[-1])).index(pad_name)
+    node_name = subckt.l_b_right_names[index1]
+    return node_name
+
+def get_pad_b_top_name(subckt, pad_name, l_lib):
+    index1 = sorted(l_lib[subckt.lib_map].pad_b_top_names, key = lambda x: int(x.split('$')[-1])).index(pad_name)
+    node_name = subckt.l_b_top_names[index1]
+    return node_name
+
+def get_pad_b_bottom_name(subckt, pad_name, l_lib):
+    index1 = sorted(l_lib[subckt.lib_map].pad_b_bottom_names, key = lambda x: int(x.split('$')[-1])).index(pad_name)
+    node_name = subckt.l_b_bottom_names[index1]
     return node_name
 
 def replace_node_names_1(input_entity, node_name, name_to_replace):
@@ -768,6 +952,15 @@ def replace_node_names_1(input_entity, node_name, name_to_replace):
            for x in i.l_e_top_names]
         i.l_e_bottom_names = [node_name if x==name_to_replace else x
            for x in i.l_e_bottom_names]
+
+        i.l_b_left_names = [node_name if x==name_to_replace else x
+           for x in i.l_b_left_names]
+        i.l_b_right_names = [node_name if x==name_to_replace else x
+           for x in i.l_b_right_names]
+        i.l_b_top_names = [node_name if x==name_to_replace else x
+           for x in i.l_b_top_names]
+        i.l_b_bottom_names = [node_name if x==name_to_replace else x
+           for x in i.l_b_bottom_names]
 
 def replace_nodes_1(input_entity, l_lib):
     if input_entity.flag_subckt:
@@ -798,6 +991,22 @@ def replace_nodes_1(input_entity, l_lib):
             node_name = get_pad_e_bottom_name(input_entity.parent,input_entity.name, l_lib)
             name_to_replace = input_entity.l_e_top_names[0]
             replace_node_names_1(input_entity, node_name, name_to_replace)
+        elif input_entity.name.startswith('pad_b_left'):
+            node_name = get_pad_b_left_name(input_entity.parent,input_entity.name, l_lib)
+            name_to_replace = input_entity.l_b_right_names[0]
+            replace_node_names_1(input_entity, node_name, name_to_replace)
+        elif input_entity.name.startswith('pad_b_right'):
+            node_name = get_pad_b_right_name(input_entity.parent,input_entity.name, l_lib)
+            name_to_replace = input_entity.l_b_left_names[0]
+            replace_node_names_1(input_entity, node_name, name_to_replace)
+        elif input_entity.name.startswith('pad_b_top'):
+            node_name = get_pad_b_top_name(input_entity.parent,input_entity.name, l_lib)
+            name_to_replace = input_entity.l_b_bottom_names[0]
+            replace_node_names_1(input_entity, node_name, name_to_replace)
+        elif input_entity.name.startswith('pad_b_bottom'):
+            node_name = get_pad_b_bottom_name(input_entity.parent,input_entity.name, l_lib)
+            name_to_replace = input_entity.l_b_top_names[0]
+            replace_node_names_1(input_entity, node_name, name_to_replace)
 
 def make_netlist_name(input_entity, l_lib):
     if input_entity.flag_subckt:
@@ -818,6 +1027,7 @@ def make_gseim_line(input_entity, l_lib, l_lines):
 #   [
 #    ['xelement', 'name=xxx', 'type=xxx', 'x1=xx', ..],
 #    ['eelement', 'name=xxx', 'type=xxx', 'x1=xx', ..],
+#    ['belement', 'name=xxx', 'type=xxx', 'x1=xx', ..],
 #    ...
 #   ]
 
@@ -825,7 +1035,12 @@ def make_gseim_line(input_entity, l_lib, l_lines):
         for i in input_entity.children:
             make_gseim_line(i, l_lib, l_lines)
     else:
-        l_line = ['eelement'] if l_lib[input_entity.lib_map].has_e_nodes else ['xelement']
+        if l_lib[input_entity.lib_map].has_b_nodes:
+            l_line = ['belement']
+        elif l_lib[input_entity.lib_map].has_e_nodes:
+            l_line = ['eelement']
+        else:
+            l_line = ['xelement']
 
         if not input_entity.name.startswith('pad'):
             name1 = input_entity.netlist_name
@@ -839,6 +1054,7 @@ def make_gseim_line(input_entity, l_lib, l_lines):
             for i_node, node_name in enumerate(input_entity.l_out_names):
                 lib_node_name = l_lib[input_entity.lib_map].gseim_out_names[i_node]
                 l_line.append(lib_node_name + '=' + node_name)
+
             for i_node, node_name in enumerate(input_entity.l_e_left_names):
                 lib_node_name = l_lib[input_entity.lib_map].gseim_e_left_names[i_node]
                 l_line.append(lib_node_name + '=' + node_name)
@@ -851,6 +1067,20 @@ def make_gseim_line(input_entity, l_lib, l_lines):
             for i_node, node_name in enumerate(input_entity.l_e_bottom_names):
                 lib_node_name = l_lib[input_entity.lib_map].gseim_e_bottom_names[i_node]
                 l_line.append(lib_node_name + '=' + node_name)
+
+            for i_node, node_name in enumerate(input_entity.l_b_left_names):
+                lib_node_name = l_lib[input_entity.lib_map].gseim_b_left_names[i_node]
+                l_line.append(lib_node_name + '=' + node_name)
+            for i_node, node_name in enumerate(input_entity.l_b_right_names):
+                lib_node_name = l_lib[input_entity.lib_map].gseim_b_right_names[i_node]
+                l_line.append(lib_node_name + '=' + node_name)
+            for i_node, node_name in enumerate(input_entity.l_b_top_names):
+                lib_node_name = l_lib[input_entity.lib_map].gseim_b_top_names[i_node]
+                l_line.append(lib_node_name + '=' + node_name)
+            for i_node, node_name in enumerate(input_entity.l_b_bottom_names):
+                lib_node_name = l_lib[input_entity.lib_map].gseim_b_bottom_names[i_node]
+                l_line.append(lib_node_name + '=' + node_name)
+
             for k, v in input_entity.gseim_prm.items():
 
                 v1 = v.strip()
@@ -971,6 +1201,31 @@ def assign_node_map(input_entity, l_lib):
                 else:
                     print ('assign_node_map: error in e nodes. Halting...')
                     sys.exit()
+
+            elif connection[1].startswith('b'):
+                input_entity.node_type[i_c] = 'bus'
+                name1 = connection[0]
+                node1 = int(connection[1][2:])
+                if connection[1].startswith('bl'):
+                    for i in input_entity.children:
+                        if i.name == name1:
+                            input_entity.node_map[i_c] = i.l_b_left_names[node1]
+                elif connection[1].startswith('br'):
+                    for i in input_entity.children:
+                        if i.name == name1:
+                            input_entity.node_map[i_c] = i.l_b_right_names[node1]
+                elif connection[1].startswith('bt'):
+                    for i in input_entity.children:
+                        if i.name == name1:
+                            input_entity.node_map[i_c] = i.l_b_top_names[node1]
+                elif connection[1].startswith('bb'):
+                    for i in input_entity.children:
+                        if i.name == name1:
+                            input_entity.node_map[i_c] = i.l_b_bottom_names[node1]
+                else:
+                    print ('assign_node_map: error in b nodes. Halting...')
+                    sys.exit()
+
             else:
                 input_entity.node_type[i_c] = 'flow'
                 name1 = connection[0]
@@ -1040,8 +1295,8 @@ def resolve_outvar(ov_main, ov_temp, input_entity, d_ov, l_lib,
 
 # main program:
 
-if len(sys.argv) != 7:
-    print('gseim1.py: need 5 arguments. Halting...')
+if len(sys.argv) != 8:
+    print('gseim1.py: need 7 arguments. Halting...')
     sys.exit()
 
 gseim_file = sys.argv[1]
@@ -1049,16 +1304,31 @@ dir_block  = sys.argv[2]
 dir_sub    = sys.argv[3]
 dir_xbe    = sys.argv[4]
 dir_ebe    = sys.argv[5]
-cct_file   = sys.argv[6]
+dir_bbe    = sys.argv[6]
+cct_file   = sys.argv[7]
 
 dir_exec = dir_xbe.replace('xbe', 'exec')
 
+flag_read_yml_once = True
+d_yml = {}
+
 print('Parser started. Wait for Program Completed message...', flush=True) 
 
-with open(os.path.expanduser(cct_file)) as f:
-    data = yaml.safe_load(f)
+if flag_read_yml_once:
+    if cct_file in d_yml.keys():
+        data = d_yml[cct_file]
+    else:
+        with open(os.path.expanduser(cct_file)) as f:
+            data = yaml.safe_load(f)
+        d_yml[cct_file] = data
+else:
+    with open(os.path.expanduser(cct_file)) as f:
+        data = yaml.safe_load(f)
+
 data = treat_text_blocks(data)
-data = treat_connectors_e(data)
+
+data = treat_connectors_e(data, 'connector_e')
+data = treat_connectors_e(data, 'connector_b')
 data = treat_connectors_f(data)
 data = treat_virtual(data)
 
@@ -1114,39 +1384,63 @@ for i in l_lib:
     if not i.flag_subckt:
         name1 = i.name
         if not name1.startswith('pad'):
-            if i.has_e_nodes:
+            if i.has_b_nodes:
+                filename = dir_bbe + name1 + '.bbe'
+            elif i.has_e_nodes:
                 filename = dir_ebe + name1 + '.ebe'
             else:
                 filename = dir_xbe + name1 + '.xbe'
 
-            if i.has_flow_nodes:
-                if i.has_e_nodes:
-                    l1 = list([i.n_in, i.n_out])
-                    l_xvars = []
-                    gu.extract_strings_2(filename, 'x_vars:', l_xvars)
-                    l_xvars_it = iter(l_xvars)
-                    i.gseim_in_names, i.gseim_out_names = \
-                      [list(islice(l_xvars_it,elem)) for elem in l1]
-                else:
-                    gu.extract_strings_2(filename, 'input_vars:', i.gseim_in_names)
-                    gu.extract_strings_2(filename, 'output_vars:', i.gseim_out_names)
+            if i.has_b_nodes:
 
-            if i.has_e_nodes:
+                gu.extract_strings_2(filename, 'in_nodes:', i.gseim_in_names)
+                gu.extract_strings_2(filename, 'out_nodes:', i.gseim_out_names)
+
                 l_e_nodes = []
-                gu.extract_strings_2(filename, 'nodes:', l_e_nodes)
-
+                gu.extract_strings_2(filename, 'e_nodes:', l_e_nodes)
                 l1 = list([i.n_e_left, i.n_e_right, i.n_e_top, i.n_e_bottom])
                 l_e_nodes_it = iter(l_e_nodes)
                 i.gseim_e_left_names, i.gseim_e_right_names, \
                 i.gseim_e_top_names, i.gseim_e_bottom_names = \
                   [list(islice(l_e_nodes_it,elem)) for elem in l1]
 
-                if i.n_in:
-                    gu.extract_strings_2(filename, 'x_vars:', i.gseim_in_names)
-                if i.n_out:
-                    gu.extract_strings_2(filename, 'x_vars:', i.gseim_out_names)
+                l_b_nodes = []
+                gu.extract_strings_2(filename, 'b_nodes:', l_b_nodes)
+                l1 = list([i.n_b_left, i.n_b_right, i.n_b_top, i.n_b_bottom])
+                l_b_nodes_it = iter(l_b_nodes)
+                i.gseim_b_left_names, i.gseim_b_right_names, \
+                i.gseim_b_top_names, i.gseim_b_bottom_names = \
+                  [list(islice(l_b_nodes_it,elem)) for elem in l1]
+            else:
+                if i.has_flow_nodes:
+                    if i.has_e_nodes:
+                        l1 = list([i.n_in, i.n_out])
+                        l_xvars = []
+                        gu.extract_strings_2(filename, 'x_vars:', l_xvars)
+                        l_xvars_it = iter(l_xvars)
+                        i.gseim_in_names, i.gseim_out_names = \
+                          [list(islice(l_xvars_it,elem)) for elem in l1]
+                    else:
+                        gu.extract_strings_2(filename, 'input_vars:', i.gseim_in_names)
+                        gu.extract_strings_2(filename, 'output_vars:', i.gseim_out_names)
 
-            gu.extract_dict_1(filename, 'rparms:', i.gseim_prm)
+                if i.has_e_nodes:
+                    l_e_nodes = []
+                    gu.extract_strings_2(filename, 'nodes:', l_e_nodes)
+
+                    l1 = list([i.n_e_left, i.n_e_right, i.n_e_top, i.n_e_bottom])
+                    l_e_nodes_it = iter(l_e_nodes)
+                    i.gseim_e_left_names, i.gseim_e_right_names, \
+                    i.gseim_e_top_names, i.gseim_e_bottom_names = \
+                      [list(islice(l_e_nodes_it,elem)) for elem in l1]
+
+                    if i.n_in:
+                        gu.extract_strings_2(filename, 'x_vars:', i.gseim_in_names)
+                    if i.n_out:
+                        gu.extract_strings_2(filename, 'x_vars:', i.gseim_out_names)
+
+            if not i.has_b_nodes:
+                gu.extract_dict_1(filename, 'rparms:', i.gseim_prm)
 
 # replace node names (subckt parsing):
 for depth in range(n_sub[1]):
@@ -1221,6 +1515,117 @@ l_lines = []
 
 for i in cct1.children:
     make_gseim_line(i, l_lib, l_lines)
+
+l_new = []
+for l_line in l_lines:
+    flag_dummy_b = False
+    if l_line[0] == 'belement':
+        l1 = l_line[2].split('=')
+        if l1[0] != 'type':
+            print('main: expected type in', l_line, 'at position 2')
+            print('   Halting...')
+            sys.exit()
+        bus_type = l1[-1]
+        if bus_type == 'dummy_b': flag_dummy_b = True
+    if not flag_dummy_b:
+        l_new.append(l_line)
+l_lines = l_new.copy()
+
+for i_pass in range(len(l_lines)):
+    flag_belement = False
+    for i_line, l_line in enumerate(l_lines):
+        l_bus_line_no = []
+
+        if l_line[0] == 'belement':
+            flag_belement = True
+            l1 = l_line[2].split('=')
+            if l1[0] != 'type':
+                print('main: expected type in', l_line, 'at position 2')
+                print('   Halting...')
+                sys.exit()
+            bus_type = l1[-1]
+            l_bus_line_no.append(i_line)
+            bus_node_index = [l_line.index(x) for x in l_line if x.startswith(bus_type + '=')][0]
+            bus_cct_node = l_line[bus_node_index].split('=')[-1]
+
+            if bus_type.startswith('bus_e_'):
+                 bus_type_to_search = bus_type
+            elif bus_type.startswith('bus_f_i_'):
+                 bus_type_to_search = bus_type.replace('_i_', '_o_')
+            elif bus_type.startswith('bus_f_o_'):
+                 bus_type_to_search = bus_type.replace('_o_', '_i_')
+
+            for i1_line in range(i_line+1, len(l_lines)):
+                l1_line = l_lines[i1_line].copy()
+                if l1_line[0] == 'belement':
+                    l1a = l1_line[2].split('=')
+                    if l1a[0] != 'type':
+                        print('main: expected type in', l1_line, 'at position 2')
+                        print('   Halting...')
+                        sys.exit()
+                    bus1_type = l1a[-1]
+                    if bus1_type == bus_type_to_search:
+                        bus1_node_index = [l1_line.index(x) for x in l1_line if x.startswith(bus1_type + '=')][0]
+                        bus1_cct_node = l1_line[bus1_node_index].split('=')[-1]
+                        if bus1_cct_node == bus_cct_node:
+                            l_bus_line_no.append(i1_line)
+
+            d_nodemap = {}
+            s1 = 'b' + str(i_pass + 1) + '_'
+            for i1_line in l_bus_line_no:
+                l1_line = l_lines[i1_line].copy()
+                bus1_type = l1_line[2].split('=')[-1]
+
+                if bus1_type.startswith('bus_e_'):
+                    n_nodes = int(bus1_type.split('bus_e_')[-1])
+                    for i_node in range(n_nodes):
+                        element_node = 'e' + str(i_node + 1)
+                        cct_node = [x for x in l1_line if x.startswith(element_node + '=')][0].split('=')[-1]
+                        if cct_node not in d_nodemap.keys():
+                            d_nodemap[cct_node] = s1 + str(i_node + 1)
+                elif bus1_type.startswith('bus_f_i_'):
+                    n_nodes = int(bus1_type.split('bus_f_i_')[-1])
+                    for i_node in range(n_nodes):
+                        element_node = 'out' + str(i_node + 1)
+                        cct_node = [x for x in l1_line if x.startswith(element_node + '=')][0].split('=')[-1]
+                        if cct_node not in d_nodemap.keys():
+                            d_nodemap[cct_node] = s1 + str(i_node + 1)
+                elif bus1_type.startswith('bus_f_o_'):
+                    n_nodes = int(bus1_type.split('bus_f_o_')[-1])
+                    for i_node in range(n_nodes):
+                        element_node = 'in' + str(i_node + 1)
+                        cct_node = [x for x in l1_line if x.startswith(element_node + '=')][0].split('=')[-1]
+                        if cct_node not in d_nodemap.keys():
+                            d_nodemap[cct_node] = s1 + str(i_node + 1)
+
+            for i1_line in range(len(l_lines)):
+                if i1_line not in l_bus_line_no:
+                    for i1, s1 in enumerate(l_lines[i1_line]):
+                        s2 = s1.split('=')[-1]
+                        if s2 in d_nodemap.keys():
+                            new_node = d_nodemap[s2]
+                            l_lines[i1_line][i1] = s1.split('=')[0] + '=' + new_node
+
+            for k, v in d_resolved_outvars.items():
+                if v.startswith('nodev_of_'):
+                    old_node = v.split('nodev_of_')[-1]
+                    if old_node in d_nodemap.keys():
+                        d_resolved_outvars[k] = 'nodev_of_' + d_nodemap[old_node]
+                elif v.startswith('xvar_of_'):
+                    old_node = v.split('xvar_of_')[-1]
+                    if old_node in d_nodemap.keys():
+                        d_resolved_outvars[k] = 'xvar_of_' + d_nodemap[old_node]
+
+            l_new = []
+            for i1_line, l1_line in enumerate(l_lines):
+                if i1_line not in l_bus_line_no:
+                    l_new.append(l1_line)
+            l_lines = l_new.copy()
+
+            break
+
+    if not flag_belement:
+        break;
 
 d_slvlib = {}
 filename = dir_exec + 'gseim_slvparms.in'

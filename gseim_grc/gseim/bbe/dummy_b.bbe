@@ -1,0 +1,8 @@
+# Note: this template will be used only by the GUI (and parser)
+# and not by the C++ engine
+#
+bbe name=dummy_b
+b_nodes: a
+e_nodes:
+in_nodes:
+out_nodes:

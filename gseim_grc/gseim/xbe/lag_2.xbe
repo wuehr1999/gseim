@@ -51,17 +51,17 @@ source:
      X.val_vr [nvr_y] = X.igprm[nig_y_ig];
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
      } else if (G.flags[G.i_implicit]) {
        X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    if (G.flags[G.i_trns]) {

@@ -1,0 +1,141 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=average_mv_2 evaluate=yes save_history=yes allow_ssw=no
+#
+# compute moving average without clock signal
+#
+Jacobian: variable
+input_vars: x
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+rparms:
++  T=1
++  y0=0
++  epsl=0
+stparms:
+igparms:
+outparms: x y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   double time0,t0,t1,tp;
+   int n_t,n_x;
+   int n_popped;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     X.que1 = queue<double>();
+     X.que2 = queue<double>();
+     X.rprm[nr_y0] = 0.0;
+     X.rprm[nr_epsl] = X.rprm[nr_T]/1.0e3;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x  ] = X.val_vr[nvr_x  ];
+     X.outprm[no_y  ] = X.val_vr[nvr_y  ];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_save_history]) {
+     time0 = G.time_given_x;
+     x = X.val_vr[nvr_x];
+     T = X.rprm[nr_T];
+     epsl = X.rprm[nr_epsl];
+
+     n_t = X.que1.size();
+     n_x = X.que2.size();
+
+     if (n_t != n_x) {
+       cout << "average_mv_2.xbe: n_t: " << n_t << " n_x: " << n_x << endl;
+       cout << "  are not equal. Halting..." << endl; exit(1);
+     }
+
+     X.que1.push(time0);
+     X.que2.push(x);
+
+     t1 = time0 - 1.1*T;
+
+     if (n_t > 2) {
+       n_popped = 0;
+
+       while(true) {
+         if (X.que1.front() <= t1) {
+           X.que1.pop();
+           X.que2.pop();
+           n_popped++;
+         } else {
+           break;
+         }
+       }
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = 0.0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+
+   time0 = G.time_given_x;
+   T = X.rprm[nr_T];
+   epsl = X.rprm[nr_epsl];
+
+   n_t = X.que1.size();
+   n_x = X.que2.size();
+
+   if (n_t != n_x) {
+     cout << "average_mv_2.xbe: n_t: " << n_t << " n_x: " << n_x << endl;
+     cout << "  are not equal. Halting..." << endl; exit(1);
+   }
+   if (n_t > 2) {
+     x = X.val_vr[nvr_x];
+     t0 = X.que1.front();
+     tp = t0 + T;
+     if (time0 >= tp) {
+       X.rprm[nr_y0] = calc_avg_1(X.que1,X.que2,time0,x,T);
+     }
+   }
+   if (G.flags[G.i_trns]) {
+     y0 = X.rprm[nr_y0];
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+   }
+endC
+endxbe

@@ -61,6 +61,11 @@ class Block(Element):
     e_top_data = []
     e_bottom_data = []
 
+    b_left_data = []
+    b_right_data = []
+    b_top_data = []
+    b_bottom_data = []
+
     extra_data = {}
     loaded_from = '(unknown)'
 
@@ -85,6 +90,11 @@ class Block(Element):
         self.e_tops = [port_factory(parent=self, **params) for params in self.e_top_data]
         self.e_bottoms = [port_factory(parent=self, **params) for params in self.e_bottom_data]
 
+        self.b_lefts = [port_factory(parent=self, **params) for params in self.b_left_data]
+        self.b_rights = [port_factory(parent=self, **params) for params in self.b_right_data]
+        self.b_tops = [port_factory(parent=self, **params) for params in self.b_top_data]
+        self.b_bottoms = [port_factory(parent=self, **params) for params in self.b_bottom_data]
+
         self.active_sources = []  # on rewrite
         self.active_sinks = []  # on rewrite
 
@@ -99,7 +109,13 @@ class Block(Element):
 
         # Adjust nports
 
-        for ports in (self.sources, self.sinks, self.e_lefts, self.e_rights, self.e_tops, self.e_bottoms):
+        t_ports = (
+          self.sources, self.sinks,
+          self.e_lefts, self.e_rights, self.e_tops, self.e_bottoms,
+          self.b_lefts, self.b_rights, self.b_tops, self.b_bottoms,
+        )
+
+        for ports in t_ports:
             self._rewrite_nports(ports)
 
         # disconnect hidden ports
@@ -193,7 +209,8 @@ class Block(Element):
 
     def ports(self):
         return itertools.chain(self.sources, self.sinks,
-           self.e_lefts, self.e_rights, self.e_tops, self.e_bottoms)
+           self.e_lefts, self.e_rights, self.e_tops, self.e_bottoms,
+           self.b_lefts, self.b_rights, self.b_tops, self.b_bottoms)
 
     def active_ports(self):
         return itertools.chain(
@@ -202,7 +219,11 @@ class Block(Element):
             self.e_lefts,
             self.e_rights,
             self.e_tops,
-            self.e_bottoms
+            self.e_bottoms,
+            self.b_lefts,
+            self.b_rights,
+            self.b_tops,
+            self.b_bottoms,
         )
 
     def children(self):
@@ -227,6 +248,18 @@ class Block(Element):
 
     def get_e_bottom(self, key):
         return _get_elem(self.e_bottoms, key)
+
+    def get_b_left(self, key):
+        return _get_elem(self.b_lefts, key)
+
+    def get_b_right(self, key):
+        return _get_elem(self.b_rights, key)
+
+    def get_b_top(self, key):
+        return _get_elem(self.b_tops, key)
+
+    def get_b_bottom(self, key):
+        return _get_elem(self.b_bottoms, key)
 
     # Resolve
     @property

@@ -68,16 +68,13 @@ parameters:
     default: '10'
 
 inputs:
--   dtype: float
-    label: g_in
+-   label: g_in
 
 e_top_nodes:
--   dtype: float
-    label: anode
+-   label: anode
 
 e_bottom_nodes:
--   dtype: float
-    label: cathode
+-   label: cathode
 
 outvars:
 - i

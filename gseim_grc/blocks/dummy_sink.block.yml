@@ -36,7 +36,7 @@ parameters:
     default: '4'
 
 inputs:
--   dtype: float
+-   label: x
 
 documentation: |-
     To be used along with dummy source.

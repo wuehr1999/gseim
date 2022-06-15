@@ -29,6 +29,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <math.h>
 #include <algorithm>
 #include <vector>
+#include <queue>
 #include <string>
 
 #include "global.h"
@@ -349,6 +350,18 @@ bool hasEnding(
    std::string const &fullString,
    std::string const &ending);
 
+double calc_avg(
+   std::queue<double> q_t,
+   std::queue<double> q_x,
+   const double T);
+
+double calc_avg_1(
+   std::queue<double> q_t,
+   std::queue<double> q_x,
+   const double t_current,
+   const double x_current,
+   const double T);
+
 template <typename T>
 void print_vec_2(const vector<T> &v1) {
    for (unsigned int i=0; i < v1.size(); i++) {
@@ -570,5 +583,15 @@ void check_vec_const_2(
    }
    return;
 };
+
+template <typename T>
+void print_queue(std::queue<T> q) {
+
+   cout << "print_queue:" << endl;
+   while (!q.empty()){
+     cout << q.front() << endl;
+     q.pop();
+   }   
+}
 
 #endif

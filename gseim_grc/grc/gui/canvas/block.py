@@ -180,6 +180,8 @@ class Block(CoreBlock, Drawable):
             color1 = colors.BLOCK_DUMMY_COLOR
         elif block_type.startswith('pad'):
             color1 = colors.BLOCK_PAD_COLOR
+        elif block_type.startswith('bus'):
+            color1 = colors.BLOCK_BUS_COLOR
         else:
             color1 = colors.BLOCK_ENABLED_COLOR
 
@@ -187,6 +189,8 @@ class Block(CoreBlock, Drawable):
             self._bg_color = colors.F_PORT_COLOR
         elif self.name.startswith('connector_e'):
             self._bg_color = colors.E_PORT_COLOR
+        elif self.name.startswith('connector_b'):
+            self._bg_color = colors.B_PORT_COLOR
         else:
             self._bg_color = color1
 
@@ -349,15 +353,17 @@ class Block(CoreBlock, Drawable):
 
         if self.mirror == 'none':
             if not self.name.startswith('connector_f'):
-                if self.active_sources or self.e_rights:
+                if self.active_sources or self.e_rights or self.b_rights:
                     if self.active_sources:
                         h1 = self.active_sources[0].height
                     elif self.e_rights:
                         h1 = self.e_rights[0].height
+                    elif self.b_rights:
+                        h1 = self.b_rights[0].height
 
-                    _N = len(self.active_sources) + len(self.e_rights)
+                    _N = len(self.active_sources) + len(self.e_rights) + len(self.b_rights)
                     _k = 0
-                    for ports in (self.active_sources, self.e_rights):
+                    for ports in (self.active_sources, self.e_rights, self.b_rights):
                         for port in ports:
                             port.create_shapes()
 
@@ -374,15 +380,17 @@ class Block(CoreBlock, Drawable):
                             }[port.connector_direction]
                             _k += 1
 
-            if self.active_sinks or self.e_lefts:
+            if self.active_sinks or self.e_lefts or self.b_lefts:
                 if self.active_sinks:
                     h1 = self.active_sinks[0].height
                 elif self.e_lefts:
                     h1 = self.e_lefts[0].height
+                elif self.b_lefts:
+                    h1 = self.b_lefts[0].height
 
-                _N = len(self.active_sinks) + len(self.e_lefts)
+                _N = len(self.active_sinks) + len(self.e_lefts) + len(self.b_lefts)
                 _k = 0
-                for ports in (self.active_sinks, self.e_lefts):
+                for ports in (self.active_sinks, self.e_lefts, self.b_lefts):
                     for port in ports:
                         port.create_shapes()
                         offset = self.get_offset(
@@ -397,31 +405,52 @@ class Block(CoreBlock, Drawable):
                         }[port.connector_direction]
                         _k += 1
 
-            for ports in (self.e_tops, self.e_bottoms):
-                if not ports:
-                    continue
-                h1 = ports[0].height
-                _N = len(ports)
+            if self.e_tops or self.b_tops:
+                if self.e_tops:
+                    h1 = self.e_tops[0].height
+                elif self.b_tops:
+                    h1 = self.b_tops[0].height
+
+                _N = len(self.e_tops) + len(self.b_tops)
                 _k = 0
+                for ports in (self.e_tops, self.b_tops):
+                    for port in ports:
+                        port.create_shapes()
+                        offset = self.get_offset(
+                           self.params['rotate_strict'].get_value(),
+                           'horizontal', self.rotation, self.port_offset_t,
+                           self.width, _N, h1, _k)
+                        port.coordinate = {
+                            0: (+self.height, offset),
+                            90: (offset, -port.width),
+                            180: (-port.width, offset),
+                            270: (offset, +self.height),
+                        }[port.connector_direction]
+                        _k += 1
 
-                for port in ports:
-                    port.create_shapes()
-                    if port.port_category == 'e_top':
-                        offset_1 = self.port_offset_t
-                    else:
-                        offset_1 = self.port_offset_b
+            if self.e_bottoms or self.b_bottoms:
+                if self.e_bottoms:
+                    h1 = self.e_bottoms[0].height
+                elif self.b_bottoms:
+                    h1 = self.b_bottoms[0].height
 
-                    offset = self.get_offset(
-                       self.params['rotate_strict'].get_value(),
-                       'horizontal', self.rotation, offset_1,
-                       self.width, _N, h1, _k)
-                    port.coordinate = {
-                        0: (+self.height, offset),
-                        90: (offset, -port.width),
-                        180: (-port.width, offset),
-                        270: (offset, +self.height),
-                    }[port.connector_direction]
-                    _k += 1
+                _N = len(self.e_bottoms) + len(self.b_bottoms)
+                _k = 0
+                for ports in (self.e_bottoms, self.b_bottoms):
+                    for port in ports:
+                        port.create_shapes()
+                        offset = self.get_offset(
+                           self.params['rotate_strict'].get_value(),
+                           'horizontal', self.rotation, self.port_offset_b,
+                           self.width, _N, h1, _k)
+                        port.coordinate = {
+                            0: (+self.height, offset),
+                            90: (offset, -port.width),
+                            180: (-port.width, offset),
+                            270: (offset, +self.height),
+                        }[port.connector_direction]
+                        _k += 1
+
             if self.drawing_scheme == 'symbol':
                 rotate1 = Utils.get_rotated_coordinate_1
 
@@ -443,15 +472,17 @@ class Block(CoreBlock, Drawable):
 
             Hb, Wb = self.height, self.width
 
-            if self.active_sources or self.e_rights:
+            if self.active_sources or self.e_rights or self.b_rights:
                 if self.active_sources:
                     h1 = self.active_sources[0].height
                 elif self.e_rights:
                     h1 = self.e_rights[0].height
+                elif self.b_rights:
+                    h1 = self.b_rights[0].height
 
-                _N = len(self.active_sources) + len(self.e_rights)
+                _N = len(self.active_sources) + len(self.e_rights) + len(self.b_rights)
                 _k = 0
-                for ports in (self.active_sources, self.e_rights):
+                for ports in (self.active_sources, self.e_rights, self.b_rights):
                     for port in ports:
                         port.create_shapes_1()
                         Hp, Wp = port.height, port.width
@@ -471,15 +502,17 @@ class Block(CoreBlock, Drawable):
                         }[(self.rotation, self.mirror)]
 
                         _k += 1
-            if self.active_sinks or self.e_lefts:
+            if self.active_sinks or self.e_lefts or self.b_lefts:
                 if self.active_sinks:
                     h1 = self.active_sinks[0].height
                 elif self.e_lefts:
                     h1 = self.e_lefts[0].height
+                elif self.b_lefts:
+                    h1 = self.b_lefts[0].height
 
-                _N = len(self.active_sinks) + len(self.e_lefts)
+                _N = len(self.active_sinks) + len(self.e_lefts) + len(self.b_lefts)
                 _k = 0
-                for ports in (self.active_sinks, self.e_lefts):
+                for ports in (self.active_sinks, self.e_lefts, self.b_lefts):
                     for port in ports:
                         port.create_shapes_1()
                         Hp, Wp = port.height, port.width
@@ -499,52 +532,60 @@ class Block(CoreBlock, Drawable):
                         }[(self.rotation, self.mirror)]
 
                         _k += 1
-            for port in self.e_tops:
-                h1 = port.height
-                _N = len(ports)
+
+            if self.e_tops or self.b_tops:
+                if self.e_tops:
+                    h1 = self.e_tops[0].height
+                elif self.b_tops:
+                    h1 = self.b_tops[0].height
+
+                _N = len(self.e_tops) + len(self.b_tops)
                 _k = 0
+                for ports in (self.e_tops, self.b_tops):
+                    for port in ports:
+                        port.create_shapes_1()
+                        Hp, Wp = port.height, port.width
 
-                port.create_shapes_1()
-                Hp, Wp = port.height, port.width
+                        offset = self.get_offset_1('horizontal',
+                            self.port_offset_t, Wb, _N, h1, _k)
+                        port.coordinate = {
+                            (  0, 'v'): (Wb-offset-Hp, -Wp         ),
+                            (180, 'h'): (Wb-offset-Hp, -Wp         ),
+                            ( 90, 'v'): (-Wp         , offset      ),
+                            (270, 'h'): (-Wp         , offset      ),
+                            (180, 'v'): (offset      , Hb          ),
+                            (  0, 'h'): (offset      , Hb          ),
+                            (270, 'v'): (Hb          , Wb-offset-Hp),
+                            ( 90, 'h'): (Hb          , Wb-offset-Hp),
+                        }[(self.rotation, self.mirror)]
+                        _k += 1
 
-                offset = self.get_offset_1('horizontal',
-                    self.port_offset_t, Wb, _N, h1, _k)
+            if self.e_bottoms or self.b_bottoms:
+                if self.e_bottoms:
+                    h1 = self.e_bottoms[0].height
+                elif self.b_bottoms:
+                    h1 = self.b_bottoms[0].height
 
-                port.coordinate = {
-                    (  0, 'v'): (Wb-offset-Hp, -Wp         ),
-                    (180, 'h'): (Wb-offset-Hp, -Wp         ),
-                    ( 90, 'v'): (-Wp         , offset      ),
-                    (270, 'h'): (-Wp         , offset      ),
-                    (180, 'v'): (offset      , Hb          ),
-                    (  0, 'h'): (offset      , Hb          ),
-                    (270, 'v'): (Hb          , Wb-offset-Hp),
-                    ( 90, 'h'): (Hb          , Wb-offset-Hp),
-                }[(self.rotation, self.mirror)]
-
-                _k += 1
-            for port in self.e_bottoms:
-                h1 = port.height
-                _N = len(ports)
+                _N = len(self.e_bottoms) + len(self.b_bottoms)
                 _k = 0
+                for ports in (self.e_bottoms, self.b_bottoms):
+                    for port in ports:
+                        port.create_shapes_1()
+                        Hp, Wp = port.height, port.width
 
-                port.create_shapes_1()
-                Hp, Wp = port.height, port.width
-
-                offset = self.get_offset_1('horizontal',
-                    self.port_offset_b, Wb, _N, h1, _k)
-
-                port.coordinate = {
-                    (  0, 'v'): (Wb-offset-Hp, Hb          ),
-                    (180, 'h'): (Wb-offset-Hp, Hb          ),
-                    ( 90, 'v'): (Hb          , offset      ),
-                    (270, 'h'): (Hb          , offset      ),
-                    (180, 'v'): (offset      , -Wp         ),
-                    (  0, 'h'): (offset      , -Wp         ),
-                    (270, 'v'): (-Wp         , Wb-offset-Hp),
-                    ( 90, 'h'): (-Wp         , Wb-offset-Hp),
-                }[(self.rotation, self.mirror)]
-
-                _k += 1
+                        offset = self.get_offset_1('horizontal',
+                            self.port_offset_b, Wb, _N, h1, _k)
+                        port.coordinate = {
+                            (  0, 'v'): (Wb-offset-Hp, Hb          ),
+                            (180, 'h'): (Wb-offset-Hp, Hb          ),
+                            ( 90, 'v'): (Hb          , offset      ),
+                            (270, 'h'): (Hb          , offset      ),
+                            (180, 'v'): (offset      , -Wp         ),
+                            (  0, 'h'): (offset      , -Wp         ),
+                            (270, 'v'): (-Wp         , Wb-offset-Hp),
+                            ( 90, 'h'): (-Wp         , Wb-offset-Hp),
+                        }[(self.rotation, self.mirror)]
+                        _k += 1
 
             if self.drawing_scheme == 'symbol':
                 rotate2 = Utils.get_rotated_coordinate_2
@@ -608,11 +649,15 @@ class Block(CoreBlock, Drawable):
                 s1 = '> ' + self.params['n'].get_value()
             elif block_type.startswith('dummy_e'):
                 s1 = self.params['n'].get_value()
+            elif block_type.startswith('dummy_b'):
+                s1 = self.params['n'].get_value()
             elif block_type.startswith('pad_source'):
                 s1 = self.params['label'].get_value() + ' >'
             elif block_type.startswith('pad_sink'):
                 s1 = '> ' + self.params['label'].get_value()
             elif block_type.startswith('pad_e_'):
+                s1 = self.params['label'].get_value()
+            elif block_type.startswith('pad_b_'):
                 s1 = self.params['label'].get_value()
             else:
                 s2 = self.label
@@ -696,10 +741,11 @@ class Block(CoreBlock, Drawable):
                 if self.name.startswith('connector_f'):
                     n_ports_W = n_ports_E = n_ports_S = n_ports_N = 1
                 else:
-                    n_ports_W = len(self.active_sinks) + len(self.e_lefts)
-                    n_ports_E = len(self.active_sources) + len(self.e_rights)
-                    n_ports_N = len(self.e_tops)
-                    n_ports_S = len(self.e_bottoms)
+
+                    n_ports_W = len(self.active_sinks) + len(self.e_lefts) + len(self.b_lefts)
+                    n_ports_E = len(self.active_sources) + len(self.e_rights) + len(self.b_rights)
+                    n_ports_N = len(self.e_tops) + len(self.b_tops)
+                    n_ports_S = len(self.e_bottoms) + len(self.b_bottoms)
 
                 n_ports_WE = max(n_ports_W, n_ports_E)
                 n_ports_SN = max(n_ports_S, n_ports_N)
@@ -822,10 +868,11 @@ class Block(CoreBlock, Drawable):
             if self.name.startswith('connector_f'):
                 n_ports_W = n_ports_E = n_ports_S = n_ports_N = 1
             else:
-                n_ports_W = len(self.active_sinks) + len(self.e_lefts)
-                n_ports_E = len(self.active_sources) + len(self.e_rights)
-                n_ports_N = len(self.e_tops)
-                n_ports_S = len(self.e_bottoms)
+
+                n_ports_W = len(self.active_sinks) + len(self.e_lefts) + len(self.b_lefts)
+                n_ports_E = len(self.active_sources) + len(self.e_rights) + len(self.b_rights)
+                n_ports_N = len(self.e_tops) + len(self.b_tops)
+                n_ports_S = len(self.e_bottoms) + len(self.b_bottoms)
 
             n_ports_WE = max(n_ports_W, n_ports_E)
             n_ports_SN = max(n_ports_S, n_ports_N)
@@ -844,7 +891,8 @@ class Block(CoreBlock, Drawable):
 
     def create_port_labels(self):
         for ports in (self.active_sinks, self.active_sources,
-            self.e_lefts, self.e_rights, self.e_tops, self.e_bottoms):
+            self.e_lefts, self.e_rights, self.e_tops, self.e_bottoms,
+            self.b_lefts, self.b_rights, self.b_tops, self.b_bottoms):
             max_width = 0
             for port in ports:
                 port.create_labels()
@@ -862,7 +910,12 @@ class Block(CoreBlock, Drawable):
             delta1 = int(self.params['delta_show_grid'].get_value())
 
             if delta1 != 0:
-                w0, h0 = self.parent._main_window.get_size()
+
+                w0a, h0a = self.parent._main_window.get_size()
+
+                w0 = max(w0a, self.parent.max_w_all + 50)
+                h0 = max(h0a, self.parent.max_h_all + 50)
+
                 d1_grid = delta1*RECT_WIRING_DELTA1
 
                 x_l = 0
@@ -1022,7 +1075,7 @@ class Block(CoreBlock, Drawable):
 
             cr.set_source_rgb(0, 0, 0)
 
-            if self.key in('connector_e_2A', 'connector_f_2A', 'connector_f_2B'):
+            if self.key in('connector_e_2A', 'connector_b_2A', 'connector_f_2A', 'connector_f_2B'):
                 cr.set_line_width(Constants.temp1)
             else:
                 cr.set_line_width(1.5*Constants.temp1)

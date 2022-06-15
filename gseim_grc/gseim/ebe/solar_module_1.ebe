@@ -1,0 +1,232 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=solar_module_1 x_inputs=yes
+#
+#
+# Reference:
+#   Modelling Photovoltaic Systems Using PSpice
+#   by L. Castañer and S. Silvestre
+#
+Jacobian: variable
+nodes: p n
+state_vars:
+aux_vars:
+aux_vars_startup:
+x_vars: g ta
+iparms:
+sparms:
+rparms:
++  ns=1
++  vocmr=1
++  iscmr=1
++  coef_iscm=0
++  coef_vocm=0
++  noct=20
++  tr=25
++  pmaxr=1
+stparms:
+igparms:
+outparms: i v p p_net
+n_f=2
+f_1: v(p) v(n) g ta
+f_2: v(p) v(n) g ta
+n_g=0
+n_h=2
+h_1: v(p) v(n) g ta
+h_2: v(p) v(n) g ta
+C:
+variables:
+   double t1;
+   double vt;
+   double isolar;
+   double voc;
+   double v_p,v_n,v_pn;
+   double idiode;
+   double idiode_vp,idiode_vn;
+   double exp_lmt;
+
+   const double k_crit=50.0;
+
+//
+
+   double a1,a2,a3;
+   const double a4=8.66e-5;
+
+   double b1,b2,b3,b4,b5,b6,b7,b8,b9,b10;
+   double b3a,b3b,b4a,b4b;
+   double b3ap,b4ap;
+
+   double t1_g,isolar_ta,isolar_g,vt_ta,vt_g;
+   double voc_ta,voc_g,b3_ta,b3_g,b4_ta,b4_g,idiode_ta,idiode_g;
+
+   double i1,i1_vp,i1_ta,i1_g,gmin0;
+
+// variables for rs computation (required only for power calculation)
+   double vt0,c1,vt0n,vocp,ff0n,ff0d,ff0,rs,p_loss;
+source:
+   gmin0 = G.gmin0;
+
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_p];
+     X.outprm[no_p] = X.outprm[no_v]*X.outprm[no_i];
+
+//   compute p_net, the net power supplied by the module, after
+//   accounting for the power loss in rs (which is outside this
+//   template)
+
+     ns        = X.rprm[nr_ns       ];
+     vocmr     = X.rprm[nr_vocmr    ];
+     iscmr     = X.rprm[nr_iscmr    ];
+     pmaxr     = X.rprm[nr_pmaxr    ];
+     ta = X.val_xvr[nx_ta];
+
+     vt0 = 0.02585;
+     c1 = ns*vt0/300.0;
+     vt0n = c1*(ta + 273.15);
+     vocp = vocmr/vt0n;
+     ff0n = vocp-log(vocp+0.72);
+     ff0d = 1.0+vocp;
+     ff0 = ff0n/ff0d;
+
+     rs = (vocmr/iscmr)-(pmaxr/((iscmr*iscmr)*ff0));
+
+     p_loss = X.cur_nd[nnd_p]*X.cur_nd[nnd_p]*rs;
+     X.outprm[no_p_net] = -X.outprm[no_p] - p_loss;
+
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     ns        = X.rprm[nr_ns       ];
+     vocmr     = X.rprm[nr_vocmr    ];
+     iscmr     = X.rprm[nr_iscmr    ];
+     coef_iscm = X.rprm[nr_coef_iscm];
+     coef_vocm = X.rprm[nr_coef_vocm];
+     noct      = X.rprm[nr_noct     ];
+     tr        = X.rprm[nr_tr       ];
+     pmaxr     = X.rprm[nr_pmaxr    ];
+
+     g  = X.val_xvr[nx_g ];
+     ta = X.val_xvr[nx_ta];
+
+     a1 = (noct-20.0)/800.0;
+     t1 = ta + a1*g;
+
+     t1_g = a1;
+
+     a2 = iscmr/1000.0;
+     a3 = coef_iscm/1000.0;
+     isolar = a2*g +a3*g*(t1-tr);
+
+     isolar_ta = a3*g;
+     isolar_g  = a2 + a3*((t1-tr) + g*t1_g);
+
+     vt = a4*(t1+273.0);
+
+     vt_ta = a4;
+     vt_g  = a4*t1_g;
+
+     b2 = isolar/iscmr;
+     b1 = log(b2);
+     voc = vocmr + coef_vocm*(t1-tr) + vt*b1;
+
+     voc_ta = coef_vocm       + (vt*isolar_ta/isolar) + b1*vt_ta;
+     voc_g  = coef_vocm*t1_g  + (vt*isolar_g /isolar) + b1*vt_g ;
+
+//   use exp_cap to make sure things don't blow up:
+//   (see p. 19 of map book)
+
+     b9 = ns*vt;
+     b10 = vt*b9;
+
+     b3b = voc/b9;
+     exp_lmt_1(b3b,k_crit,b3a,b3ap);
+     b3 = b3a-1.0;
+
+     v_p = X.val_nd[nnd_p];
+     v_n = X.val_nd[nnd_n];
+
+     v_pn = v_p-v_n;
+     b4b = v_pn/b9;
+     exp_lmt_1(b4b,k_crit,b4a,b4ap);
+     b4 = b4a-1.0;
+
+     b5 = isolar/b3;
+     b7 = isolar*b4;
+     idiode = b7/b3;
+
+     b4_ta = -b4_ta*v_pn*vt_ta/b10;
+     b4_g  = -b4_g *v_pn*vt_g /b10;
+
+     b3_ta = (b3a/b10)*(vt*voc_ta - voc*vt_ta);
+     b3_g  = (b3a/b10)*(vt*voc_g  - voc*vt_g );
+
+     idiode_vp = b5*b4a/b9;
+     idiode_ta = (isolar*b4_ta + b4*isolar_ta - (b7*b3_ta/b3))/b3;
+     idiode_g  = (isolar*b4_g  + b4*isolar_g  - (b7*b3_g /b3))/b3;
+
+     i1 =  idiode - isolar + gmin0*v_pn;
+
+     i1_vp =  idiode_vp + gmin0;
+     i1_ta =  idiode_ta - isolar_ta;
+     i1_g  =  idiode_g  - isolar_g ;
+
+     if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+       if (G.flags[G.i_function]) {
+         X.f[nf_1] =  i1;
+         X.f[nf_2] = -i1;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dfdv  [nf_1][nnd_p] =  i1_vp;
+         J.dfdv  [nf_1][nnd_n] = -i1_vp;
+         J.dfdxvr[nf_1][nx_ta] =  i1_ta;
+         J.dfdxvr[nf_1][nx_g ] =  i1_g ;
+
+         J.dfdv  [nf_2][nnd_p] = -i1_vp;
+         J.dfdv  [nf_2][nnd_n] =  i1_vp;
+         J.dfdxvr[nf_2][nx_ta] = -i1_ta;
+         J.dfdxvr[nf_2][nx_g ] = -i1_g ;
+       }
+     }
+     if (G.flags[G.i_startup]) {
+       if (G.flags[G.i_function]) {
+         X.h[nh_1] =  i1;
+         X.h[nh_2] = -i1;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dhdv  [nh_1][nnd_p] =  i1_vp;
+         J.dhdv  [nh_1][nnd_n] = -i1_vp;
+         J.dhdxvr[nh_1][nx_ta] =  i1_ta;
+         J.dhdxvr[nh_1][nx_g ] =  i1_g ;
+
+         J.dhdv  [nh_2][nnd_p] = -i1_vp;
+         J.dhdv  [nh_2][nnd_n] =  i1_vp;
+         J.dhdxvr[nh_2][nx_ta] = -i1_ta;
+         J.dhdxvr[nh_2][nx_g ] = -i1_g ;
+       }
+     }
+   }
+endC
+endebe

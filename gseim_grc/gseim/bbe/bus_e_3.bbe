@@ -1,0 +1,8 @@
+# Note: this template will be used only by the GUI (and parser)
+# and not by the C++ engine
+#
+bbe name=bus_e_3
+b_nodes: bus_e_3
+e_nodes: e1 e2 e3
+in_nodes:
+out_nodes:

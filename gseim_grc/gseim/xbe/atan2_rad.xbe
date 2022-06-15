@@ -39,6 +39,12 @@ source:
      X.val_vr[nvr_theta] = atan2(y,x);
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x    ] = X.val_vr[nvr_x    ];
+     X.outprm[no_y    ] = X.val_vr[nvr_y    ];
+     X.outprm[no_theta] = X.val_vr[nvr_theta];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      x = X.val_vr[nvr_x];
      y = X.val_vr[nvr_y];
@@ -55,12 +61,6 @@ source:
          J.dgdvr[ng_1][nvr_theta] = 1.0;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x    ] = X.val_vr[nvr_x    ];
-     X.outprm[no_y    ] = X.val_vr[nvr_y    ];
-     X.outprm[no_theta] = X.val_vr[nvr_theta];
      return;
    }
 endC

@@ -76,22 +76,16 @@ parameters:
     default: '24'
 
 e_top_nodes:
--   dtype: float
-    label: p_p
--   dtype: float
-    label: s1_p
+-   label: p_p
+-   label: s1_p
 
 e_right_nodes:
--   dtype: float
-    label: s1_n
--   dtype: float
-    label: s2_p
+-   label: s1_n
+-   label: s2_p
 
 e_bottom_nodes:
--   dtype: float
-    label: p_n
--   dtype: float
-    label: s2_n
+-   label: p_n
+-   label: s2_n
 
 outvars:
 - ip

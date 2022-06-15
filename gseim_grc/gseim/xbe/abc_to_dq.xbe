@@ -52,6 +52,14 @@ source:
      X.val_vr[nvr_vds] = - k3*(vbn - vcn);
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_van] = X.val_vr[nvr_van];
+     X.outprm[no_vbn] = X.val_vr[nvr_vbn];
+     X.outprm[no_vcn] = X.val_vr[nvr_vcn];
+     X.outprm[no_vqs] = X.val_vr[nvr_vqs];
+     X.outprm[no_vds] = X.val_vr[nvr_vds];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      van = X.val_vr[nvr_van];
      vbn = X.val_vr[nvr_vbn];
@@ -77,14 +85,6 @@ source:
          J.dgdvr[ng_2][nvr_vcn] = -k3;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_van] = X.val_vr[nvr_van];
-     X.outprm[no_vbn] = X.val_vr[nvr_vbn];
-     X.outprm[no_vcn] = X.val_vr[nvr_vcn];
-     X.outprm[no_vqs] = X.val_vr[nvr_vqs];
-     X.outprm[no_vds] = X.val_vr[nvr_vds];
      return;
    }
 endC

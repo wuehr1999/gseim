@@ -260,9 +260,19 @@ begin_file
     default: no
   end_parm
   begin_parm category=x_nr
+    keyword: x_nr_check_rhs2
+    options: yes no
+    default: yes 
+  end_parm
+  begin_parm category=x_nr
     keyword: x_nr_write_rhs2
     options: yes no
     default: no
+  end_parm
+  begin_parm category=x_nr
+    keyword: x_nr_eps_rhs
+    options: none
+    default: 1.0e-6
   end_parm
   begin_parm category=x_nr
     keyword: x_nr_eps_delx_all

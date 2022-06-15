@@ -59,10 +59,6 @@ variables:
    int nfp_p_n=2;
    int nfp_s_n=3;
 source:
-   if (G.flags[G.i_dc]) {
-     cout << "xfmr_basic.ebe: dc not implemented." << endl;
-     cout << "  Halting..." << endl; exit(1);
-   }
    l1 = X.rprm[nr_l1];
    l2 = X.rprm[nr_l2];
    m  = X.rprm[nr_m ];
@@ -73,12 +69,23 @@ source:
      X.rprm[nr_m] = m;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_vp] = X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n];
+      X.outprm[no_vs] = X.val_nd[nnd_s_p]-X.val_nd[nnd_s_n];
+      X.outprm[no_ip] = X.cur_nd[nnd_p_p];
+      X.outprm[no_is] = X.cur_nd[nnd_s_p];
+      return;
+   }
    if (G.flags[G.i_init_guess]) {
      X.val_aux[na_i1 ] = 0.0;
      X.val_aux[na_i2 ] = 0.0;
      X.val_aux[na_i1d] = 0.0;
      X.val_aux[na_i2d] = 0.0;
      return;
+   }
+   if (G.flags[G.i_dc]) {
+     cout << "xfmr_basic.ebe: dc not implemented." << endl;
+     cout << "  Halting..." << endl; exit(1);
    }
    if (G.flags[G.i_trns]) {
      i1  = X.val_aux[na_i1 ];
@@ -132,13 +139,6 @@ source:
       }
       X.val_aux[na_i1] = i10;
       X.val_aux[na_i2] = i20;
-      return;
-   }
-   if (G.flags[G.i_outvar]) {
-      X.outprm[no_vp] = X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n];
-      X.outprm[no_vs] = X.val_nd[nnd_s_p]-X.val_nd[nnd_s_n];
-      X.outprm[no_ip] = X.cur_nd[nnd_p_p];
-      X.outprm[no_is] = X.cur_nd[nnd_s_p];
       return;
    }
 endC

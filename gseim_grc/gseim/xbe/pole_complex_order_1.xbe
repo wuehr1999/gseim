@@ -51,6 +51,9 @@ source:
      X.val_aux[na_z1] = 0.0;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
@@ -59,9 +62,6 @@ source:
        X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
        X.h[nf_2] = X.val_aux[na_z1];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
      return;
    }
    if (G.flags[G.i_trns]) {

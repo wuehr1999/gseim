@@ -2241,4 +2241,58 @@ bool hasEnding(
      return false;
    }   
 }
+// -----------------------------------------------------------------------------
+double calc_avg_1(
+   std::queue<double> q_t,
+   std::queue<double> q_x,
+   const double t_current,
+   const double x_current,
+   const double T) {
 
+   vector<double> t,x;
+   int n_t,n_x;
+   double delt,sum,x_interp,x_avg;
+   double t_offset;
+
+   n_t = q_t.size();
+   n_x = q_x.size();
+
+   if (n_t != n_x) {
+     cout << "calc_avg_1: n_t: " << n_t << " n_x: " << n_x << endl;
+     cout << "  are not equal. Halting..." << endl; exit(1);
+   }
+   if (n_t < 2) {
+     cout << "calc_avg_1: n_t < 2? Halting..." << endl; exit(1);
+   }
+
+   sum = 0;
+
+   t_offset = -t_current + T;
+
+   while (!q_t.empty()){
+     t.push_back(q_t.front() + t_offset);
+     q_t.pop();
+     x.push_back(q_x.front());
+     q_x.pop();
+   }
+   t.push_back(T);
+   x.push_back(x_current);
+
+   for (int i=n_t; i > 0; i--) {
+     if (t[i-1] >= 0.0) {
+       delt = t[i] - t[i-1];
+       sum += 0.5*delt*(x[i-1] + x[i]);
+     } else{
+       if (t[i] > 0.0) {
+         delt = t[i];
+         x_interp = x[i] - ((x[i]-x[i-1])/(t[i]-t[i-1]))*delt;
+         sum += 0.5*delt*(x[i] + x_interp);
+       } else {
+         break;
+       }
+     }
+   }
+
+   x_avg = sum/T;
+   return x_avg;
+}

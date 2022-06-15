@@ -48,6 +48,10 @@ class HierBlockGenerator(TopBlockGenerator):
             ('e_right_nodes:', '\ne_right_nodes:'),
             ('e_top_nodes:', '\ne_top_nodes:'),
             ('e_bottom_nodes:', '\ne_bottom_nodes:'),
+            ('b_left_nodes:', '\nb_left_nodes:'),
+            ('b_right_nodes:', '\nb_right_nodes:'),
+            ('b_top_nodes:', '\nb_top_nodes:'),
+            ('b_bottom_nodes:', '\nb_bottom_nodes:'),
             ('asserts:', '\nasserts:'),
             ('templates:', '\ntemplates:'),
             ('documentation:', '\ndocumentation:'),
@@ -124,14 +128,12 @@ class HierBlockGenerator(TopBlockGenerator):
                     flow_graph.gparms['port_offset_t'] = '0'
                 if 'port_offset_b' not in flow_graph.gparms.keys():
                     flow_graph.gparms['port_offset_b'] = '0'
-
         else:
             flow_graph.gparms['drawing_scheme'] = 'name'
 
-# todo
-# write gparms which the user would be interested in editing (when the sub ckt is
-# called), then followed by gparms such as port_sep_x which the user would not
-# be editing.
+#       write gparms which the user would be interested in editing (when the sub ckt is
+#       called), then followed by gparms such as port_sep_x which the user would not
+#       be editing.
 
         l1 = [
           'rotate_strict',
@@ -170,12 +172,19 @@ class HierBlockGenerator(TopBlockGenerator):
             data['outvars'].append(k)
 
         # Ports
-        for direction in ('inputs', 'outputs', 'e_left_nodes', 'e_right_nodes', 'e_top_nodes', 'e_bottom_nodes'):
+        t_dir = (
+          'inputs', 'outputs',
+          'e_left_nodes', 'e_right_nodes', 'e_top_nodes', 'e_bottom_nodes',
+          'b_left_nodes', 'b_right_nodes', 'b_top_nodes', 'b_bottom_nodes',
+        )
+        for direction in t_dir:
             data[direction] = []
             for port in get_hier_block_io(self._flow_graph, direction):
                 p = collections.OrderedDict()
                 p['label'] = port.parent.params['label'].value
                 p['dtype'] = port.dtype
+
+                print('HierBlockGenerator: _build_block_n_from_flow_graph_io: p[label]:', p['label'])
 
                 data[direction].append(p)
 
@@ -202,6 +211,14 @@ def get_hier_block_io(flow_graph, direction, domain=None):
         pads = flow_graph.get_pad_e_tops()
     elif direction == 'e_bottom_nodes':
         pads = flow_graph.get_pad_e_bottoms()
+    elif direction == 'b_left_nodes':
+        pads = flow_graph.get_pad_b_lefts()
+    elif direction == 'b_right_nodes':
+        pads = flow_graph.get_pad_b_rights()
+    elif direction == 'b_top_nodes':
+        pads = flow_graph.get_pad_b_tops()
+    elif direction == 'b_bottom_nodes':
+        pads = flow_graph.get_pad_b_bottoms()
 
     for pad in pads:
         if direction == 'inputs':
@@ -222,4 +239,15 @@ def get_hier_block_io(flow_graph, direction, domain=None):
         elif direction == 'e_bottom_nodes':
             for port in pad.e_tops:
                 yield port
-
+        elif direction == 'b_left_nodes':
+            for port in pad.b_rights:
+                yield port
+        elif direction == 'b_right_nodes':
+            for port in pad.b_lefts:
+                yield port
+        elif direction == 'b_top_nodes':
+            for port in pad.b_bottoms:
+                yield port
+        elif direction == 'b_bottom_nodes':
+            for port in pad.b_tops:
+                yield port

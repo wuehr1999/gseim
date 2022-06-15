@@ -9,7 +9,7 @@ parameters:
     default: none
 -   id: i0
     label: i0
-    default: 0
+    default: '0'
 -   id: l
     label: l
     default: 1m
@@ -67,4 +67,12 @@ e_right_nodes:
 e_top_nodes: []
 
 e_bottom_nodes: []
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_rl_series.grc

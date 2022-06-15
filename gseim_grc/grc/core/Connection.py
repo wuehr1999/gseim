@@ -55,7 +55,7 @@ class Connection(Element):
                 raise ValueError('Connection could not isolate sink')
             self.source_port = source
             self.sink_port = sink
-        elif source.port_type == 'electrical':
+        elif source.port_type in ('electrical', 'bus'):
             self.source_port = source
             self.sink_port = sink
 
@@ -130,6 +130,25 @@ class Connection(Element):
                'e_right' : 'er',
                'e_top'   : 'et',
                'e_bottom': 'eb',
+            }[self.sink_port.port_subtype]
+
+            return (
+                self.source_block.name, source_key + self.source_port.key,
+                self.sink_block.name, sink_key + self.sink_port.key
+            )
+        elif self.source_port.port_type == 'bus':
+            source_key = {
+               'b_left'  : 'bl',
+               'b_right' : 'br',
+               'b_top'   : 'bt',
+               'b_bottom': 'bb',
+            }[self.source_port.port_subtype]
+
+            sink_key = {
+               'b_left'  : 'bl',
+               'b_right' : 'br',
+               'b_top'   : 'bt',
+               'b_bottom': 'bb',
             }[self.sink_port.port_subtype]
 
             return (

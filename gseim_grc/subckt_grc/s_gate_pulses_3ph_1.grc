@@ -4,6 +4,7 @@ options:
     category: '[GRC Hier Blocks]'
     comment: ''
     copyright: ''
+    delta_show_grid: '0'
     description: ''
     drawing_scheme: name
     engine_output: GUI_window
@@ -18,7 +19,7 @@ options:
     rotate_strict: 'no'
     run: 'True'
     sizing_mode: fixed
-    title: gate pulses
+    title: gate pulses\n    3ph-1
     wiring_style: rectilinear
   states:
     coordinate: [8, 8]
@@ -76,7 +77,7 @@ blocks:
     rotate_strict: 'no'
     type: float
   states:
-    coordinate: [501, 123]
+    coordinate: [462, 123]
     rotation: 0
     state: true
 - name: pad_sink$1
@@ -94,7 +95,7 @@ blocks:
     rotate_strict: 'no'
     type: float
   states:
-    coordinate: [501, 312]
+    coordinate: [462, 312]
     rotation: 0
     state: true
 - name: pad_sink$2
@@ -112,7 +113,7 @@ blocks:
     rotate_strict: 'no'
     type: float
   states:
-    coordinate: [501, 204]
+    coordinate: [462, 204]
     rotation: 0
     state: true
 - name: pad_sink$3
@@ -130,7 +131,7 @@ blocks:
     rotate_strict: 'no'
     type: float
   states:
-    coordinate: [501, 147]
+    coordinate: [462, 147]
     rotation: 0
     state: true
 - name: pad_sink$4
@@ -148,7 +149,7 @@ blocks:
     rotate_strict: 'no'
     type: float
   states:
-    coordinate: [501, 288]
+    coordinate: [462, 288]
     rotation: 0
     state: true
 - name: pad_sink$5
@@ -166,7 +167,7 @@ blocks:
     rotate_strict: 'no'
     type: float
   states:
-    coordinate: [501, 228]
+    coordinate: [462, 228]
     rotation: 0
     state: true
 - name: pad_source$0
@@ -252,6 +253,10 @@ blocks:
     name: none
     port_block_x: '4'
     port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
     port_sep_x: '4'
     port_sep_y: '4'
     rotate_strict: 'no'
@@ -272,6 +277,10 @@ blocks:
     name: none
     port_block_x: '4'
     port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
     port_sep_x: '4'
     port_sep_y: '4'
     rotate_strict: 'no'
@@ -292,6 +301,10 @@ blocks:
     name: none
     port_block_x: '4'
     port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
     port_sep_x: '4'
     port_sep_y: '4'
     rotate_strict: 'no'
@@ -319,6 +332,17 @@ connections:
 gparms:
   delt_min: 0.1u
   delt_nrml: 10u
+  drawing_scheme: name
+  mirror: none
+  port_block_x: '4'
+  port_block_y: '4'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
+  port_sep_x: '4'
+  port_sep_y: '4'
+  rotate_strict: 'no'
   t_delay: 0.1m
   y_high: '1'
 outvars: {}

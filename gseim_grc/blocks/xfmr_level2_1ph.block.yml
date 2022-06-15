@@ -72,16 +72,12 @@ parameters:
     default: '12'
 
 e_top_nodes:
--   dtype: float
-    label: p_p
--   dtype: float
-    label: s_p
+-   label: p_p
+-   label: s_p
 
 e_bottom_nodes:
--   dtype: float
-    label: p_n
--   dtype: float
-    label: s_n
+-   label: p_n
+-   label: s_n
 
 outvars:
 - ip

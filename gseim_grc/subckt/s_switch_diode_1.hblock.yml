@@ -80,4 +80,12 @@ e_top_nodes:
 e_bottom_nodes:
 -   label: n
     dtype: float
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_switch_diode_1.grc

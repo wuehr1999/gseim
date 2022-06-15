@@ -7,6 +7,15 @@ parameters:
     label: name
     dtype: string
     default: none
+-   id: ip0
+    label: ip0
+    default: '0'
+-   id: is0
+    label: is0
+    default: '0'
+-   id: lm
+    label: lm
+    default: 15m
 -   id: p_ll
     label: p_ll
     default: 1n
@@ -28,18 +37,12 @@ parameters:
 -   id: s_turns
     label: s_turns
     default: '1'
--   id: ip0
-    label: ip0
-    default: '0'
--   id: is0
-    label: is0
-    default: '0'
--   id: lm
-    label: lm
-    default: 15m
 -   id: drawing_scheme
     label: drawing_scheme
     default: symbol
+-   id: mirror
+    label: mirror
+    default: none
 -   id: port_block_x
     label: port_block_x
     default: '2'
@@ -67,9 +70,6 @@ parameters:
 -   id: rotate_strict
     label: rotate_strict
     default: 'yes'
--   id: mirror
-    label: mirror
-    default: none
 outvars: []
 
 inputs: []
@@ -82,13 +82,21 @@ e_right_nodes: []
 
 e_top_nodes:
 -   label: p_p
-    dtype: float
+    dtype: ''
 -   label: s_p
-    dtype: float
+    dtype: ''
 
 e_bottom_nodes:
 -   label: p_n
-    dtype: float
+    dtype: ''
 -   label: s_n
-    dtype: float
+    dtype: ''
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_xfmr_level2_1ph.grc

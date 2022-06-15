@@ -491,8 +491,6 @@ blocks:
     delt_min: 0.1u
     delt_nrml: delt0
     drawing_scheme: name
-    flag_invert: '0'
-    flag_quad: '0'
     mirror: none
     name: none
     port_block_x: '10'

@@ -48,15 +48,11 @@ parameters:
     default: 'bottom'
 
 inputs:
--   dtype: float
-    label: in
+-   label: in
 
 outputs:
--   dtype: float
-    label: out1
--   dtype: float
-    label: out2
--   dtype: float
-    label: out3
+-   label: out1
+-   label: out2
+-   label: out3
 
 outvars: []

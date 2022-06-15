@@ -13,9 +13,6 @@ parameters:
 -   id: f_hz
     label: f_hz
     default: '50'
--   id: t0
-    label: t0
-    default: '0'
 -   id: phi_a
     label: phi_a
     default: '0'
@@ -25,27 +22,24 @@ parameters:
 -   id: phi_c
     label: phi_c
     default: '-240'
+-   id: t0
+    label: t0
+    default: '0'
 -   id: drawing_scheme
     label: drawing_scheme
     default: name
--   id: rotate_strict
-    label: rotate_strict
-    default: 'no'
 -   id: mirror
     label: mirror
     default: none
--   id: port_sep_x
-    label: port_sep_x
-    default: '4'
--   id: port_sep_y
-    label: port_sep_y
-    default: '4'
 -   id: port_block_x
     label: port_block_x
     default: '4'
 -   id: port_block_y
     label: port_block_y
     default: '4'
+-   id: port_offset_b
+    label: port_offset_b
+    default: '0'
 -   id: port_offset_l
     label: port_offset_l
     default: '0'
@@ -55,9 +49,15 @@ parameters:
 -   id: port_offset_t
     label: port_offset_t
     default: '0'
--   id: port_offset_b
-    label: port_offset_b
-    default: '0'
+-   id: port_sep_x
+    label: port_sep_x
+    default: '4'
+-   id: port_sep_y
+    label: port_sep_y
+    default: '4'
+-   id: rotate_strict
+    label: rotate_strict
+    default: 'no'
 outvars: []
 
 inputs: []
@@ -77,4 +77,12 @@ e_right_nodes: []
 e_top_nodes: []
 
 e_bottom_nodes: []
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_src_ac_3ph.grc

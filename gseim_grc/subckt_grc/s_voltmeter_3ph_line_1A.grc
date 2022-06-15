@@ -1,0 +1,427 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    delta_show_grid: '0'
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_voltmeter_3ph_line_1A
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: v_meter\n   3-ph
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: bus_f_o_3$0
+  id: bus_f_o_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '2'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [648, 177]
+    rotation: 0
+    state: true
+- name: connector_e_2A$0
+  id: connector_e_2A
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [273, 327]
+    rotation: 270
+    state: true
+- name: connector_e_2A$1
+  id: connector_e_2A
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [336, 282]
+    rotation: 270
+    state: true
+- name: connector_e_2A$2
+  id: connector_e_2A
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [303, 303]
+    rotation: 270
+    state: true
+- name: connector_e_3$0
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [273, 87]
+    rotation: 180
+    state: true
+- name: connector_e_3$1
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [336, 117]
+    rotation: 180
+    state: true
+- name: connector_e_3$3
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [303, 147]
+    rotation: 180
+    state: true
+- name: connector_f_3a$0
+  id: connector_f_3a
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: top
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [516, 180]
+    rotation: 0
+    state: true
+- name: connector_f_3a$1
+  id: connector_f_3a
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: top
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [546, 210]
+    rotation: 0
+    state: true
+- name: connector_f_3a$2
+  id: connector_f_3a
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    output1: top
+    output2: right
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [576, 240]
+    rotation: 0
+    state: true
+- name: pad_b_right$0
+  id: pad_b_right
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: v_line
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [681, 195]
+    rotation: 0
+    state: true
+- name: pad_e_left$0
+  id: pad_e_left
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: a
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [219, 78]
+    rotation: 0
+    state: true
+- name: pad_e_left$1
+  id: pad_e_left
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: b
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [219, 108]
+    rotation: 0
+    state: true
+- name: pad_e_left$2
+  id: pad_e_left
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: c
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [219, 138]
+    rotation: 0
+    state: true
+- name: voltmeter_fb$0
+  id: voltmeter_fb
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [360, 171]
+    rotation: 0
+    state: true
+- name: voltmeter_fb$1
+  id: voltmeter_fb
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [420, 201]
+    rotation: 0
+    state: true
+- name: voltmeter_fb$2
+  id: voltmeter_fb
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [477, 231]
+    rotation: 0
+    state: true
+- name: x_dummy$0
+  id: x_dummy
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [567, 114]
+    rotation: 90
+    state: true
+- name: x_dummy$1
+  id: x_dummy
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [537, 114]
+    rotation: 90
+    state: true
+- name: x_dummy$2
+  id: x_dummy
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [507, 114]
+    rotation: 90
+    state: true
+connections:
+- [connector_e_2A$0, el0, connector_e_3$0, et0]
+- [connector_e_2A$0, et0, voltmeter_fb$2, eb0]
+- [connector_e_3$0, el0, voltmeter_fb$0, et0]
+- [connector_e_3$1, el0, voltmeter_fb$1, et0]
+- [connector_e_3$1, er0, pad_e_left$1, er0]
+- [connector_e_3$1, et0, connector_e_2A$1, el0]
+- [connector_e_3$3, el0, voltmeter_fb$2, et0]
+- [connector_e_3$3, et0, connector_e_2A$2, el0]
+- [connector_f_3a$0, '0', x_dummy$2, '0']
+- [connector_f_3a$0, '1', bus_f_o_3$0, '0']
+- [connector_f_3a$1, '0', x_dummy$1, '0']
+- [connector_f_3a$1, '1', bus_f_o_3$0, '1']
+- [connector_f_3a$2, '0', x_dummy$0, '0']
+- [connector_f_3a$2, '1', bus_f_o_3$0, '2']
+- [pad_b_right$0, bl0, bus_f_o_3$0, br0]
+- [pad_e_left$0, er0, connector_e_3$0, er0]
+- [pad_e_left$2, er0, connector_e_3$3, er0]
+- [voltmeter_fb$0, '0', connector_f_3a$0, '0']
+- [voltmeter_fb$0, eb0, connector_e_2A$1, et0]
+- [voltmeter_fb$1, '0', connector_f_3a$1, '0']
+- [voltmeter_fb$1, eb0, connector_e_2A$2, et0]
+- [voltmeter_fb$2, '0', connector_f_3a$2, '0']
+gparms:
+  drawing_scheme: name
+  mirror: none
+  port_block_x: '4'
+  port_block_y: '4'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
+  port_sep_x: '4'
+  port_sep_y: '4'
+  rotate_strict: 'no'
+outvars:
+  v_ab:
+  - outvar
+  - - voltmeter_fb$0
+    - v_fb
+  v_bc:
+  - outvar
+  - - voltmeter_fb$1
+    - v_fb
+  v_ca:
+  - outvar
+  - - voltmeter_fb$2
+    - v_fb
+solve_blocks: []
+output_blocks: []

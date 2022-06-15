@@ -4,6 +4,7 @@ options:
     category: '[GRC Hier Blocks]'
     comment: ''
     copyright: ''
+    delta_show_grid: '0'
     description: ''
     drawing_scheme: name
     engine_output: GUI_window
@@ -25,6 +26,42 @@ options:
     rotation: 0
     state: enabled
 blocks:
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [393, 180]
+    rotation: 0
+    state: true
+- name: pad_source$0
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: x
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [258, 180]
+    rotation: 0
+    state: true
 - name: xfer_fn$0
   id: xfer_fn
   parameters:
@@ -54,48 +91,12 @@ blocks:
     x_sv: '0.0'
     y_sv: '0.0'
   states:
-    coordinate: [318, 180]
-    rotation: 0
-    state: true
-- name: pad_sink$0
-  id: pad_sink
-  parameters:
-    comment: ''
-    drawing_scheme: name
-    label: y
-    mirror: none
-    num_streams: '1'
-    port_block_x: '4'
-    port_block_y: '4'
-    port_sep_x: '4'
-    port_sep_y: '4'
-    rotate_strict: 'no'
-    type: float
-  states:
-    coordinate: [399, 180]
-    rotation: 0
-    state: true
-- name: pad_source$0
-  id: pad_source
-  parameters:
-    comment: ''
-    drawing_scheme: name
-    label: x
-    mirror: none
-    num_streams: '1'
-    port_block_x: '4'
-    port_block_y: '4'
-    port_sep_x: '4'
-    port_sep_y: '4'
-    rotate_strict: 'no'
-    type: float
-  states:
-    coordinate: [255, 180]
+    coordinate: [324, 171]
     rotation: 0
     state: true
 connections:
-- [xfer_fn$0, '0', pad_sink$0, '0']
 - [pad_source$0, '0', xfer_fn$0, '0']
+- [xfer_fn$0, '0', pad_sink$0, '0']
 gparms:
   a0: computed
   b0: computed

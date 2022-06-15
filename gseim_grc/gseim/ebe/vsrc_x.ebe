@@ -45,6 +45,16 @@ source:
    if (G.flags[G.i_one_time_parms]) {
      return;
    }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+      X.outprm[no_i] = X.cur_nd[nnd_n];
+      return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
    if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
      k_scale = X.rprm[nr_k_scale];
      v0 = k_scale*X.val_xvr[nx_x_in];
@@ -80,16 +90,6 @@ source:
        J.dhdv   [nh_3][nnd_n      ] = -1.0;
        J.dhdxvr [nh_3][nx_x_in    ] = -k_scale;
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
-      X.outprm[no_i] = X.cur_nd[nnd_n];
-      return;
-   }
-   if (G.flags[G.i_init_guess]) {
-     X.val_nd[nnd_n] = 0.0;
-     X.val_nd[nnd_p] = 0.0;
      return;
    }
 endC

@@ -56,17 +56,17 @@ parameters:
     label: mirror
     default: none
 outvars:
-- wrm
-- tem
 - ia
+- tem
+- wrm
 
 inputs:
 -   label: TL
-    dtype: float
+    dtype: ''
 
 outputs:
 -   label: wrm
-    dtype: float
+    dtype: ''
 
 e_left_nodes: []
 
@@ -74,9 +74,17 @@ e_right_nodes: []
 
 e_top_nodes:
 -   label: p
-    dtype: float
+    dtype: ''
 
 e_bottom_nodes:
 -   label: n
-    dtype: float
+    dtype: ''
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_dcmc.grc

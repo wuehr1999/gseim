@@ -36,23 +36,13 @@ parameters:
     default: '4'
 
 inputs:
--   domain: stream
-    label: van
-    dtype: float
--   domain: stream
-    label: vbn
-    dtype: float
--   domain: stream
-    label: vcn
-    dtype: float
+-   label: van
+-   label: vbn
+-   label: vcn
 
 outputs:
--   domain: stream
-    label: vqs
-    dtype: float
--   domain: stream
-    label: vds
-    dtype: float
+-   label: vqs
+-   label: vds
 
 outvars:
 - van

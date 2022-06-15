@@ -781,8 +781,6 @@ void Circuit::assign_xvr_ebe_1(
        i_ebel = ebe_usr[i_ebeu].index_ebel;
 
        if (ebe_lib[i_ebel].flag_x_outputs) {
-         cout << "Circuit::assign_xvr_ebe_1:" << endl;
-         cout << "  ebe name = " << ebe_lib[i_ebel].name << endl;
          n_xvr1 = ebe_lib[i_ebel].n_xvr;
          for (int j=0; j < n_xvr1; j++) {
            i_xbeu_vr = ebe_usr[i_ebeu].xvr[j];

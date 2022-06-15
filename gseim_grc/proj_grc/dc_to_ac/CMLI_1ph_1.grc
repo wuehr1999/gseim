@@ -1,0 +1,577 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    delta_show_grid: '0'
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: circuit
+    id: MLI_1ph_1
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: MLI_1ph_1
+    wiring_style: rectilinear
+  states:
+    coordinate: [9, 21]
+    rotation: 0
+    state: enabled
+blocks:
+- name: connector_e_3$0
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [261, 366]
+    rotation: 270
+    state: true
+- name: connector_e_3$1
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [261, 114]
+    rotation: 180
+    state: true
+- name: dummy_b$0
+  id: dummy_b
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: A
+    port_block_x: '0'
+    port_block_y: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [552, 144]
+    rotation: 0
+    state: true
+- name: dummy_b$1
+  id: dummy_b
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: B
+    port_block_x: '0'
+    port_block_y: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [552, 204]
+    rotation: 0
+    state: true
+- name: dummy_b$2
+  id: dummy_b
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: C
+    port_block_x: '0'
+    port_block_y: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [552, 264]
+    rotation: 0
+    state: true
+- name: dummy_b$3
+  id: dummy_b
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: A
+    port_block_x: '0'
+    port_block_y: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [201, 162]
+    rotation: 180
+    state: true
+- name: dummy_b$4
+  id: dummy_b
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: B
+    port_block_x: '0'
+    port_block_y: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [201, 234]
+    rotation: 180
+    state: true
+- name: dummy_b$5
+  id: dummy_b
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: C
+    port_block_x: '0'
+    port_block_y: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [201, 306]
+    rotation: 180
+    state: true
+- name: dummy_e$0
+  id: dummy_e
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    n: a
+    port_block_x: '0'
+    port_block_y: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [234, 108]
+    rotation: 180
+    state: true
+- name: ground$1
+  id: ground
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [252, 372]
+    rotation: 0
+    state: true
+- name: r$2
+  id: r
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '10'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r: Rg
+    rotate_strict: 'yes'
+  states:
+    coordinate: [324, 213]
+    rotation: 270
+    state: true
+- name: s_full_bridge_2A$0
+  id: s_full_bridge_2A
+  parameters:
+    Vdc: Vdc
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    r_off: r_off
+    r_on: r_on
+    rotate_strict: 'no'
+  states:
+    coordinate: [240, 150]
+    rotation: 0
+    state: true
+- name: s_full_bridge_2A$1
+  id: s_full_bridge_2A
+  parameters:
+    Vdc: Vdc
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    r_off: r_off
+    r_on: r_on
+    rotate_strict: 'no'
+  states:
+    coordinate: [240, 222]
+    rotation: 0
+    state: true
+- name: s_full_bridge_2A$2
+  id: s_full_bridge_2A
+  parameters:
+    Vdc: Vdc
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    r_off: r_off
+    r_on: r_on
+    rotate_strict: 'no'
+  states:
+    coordinate: [240, 294]
+    rotation: 0
+    state: true
+- name: s_gate_pulses_MLI_1ph_1$0
+  id: s_gate_pulses_MLI_1ph_1
+  parameters:
+    a_sin: a_sin
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    drawing_scheme: name
+    f_ac: f_ac
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [453, 132]
+    rotation: 0
+    state: true
+- name: s_gate_pulses_MLI_1ph_1$1
+  id: s_gate_pulses_MLI_1ph_1
+  parameters:
+    a_sin: a_sin
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    drawing_scheme: name
+    f_ac: f_ac
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [453, 192]
+    rotation: 0
+    state: true
+- name: s_gate_pulses_MLI_1ph_1$2
+  id: s_gate_pulses_MLI_1ph_1
+  parameters:
+    a_sin: a_sin
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    drawing_scheme: name
+    f_ac: f_ac
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [453, 252]
+    rotation: 0
+    state: true
+- name: triangle_2$0
+  id: triangle_2
+  parameters:
+    L1: '-1'
+    L2: '1'
+    T: '0'
+    comment: ''
+    drawing_scheme: symbol
+    flag_frequency: '1'
+    flag_period: '0'
+    frequency: f_sw
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t0: '0'
+  states:
+    coordinate: [396, 141]
+    rotation: 0
+    state: true
+- name: triangle_2$1
+  id: triangle_2
+  parameters:
+    L1: '-1'
+    L2: '1'
+    T: '0'
+    comment: ''
+    drawing_scheme: symbol
+    flag_frequency: '1'
+    flag_period: '0'
+    frequency: f_sw
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t0: t_offset_1
+  states:
+    coordinate: [396, 201]
+    rotation: 0
+    state: true
+- name: triangle_2$2
+  id: triangle_2
+  parameters:
+    L1: '-1'
+    L2: '1'
+    T: '0'
+    comment: ''
+    drawing_scheme: symbol
+    flag_frequency: '1'
+    flag_period: '0'
+    frequency: f_sw
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t0: t_offset_2
+  states:
+    coordinate: [396, 261]
+    rotation: 0
+    state: true
+connections:
+- [connector_e_3$0, el0, s_full_bridge_2A$2, eb0]
+- [connector_e_3$0, er0, ground$1, et0]
+- [connector_e_3$0, et0, r$2, er0]
+- [connector_e_3$1, el0, r$2, el0]
+- [connector_e_3$1, er0, dummy_e$0, el0]
+- [connector_e_3$1, et0, s_full_bridge_2A$0, et0]
+- [dummy_b$3, bl0, s_full_bridge_2A$0, bl0]
+- [dummy_b$4, bl0, s_full_bridge_2A$1, bl0]
+- [dummy_b$5, bl0, s_full_bridge_2A$2, bl0]
+- [s_full_bridge_2A$0, eb0, s_full_bridge_2A$1, et0]
+- [s_full_bridge_2A$1, eb0, s_full_bridge_2A$2, et0]
+- [s_gate_pulses_MLI_1ph_1$0, br0, dummy_b$0, bl0]
+- [s_gate_pulses_MLI_1ph_1$1, br0, dummy_b$1, bl0]
+- [s_gate_pulses_MLI_1ph_1$2, br0, dummy_b$2, bl0]
+- [triangle_2$0, '0', s_gate_pulses_MLI_1ph_1$0, '0']
+- [triangle_2$1, '0', s_gate_pulses_MLI_1ph_1$1, '0']
+- [triangle_2$2, '0', s_gate_pulses_MLI_1ph_1$2, '0']
+gparms:
+  Lg: '0.01'
+  Rg: '10'
+  Vdc: '200'
+  a_sin: '1'
+  delt_min: 0.02u
+  delt_nrml: 1u
+  f_ac: '50'
+  f_sw: 10e3
+  r_off: 1M
+  r_on: 0.1m
+  t_offset_1: computed
+  t_offset_2: computed
+outvars:
+  v_an:
+  - connection
+  - - connector_e_3$1
+    - el0
+    - r$2
+    - el0
+solve_blocks:
+- d_parms:
+    algorithm_e: backward_euler
+    algorithm_ex: backward_euler
+    algorithm_x_startup: explicit
+    algorithm_x_trns: RK4
+    block_index: '0'
+    bs23_fctr_max: '1.1'
+    bs23_fctr_min: '0.8'
+    bs23_tolr: '1.0e-8'
+    delt_max_e: none
+    delt_max_ex: none
+    delt_max_x: none
+    delt_min_e: none
+    delt_min_ex: delt_min
+    delt_min_x: none
+    e_nr_check_delx_all: 'no'
+    e_nr_check_spice: 'yes'
+    e_nr_dmp: 'no'
+    e_nr_dmp0: 'no'
+    e_nr_dmp_itermax: '50'
+    e_nr_dmp_itermax0: '50'
+    e_nr_dmp_k: '0.2'
+    e_nr_dmp_k0: '0.2'
+    e_nr_eps_delx_all: '1.0e-4'
+    e_nr_itermax: '500'
+    e_nr_itermax0: '500'
+    e_nr_spice_abstol: '1.0e-6'
+    e_nr_spice_reltol: '1.0e-3'
+    e_nr_spice_vntol: '1.0e-4'
+    e_nr_write_rhs2: 'no'
+    ex_nr_check_delx_all: 'yes'
+    ex_nr_dmp: 'no'
+    ex_nr_dmp0: 'no'
+    ex_nr_dmp_itermax: '50'
+    ex_nr_dmp_itermax0: '50'
+    ex_nr_dmp_k: '0.2'
+    ex_nr_dmp_k0: '0.2'
+    ex_nr_eps_delx_all: '1.0e-2'
+    ex_nr_itermax: '500'
+    ex_nr_itermax0: '500'
+    ex_nr_write_rhs2: 'no'
+    factor_step_decrease: '0.6'
+    factor_step_increase: '1.5'
+    initial_sol: initialize
+    initial_sol_file: none
+    itmax_stepred: '20'
+    itmax_trbdf2: '20'
+    itmax_trns: '1000000'
+    output_solution_file: none
+    rkf45_fctr_max: '1.1'
+    rkf45_fctr_min: '0.8'
+    rkf45_tolr: '1.0e-8'
+    solve_type: trns
+    ssw_frequency: none
+    ssw_ndiv: '200'
+    ssw_nr_dmp: 'no'
+    ssw_nr_dmp_itermax: '10'
+    ssw_nr_dmp_k: '0.6'
+    ssw_nr_eps_rhs: '1.0e-10'
+    ssw_nr_itermax: '50'
+    ssw_period: none
+    ssw_period_mult: '2'
+    t_end: 50m
+    t_start: '0'
+    t_startup: '0.0'
+    trbdf2_tolr: '1.0e-5'
+    tstep0_e: none
+    tstep0_ex: delt_nrml
+    tstep0_x: none
+    write_iter_n_e: '1000'
+    write_iter_n_x: '1000'
+    write_time_e: 'no'
+    write_time_x: 'no'
+    x_nr_check_delx_all: 'no'
+    x_nr_check_rhs2: 'yes'
+    x_nr_dmp: 'no'
+    x_nr_dmp0: 'no'
+    x_nr_dmp_itermax: '50'
+    x_nr_dmp_itermax0: '50'
+    x_nr_dmp_k: '0.2'
+    x_nr_dmp_k0: '0.2'
+    x_nr_eps_delx_all: '1.0e-4'
+    x_nr_eps_rhs: '1.0e-6'
+    x_nr_itermax: '500'
+    x_nr_itermax0: '500'
+    x_nr_write_rhs2: 'no'
+  index: '0'
+  name: s1
+  output_blocks:
+  - out$0
+output_blocks:
+- d_parms:
+    append: 'no'
+    filename: out1.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: none
+    t_start: none
+  index_slv: '0'
+  name: out$0
+  outvars:
+  - v_an

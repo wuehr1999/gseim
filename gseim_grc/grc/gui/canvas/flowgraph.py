@@ -77,6 +77,8 @@ class FlowGraph(CoreFlowgraph, Drawable):
                 break
 
         self._main_window = main_window
+        self.max_w_all = 0
+        self.max_h_all = 0
 
         self.drawing_area = None
         # important vars dealing with mouse event tracking
@@ -116,7 +118,6 @@ class FlowGraph(CoreFlowgraph, Drawable):
         """
         block_ids = set(b.name for b in self.blocks)
         for index in count():
-            print('gui/canvas/flowgraph.py: _get_unique_id: base_id =', base_id, ' index =',index)
             block_id = '{}${}'.format(base_id, index)
             if block_id not in block_ids:
                 break
@@ -288,15 +289,9 @@ class FlowGraph(CoreFlowgraph, Drawable):
             src_port_id = connection_n[1]
             snk_port_id = connection_n[3]
 
-            if not src_port_id.startswith('e'):
-                print('paste_from_clipboard: debug 1')
-                source = old_id2block[connection_n[0]].get_source(connection_n[1])
-                print('paste_from_clipboard: debug 2')
-                sink = old_id2block[connection_n[2]].get_sink(connection_n[3])
-            else:
+            if src_port_id.startswith('e'):
                 src_port_id_1 = src_port_id[2:].strip()
                 snk_port_id_1 = snk_port_id[2:].strip()
-
                 src_prefix = src_port_id[0:2]
                 snk_prefix = snk_port_id[0:2]
 
@@ -317,6 +312,34 @@ class FlowGraph(CoreFlowgraph, Drawable):
                     sink = old_id2block[connection_n[2]].get_e_top(snk_port_id_1)
                 elif snk_prefix == 'eb':
                     sink = old_id2block[connection_n[2]].get_e_bottom(snk_port_id_1)
+            elif src_port_id.startswith('b'):
+                src_port_id_1 = src_port_id[2:].strip()
+                snk_port_id_1 = snk_port_id[2:].strip()
+                src_prefix = src_port_id[0:2]
+                snk_prefix = snk_port_id[0:2]
+
+                if src_prefix == 'bl':
+                    source = old_id2block[connection_n[0]].get_b_left(src_port_id_1)
+                elif src_prefix == 'br':
+                    source = old_id2block[connection_n[0]].get_b_right(src_port_id_1)
+                elif src_prefix == 'bt':
+                    source = old_id2block[connection_n[0]].get_b_top(src_port_id_1)
+                elif src_prefix == 'bb':
+                    source = old_id2block[connection_n[0]].get_b_bottom(src_port_id_1)
+
+                if snk_prefix == 'bl':
+                    sink = old_id2block[connection_n[2]].get_b_left(snk_port_id_1)
+                elif snk_prefix == 'br':
+                    sink = old_id2block[connection_n[2]].get_b_right(snk_port_id_1)
+                elif snk_prefix == 'bt':
+                    sink = old_id2block[connection_n[2]].get_b_top(snk_port_id_1)
+                elif snk_prefix == 'bb':
+                    sink = old_id2block[connection_n[2]].get_b_bottom(snk_port_id_1)
+            else:
+                print('paste_from_clipboard: debug 1')
+                source = old_id2block[connection_n[0]].get_source(connection_n[1])
+                print('paste_from_clipboard: debug 2')
+                sink = old_id2block[connection_n[2]].get_sink(connection_n[3])
 
             connection = self.connect(source, sink)
             selected.add(connection)
@@ -389,10 +412,7 @@ class FlowGraph(CoreFlowgraph, Drawable):
             src_port_id = connection_n[1]
             snk_port_id = connection_n[3]
 
-            if not src_port_id.startswith('e'):
-                source = old_id2block[connection_n[0]].get_source(connection_n[1])
-                sink = old_id2block[connection_n[2]].get_sink(connection_n[3])
-            else:
+            if src_port_id.startswith('e'):
                 src_port_id_1 = src_port_id[2:].strip()
                 snk_port_id_1 = snk_port_id[2:].strip()
 
@@ -416,6 +436,33 @@ class FlowGraph(CoreFlowgraph, Drawable):
                     sink = old_id2block[connection_n[2]].get_e_top(snk_port_id_1)
                 elif snk_prefix == 'eb':
                     sink = old_id2block[connection_n[2]].get_e_bottom(snk_port_id_1)
+            elif src_port_id.startswith('b'):
+                src_port_id_1 = src_port_id[2:].strip()
+                snk_port_id_1 = snk_port_id[2:].strip()
+
+                src_prefix = src_port_id[0:2]
+                snk_prefix = snk_port_id[0:2]
+
+                if src_prefix == 'bl':
+                    source = old_id2block[connection_n[0]].get_b_left(src_port_id_1)
+                elif src_prefix == 'br':
+                    source = old_id2block[connection_n[0]].get_b_right(src_port_id_1)
+                elif src_prefix == 'bt':
+                    source = old_id2block[connection_n[0]].get_b_top(src_port_id_1)
+                elif src_prefix == 'bb':
+                    source = old_id2block[connection_n[0]].get_b_bottom(src_port_id_1)
+
+                if snk_prefix == 'bl':
+                    sink = old_id2block[connection_n[2]].get_b_left(snk_port_id_1)
+                elif snk_prefix == 'br':
+                    sink = old_id2block[connection_n[2]].get_b_right(snk_port_id_1)
+                elif snk_prefix == 'bt':
+                    sink = old_id2block[connection_n[2]].get_b_top(snk_port_id_1)
+                elif snk_prefix == 'bb':
+                    sink = old_id2block[connection_n[2]].get_b_bottom(snk_port_id_1)
+            else:
+                source = old_id2block[connection_n[0]].get_source(connection_n[1])
+                sink = old_id2block[connection_n[2]].get_sink(connection_n[3])
 
             connection = self.connect(source, sink)
             selected.add(connection)
@@ -424,9 +471,6 @@ class FlowGraph(CoreFlowgraph, Drawable):
         self.selected_elements = selected
 
     # Modify Selected
-
-# todo
-# check for e nodes
 
     def move_selected(self, delta_coordinate):
         """
@@ -653,6 +697,20 @@ class FlowGraph(CoreFlowgraph, Drawable):
 
     def draw(self, cr):
         """Draw blocks connections comment and select rectangle"""
+
+        self.max_w_all = 0
+        self.max_h_all = 0
+
+        delta1 = int(self.options_block.params['delta_show_grid'].get_value())
+        if delta1 != 0:
+
+            for block in self.blocks:
+                 if block.is_horizontal():
+                     self.max_w_all = max(self.max_w_all, block.coordinate[0] + block.width)
+                     self.max_h_all = max(self.max_h_all, block.coordinate[1] + block.height)
+                 else:
+                     self.max_w_all = max(self.max_w_all, block.coordinate[0] + block.height)
+                     self.max_h_all = max(self.max_h_all, block.coordinate[1] + block.width)
 
         for draw_element in self._drawables():
             cr.save()

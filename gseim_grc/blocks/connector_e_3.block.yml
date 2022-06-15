@@ -36,15 +36,12 @@ parameters:
     default: '1' 
 
 e_right_nodes:
--   dtype: float
-    label: e3
+-   label: e3
 
 e_top_nodes:
--   dtype: float
-    label: e2
+-   label: e2
 
 e_left_nodes:
--   dtype: float
-    label: e1
+-   label: e1
 
 outvars: []

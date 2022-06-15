@@ -88,14 +88,10 @@ parameters:
     default: '4'
 
 inputs:
--   domain: stream
-    label: x1
-    dtype: float
+-   label: x1
 
 outputs:
--   domain: stream
-    label: y1
-    dtype: float
+-   label: y1
 
 outvars:
 - y1

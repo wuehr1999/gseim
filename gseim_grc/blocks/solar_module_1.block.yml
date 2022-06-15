@@ -1,0 +1,84 @@
+id: solar_module_1
+label: solar \n module
+
+parameters:
+-   id: ns
+    label: ns
+    dtype: float
+    default: '1'
+-   id: vocmr
+    label: vocmr
+    dtype: float
+    default: '1'
+-   id: iscmr
+    label: iscmr
+    dtype: float
+    default: '1'
+-   id: coef_iscm
+    label: coef_iscm
+    dtype: float
+    default: '0'
+-   id: coef_vocm
+    label: coef_vocm
+    dtype: float
+    default: '0'
+-   id: noct
+    label: noct
+    dtype: float
+    default: '20'
+-   id: tr
+    label: tr
+    dtype: float
+    default: '25'
+-   id: pmaxr
+    label: pmaxr
+    dtype: float
+    default: '1'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'yes'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'name'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '4'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '4'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '2'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '2'
+
+inputs:
+-   label: g
+-   label: ta
+
+e_top_nodes:
+-   label: p
+
+e_bottom_nodes:
+-   label: n
+
+outvars:
+- i
+- v
+- p
+- p_net

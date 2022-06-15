@@ -3656,7 +3656,11 @@ class ApplicationWindow(QMainWindow):
             self.plotWindow_1.fig.subplots_adjust(hspace=0.0)
 
             for i in range(self.n_variables):
-                self.plotCanvas_1.ax_multi[i] = self.plotCanvas_1.fig.add_subplot(self.n_variables, 1, i+1)
+                if i == 0:
+                    self.plotCanvas_1.ax_multi[i] = self.plotCanvas_1.fig.add_subplot(self.n_variables, 1, i+1)
+                else:
+                    self.plotCanvas_1.ax_multi[i] = self.plotCanvas_1.fig.add_subplot(self.n_variables, 1, i+1,
+                      sharex=self.plotCanvas_1.ax_multi[0])
                 self.plotCanvas_1.ax_multi[i].label_outer()
                 self.plotCanvas_1.ax_multi[i].grid(color='lightgrey')
                 self.plotCanvas_1.ax_multi[i].legend(loc='best')
@@ -3668,7 +3672,11 @@ class ApplicationWindow(QMainWindow):
                 if (self.axesPropObject_1.s_xMax.split()):
                     self.plotCanvas_1.ax_multi[i].set_xlim(right = float(self.axesPropObject_1.s_xMax))
 
-                self.plotWindow_1.ax_multi[i] = self.plotWindow_1.fig.add_subplot(self.n_variables, 1, i+1)
+                if i == 0:
+                    self.plotWindow_1.ax_multi[i] = self.plotWindow_1.fig.add_subplot(self.n_variables, 1, i+1)
+                else:
+                    self.plotWindow_1.ax_multi[i] = self.plotWindow_1.fig.add_subplot(self.n_variables, 1, i+1,
+                      sharex=self.plotWindow_1.ax_multi[0])
                 self.plotWindow_1.ax_multi[i].label_outer()
                 self.plotWindow_1.ax_multi[i].grid(color='lightgrey')
                 self.plotWindow_1.ax_multi[i].legend(loc='best')

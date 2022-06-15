@@ -56,16 +56,13 @@ parameters:
     default: '10'
 
 inputs:
--   dtype: float
-    label: x
+-   label: x
 
 e_top_nodes:
--   dtype: float
-    label: p
+-   label: p
 
 e_bottom_nodes:
--   dtype: float
-    label: n
+-   label: n
 
 outvars:
 - i

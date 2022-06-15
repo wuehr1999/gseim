@@ -56,11 +56,9 @@ parameters:
     default: 'top'
 
 inputs:
--   dtype: float
-    label: in
+-   label: in
 
 outputs:
--   dtype: float
-    label: out
+-   label: out
 
 outvars: []

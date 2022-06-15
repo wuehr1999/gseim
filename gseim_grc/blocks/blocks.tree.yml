@@ -1,5 +1,6 @@
 '[Core]':
 - xbe:
+  - x_dummy
   - comparators:
     - cmpr_1_1
     - cmpr_1_2
@@ -35,6 +36,7 @@
     - not
     - and_2
     - or_2
+    - xor_2
   - math Operations:
     - abs
     - atan2_rad
@@ -42,7 +44,6 @@
     - dead_zone
     - diff
     - div
-    - edge_delay
     - integrator
     - integrator_1
     - lag_1
@@ -63,6 +64,12 @@
     - sampler
     - delay_discrete
     - delay_onestep
+    - delay_onestep_1
+    - edge_delay
+    - edge_delay_1
+  - averaging:
+    - average_mv_1
+    - average_mv_2
   - filters:
     - xfer_fn
   - electrical machines:
@@ -94,6 +101,7 @@
     - vsrc_x
   - switches:
     - diode_r
+    - diode_spice
     - switch_1
     - thyristor
   - solar:
@@ -110,6 +118,7 @@
     - dummy_sink
     - dummy_source
     - dummy_e
+    - dummy_b
   - subcircuit pads:
     - pad_sink
     - pad_source
@@ -117,11 +126,19 @@
     - pad_e_right
     - pad_e_top
     - pad_e_bottom
+    - pad_b_left
+    - pad_b_right
+    - pad_b_top
+    - pad_b_bottom
   - connectors:
     - connector_e_2
     - connector_e_2A
     - connector_e_3
     - connector_e_4
+    - connector_b_2
+    - connector_b_2A
+    - connector_b_3
+    - connector_b_4
     - connector_f_2a
     - connector_f_2A
     - connector_f_2b
@@ -130,6 +147,12 @@
     - connector_f_3b
     - connector_f_3c
     - connector_f_4
+  - bus:
+    - bus_e_3
+    - bus_f_i_3
+    - bus_f_i_4
+    - bus_f_o_3
+    - bus_f_o_4
   - text_display:
     - show_text
     - show_parameter

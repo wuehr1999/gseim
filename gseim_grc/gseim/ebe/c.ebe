@@ -43,6 +43,11 @@ C:
 variables:
    double c1;
 source:
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+      X.outprm[no_i] = X.cur_nd[nnd_p];
+      return;
+   }
    c = X.rprm[nr_c];
    k_scale = X.rprm[nr_k_scale];
    c1 = c*k_scale;
@@ -82,11 +87,6 @@ source:
       }
       X.val_stv[nstv_qp] = c1*(X.val_nd[nnd_p]-X.val_nd[nnd_n]);
       X.val_stv[nstv_qm] = -X.val_stv[nstv_qp];
-      return;
-   }
-   if (G.flags[G.i_outvar]) {
-      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
-      X.outprm[no_i] = X.cur_nd[nnd_p];
       return;
    }
    if (G.flags[G.i_init_guess]) {

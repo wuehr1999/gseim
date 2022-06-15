@@ -7,15 +7,6 @@ parameters:
     label: name
     dtype: string
     default: none
--   id: fc
-    label: fc
-    default: '1000'
--   id: k
-    label: k
-    default: '1'
--   id: xi
-    label: xi
-    default: '0.7'
 -   id: a0
     label: a0
     default: computed
@@ -28,6 +19,15 @@ parameters:
 -   id: b2
     label: b2
     default: computed
+-   id: fc
+    label: fc
+    default: '1000'
+-   id: k
+    label: k
+    default: '1'
+-   id: xi
+    label: xi
+    default: '0.7'
 -   id: drawing_scheme
     label: drawing_scheme
     default: name
@@ -78,4 +78,12 @@ e_right_nodes: []
 e_top_nodes: []
 
 e_bottom_nodes: []
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_filter_lp_2.grc

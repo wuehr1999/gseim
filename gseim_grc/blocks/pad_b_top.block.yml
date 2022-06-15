@@ -1,0 +1,54 @@
+id: pad_b_top
+label: b Pad
+
+parameters:
+-   id: label
+    label: Label
+    dtype: string
+    default: out
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'no'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'name'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '4'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '4'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '4'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '4'
+-   id: type
+    label: Input Type
+    dtype: enum
+    options: [float]
+    option_labels: [Float]
+    hide: part
+-   id: num_streams
+    label: Num Streams
+    dtype: int
+    default: '1'
+    hide: part
+
+b_bottom_nodes:
+-   label: b1
+
+documentation: |-
+    This will appear as a top b pad of the subcircuit.
+

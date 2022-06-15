@@ -41,6 +41,10 @@ source:
    if (G.flags[G.i_one_time_parms]) {
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     return;
+   }
    if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
      if (G.flags[G.i_function]) {
        X.f[nf_1] = 0.0;
@@ -53,10 +57,6 @@ source:
        X.h[nh_1] = 0.0;
        X.h[nh_2] = 0.0;
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
      return;
    }
 endC

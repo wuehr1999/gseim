@@ -39,6 +39,10 @@ h_3: v(p) v(n)
 C:
 variables:
 source:
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_i] = X.cur_nd[nnd_p];
+      return;
+   }
    if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
      cur_p = X.val_aux[na_cur_p];
 
@@ -69,10 +73,6 @@ source:
        J.dhdv   [nh_3][nnd_n      ] = -1.0;
      }
      return;
-   }
-   if (G.flags[G.i_outvar]) {
-      X.outprm[no_i] = X.cur_nd[nnd_p];
-      return;
    }
    if (G.flags[G.i_init_guess]) {
      X.val_nd[nnd_n] = 0.0;

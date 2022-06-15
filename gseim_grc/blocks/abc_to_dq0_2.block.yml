@@ -36,29 +36,15 @@ parameters:
     default: '4'
 
 inputs:
--   domain: stream
-    label: xa
-    dtype: float
--   domain: stream
-    label: xb
-    dtype: float
--   domain: stream
-    label: xc
-    dtype: float
--   domain: stream
-    label: theta
-    dtype: float
+-   label: xa
+-   label: xb
+-   label: xc
+-   label: theta
 
 outputs:
--   domain: stream
-    label: xd
-    dtype: float
--   domain: stream
-    label: xq
-    dtype: float
--   domain: stream
-    label: x0
-    dtype: float
+-   label: xd
+-   label: xq
+-   label: x0
 
 outvars:
 - xa

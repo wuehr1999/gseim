@@ -82,6 +82,11 @@ source:
      X.rprm[nr_b] = b;
      X.rprm[nr_c] = c;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
 
    a = X.rprm[nr_a];
    b = X.rprm[nr_b];
@@ -103,11 +108,6 @@ source:
          J.dgdvr[ng_1][nvr_x] = -b;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
 endC

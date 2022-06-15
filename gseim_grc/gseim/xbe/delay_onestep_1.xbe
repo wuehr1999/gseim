@@ -1,0 +1,117 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=delay_onestep_1 evaluate=yes limit_tstep=yes save_history=yes allow_ssw=no
+#
+# delay by one time step; also limit time step
+#
+Jacobian: variable
+input_vars: x
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+rparms:
++  x_high=1.0
++  dt=0.1u
++  x_last=0
++  x_cross=0
+stparms:
+igparms:
+outparms: x y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   double time0;
+   bool flag_edge;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     x_high = X.rprm[nr_x_high];
+
+     if (x_high < 0.0) {
+       cout << "delay_onestep_1.xbe: check x_high. Halting..." << endl;
+       exit(1);
+     }
+     X.rprm[nr_x_cross] = 0.5*x_high;
+     X.rprm[nr_x_last] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_next_time]) {
+     time0 = G.time_given_x;
+
+     x_last  = X.rprm[nr_x_last ];
+     x_cross = X.rprm[nr_x_cross];
+
+     x = X.val_vr[nvr_x];
+
+     flag_edge = false;
+
+     if ((x_last <= x_cross) && (x > x_cross)) {
+       flag_edge = true;
+     } else if ((x_last >= x_cross) && (x < x_cross)) {
+       flag_edge = true;
+     }
+     if (flag_edge) {
+       G.time_nextbreak_x = time0 + X.rprm[nr_dt];
+     } else {
+       G.time_nextbreak_x = G.time_end;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.val_vr[nvr_x];
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - X.val_vr[nvr_x];
+       }   
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }   
+     }   
+     return;
+   }   
+   if (G.flags[G.i_save_history]) {
+     X.rprm[nr_x_last] = X.val_vr[nvr_x];
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.rprm[nr_x_last];
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - X.rprm[nr_x_last];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

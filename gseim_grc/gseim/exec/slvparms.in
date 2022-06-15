@@ -319,6 +319,11 @@ begin_file
     default: 0.2
   end_parm
   begin_parm
+    keyword: x_nr_check_rhs2
+    options: yes no
+    default: yes
+  end_parm
+  begin_parm
     keyword: x_nr_check_delx_all
     options: yes no
     default: no
@@ -332,6 +337,11 @@ begin_file
     keyword: x_nr_write_rhsinf
     options: yes no
     default: no
+  end_parm
+  begin_parm
+    keyword: x_nr_eps_rhs
+    options: none
+    default: 1.0e-6
   end_parm
   begin_parm
     keyword: x_nr_eps_delx_all

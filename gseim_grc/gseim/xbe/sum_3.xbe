@@ -41,6 +41,13 @@ source:
      X.val_vr[nvr_y] = k1*X.val_vr[nvr_x1] + k2*X.val_vr[nvr_x2] + k3*X.val_vr[nvr_x3];
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_x3] = X.val_vr[nvr_x3];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = k1*X.val_vr[nvr_x1] + k2*X.val_vr[nvr_x2] + k3*X.val_vr[nvr_x3];
@@ -58,13 +65,6 @@ source:
          J.dgdvr[ng_1][nvr_x3] = -k3;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x1] = X.val_vr[nvr_x1];
-     X.outprm[no_x2] = X.val_vr[nvr_x2];
-     X.outprm[no_x3] = X.val_vr[nvr_x3];
-     X.outprm[no_y ] = X.val_vr[nvr_y ];
      return;
    }
 endC

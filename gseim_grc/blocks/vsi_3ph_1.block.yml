@@ -44,35 +44,17 @@ parameters:
     default: '4'
 
 inputs:
--   domain: stream
-    label: g1
-    dtype: float
--   domain: stream
-    label: g2
-    dtype: float
--   domain: stream
-    label: g3
-    dtype: float
--   domain: stream
-    label: g4
-    dtype: float
--   domain: stream
-    label: g5
-    dtype: float
--   domain: stream
-    label: g6
-    dtype: float
+-   label: g1
+-   label: g2
+-   label: g3
+-   label: g4
+-   label: g5
+-   label: g6
 
 outputs:
--   domain: stream
-    label: va
-    dtype: float
--   domain: stream
-    label: vb
-    dtype: float
--   domain: stream
-    label: vc
-    dtype: float
+-   label: va
+-   label: vb
+-   label: vc
 
 outvars:
 - va

@@ -57,23 +57,31 @@ outputs: []
 
 e_left_nodes:
 -   label: p_a
-    dtype: float
+    dtype: ''
 -   label: p_b
-    dtype: float
+    dtype: ''
 -   label: p_c
-    dtype: float
+    dtype: ''
 -   label: p_n0
-    dtype: float
+    dtype: ''
 
 e_right_nodes:
 -   label: s_a
-    dtype: float
+    dtype: ''
 -   label: s_b
-    dtype: float
+    dtype: ''
 -   label: s_c
-    dtype: float
+    dtype: ''
 
 e_top_nodes: []
 
 e_bottom_nodes: []
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_xfmr_level0_3ph_y_d.grc

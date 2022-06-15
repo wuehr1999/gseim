@@ -85,6 +85,9 @@ class XbeUsr {
 
    int edge_delay_top;
 
+   vector<double> vec1,vec2;
+
+   queue<double> que1,que2;
   public:
    XbeUsr();
 

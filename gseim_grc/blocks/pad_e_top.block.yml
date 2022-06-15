@@ -47,7 +47,7 @@ parameters:
     hide: part
 
 e_bottom_nodes:
--   dtype: float
+-   label: e1
 
 documentation: |-
     This will appear as a top e pad of the subcircuit.

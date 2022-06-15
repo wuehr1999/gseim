@@ -291,6 +291,10 @@ class Application(Gtk.Application):
             print('outvar_add_connection: ground connection not allowed as outvar.')
             self.display_message('ground connection not allowed as outvar.')
             return
+        if l1[1].startswith('b') or l1[3].startswith('b'):
+            print('outvar_add_connection: bus connection not allowed as outvar.')
+            self.display_message('bus connection not allowed as outvar.')
+            return
 
         for v in ov_dict.values():
             if l1 == v[1]:
@@ -1352,6 +1356,7 @@ class Application(Gtk.Application):
                     cmd += ' ' + self.config.hier_block_lib_dir + '/'
                     cmd += ' ' + self.config.gseim_xbe_dir + '/'
                     cmd += ' ' + self.config.gseim_ebe_dir + '/'
+                    cmd += ' ' + self.config.gseim_bbe_dir + '/'
                     cmd += ' ' + page.file_path
 
                     print('grc/gui/Application.py: cmd:', cmd)
@@ -1412,10 +1417,16 @@ class Application(Gtk.Application):
             main.btwin.search_entry.show()
             main.btwin.search_entry.grab_focus()
         elif action == Actions.OPEN_HIER:
-            for b in flow_graph.selected_blocks():
-                grc_source = b.extra_data.get('grc_source', '')
-                if grc_source:
-                    main.new_page(grc_source, show=True)
+
+            if len(list(flow_graph.selected_blocks())) == 1:
+                for b in flow_graph.selected_blocks():
+                    grc_source = b.extra_data.get('grc_source', '')
+                    if grc_source:
+                        main.new_page(grc_source, show=True)
+                    else:
+                        self.display_message("open hier allowed only for hier blocks")
+            else:
+                self.display_message("open hier allowed only when a single block is selected")
 
         else:
             log.warning('!!! Action "%s" not handled !!!' % action)

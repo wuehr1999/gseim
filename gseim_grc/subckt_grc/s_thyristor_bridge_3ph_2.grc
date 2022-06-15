@@ -4,6 +4,7 @@ options:
     category: '[GRC Hier Blocks]'
     comment: ''
     copyright: ''
+    delta_show_grid: '0'
     description: ''
     drawing_scheme: name
     engine_output: GUI_window
@@ -45,7 +46,7 @@ blocks:
     rotate_strict: 'yes'
     v0: '0.0'
   states:
-    coordinate: [696, 291]
+    coordinate: [696, 288]
     rotation: 270
     state: true
 - name: c$1
@@ -68,7 +69,7 @@ blocks:
     rotate_strict: 'yes'
     v0: '0.0'
   states:
-    coordinate: [735, 291]
+    coordinate: [735, 288]
     rotation: 270
     state: true
 - name: c$2
@@ -91,7 +92,7 @@ blocks:
     rotate_strict: 'yes'
     v0: '0.0'
   states:
-    coordinate: [657, 291]
+    coordinate: [657, 288]
     rotation: 270
     state: true
 - name: connector_e_3$0
@@ -501,7 +502,7 @@ blocks:
     port_sep_y: '4'
     rotate_strict: 'no'
   states:
-    coordinate: [360, 294]
+    coordinate: [360, 291]
     rotation: 0
     state: true
 - name: dummy_source$4
@@ -556,7 +557,7 @@ blocks:
     port_sep_x: '0'
     port_sep_y: '0'
     rotate_strict: 'yes'
-    T: T
+    t_period: '0'
     theta_delay: '60'
     theta_delay_1: '0'
     x_high: x_high
@@ -585,7 +586,7 @@ blocks:
     port_sep_x: '0'
     port_sep_y: '0'
     rotate_strict: 'yes'
-    T: T
+    t_period: '0'
     theta_delay: '60'
     theta_delay_1: '0'
     x_high: x_high
@@ -614,7 +615,7 @@ blocks:
     port_sep_x: '0'
     port_sep_y: '0'
     rotate_strict: 'yes'
-    T: T
+    t_period: '0'
     theta_delay: '60'
     theta_delay_1: '0'
     x_high: x_high
@@ -643,7 +644,7 @@ blocks:
     port_sep_x: '0'
     port_sep_y: '0'
     rotate_strict: 'yes'
-    T: T
+    t_period: '0'
     theta_delay: '60'
     theta_delay_1: '0'
     x_high: x_high
@@ -672,7 +673,7 @@ blocks:
     port_sep_x: '0'
     port_sep_y: '0'
     rotate_strict: 'yes'
-    T: T
+    t_period: '0'
     theta_delay: '60'
     theta_delay_1: '0'
     x_high: x_high
@@ -858,7 +859,7 @@ blocks:
     v_on: v_on
     x_high: x_high
   states:
-    coordinate: [390, 291]
+    coordinate: [390, 288]
     rotation: 180
     state: true
 - name: thyristor$3
@@ -985,6 +986,7 @@ connections:
 - [thyristor$2, et0, connector_e_3$0, el0]
 - [thyristor$5, eb0, connector_e_4$1, eb0]
 gparms:
+  T: 20m
   cap: 10p
   drawing_scheme: symbol
   flag_frequency: '1'
@@ -1002,7 +1004,6 @@ gparms:
   r_off: 10M
   r_on: 1m
   rotate_strict: 'yes'
-  T: 20m
   v_on: '0'
   x_high: '1'
 outvars: {}

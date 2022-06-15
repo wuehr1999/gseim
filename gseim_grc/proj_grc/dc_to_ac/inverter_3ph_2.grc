@@ -507,56 +507,8 @@ blocks:
     port_sep_y: '0'
     rotate_strict: 'no'
   states:
-    coordinate: [252, 381]
-    rotation: 90
-    state: true
-- name: dummy_e$11
-  id: dummy_e
-  parameters:
-    comment: ''
-    drawing_scheme: name
-    mirror: none
-    n: b
-    port_block_x: '0'
-    port_block_y: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'no'
-  states:
-    coordinate: [252, 360]
-    rotation: 270
-    state: true
-- name: dummy_e$12
-  id: dummy_e
-  parameters:
-    comment: ''
-    drawing_scheme: name
-    mirror: none
-    n: c
-    port_block_x: '0'
-    port_block_y: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'no'
-  states:
-    coordinate: [309, 360]
-    rotation: 270
-    state: true
-- name: dummy_e$13
-  id: dummy_e
-  parameters:
-    comment: ''
-    drawing_scheme: name
-    mirror: none
-    n: a
-    port_block_x: '0'
-    port_block_y: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'no'
-  states:
-    coordinate: [363, 360]
-    rotation: 270
+    coordinate: [312, 375]
+    rotation: 180
     state: true
 - name: dummy_e$14
   id: dummy_e
@@ -589,38 +541,6 @@ blocks:
   states:
     coordinate: [966, 189]
     rotation: 90
-    state: true
-- name: dummy_e$16
-  id: dummy_e
-  parameters:
-    comment: ''
-    drawing_scheme: name
-    mirror: none
-    n: c1
-    port_block_x: '0'
-    port_block_y: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'no'
-  states:
-    coordinate: [309, 471]
-    rotation: 270
-    state: true
-- name: dummy_e$17
-  id: dummy_e
-  parameters:
-    comment: ''
-    drawing_scheme: name
-    mirror: none
-    n: a1
-    port_block_x: '0'
-    port_block_y: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'no'
-  states:
-    coordinate: [363, 471]
-    rotation: 270
     state: true
 - name: dummy_e$2
   id: dummy_e
@@ -667,8 +587,8 @@ blocks:
     port_sep_y: '0'
     rotate_strict: 'no'
   states:
-    coordinate: [252, 276]
-    rotation: 90
+    coordinate: [318, 294]
+    rotation: 180
     state: true
 - name: dummy_e$5
   id: dummy_e
@@ -683,8 +603,8 @@ blocks:
     port_sep_y: '0'
     rotate_strict: 'no'
   states:
-    coordinate: [309, 276]
-    rotation: 90
+    coordinate: [318, 318]
+    rotation: 180
     state: true
 - name: dummy_e$6
   id: dummy_e
@@ -699,24 +619,8 @@ blocks:
     port_sep_y: '0'
     rotate_strict: 'no'
   states:
-    coordinate: [363, 276]
-    rotation: 90
-    state: true
-- name: dummy_e$7
-  id: dummy_e
-  parameters:
-    comment: ''
-    drawing_scheme: name
-    mirror: none
-    n: b1
-    port_block_x: '0'
-    port_block_y: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'no'
-  states:
-    coordinate: [252, 471]
-    rotation: 270
+    coordinate: [318, 342]
+    rotation: 180
     state: true
 - name: dummy_e$8
   id: dummy_e
@@ -731,8 +635,8 @@ blocks:
     port_sep_y: '0'
     rotate_strict: 'no'
   states:
-    coordinate: [309, 381]
-    rotation: 90
+    coordinate: [312, 399]
+    rotation: 180
     state: true
 - name: dummy_e$9
   id: dummy_e
@@ -747,8 +651,8 @@ blocks:
     port_sep_y: '0'
     rotate_strict: 'no'
   states:
-    coordinate: [363, 384]
-    rotation: 90
+    coordinate: [318, 423]
+    rotation: 180
     state: true
 - name: dummy_sink$0
   id: dummy_sink
@@ -907,7 +811,7 @@ blocks:
     port_sep_y: '4'
     rotate_strict: 'no'
   states:
-    coordinate: [516, 351]
+    coordinate: [516, 348]
     rotation: 0
     state: true
 - name: dummy_source$4
@@ -923,7 +827,7 @@ blocks:
     port_sep_y: '4'
     rotate_strict: 'no'
   states:
-    coordinate: [633, 351]
+    coordinate: [633, 348]
     rotation: 0
     state: true
 - name: dummy_source$5
@@ -939,7 +843,7 @@ blocks:
     port_sep_y: '4'
     rotate_strict: 'no'
   states:
-    coordinate: [750, 351]
+    coordinate: [750, 348]
     rotation: 0
     state: true
 - name: ground$0
@@ -1126,166 +1030,194 @@ blocks:
     coordinate: [165, 96]
     rotation: 0
     state: true
-- name: s_switch_diode_1$0
-  id: s_switch_diode_1
+- name: s_switch_diode_2$1
+  id: s_switch_diode_2
   parameters:
-    c_snubber: c_snubber
     comment: ''
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
     r_on: r_on
-    r_snubber: r_snubber
     rotate_strict: 'yes'
     v_on_d: '0'
     v_on_s: '0'
-    x_high: x_high
-  states:
-    coordinate: [552, 144]
-    rotation: 0
-    state: true
-- name: s_switch_diode_1$1
-  id: s_switch_diode_1
-  parameters:
-    c_snubber: c_snubber
-    comment: ''
-    drawing_scheme: symbol
-    mirror: none
-    name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
-    port_offset_l: '0'
-    port_offset_r: '0'
-    port_offset_t: '-4'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    r_off: r_off
-    r_on: r_on
-    r_snubber: r_snubber
-    rotate_strict: 'yes'
-    v_on_d: '0'
-    v_on_s: '0'
-    x_high: x_high
+    x_high: '1'
   states:
     coordinate: [669, 144]
     rotation: 0
     state: true
-- name: s_switch_diode_1$2
-  id: s_switch_diode_1
+- name: s_switch_diode_2$2
+  id: s_switch_diode_2
   parameters:
-    c_snubber: c_snubber
     comment: ''
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
     r_on: r_on
-    r_snubber: r_snubber
     rotate_strict: 'yes'
     v_on_d: '0'
     v_on_s: '0'
-    x_high: x_high
+    x_high: '1'
   states:
     coordinate: [786, 144]
     rotation: 0
     state: true
-- name: s_switch_diode_1$3
-  id: s_switch_diode_1
+- name: s_switch_diode_2$3
+  id: s_switch_diode_2
   parameters:
-    c_snubber: c_snubber
     comment: ''
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
     r_on: r_on
-    r_snubber: r_snubber
     rotate_strict: 'yes'
     v_on_d: '0'
     v_on_s: '0'
-    x_high: x_high
+    x_high: '1'
   states:
-    coordinate: [552, 330]
+    coordinate: [552, 144]
     rotation: 0
     state: true
-- name: s_switch_diode_1$4
-  id: s_switch_diode_1
+- name: s_switch_diode_2$4
+  id: s_switch_diode_2
   parameters:
-    c_snubber: c_snubber
     comment: ''
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
     r_on: r_on
-    r_snubber: r_snubber
     rotate_strict: 'yes'
     v_on_d: '0'
     v_on_s: '0'
-    x_high: x_high
+    x_high: '1'
   states:
-    coordinate: [669, 330]
+    coordinate: [552, 327]
     rotation: 0
     state: true
-- name: s_switch_diode_1$5
-  id: s_switch_diode_1
+- name: s_switch_diode_2$5
+  id: s_switch_diode_2
   parameters:
-    c_snubber: c_snubber
     comment: ''
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
     r_on: r_on
-    r_snubber: r_snubber
     rotate_strict: 'yes'
     v_on_d: '0'
     v_on_s: '0'
-    x_high: x_high
+    x_high: '1'
   states:
-    coordinate: [786, 330]
+    coordinate: [669, 327]
+    rotation: 0
+    state: true
+- name: s_switch_diode_2$6
+  id: s_switch_diode_2
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '-1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r_off: r_off
+    r_on: r_on
+    rotate_strict: 'yes'
+    v_on_d: '0'
+    v_on_s: '0'
+    x_high: '1'
+  states:
+    coordinate: [786, 327]
+    rotation: 0
+    state: true
+- name: s_voltmeter_3ph_line_1$0
+  id: s_voltmeter_3ph_line_1
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [351, 291]
+    rotation: 0
+    state: true
+- name: s_voltmeter_3ph_line_1$1
+  id: s_voltmeter_3ph_line_1
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [351, 372]
     rotation: 0
     state: true
 - name: show_parameter$0
@@ -1335,126 +1267,6 @@ blocks:
     coordinate: [234, 234]
     rotation: 0
     state: true
-- name: voltmeter_1$0
-  id: voltmeter_1
-  parameters:
-    comment: ''
-    drawing_scheme: symbol
-    mirror: none
-    name: none
-    port_block_x: '6'
-    port_block_y: '5'
-    port_offset_b: '0'
-    port_offset_l: '0'
-    port_offset_r: '0'
-    port_offset_t: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'yes'
-  states:
-    coordinate: [243, 309]
-    rotation: 0
-    state: true
-- name: voltmeter_1$1
-  id: voltmeter_1
-  parameters:
-    comment: ''
-    drawing_scheme: symbol
-    mirror: none
-    name: none
-    port_block_x: '6'
-    port_block_y: '5'
-    port_offset_b: '0'
-    port_offset_l: '0'
-    port_offset_r: '0'
-    port_offset_t: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'yes'
-  states:
-    coordinate: [300, 309]
-    rotation: 0
-    state: true
-- name: voltmeter_1$2
-  id: voltmeter_1
-  parameters:
-    comment: ''
-    drawing_scheme: symbol
-    mirror: none
-    name: none
-    port_block_x: '6'
-    port_block_y: '5'
-    port_offset_b: '0'
-    port_offset_l: '0'
-    port_offset_r: '0'
-    port_offset_t: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'yes'
-  states:
-    coordinate: [354, 309]
-    rotation: 0
-    state: true
-- name: voltmeter_1$3
-  id: voltmeter_1
-  parameters:
-    comment: ''
-    drawing_scheme: symbol
-    mirror: none
-    name: none
-    port_block_x: '6'
-    port_block_y: '5'
-    port_offset_b: '0'
-    port_offset_l: '0'
-    port_offset_r: '0'
-    port_offset_t: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'yes'
-  states:
-    coordinate: [243, 420]
-    rotation: 0
-    state: true
-- name: voltmeter_1$4
-  id: voltmeter_1
-  parameters:
-    comment: ''
-    drawing_scheme: symbol
-    mirror: none
-    name: none
-    port_block_x: '6'
-    port_block_y: '5'
-    port_offset_b: '0'
-    port_offset_l: '0'
-    port_offset_r: '0'
-    port_offset_t: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'yes'
-  states:
-    coordinate: [300, 420]
-    rotation: 0
-    state: true
-- name: voltmeter_1$5
-  id: voltmeter_1
-  parameters:
-    comment: ''
-    drawing_scheme: symbol
-    mirror: none
-    name: none
-    port_block_x: '6'
-    port_block_y: '5'
-    port_offset_b: '0'
-    port_offset_l: '0'
-    port_offset_r: '0'
-    port_offset_t: '0'
-    port_sep_x: '0'
-    port_sep_y: '0'
-    rotate_strict: 'yes'
-  states:
-    coordinate: [354, 420]
-    rotation: 0
-    state: true
 - name: vsrc_dc$0
   id: vsrc_dc
   parameters:
@@ -1493,26 +1305,17 @@ connections:
 - [connector_e_3$4, el0, connector_e_3$8, er0]
 - [connector_e_3$5, el0, connector_e_3$7, et0]
 - [connector_e_3$5, er0, connector_e_3$6, el0]
-- [connector_e_3$5, et0, s_switch_diode_1$3, eb0]
-- [connector_e_3$6, er0, s_switch_diode_1$5, eb0]
-- [connector_e_3$6, et0, s_switch_diode_1$4, eb0]
+- [connector_e_3$6, er0, s_switch_diode_2$6, eb0]
 - [connector_e_3$7, el0, vsrc_dc$0, eb0]
 - [connector_e_3$7, er0, ground$0, et0]
-- [connector_e_3$8, el0, s_switch_diode_1$2, et0]
 - [connector_e_4$0, eb0, c$0, el0]
 - [connector_e_4$0, el0, s_rl_series$0, er0]
 - [connector_e_4$0, er0, s_rl_series$3, el0]
-- [connector_e_4$1, eb0, s_switch_diode_1$3, et0]
 - [connector_e_4$1, el0, dummy_e$1, el0]
 - [connector_e_4$1, er0, s_rl_series$0, el0]
-- [connector_e_4$1, et0, s_switch_diode_1$0, eb0]
-- [connector_e_4$2, eb0, s_switch_diode_1$4, et0]
 - [connector_e_4$2, el0, dummy_e$2, el0]
 - [connector_e_4$2, er0, s_rl_series$1, el0]
-- [connector_e_4$2, et0, s_switch_diode_1$1, eb0]
-- [connector_e_4$3, eb0, s_switch_diode_1$5, et0]
 - [connector_e_4$3, er0, s_rl_series$2, el0]
-- [connector_e_4$3, et0, s_switch_diode_1$2, eb0]
 - [connector_e_4$4, eb0, c$1, el0]
 - [connector_e_4$4, el0, s_rl_series$1, er0]
 - [connector_e_4$4, er0, s_rl_series$4, el0]
@@ -1526,32 +1329,35 @@ connections:
 - [connector_f_3b$0, '0', cmpr_2_2$2, '1']
 - [connector_f_3b$0, '1', cmpr_2_2$0, '1']
 - [dummy_e$0, el0, connector_e_4$0, et0]
-- [dummy_e$10, el0, voltmeter_1$3, et0]
-- [dummy_e$11, el0, voltmeter_1$0, eb0]
-- [dummy_e$12, el0, voltmeter_1$1, eb0]
-- [dummy_e$13, el0, voltmeter_1$2, eb0]
+- [dummy_e$10, el0, s_voltmeter_3ph_line_1$1, el0]
 - [dummy_e$14, el0, connector_e_4$5, et0]
 - [dummy_e$15, el0, connector_e_4$4, et0]
-- [dummy_e$16, el0, voltmeter_1$4, eb0]
-- [dummy_e$17, el0, voltmeter_1$5, eb0]
 - [dummy_e$3, el0, connector_e_4$3, el0]
-- [dummy_e$4, el0, voltmeter_1$0, et0]
-- [dummy_e$5, el0, voltmeter_1$1, et0]
-- [dummy_e$6, el0, voltmeter_1$2, et0]
-- [dummy_e$7, el0, voltmeter_1$3, eb0]
-- [dummy_e$8, el0, voltmeter_1$4, et0]
-- [dummy_e$9, el0, voltmeter_1$5, et0]
-- [dummy_source$0, '0', s_switch_diode_1$0, '0']
-- [dummy_source$1, '0', s_switch_diode_1$1, '0']
-- [dummy_source$2, '0', s_switch_diode_1$2, '0']
-- [dummy_source$3, '0', s_switch_diode_1$3, '0']
-- [dummy_source$4, '0', s_switch_diode_1$4, '0']
-- [dummy_source$5, '0', s_switch_diode_1$5, '0']
+- [dummy_e$4, el0, s_voltmeter_3ph_line_1$0, el0]
+- [dummy_e$5, el0, s_voltmeter_3ph_line_1$0, el1]
+- [dummy_e$6, el0, s_voltmeter_3ph_line_1$0, el2]
+- [dummy_e$8, el0, s_voltmeter_3ph_line_1$1, el1]
+- [dummy_e$9, el0, s_voltmeter_3ph_line_1$1, el2]
+- [dummy_source$0, '0', s_switch_diode_2$3, '0']
+- [dummy_source$1, '0', s_switch_diode_2$1, '0']
+- [dummy_source$2, '0', s_switch_diode_2$2, '0']
+- [dummy_source$3, '0', s_switch_diode_2$4, '0']
+- [dummy_source$4, '0', s_switch_diode_2$5, '0']
+- [dummy_source$5, '0', s_switch_diode_2$6, '0']
 - [s_src_ac_3ph$0, '0', cmpr_2_2$0, '0']
 - [s_src_ac_3ph$0, '1', connector_f_2B$0, '0']
 - [s_src_ac_3ph$0, '2', connector_f_2B$1, '0']
-- [s_switch_diode_1$0, et0, connector_e_3$4, et0]
-- [s_switch_diode_1$1, et0, connector_e_3$8, et0]
+- [s_switch_diode_2$1, eb0, connector_e_4$2, et0]
+- [s_switch_diode_2$1, et0, connector_e_3$8, et0]
+- [s_switch_diode_2$2, eb0, connector_e_4$3, et0]
+- [s_switch_diode_2$2, et0, connector_e_3$8, el0]
+- [s_switch_diode_2$3, eb0, connector_e_4$1, et0]
+- [s_switch_diode_2$3, et0, connector_e_3$4, et0]
+- [s_switch_diode_2$4, eb0, connector_e_3$5, et0]
+- [s_switch_diode_2$4, et0, connector_e_4$1, eb0]
+- [s_switch_diode_2$5, eb0, connector_e_3$6, et0]
+- [s_switch_diode_2$5, et0, connector_e_4$2, eb0]
+- [s_switch_diode_2$6, et0, connector_e_4$3, eb0]
 - [triangle_2$0, '0', connector_f_3a$0, '0']
 - [vsrc_dc$0, et0, connector_e_3$4, er0]
 gparms:
@@ -1561,7 +1367,7 @@ gparms:
   R1: 1m
   R2: '10'
   c_snubber: 10p
-  delt_min: 0.002u
+  delt_min: 0.05u
   delt_nrml: 0.5u
   r_off: 10M
   r_on: 0.1m
@@ -1616,28 +1422,28 @@ outvars:
     - '1'
   v_a1b1:
   - outvar
-  - - voltmeter_1$3
-    - v
+  - - s_voltmeter_3ph_line_1$1
+    - v_ab
   v_ab:
   - outvar
-  - - voltmeter_1$0
-    - v
+  - - s_voltmeter_3ph_line_1$0
+    - v_ab
   v_b1c1:
   - outvar
-  - - voltmeter_1$4
-    - v
+  - - s_voltmeter_3ph_line_1$1
+    - v_bc
   v_bc:
   - outvar
-  - - voltmeter_1$1
-    - v
+  - - s_voltmeter_3ph_line_1$0
+    - v_bc
   v_c1a1:
   - outvar
-  - - voltmeter_1$5
-    - v
+  - - s_voltmeter_3ph_line_1$1
+    - v_ca
   v_ca:
   - outvar
-  - - voltmeter_1$2
-    - v
+  - - s_voltmeter_3ph_line_1$0
+    - v_ca
 solve_blocks:
 - d_parms:
     algorithm_e: backward_euler
@@ -1710,8 +1516,10 @@ solve_blocks:
     tstep0_x: none
     write_iter_n_e: '1000'
     write_iter_n_x: '1000'
+    write_time_e: 'no'
     write_time_x: 'no'
     x_nr_check_delx_all: 'no'
+    x_nr_check_rhs2: 'yes'
     x_nr_dmp: 'no'
     x_nr_dmp0: 'no'
     x_nr_dmp_itermax: '50'
@@ -1719,6 +1527,7 @@ solve_blocks:
     x_nr_dmp_k: '0.2'
     x_nr_dmp_k0: '0.2'
     x_nr_eps_delx_all: '1.0e-4'
+    x_nr_eps_rhs: '1.0e-6'
     x_nr_itermax: '500'
     x_nr_itermax0: '500'
     x_nr_write_rhs2: 'no'
@@ -1756,12 +1565,12 @@ output_blocks:
   index_slv: '0'
   name: out$1
   outvars:
-  - v_a1b1
   - v_ab
-  - v_b1c1
   - v_bc
-  - v_c1a1
   - v_ca
+  - v_a1b1
+  - v_b1c1
+  - v_c1a1
 - d_parms:
     append: 'no'
     filename: out3.dat

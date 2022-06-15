@@ -452,8 +452,6 @@ blocks:
     delt_min: delt_min
     delt_nrml: delt_nrml
     drawing_scheme: name
-    flag_invert: '0'
-    flag_quad: '0'
     mirror: none
     name: none
     port_block_x: '10'
@@ -768,6 +766,7 @@ solve_blocks:
     tstep0_x: delt_nrml
     write_iter_n_e: '1000'
     write_iter_n_x: '100000'
+    write_time_e: 'no'
     write_time_x: 'no'
     x_nr_check_delx_all: 'no'
     x_nr_dmp: 'no'

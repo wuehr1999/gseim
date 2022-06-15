@@ -36,6 +36,10 @@ variables:
    double k0;
 source:
 // cout << "const.xbe" << endl;
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    k0 = X.rprm[nr_k_scale]*X.rprm[nr_k];
    if (G.flags[G.i_init_guess]) {
      X.val_vr[nvr_y] = k0;
@@ -53,10 +57,6 @@ source:
          J.dgdvr[ng_1][nvr_y] = 1.0;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
 endC

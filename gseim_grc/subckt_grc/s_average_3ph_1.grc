@@ -1,0 +1,208 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    delta_show_grid: '0'
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_average_3ph_1
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: average\n   3ph
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: average_mv_2$0
+  id: average_mv_2
+  parameters:
+    T: T_avg
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [276, 111]
+    rotation: 0
+    state: true
+- name: average_mv_2$1
+  id: average_mv_2
+  parameters:
+    T: T_avg
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [276, 159]
+    rotation: 0
+    state: true
+- name: average_mv_2$2
+  id: average_mv_2
+  parameters:
+    T: T_avg
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [276, 207]
+    rotation: 0
+    state: true
+- name: bus_f_i_3$0
+  id: bus_f_i_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '2'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [213, 150]
+    rotation: 0
+    state: true
+- name: bus_f_o_3$0
+  id: bus_f_o_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '2'
+    port_sep_x: '0'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+  states:
+    coordinate: [366, 150]
+    rotation: 0
+    state: true
+- name: pad_b_left$0
+  id: pad_b_left
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: x
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [162, 168]
+    rotation: 0
+    state: true
+- name: pad_b_right$0
+  id: pad_b_right
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [399, 168]
+    rotation: 0
+    state: true
+connections:
+- [average_mv_2$0, '0', bus_f_o_3$0, '0']
+- [average_mv_2$1, '0', bus_f_o_3$0, '1']
+- [average_mv_2$2, '0', bus_f_o_3$0, '2']
+- [bus_f_i_3$0, '0', average_mv_2$0, '0']
+- [bus_f_i_3$0, '1', average_mv_2$1, '0']
+- [bus_f_i_3$0, '2', average_mv_2$2, '0']
+- [bus_f_i_3$0, bl0, pad_b_left$0, br0]
+- [bus_f_o_3$0, br0, pad_b_right$0, bl0]
+gparms:
+  T_avg: 1m
+  drawing_scheme: name
+  mirror: none
+  port_block_x: '4'
+  port_block_y: '4'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
+  port_sep_x: '4'
+  port_sep_y: '4'
+  rotate_strict: 'no'
+outvars:
+  x_a:
+  - outvar
+  - - average_mv_2$0
+    - x
+  x_b:
+  - outvar
+  - - average_mv_2$1
+    - x
+  x_c:
+  - outvar
+  - - average_mv_2$2
+    - x
+  y_a:
+  - outvar
+  - - average_mv_2$0
+    - y
+  y_b:
+  - outvar
+  - - average_mv_2$1
+    - y
+  y_c:
+  - outvar
+  - - average_mv_2$2
+    - y
+solve_blocks: []
+output_blocks: []

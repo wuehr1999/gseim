@@ -352,6 +352,10 @@ class FlowGraph(Element):
               'e_right' : block.e_rights,
               'e_top'   : block.e_tops,
               'e_bottom': block.e_bottoms,
+              'b_left'  : block.b_lefts,
+              'b_right' : block.b_rights,
+              'b_top'   : block.b_tops,
+              'b_bottom': block.b_bottoms,
             }[dir]
 
             for port in ports:
@@ -381,10 +385,7 @@ class FlowGraph(Element):
 
                 # build the connection
 
-                if not src_port_id.startswith('e'):
-                    source_port = verify_and_get_port(src_port_id, source_block, 'source')
-                    sink_port = verify_and_get_port(snk_port_id, sink_block, 'sink')
-                else:
+                if src_port_id.startswith('e'):
 
                     src_port_id_1 = src_port_id[2:].strip()
                     snk_port_id_1 = snk_port_id[2:].strip()
@@ -408,6 +409,33 @@ class FlowGraph(Element):
 
                     source_port = verify_and_get_port(src_port_id_1, source_block, src_port_type)
                     sink_port = verify_and_get_port(snk_port_id_1, sink_block, snk_port_type)
+                elif src_port_id.startswith('b'):
+
+                    src_port_id_1 = src_port_id[2:].strip()
+                    snk_port_id_1 = snk_port_id[2:].strip()
+
+                    src_prefix = src_port_id[0:2]
+                    snk_prefix = snk_port_id[0:2]
+
+                    src_port_type = {
+                       'bl' : 'b_left',
+                       'br' : 'b_right',
+                       'bt' : 'b_top',
+                       'bb' : 'b_bottom',
+                    }[src_prefix]
+
+                    snk_port_type = {
+                       'bl' : 'b_left',
+                       'br' : 'b_right',
+                       'bt' : 'b_top',
+                       'bb' : 'b_bottom',
+                    }[snk_prefix]
+
+                    source_port = verify_and_get_port(src_port_id_1, source_block, src_port_type)
+                    sink_port = verify_and_get_port(snk_port_id_1, sink_block, snk_port_type)
+                else:
+                    source_port = verify_and_get_port(src_port_id, source_block, 'source')
+                    sink_port = verify_and_get_port(snk_port_id, sink_block, 'sink')
 
                 self.connect(source_port, sink_port)
 

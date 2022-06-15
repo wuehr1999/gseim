@@ -75,6 +75,14 @@ void x_abc_to_alphabeta_3(Global &G,XbeUsr &X,XbeJac &J) {
 
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_a] = X.val_vr[nvr_a];
+     X.outprm[no_b] = X.val_vr[nvr_b];
+     X.outprm[no_c] = X.val_vr[nvr_c];
+     X.outprm[no_alpha] = X.val_vr[nvr_alpha];
+     X.outprm[no_beta ] = X.val_vr[nvr_beta ];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      a = X.val_vr[nvr_a];
      b = X.val_vr[nvr_b];
@@ -101,14 +109,6 @@ void x_abc_to_alphabeta_3(Global &G,XbeUsr &X,XbeJac &J) {
          J.dgdvr[ng_2][nvr_c   ] =  k3;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_a] = X.val_vr[nvr_a];
-     X.outprm[no_b] = X.val_vr[nvr_b];
-     X.outprm[no_c] = X.val_vr[nvr_c];
-     X.outprm[no_alpha] = X.val_vr[nvr_alpha];
-     X.outprm[no_beta ] = X.val_vr[nvr_beta ];
      return;
    }
    return;
@@ -146,6 +146,14 @@ void x_abc_to_dq(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr[nvr_vds] = - k3*(vbn - vcn);
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_van] = X.val_vr[nvr_van];
+     X.outprm[no_vbn] = X.val_vr[nvr_vbn];
+     X.outprm[no_vcn] = X.val_vr[nvr_vcn];
+     X.outprm[no_vqs] = X.val_vr[nvr_vqs];
+     X.outprm[no_vds] = X.val_vr[nvr_vds];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      van = X.val_vr[nvr_van];
      vbn = X.val_vr[nvr_vbn];
@@ -173,12 +181,125 @@ void x_abc_to_dq(Global &G,XbeUsr &X,XbeJac &J) {
      }
      return;
    }
+   return;
+}
+void x_abc_to_dq0_2(Global &G,XbeUsr &X,XbeJac &J) {
+   static double k1=0,k2=0,k3=0;
+   double c1,s1;
+   double xa,xb,xc,theta;
+   double xd,xq,x0;
+   double c,s;
+   const int nvr_xa = 0;
+   const int nvr_xb = 1;
+   const int nvr_xc = 2;
+   const int nvr_theta = 3;
+   const int nvr_xd = 4;
+   const int nvr_xq = 5;
+   const int nvr_x0 = 6;
+   const int no_xa = 0;
+   const int no_xb = 1;
+   const int no_xc = 2;
+   const int no_xd = 3;
+   const int no_xq = 4;
+   const int no_x0 = 5;
+   const int na_c = 0;
+   const int na_s = 1;
+   const int ng_1 = 0;
+   const int ng_2 = 1;
+   const int ng_3 = 2;
+   const int ng_4 = 3;
+   const int ng_5 = 4;
+   if (G.flags[G.i_one_time_parms]) {
+     k1 = 1.0/3.0;
+     k2 = 1.0/(sqrt(3.0));
+     k3 = 2.0/3.0;
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     xa    = X.val_vr[nvr_xa   ];
+     xb    = X.val_vr[nvr_xb   ];
+     xc    = X.val_vr[nvr_xc   ];
+     theta = X.val_vr[nvr_theta];
+
+     c = cos(theta);
+     s = sin(theta);
+
+     X.val_aux[na_c] = c;
+     X.val_aux[na_s] = s;
+
+     X.val_vr[nvr_xd] = - xa*(-k3*c) - xb*(k1*c-k2*s) - xc*( k1*c+k2*s);
+     X.val_vr[nvr_xq] = - xa*(-k3*s) - xb*(k2*c+k1*s) - xc*(-k2*c+k1*s);
+     X.val_vr[nvr_x0] = k1*(xa + xb + xc);
+
+     return;
+   }
    if (G.flags[G.i_outvar]) {
-     X.outprm[no_van] = X.val_vr[nvr_van];
-     X.outprm[no_vbn] = X.val_vr[nvr_vbn];
-     X.outprm[no_vcn] = X.val_vr[nvr_vcn];
-     X.outprm[no_vqs] = X.val_vr[nvr_vqs];
-     X.outprm[no_vds] = X.val_vr[nvr_vds];
+     X.outprm[no_xa] = X.val_vr[nvr_xa];
+     X.outprm[no_xb] = X.val_vr[nvr_xb];
+     X.outprm[no_xc] = X.val_vr[nvr_xc];
+     X.outprm[no_xd] = X.val_vr[nvr_xd];
+     X.outprm[no_xq] = X.val_vr[nvr_xq];
+     X.outprm[no_x0] = X.val_vr[nvr_x0];
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     xa    = X.val_vr[nvr_xa   ];
+     xb    = X.val_vr[nvr_xb   ];
+     xc    = X.val_vr[nvr_xc   ];
+     theta = X.val_vr[nvr_theta];
+
+     c1 = cos(theta);
+     s1 = sin(theta);
+
+     if (G.flags[G.i_explicit]) {
+       X.val_aux[na_c] = c1;
+       X.val_aux[na_s] = s1;
+
+       X.val_vr[nvr_xd] = - xa*(-k3*c) - xb*(k1*c-k2*s) - xc*( k1*c+k2*s);
+       X.val_vr[nvr_xq] = - xa*(-k3*s) - xb*(k2*c+k1*s) - xc*(-k2*c+k1*s);
+       X.val_vr[nvr_x0] = k1*(xa + xb + xc);
+     } else if (G.flags[G.i_implicit]) {
+       xd = X.val_vr[nvr_xd];
+       xq = X.val_vr[nvr_xq];
+       x0 = X.val_vr[nvr_x0];
+
+       c = X.val_aux[na_c];
+       s = X.val_aux[na_s];
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = xd + xa*(-k3*c) + xb*(k1*c-k2*s) +xc*( k1*c+k2*s);
+         X.g[ng_2] = xq + xa*(-k3*s) + xb*(k2*c+k1*s) +xc*(-k2*c+k1*s);
+         X.g[ng_3] = x0 + xa*(-k1) + xb*(-k1) +xc*(-k1);
+         X.g[ng_4] = c - c1;
+         X.g[ng_5] = s - s1;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr [ng_1][nvr_xd] = 1.0;
+         J.dgdvr [ng_1][nvr_xa] = -k3*c;
+         J.dgdvr [ng_1][nvr_xb] = k1*c-k2*s;
+         J.dgdvr [ng_1][nvr_xc] = k1*c+k2*s;
+         J.dgdaux[ng_1][na_c  ] = -xa*k3 + (xb+xc)*k1;
+         J.dgdaux[ng_1][na_s  ] = -xb*k2 + xc*k2;
+
+         J.dgdvr [ng_2][nvr_xq] = 1.0;
+         J.dgdvr [ng_2][nvr_xa] = -k3*s;
+         J.dgdvr [ng_2][nvr_xb] = k2*c+k1*s;
+         J.dgdvr [ng_2][nvr_xc] = -k2*c+k1*s;
+         J.dgdaux[ng_2][na_c  ] = (xb-xc)*k2;
+         J.dgdaux[ng_2][na_s  ] = -xa*k3 + (xb+xc)*k1;
+
+         J.dgdvr [ng_3][nvr_x0] = 1.0;
+         J.dgdvr [ng_3][nvr_xa] = -k1;
+         J.dgdvr [ng_3][nvr_xb] = -k1;
+         J.dgdvr [ng_3][nvr_xc] = -k1;
+
+         J.dgdaux[ng_4][na_c     ] = 1.0;
+         J.dgdvr [ng_4][nvr_theta] =  s1;
+
+         J.dgdaux[ng_5][na_s     ] = 1.0;
+         J.dgdvr [ng_5][nvr_theta] = -c1;
+       }
+     }
      return;
    }
    return;
@@ -278,127 +399,6 @@ void x_abc_to_dq_2(Global &G,XbeUsr &X,XbeJac &J) {
    }
    return;
 }
-void x_abc_to_dq0_2(Global &G,XbeUsr &X,XbeJac &J) {
-   static double k1=0,k2=0,k3=0;
-   double c1,s1;
-   double xa,xb,xc,theta;
-   double xd,xq,x0;
-   double c,s;
-   const int nvr_xa = 0;
-   const int nvr_xb = 1;
-   const int nvr_xc = 2;
-   const int nvr_theta = 3;
-   const int nvr_xd = 4;
-   const int nvr_xq = 5;
-   const int nvr_x0 = 6;
-   const int no_xa = 0;
-   const int no_xb = 1;
-   const int no_xc = 2;
-   const int no_xd = 3;
-   const int no_xq = 4;
-   const int no_x0 = 5;
-   const int na_c = 0;
-   const int na_s = 1;
-   const int ng_1 = 0;
-   const int ng_2 = 1;
-   const int ng_3 = 2;
-   const int ng_4 = 3;
-   const int ng_5 = 4;
-   if (G.flags[G.i_one_time_parms]) {
-     k1 = 1.0/3.0;
-     k2 = 1.0/(sqrt(3.0));
-     k3 = 2.0/3.0;
-     return;
-   }
-   if (G.flags[G.i_init_guess]) {
-     xa    = X.val_vr[nvr_xa   ];
-     xb    = X.val_vr[nvr_xb   ];
-     xc    = X.val_vr[nvr_xc   ];
-     theta = X.val_vr[nvr_theta];
-
-     c = cos(theta);
-     s = sin(theta);
-
-     X.val_aux[na_c] = c;
-     X.val_aux[na_s] = s;
-
-     X.val_vr[nvr_xd] = - xa*(-k3*c) - xb*(k1*c-k2*s) - xc*( k1*c+k2*s);
-     X.val_vr[nvr_xq] = - xa*(-k3*s) - xb*(k2*c+k1*s) - xc*(-k2*c+k1*s);
-     X.val_vr[nvr_x0] = k1*(xa + xb + xc);
-
-     return;
-   }
-   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
-     xa    = X.val_vr[nvr_xa   ];
-     xb    = X.val_vr[nvr_xb   ];
-     xc    = X.val_vr[nvr_xc   ];
-     theta = X.val_vr[nvr_theta];
-
-     c1 = cos(theta);
-     s1 = sin(theta);
-
-     if (G.flags[G.i_explicit]) {
-       X.val_aux[na_c] = c1;
-       X.val_aux[na_s] = s1;
-
-       X.val_vr[nvr_xd] = - xa*(-k3*c) - xb*(k1*c-k2*s) - xc*( k1*c+k2*s);
-       X.val_vr[nvr_xq] = - xa*(-k3*s) - xb*(k2*c+k1*s) - xc*(-k2*c+k1*s);
-       X.val_vr[nvr_x0] = k1*(xa + xb + xc);
-     } else if (G.flags[G.i_implicit]) {
-       xd = X.val_vr[nvr_xd];
-       xq = X.val_vr[nvr_xq];
-       x0 = X.val_vr[nvr_x0];
-
-       c = X.val_aux[na_c];
-       s = X.val_aux[na_s];
-
-       if (G.flags[G.i_function]) {
-         X.g[ng_1] = xd + xa*(-k3*c) + xb*(k1*c-k2*s) +xc*( k1*c+k2*s);
-         X.g[ng_2] = xq + xa*(-k3*s) + xb*(k2*c+k1*s) +xc*(-k2*c+k1*s);
-         X.g[ng_3] = x0 + xa*(-k1) + xb*(-k1) +xc*(-k1);
-         X.g[ng_4] = c - c1;
-         X.g[ng_5] = s - s1;
-       }
-       if (G.flags[G.i_jacobian]) {
-         J.dgdvr [ng_1][nvr_xd] = 1.0;
-         J.dgdvr [ng_1][nvr_xa] = -k3*c;
-         J.dgdvr [ng_1][nvr_xb] = k1*c-k2*s;
-         J.dgdvr [ng_1][nvr_xc] = k1*c+k2*s;
-         J.dgdaux[ng_1][na_c  ] = -xa*k3 + (xb+xc)*k1;
-         J.dgdaux[ng_1][na_s  ] = -xb*k2 + xc*k2;
-
-         J.dgdvr [ng_2][nvr_xq] = 1.0;
-         J.dgdvr [ng_2][nvr_xa] = -k3*s;
-         J.dgdvr [ng_2][nvr_xb] = k2*c+k1*s;
-         J.dgdvr [ng_2][nvr_xc] = -k2*c+k1*s;
-         J.dgdaux[ng_2][na_c  ] = (xb-xc)*k2;
-         J.dgdaux[ng_2][na_s  ] = -xa*k3 + (xb+xc)*k1;
-
-         J.dgdvr [ng_3][nvr_x0] = 1.0;
-         J.dgdvr [ng_3][nvr_xa] = -k1;
-         J.dgdvr [ng_3][nvr_xb] = -k1;
-         J.dgdvr [ng_3][nvr_xc] = -k1;
-
-         J.dgdaux[ng_4][na_c     ] = 1.0;
-         J.dgdvr [ng_4][nvr_theta] =  s1;
-
-         J.dgdaux[ng_5][na_s     ] = 1.0;
-         J.dgdvr [ng_5][nvr_theta] = -c1;
-       }
-     }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_xa] = X.val_vr[nvr_xa];
-     X.outprm[no_xb] = X.val_vr[nvr_xb];
-     X.outprm[no_xc] = X.val_vr[nvr_xc];
-     X.outprm[no_xd] = X.val_vr[nvr_xd];
-     X.outprm[no_xq] = X.val_vr[nvr_xq];
-     X.outprm[no_x0] = X.val_vr[nvr_x0];
-     return;
-   }
-   return;
-}
 void x_abs(Global &G,XbeUsr &X,XbeJac &J) {
    double x;
    double y;
@@ -409,6 +409,11 @@ void x_abs(Global &G,XbeUsr &X,XbeJac &J) {
    const int ng_1 = 0;
    if (G.flags[G.i_init_guess]) {
      X.val_vr[nvr_y] = abs(X.val_vr[nvr_x]);
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
@@ -435,11 +440,6 @@ void x_abs(Global &G,XbeUsr &X,XbeJac &J) {
          }
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    return;
@@ -522,6 +522,12 @@ void x_atan2_rad(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr[nvr_theta] = atan2(y,x);
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x    ] = X.val_vr[nvr_x    ];
+     X.outprm[no_y    ] = X.val_vr[nvr_y    ];
+     X.outprm[no_theta] = X.val_vr[nvr_theta];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      x = X.val_vr[nvr_x];
      y = X.val_vr[nvr_y];
@@ -540,11 +546,289 @@ void x_atan2_rad(Global &G,XbeUsr &X,XbeJac &J) {
      }
      return;
    }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x    ] = X.val_vr[nvr_x    ];
-     X.outprm[no_y    ] = X.val_vr[nvr_y    ];
-     X.outprm[no_theta] = X.val_vr[nvr_theta];
+   return;
+}
+void x_average_mv_1(Global &G,XbeUsr &X,XbeJac &J) {
+   int flag_active_edge;
+   double time0,delt,delx_sum;
+   double clk,x;
+   double y;
+   int active_pos_edge,active_neg_edge;
+   double clk_high,dt,clk_cross,clk_prev,t_lapsed,x_sum,t_prev,x_prev,y0;
+   const int nvr_clk = 0;
+   const int nvr_x = 1;
+   const int nvr_y = 2;
+   const int ni_active_pos_edge = 0;
+   const int ni_active_neg_edge = 1;
+   const int nr_clk_high = 0;
+   const int nr_dt = 1;
+   const int nr_clk_cross = 2;
+   const int nr_clk_prev = 3;
+   const int nr_t_lapsed = 4;
+   const int nr_x_sum = 5;
+   const int nr_t_prev = 6;
+   const int nr_x_prev = 7;
+   const int nr_y0 = 8;
+   const int no_clk = 0;
+   const int no_x = 1;
+   const int no_y = 2;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     active_pos_edge = X.iprm[ni_active_pos_edge];
+     active_neg_edge = X.iprm[ni_active_neg_edge];
+
+     if (active_pos_edge == 0) {
+       if (active_neg_edge == 0) {
+         cout << "average_mv_1.xbe: one of pos/neg edge must be 1. Halting..." << endl;
+         exit(1);
+       }
+     } else {
+       if (active_neg_edge != 0) {
+         cout << "average_mv_1.xbe: only one of pos/neg edge must be 1. Halting..." << endl;
+         exit(1);
+       }
+     }
+     clk_high = X.rprm[nr_clk_high];
+
+     if (clk_high < 0.0) {
+       cout << "average_mv_1.xbe: check clk_high. Halting..." << endl;
+       exit(1);
+     }
+
+     clk_cross = 0.5*clk_high;
+     X.rprm[nr_clk_cross] = clk_cross;
+
+     X.rprm[nr_clk_prev] = 0.0;
+     X.rprm[nr_t_lapsed] = 0.0;
+     X.rprm[nr_x_sum   ] = 0.0;
+     X.rprm[nr_t_prev  ] = 0.0;
+     X.rprm[nr_x_prev  ] = 0.0;
+     X.rprm[nr_y0      ] = 0.0;
      return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x  ] = X.val_vr[nvr_x  ];
+     X.outprm[no_y  ] = X.val_vr[nvr_y  ];
+     X.outprm[no_clk] = X.val_vr[nvr_clk];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_next_time]) {
+     time0 = G.time_given_x;
+
+     active_pos_edge = X.iprm[ni_active_pos_edge];
+
+     clk_prev  = X.rprm[nr_clk_prev ];
+     clk_cross = X.rprm[nr_clk_cross];
+
+     clk = X.val_vr[nvr_clk];
+
+     if (active_pos_edge == 1) {
+       if ((clk_prev <= clk_cross) && (clk >= clk_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     } else {
+       if ((clk_prev >= clk_cross) && (clk <= clk_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     }
+     if (flag_active_edge == 1) {
+       G.time_nextbreak_x = time0 + X.rprm[nr_dt];
+     } else {
+       G.time_nextbreak_x = G.time_end;
+     }
+     return;
+   }
+   if (G.flags[G.i_save_history]) {
+     time0 = G.time_given_x;
+     active_pos_edge = X.iprm[ni_active_pos_edge];
+
+     clk_prev  = X.rprm[nr_clk_prev ];
+     clk_cross = X.rprm[nr_clk_cross];
+
+     clk = X.val_vr[nvr_clk];
+
+     if (active_pos_edge == 1) {
+       if ((clk_prev <= clk_cross) && (clk >= clk_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     } else {
+       if ((clk_prev >= clk_cross) && (clk <= clk_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     }
+     t_prev = X.rprm[nr_t_prev];
+     x_prev = X.rprm[nr_x_prev];
+     delt = time0-t_prev;
+     delx_sum = 0.5*delt*(X.val_vr[nvr_x]+x_prev);
+
+     if (flag_active_edge == 1) {
+       t_lapsed = X.rprm[nr_t_lapsed];
+       x_sum = X.rprm[nr_x_sum] + delx_sum;
+       if (t_lapsed > 1.0e-10) {
+         X.rprm[nr_y0] = x_sum/t_lapsed;
+       }
+       X.rprm[nr_t_lapsed] = 0.0;
+       X.rprm[nr_x_sum   ] = 0.0;
+     } else {
+       X.rprm[nr_t_lapsed] += delt;
+       X.rprm[nr_x_sum   ] += delx_sum;
+     }
+     X.rprm[nr_clk_prev] = clk;
+     X.rprm[nr_t_prev  ] = time0;
+     X.rprm[nr_x_prev  ] = X.val_vr[nvr_x];
+
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = 0.0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     y0 = X.rprm[nr_y0];
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+   }
+   return;
+}
+void x_average_mv_2(Global &G,XbeUsr &X,XbeJac &J) {
+   double time0,t0,t1,tp;
+   int n_t,n_x;
+   int n_popped;
+   double x;
+   double y;
+   double T,y0,epsl;
+   const int nvr_x = 0;
+   const int nvr_y = 1;
+   const int nr_T = 0;
+   const int nr_y0 = 1;
+   const int nr_epsl = 2;
+   const int no_x = 0;
+   const int no_y = 1;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     X.que1 = queue<double>();
+     X.que2 = queue<double>();
+     X.rprm[nr_y0] = 0.0;
+     X.rprm[nr_epsl] = X.rprm[nr_T]/1.0e3;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x  ] = X.val_vr[nvr_x  ];
+     X.outprm[no_y  ] = X.val_vr[nvr_y  ];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_save_history]) {
+     time0 = G.time_given_x;
+     x = X.val_vr[nvr_x];
+     T = X.rprm[nr_T];
+     epsl = X.rprm[nr_epsl];
+
+     n_t = X.que1.size();
+     n_x = X.que2.size();
+
+     if (n_t != n_x) {
+       cout << "average_mv_2.xbe: n_t: " << n_t << " n_x: " << n_x << endl;
+       cout << "  are not equal. Halting..." << endl; exit(1);
+     }
+
+     X.que1.push(time0);
+     X.que2.push(x);
+
+     t1 = time0 - 1.1*T;
+
+     if (n_t > 2) {
+       n_popped = 0;
+
+       while(true) {
+         if (X.que1.front() <= t1) {
+           X.que1.pop();
+           X.que2.pop();
+           n_popped++;
+         } else {
+           break;
+         }
+       }
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = 0.0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+
+   time0 = G.time_given_x;
+   T = X.rprm[nr_T];
+   epsl = X.rprm[nr_epsl];
+
+   n_t = X.que1.size();
+   n_x = X.que2.size();
+
+   if (n_t != n_x) {
+     cout << "average_mv_2.xbe: n_t: " << n_t << " n_x: " << n_x << endl;
+     cout << "  are not equal. Halting..." << endl; exit(1);
+   }
+   if (n_t > 2) {
+     x = X.val_vr[nvr_x];
+     t0 = X.que1.front();
+     tp = t0 + T;
+     if (time0 >= tp) {
+       X.rprm[nr_y0] = calc_avg_1(X.que1,X.que2,time0,x,T);
+     }
+   }
+   if (G.flags[G.i_trns]) {
+     y0 = X.rprm[nr_y0];
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
    }
    return;
 }
@@ -1186,7 +1470,6 @@ void x_clock_3ph(Global &G,XbeUsr &X,XbeJac &J) {
      return;
    }
 
-// todo
    t0   = X.rprm[nr_t0  ];
    T    = X.rprm[nr_T   ];
    epsl = X.rprm[nr_epsl];
@@ -2487,6 +2770,10 @@ void x_const(Global &G,XbeUsr &X,XbeJac &J) {
    const int no_y = 0;
    const int ng_1 = 0;
 // cout << "const.xbe" << endl;
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    k0 = X.rprm[nr_k_scale]*X.rprm[nr_k];
    if (G.flags[G.i_init_guess]) {
      X.val_vr[nvr_y] = k0;
@@ -2506,10 +2793,6 @@ void x_const(Global &G,XbeUsr &X,XbeJac &J) {
      }
      return;
    }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_y] = X.val_vr[nvr_y];
-     return;
-   }
    return;
 }
 void x_cos(Global &G,XbeUsr &X,XbeJac &J) {
@@ -2523,6 +2806,11 @@ void x_cos(Global &G,XbeUsr &X,XbeJac &J) {
    const int ng_1 = 0;
    if (G.flags[G.i_init_guess]) {
      X.val_vr[nvr_y] = cos(X.val_vr[nvr_x]);
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
@@ -2540,11 +2828,6 @@ void x_cos(Global &G,XbeUsr &X,XbeJac &J) {
          J.dgdvr[ng_1][nvr_x] = sin(x);
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    return;
@@ -2600,77 +2883,6 @@ void x_dead_zone(Global &G,XbeUsr &X,XbeJac &J) {
          } else {
            J.dgdvr[ng_1][nvr_x] = -1.0;
          }   
-       }
-     }
-     return;
-   }
-   return;
-}
-void x_delay_1(Global &G,XbeUsr &X,XbeJac &J) {
-   double x;
-   double y;
-   double t_delay,t0,rt0;
-   double y_st;
-   double y_ig;
-   const int nvr_x = 0;
-   const int nvr_y = 1;
-   const int nr_t_delay = 0;
-   const int nr_t0 = 1;
-   const int nr_rt0 = 2;
-   const int nst_y_st = 0;
-   const int nig_y_ig = 0;
-   const int no_x = 0;
-   const int no_y = 1;
-   const int nf_1 = 0;
-   const int ng_1 = 0;
-   if (G.flags[G.i_one_time_parms]) {
-     t_delay = X.rprm[nr_t_delay];
-
-     t0 = t_delay/log(2.0);
-     rt0 = 1.0/t0;
-
-     X.rprm[nr_t0 ] = t0 ;
-     X.rprm[nr_rt0] = rt0;
-     return;
-   }
-   if (G.flags[G.i_init_guess]) {
-     X.val_vr [nvr_y] = X.igprm[nig_y_ig];
-     return;
-   }
-   if (G.flags[G.i_startup]) {
-     if (G.flags[G.i_explicit]) {
-       X.val_vr[nvr_y] = X.stprm[nst_y_st];
-     } else if (G.flags[G.i_implicit]) {
-       X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
-     }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
-     return;
-   }
-   if (G.flags[G.i_trns]) {
-     if (G.flags[G.i_explicit]) {
-       if (G.flags[G.i_alg_loop]) {
-//       use h[..] for both startup and explicit/alg loop:
-         X.h[nf_1] = X.val_vr[nvr_y] - X.val_vr_u[nvr_y];
-       } else {
-         rt0 = X.rprm[nr_rt0];
-         x = X.val_vr[nvr_x];
-         y = X.val_vr[nvr_y];
-         X.f[nf_1] = rt0*(x-y);
-       }
-     } else if (G.flags[G.i_implicit]) {
-       rt0 = X.rprm[nr_rt0];
-       x = X.val_vr[nvr_x];
-       y = X.val_vr[nvr_y];
-       if (G.flags[G.i_function]) {
-         X.g[ng_1] = rt0*(x-y);
-       }
-       if (G.flags[G.i_jacobian]) {
-         J.dgdvr[ng_1][nvr_x] =  rt0;
-         J.dgdvr[ng_1][nvr_y] = -rt0;
        }
      }
      return;
@@ -2865,6 +3077,95 @@ void x_delay_onestep(Global &G,XbeUsr &X,XbeJac &J) {
    }
    return;
 }
+void x_delay_onestep_1(Global &G,XbeUsr &X,XbeJac &J) {
+   double time0;
+   bool flag_edge;
+   double x;
+   double y;
+   double x_high,dt,x_last,x_cross;
+   const int nvr_x = 0;
+   const int nvr_y = 1;
+   const int nr_x_high = 0;
+   const int nr_dt = 1;
+   const int nr_x_last = 2;
+   const int nr_x_cross = 3;
+   const int no_x = 0;
+   const int no_y = 1;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     x_high = X.rprm[nr_x_high];
+
+     if (x_high < 0.0) {
+       cout << "delay_onestep_1.xbe: check x_high. Halting..." << endl;
+       exit(1);
+     }
+     X.rprm[nr_x_cross] = 0.5*x_high;
+     X.rprm[nr_x_last] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_next_time]) {
+     time0 = G.time_given_x;
+
+     x_last  = X.rprm[nr_x_last ];
+     x_cross = X.rprm[nr_x_cross];
+
+     x = X.val_vr[nvr_x];
+
+     flag_edge = false;
+
+     if ((x_last <= x_cross) && (x > x_cross)) {
+       flag_edge = true;
+     } else if ((x_last >= x_cross) && (x < x_cross)) {
+       flag_edge = true;
+     }
+     if (flag_edge) {
+       G.time_nextbreak_x = time0 + X.rprm[nr_dt];
+     } else {
+       G.time_nextbreak_x = G.time_end;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.val_vr[nvr_x];
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - X.val_vr[nvr_x];
+       }   
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }   
+     }   
+     return;
+   }   
+   if (G.flags[G.i_save_history]) {
+     X.rprm[nr_x_last] = X.val_vr[nvr_x];
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.rprm[nr_x_last];
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - X.rprm[nr_x_last];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
 void x_diff(Global &G,XbeUsr &X,XbeJac &J) {
    double x1,x2;
    double y;
@@ -2877,6 +3178,12 @@ void x_diff(Global &G,XbeUsr &X,XbeJac &J) {
    const int ng_1 = 0;
    if (G.flags[G.i_init_guess]) {
      X.val_vr[nvr_y] = X.val_vr[nvr_x1] - X.val_vr[nvr_x2];
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
      return;
    }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
@@ -2892,12 +3199,6 @@ void x_diff(Global &G,XbeUsr &X,XbeJac &J) {
          J.dgdvr[ng_1][nvr_x2] =  1.0;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x1] = X.val_vr[nvr_x1];
-     X.outprm[no_x2] = X.val_vr[nvr_x2];
-     X.outprm[no_y ] = X.val_vr[nvr_y ];
      return;
    }
    return;
@@ -2967,113 +3268,6 @@ void x_div(Global &G,XbeUsr &X,XbeJac &J) {
          J.dgdvr[ng_1][nvr_y ] =  1.0;
          J.dgdvr[ng_1][nvr_x1] = -k*x2inv;
          J.dgdvr[ng_1][nvr_x2] =  k*x1*x2inv*x2inv;
-       }
-     }
-     return;
-   }
-   return;
-}
-void x_dq_to_abc(Global &G,XbeUsr &X,XbeJac &J) {
-   static double k1=0,k2=0,k3=0;
-   double d,q,cost,sint;
-   double a,b,c;
-   double alpha,beta;
-   const int nvr_d = 0;
-   const int nvr_q = 1;
-   const int nvr_cost = 2;
-   const int nvr_sint = 3;
-   const int nvr_a = 4;
-   const int nvr_b = 5;
-   const int nvr_c = 6;
-   const int no_d = 0;
-   const int no_q = 1;
-   const int no_a = 2;
-   const int no_b = 3;
-   const int no_c = 4;
-   const int na_alpha = 0;
-   const int na_beta = 1;
-   const int ng_1 = 0;
-   const int ng_2 = 1;
-   const int ng_3 = 2;
-   const int ng_4 = 3;
-   const int ng_5 = 4;
-   if (G.flags[G.i_one_time_parms]) {
-     k1 = 2.0/3.0;
-     k2 = 1.0/3.0;
-     k3 = 1.0/(sqrt(3.0));
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_d] = X.val_vr[nvr_d];
-     X.outprm[no_q] = X.val_vr[nvr_q];
-     X.outprm[no_a] = X.val_vr[nvr_a];
-     X.outprm[no_b] = X.val_vr[nvr_b];
-     X.outprm[no_c] = X.val_vr[nvr_c];
-     return;
-   }
-   cost = X.val_vr[nvr_cost];
-   sint = X.val_vr[nvr_sint];
-   d = X.val_vr[nvr_d];
-   q = X.val_vr[nvr_q];
-
-   if (G.flags[G.i_init_guess]) {
-     alpha = cost*d - sint*q;
-     beta  = sint*d + cost*q;
-
-     X.val_aux[na_alpha] = alpha;
-     X.val_aux[na_beta ] = beta;
-     X.val_vr[nvr_a] =  k1*alpha;
-     X.val_vr[nvr_b] = -k2*alpha + k3*beta;
-     X.val_vr[nvr_c] = -k2*alpha - k3*beta;
-
-     return;
-   }
-   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
-     if (G.flags[G.i_explicit]) {
-       alpha = cost*d - sint*q;
-       beta  = sint*d + cost*q;
-
-       X.val_aux[na_alpha] = alpha;
-       X.val_aux[na_beta ] = beta;
-
-       X.val_vr[nvr_a] =  k1*alpha;
-       X.val_vr[nvr_b] = -k2*alpha + k3*beta;
-       X.val_vr[nvr_c] = -k2*alpha - k3*beta;
-     } else if (G.flags[G.i_implicit]) {
-       alpha = X.val_aux[na_alpha];
-       beta  = X.val_aux[na_beta ];
-
-       if (G.flags[G.i_function]) {
-         X.g[ng_1] = alpha - cost*d + sint*q;
-         X.g[ng_2] = beta - sint*d - cost*q;
-
-         X.g[ng_3] = a - k1*alpha;
-         X.g[ng_4] = b + k2*alpha - k3*beta;
-         X.g[ng_5] = c + k2*alpha + k3*beta;
-       }
-       if (G.flags[G.i_jacobian]) {
-         J.dgdaux[ng_1][na_alpha] =  1.0;
-         J.dgdvr [ng_1][nvr_cost] = -d;
-         J.dgdvr [ng_1][nvr_sint] =  q;
-         J.dgdvr [ng_1][nvr_d   ] = -cost;
-         J.dgdvr [ng_1][nvr_q   ] =  sint;
-
-         J.dgdaux[ng_2][na_beta ] =  1.0;
-         J.dgdvr [ng_2][nvr_cost] = -q;
-         J.dgdvr [ng_2][nvr_sint] = -d;
-         J.dgdvr [ng_2][nvr_d   ] = -sint;
-         J.dgdvr [ng_2][nvr_q   ] = -cost;
-
-         J.dgdvr [ng_3][nvr_a   ] =  1.0;
-         J.dgdaux[ng_3][na_alpha] = -k1;
-
-         J.dgdvr [ng_4][nvr_b   ] =  1.0;
-         J.dgdaux[ng_4][na_alpha] =  k2;
-         J.dgdaux[ng_4][na_beta ] = -k3;
-
-         J.dgdvr [ng_5][nvr_c   ] =  1.0;
-         J.dgdaux[ng_5][na_alpha] =  k2;
-         J.dgdaux[ng_5][na_beta ] =  k3;
        }
      }
      return;
@@ -3194,6 +3388,113 @@ void x_dq0_to_abc_2(Global &G,XbeUsr &X,XbeJac &J) {
 
          J.dgdaux[ng_5][na_s     ] = 1.0;
          J.dgdvr [ng_5][nvr_theta] = -c1;
+       }
+     }
+     return;
+   }
+   return;
+}
+void x_dq_to_abc(Global &G,XbeUsr &X,XbeJac &J) {
+   static double k1=0,k2=0,k3=0;
+   double d,q,cost,sint;
+   double a,b,c;
+   double alpha,beta;
+   const int nvr_d = 0;
+   const int nvr_q = 1;
+   const int nvr_cost = 2;
+   const int nvr_sint = 3;
+   const int nvr_a = 4;
+   const int nvr_b = 5;
+   const int nvr_c = 6;
+   const int no_d = 0;
+   const int no_q = 1;
+   const int no_a = 2;
+   const int no_b = 3;
+   const int no_c = 4;
+   const int na_alpha = 0;
+   const int na_beta = 1;
+   const int ng_1 = 0;
+   const int ng_2 = 1;
+   const int ng_3 = 2;
+   const int ng_4 = 3;
+   const int ng_5 = 4;
+   if (G.flags[G.i_one_time_parms]) {
+     k1 = 2.0/3.0;
+     k2 = 1.0/3.0;
+     k3 = 1.0/(sqrt(3.0));
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_d] = X.val_vr[nvr_d];
+     X.outprm[no_q] = X.val_vr[nvr_q];
+     X.outprm[no_a] = X.val_vr[nvr_a];
+     X.outprm[no_b] = X.val_vr[nvr_b];
+     X.outprm[no_c] = X.val_vr[nvr_c];
+     return;
+   }
+   cost = X.val_vr[nvr_cost];
+   sint = X.val_vr[nvr_sint];
+   d = X.val_vr[nvr_d];
+   q = X.val_vr[nvr_q];
+
+   if (G.flags[G.i_init_guess]) {
+     alpha = cost*d - sint*q;
+     beta  = sint*d + cost*q;
+
+     X.val_aux[na_alpha] = alpha;
+     X.val_aux[na_beta ] = beta;
+     X.val_vr[nvr_a] =  k1*alpha;
+     X.val_vr[nvr_b] = -k2*alpha + k3*beta;
+     X.val_vr[nvr_c] = -k2*alpha - k3*beta;
+
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       alpha = cost*d - sint*q;
+       beta  = sint*d + cost*q;
+
+       X.val_aux[na_alpha] = alpha;
+       X.val_aux[na_beta ] = beta;
+
+       X.val_vr[nvr_a] =  k1*alpha;
+       X.val_vr[nvr_b] = -k2*alpha + k3*beta;
+       X.val_vr[nvr_c] = -k2*alpha - k3*beta;
+     } else if (G.flags[G.i_implicit]) {
+       alpha = X.val_aux[na_alpha];
+       beta  = X.val_aux[na_beta ];
+
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = alpha - cost*d + sint*q;
+         X.g[ng_2] = beta - sint*d - cost*q;
+
+         X.g[ng_3] = a - k1*alpha;
+         X.g[ng_4] = b + k2*alpha - k3*beta;
+         X.g[ng_5] = c + k2*alpha + k3*beta;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdaux[ng_1][na_alpha] =  1.0;
+         J.dgdvr [ng_1][nvr_cost] = -d;
+         J.dgdvr [ng_1][nvr_sint] =  q;
+         J.dgdvr [ng_1][nvr_d   ] = -cost;
+         J.dgdvr [ng_1][nvr_q   ] =  sint;
+
+         J.dgdaux[ng_2][na_beta ] =  1.0;
+         J.dgdvr [ng_2][nvr_cost] = -q;
+         J.dgdvr [ng_2][nvr_sint] = -d;
+         J.dgdvr [ng_2][nvr_d   ] = -sint;
+         J.dgdvr [ng_2][nvr_q   ] = -cost;
+
+         J.dgdvr [ng_3][nvr_a   ] =  1.0;
+         J.dgdaux[ng_3][na_alpha] = -k1;
+
+         J.dgdvr [ng_4][nvr_b   ] =  1.0;
+         J.dgdaux[ng_4][na_alpha] =  k2;
+         J.dgdaux[ng_4][na_beta ] = -k3;
+
+         J.dgdvr [ng_5][nvr_c   ] =  1.0;
+         J.dgdaux[ng_5][na_alpha] =  k2;
+         J.dgdaux[ng_5][na_beta ] =  k3;
        }
      }
      return;
@@ -3495,6 +3796,149 @@ void x_edge_delay(Global &G,XbeUsr &X,XbeJac &J) {
    }
    return;
 }
+void x_edge_delay_1(Global &G,XbeUsr &X,XbeJac &J) {
+   int flag_active_edge;
+   double time0,y0;
+   double x;
+   double y;
+   double x_high,t_delay,t_rise,x_prev,x_cross,t2,epsl1;
+   const int nvr_x = 0;
+   const int nvr_y = 1;
+   const int nr_x_high = 0;
+   const int nr_t_delay = 1;
+   const int nr_t_rise = 2;
+   const int nr_x_prev = 3;
+   const int nr_x_cross = 4;
+   const int nr_t2 = 5;
+   const int nr_epsl1 = 6;
+   const int no_x = 0;
+   const int no_y = 1;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     x_high  = X.rprm[nr_x_high ];
+     t_delay = X.rprm[nr_t_delay];
+
+     if (x_high < 0.0) {
+       cout << "edge_delay_1.xbe: x_high < 0? Halting..." << endl;
+       exit(1);
+     }
+     x_cross = 0.5*x_high;
+     X.rprm[nr_x_cross] = x_cross;
+
+     t_rise = X.rprm[nr_t_rise];
+     epsl1 = 1.1*t_rise;
+
+     X.rprm[nr_epsl1] = epsl1;
+
+     X.rprm[nr_x_prev] = 0.0;
+     X.rprm[nr_t2    ] = G.time_begin;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_save_history]) {
+     time0 = G.time_given_x;
+
+     x_prev  = X.rprm[nr_x_prev ];
+     x_cross = X.rprm[nr_x_cross];
+
+     x = X.val_vr[nvr_x];
+
+     if ((x_prev <= x_cross) && (x >= x_cross)) {
+       flag_active_edge = 1;
+     } else {
+       flag_active_edge = 0;
+     }
+     if (flag_active_edge == 1) {
+       X.rprm[nr_t2] = time0 + X.rprm[nr_t_delay];
+     }
+     X.rprm[nr_x_prev] = x;
+
+     return;
+   }
+   if (G.flags[G.i_next_time]) {
+     time0 = G.time_given_x;
+     t2 = X.rprm[nr_t2];
+
+     x_prev  = X.rprm[nr_x_prev ];
+     x_cross = X.rprm[nr_x_cross];
+     x = X.val_vr[nvr_x];
+
+     if ((x_prev <= x_cross) && (x >= x_cross)) {
+       flag_active_edge = 1;
+     } else {
+       flag_active_edge = 0;
+     }
+     if (flag_active_edge == 1) {
+       G.time_nextbreak_x = time0 + X.rprm[nr_t_delay];
+       return;
+     }
+     if (time0 < t2) {
+       t_rise = X.rprm[nr_t_rise];
+       epsl1 = X.rprm[nr_epsl1];
+
+       if ((t2-time0) <= epsl1) {
+         G.time_nextbreak_x = t2 + t_rise;
+       } else {
+         G.time_nextbreak_x = t2 - t_rise;
+       }
+     } else {
+       G.time_nextbreak_x = G.time_end;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = 0.0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     time0 = G.time_given_x;
+     x = X.val_vr[nvr_x];
+
+     x_cross = X.rprm[nr_x_cross];
+     x_prev  = X.rprm[nr_x_prev ];
+     t2      = X.rprm[nr_t2     ];
+
+     if (time0 < t2) {
+       y0 = 0.0;
+     } else {
+       if ((x < x_cross) || (x_prev < x_cross)) {
+         y0 = 0.0;
+         X.rprm[nr_t2] = G.time_begin;
+       } else {
+         y0 = X.rprm[nr_x_high];
+       }
+     }
+
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+   }
+   return;
+}
 void x_indmc1(Global &G,XbeUsr &X,XbeJac &J) {
    double ids,iqs,idr,iqr,wr,tem0;
    double p;
@@ -3598,22 +4042,6 @@ void x_indmc1(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr [nvr_wrm ] = X.stprm[nst_wrm0  ];
      return;
    }
-   if (G.flags[G.i_startup]) {
-     if (G.flags[G.i_explicit]) {
-       X.val_aux[na_psids] = X.stprm[nst_psids0];
-       X.val_aux[na_psiqs] = X.stprm[nst_psiqs0];
-       X.val_aux[na_psidr] = X.stprm[nst_psidr0];
-       X.val_aux[na_psiqr] = X.stprm[nst_psiqr0];
-       X.val_vr [nvr_wrm ] = X.stprm[nst_wrm0  ];
-     } else {
-       X.h[nf_1] = X.val_aux[na_psids] - X.stprm[nst_psids0];
-       X.h[nf_2] = X.val_aux[na_psiqs] - X.stprm[nst_psiqs0];
-       X.h[nf_3] = X.val_aux[na_psidr] - X.stprm[nst_psidr0];
-       X.h[nf_4] = X.val_aux[na_psiqr] - X.stprm[nst_psiqr0];
-       X.h[nf_5] = X.val_vr [nvr_wrm ] - X.stprm[nst_wrm0  ];
-     }
-     return;
-   }
    if (G.flags[G.i_outvar]) {
      X.outprm[no_wrm] = X.val_vr[nvr_wrm];
      X.outprm[no_vds] = X.val_vr[nvr_vds];
@@ -3642,6 +4070,22 @@ void x_indmc1(Global &G,XbeUsr &X,XbeJac &J) {
      tem0 = x1*(iqs*idr-ids*iqr);
      X.outprm[no_tem] = tem0;
 
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_aux[na_psids] = X.stprm[nst_psids0];
+       X.val_aux[na_psiqs] = X.stprm[nst_psiqs0];
+       X.val_aux[na_psidr] = X.stprm[nst_psidr0];
+       X.val_aux[na_psiqr] = X.stprm[nst_psiqr0];
+       X.val_vr [nvr_wrm ] = X.stprm[nst_wrm0  ];
+     } else {
+       X.h[nf_1] = X.val_aux[na_psids] - X.stprm[nst_psids0];
+       X.h[nf_2] = X.val_aux[na_psiqs] - X.stprm[nst_psiqs0];
+       X.h[nf_3] = X.val_aux[na_psidr] - X.stprm[nst_psidr0];
+       X.h[nf_4] = X.val_aux[na_psiqr] - X.stprm[nst_psiqr0];
+       X.h[nf_5] = X.val_vr [nvr_wrm ] - X.stprm[nst_wrm0  ];
+     }
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -3926,22 +4370,6 @@ void x_indmc2a(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr[nvr_wrm  ] = X.stprm[nst_wrm0  ];
      return;
    }
-   if (G.flags[G.i_startup]) {
-     if (G.flags[G.i_explicit]) {
-       X.val_vr[nvr_psids] = X.stprm[nst_psids0];
-       X.val_vr[nvr_psiqs] = X.stprm[nst_psiqs0];
-       X.val_vr[nvr_psidr] = X.stprm[nst_psidr0];
-       X.val_vr[nvr_psiqr] = X.stprm[nst_psiqr0];
-       X.val_vr[nvr_wrm  ] = X.stprm[nst_wrm0  ];
-     } else {
-       X.h[nf_1] = X.val_vr[nvr_psids] - X.stprm[nst_psids0];
-       X.h[nf_2] = X.val_vr[nvr_psiqs] - X.stprm[nst_psiqs0];
-       X.h[nf_3] = X.val_vr[nvr_psidr] - X.stprm[nst_psidr0];
-       X.h[nf_4] = X.val_vr[nvr_psiqr] - X.stprm[nst_psiqr0];
-       X.h[nf_5] = X.val_vr[nvr_wrm  ] - X.stprm[nst_wrm0  ];
-     }
-     return;
-   }
    if (G.flags[G.i_outvar]) {
      X.outprm[no_wrm] = X.val_vr[nvr_wrm];
      X.outprm[no_vds] = X.val_vr[nvr_vds];
@@ -3966,6 +4394,22 @@ void x_indmc2a(Global &G,XbeUsr &X,XbeJac &J) {
      tem0 = x1*(iqs*idr-ids*iqr);
      X.outprm[no_tem] = tem0;
 
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_psids] = X.stprm[nst_psids0];
+       X.val_vr[nvr_psiqs] = X.stprm[nst_psiqs0];
+       X.val_vr[nvr_psidr] = X.stprm[nst_psidr0];
+       X.val_vr[nvr_psiqr] = X.stprm[nst_psiqr0];
+       X.val_vr[nvr_wrm  ] = X.stprm[nst_wrm0  ];
+     } else {
+       X.h[nf_1] = X.val_vr[nvr_psids] - X.stprm[nst_psids0];
+       X.h[nf_2] = X.val_vr[nvr_psiqs] - X.stprm[nst_psiqs0];
+       X.h[nf_3] = X.val_vr[nvr_psidr] - X.stprm[nst_psidr0];
+       X.h[nf_4] = X.val_vr[nvr_psiqr] - X.stprm[nst_psiqr0];
+       X.h[nf_5] = X.val_vr[nvr_wrm  ] - X.stprm[nst_wrm0  ];
+     }
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -4276,6 +4720,14 @@ void x_integrator(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr [nvr_y] = X.igprm[nig_y_ig];
      return;
    }
+   if (G.flags[G.i_outvar]) {
+//   cout << "integrator: outvar" << endl;
+//   cout << "integrator: X.val_vr[nvr_x] = " << X.val_vr[nvr_x] << endl;
+//   cout << "integrator: X.val_vr[nvr_y] = " << X.val_vr[nvr_y] << endl;
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
@@ -4286,14 +4738,6 @@ void x_integrator(Global &G,XbeUsr &X,XbeJac &J) {
 //     cout << "integrator: X.val_vr[nvr_y] = " << X.val_vr[nvr_y] << endl;
        X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-//   cout << "integrator: outvar" << endl;
-//   cout << "integrator: X.val_vr[nvr_x] = " << X.val_vr[nvr_x] << endl;
-//   cout << "integrator: X.val_vr[nvr_y] = " << X.val_vr[nvr_y] << endl;
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -4349,17 +4793,17 @@ void x_integrator_1(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr [nvr_y] = X.igprm[nig_y_ig];
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
      } else if (G.flags[G.i_implicit]) {
        X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -4382,6 +4826,241 @@ void x_integrator_1(Global &G,XbeUsr &X,XbeJac &J) {
        }
      }
      return;
+   }
+   return;
+}
+void x_jkff(Global &G,XbeUsr &X,XbeJac &J) {
+   int flag_active_edge;
+   double time0,q0,q0bar;
+   double clk,j,k;
+   double q,qbar;
+   int active_pos_edge,active_neg_edge;
+   double x_high,dt,clk_prev,j_prev,k_prev,q_next,x_cross;
+   double q_st;
+   const int nvr_clk = 0;
+   const int nvr_j = 1;
+   const int nvr_k = 2;
+   const int nvr_q = 3;
+   const int nvr_qbar = 4;
+   const int ni_active_pos_edge = 0;
+   const int ni_active_neg_edge = 1;
+   const int nr_x_high = 0;
+   const int nr_dt = 1;
+   const int nr_clk_prev = 2;
+   const int nr_j_prev = 3;
+   const int nr_k_prev = 4;
+   const int nr_q_next = 5;
+   const int nr_x_cross = 6;
+   const int nst_q_st = 0;
+   const int no_clk = 0;
+   const int no_j = 1;
+   const int no_k = 2;
+   const int no_q = 3;
+   const int ng_1 = 0;
+   const int ng_2 = 1;
+   if (G.flags[G.i_one_time_parms]) {
+     active_pos_edge = X.iprm[ni_active_pos_edge];
+     active_neg_edge = X.iprm[ni_active_neg_edge];
+
+     if (active_pos_edge == 0) {
+       if (active_neg_edge == 0) {
+         cout << "jkff.xbe: one of pos/neg edge must be 1. Halting..." << endl;
+         exit(1);
+       }
+     } else {
+       if (active_neg_edge != 0) {
+         cout << "jkff.xbe: only one of pos/neg edge must be 1. Halting..." << endl;
+         exit(1);
+       }
+     }
+     x_high = X.rprm[nr_x_high];
+
+     if (x_high < 0.0) {
+       cout << "jkff.xbe: check x_high. Halting..." << endl;
+       exit(1);
+     }
+     x_cross = 0.5*x_high;
+     X.rprm[nr_x_cross] = x_cross;
+
+     X.rprm[nr_clk_prev] = 0.0;
+     X.rprm[nr_j_prev] = 0.0;
+     X.rprm[nr_k_prev] = 0.0;
+     X.rprm[nr_q_next] = 0.0;
+     return;
+   }
+
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_clk] = X.val_vr[nvr_clk];
+     X.outprm[no_j  ] = X.val_vr[nvr_j  ];
+     X.outprm[no_k  ] = X.val_vr[nvr_k  ];
+     X.outprm[no_q  ] = X.val_vr[nvr_q  ];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_q   ] = 0.0;
+     X.val_vr[nvr_qbar] = X.rprm[nr_x_high];
+     return;
+   }
+   if (G.flags[G.i_save_history]) {
+     time0 = G.time_given_x;
+     active_pos_edge = X.iprm[ni_active_pos_edge];
+
+     clk_prev = X.rprm[nr_clk_prev];
+     x_cross  = X.rprm[nr_x_cross ];
+     x_high   = X.rprm[nr_x_high  ];
+
+     clk = X.val_vr[nvr_clk];
+     j   = X.val_vr[nvr_j  ];
+     k   = X.val_vr[nvr_k  ];
+     q   = X.val_vr[nvr_q  ];
+
+     if (active_pos_edge == 1) {
+       if ((clk_prev <= x_cross) && (clk >= x_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     } else {
+       if ((clk_prev >= x_cross) && (clk <= x_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     }
+     if (flag_active_edge == 1) {
+       j_prev = X.rprm[nr_j_prev];
+       k_prev = X.rprm[nr_k_prev];
+
+       if (j_prev > x_cross) {
+         if (k_prev > x_cross) {
+           if (q > x_cross) {
+             q_next = 0.0;
+           } else {
+             q_next = x_high;
+           }
+         } else {
+           q_next = x_high;
+         }
+       } else {
+         if (k_prev > x_cross) {
+           q_next = 0.0;
+         } else {
+           q_next = q;
+         }
+       }
+     } else {
+       q_next = q;
+     }
+
+     X.rprm[nr_clk_prev] = clk;
+     X.rprm[nr_j_prev  ] = j;
+     X.rprm[nr_k_prev  ] = k;
+     X.rprm[nr_q_next  ] = q_next;
+
+     return;
+   }
+   if (G.flags[G.i_next_time]) {
+     time0 = G.time_given_x;
+
+     active_pos_edge = X.iprm[ni_active_pos_edge];
+
+     clk_prev = X.rprm[nr_clk_prev];
+     x_cross  = X.rprm[nr_x_cross ];
+
+     clk = X.val_vr[nvr_clk];
+
+     if (active_pos_edge == 1) {
+       if ((clk_prev <= x_cross) && (clk >= x_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     } else {
+       if ((clk_prev >= x_cross) && (clk <= x_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     }
+     if (flag_active_edge == 1) {
+       G.time_nextbreak_x = time0 + X.rprm[nr_dt];
+     } else {
+       G.time_nextbreak_x = G.time_end;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       q_st = X.stprm[nst_q_st];
+
+       x_cross = X.rprm[nr_x_cross];
+       x_high  = X.rprm[nr_x_high ];
+
+       if (q_st > x_cross) {
+         X.val_vr[nvr_q   ] = x_high;
+         X.val_vr[nvr_qbar] = 0.0;
+       } else {
+         X.val_vr[nvr_q   ] = 0.0;
+         X.val_vr[nvr_qbar] = x_high;
+       }
+     } else if (G.flags[G.i_implicit]) {
+       q_st = X.stprm[nst_q_st];
+
+       x_cross = X.rprm[nr_x_cross];
+       x_high  = X.rprm[nr_x_high ];
+
+       if (q_st > x_cross) {
+         q0    = x_high;
+         q0bar = 0.0;
+       } else {
+         q0    = 0.0;
+         q0bar = x_high;
+       }
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_q   ] - q0;
+         X.g[ng_2] = X.val_vr[nvr_qbar] - q0bar;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_q   ] = 1.0;
+         J.dgdvr[ng_2][nvr_qbar] = 1.0;
+       }
+     }
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     time0 = G.time_given_x;
+
+     if (G.iter_trns_x == 0) {
+       if (G.flags[G.i_slv_init]) {
+         q0 = X.rprm[nr_q_next];
+       } else {
+         q0 = X.val_vr[nvr_q];
+       }
+     } else {
+       q0 = X.rprm[nr_q_next];
+     }
+
+     x_cross = X.rprm[nr_x_cross];
+     x_high  = X.rprm[nr_x_high ];
+
+     if (q0 > x_cross) {
+       q0bar = 0.0;
+     } else {
+       q0bar = x_high;
+     }
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_q   ] = q0;
+       X.val_vr[nvr_qbar] = q0bar;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_q   ] - q0;
+         X.g[ng_2] = X.val_vr[nvr_qbar] - q0bar;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_q   ] = 1.0;
+         J.dgdvr[ng_2][nvr_qbar] = 1.0;
+       }
+     }
    }
    return;
 }
@@ -4412,17 +5091,17 @@ void x_lag_1(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr [nvr_y] = X.igprm[nig_y_ig];
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
      } else if (G.flags[G.i_implicit]) {
        X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -4479,17 +5158,17 @@ void x_lag_2(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr [nvr_y] = X.igprm[nig_y_ig];
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
      } else if (G.flags[G.i_implicit]) {
        X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -4629,6 +5308,11 @@ void x_linear(Global &G,XbeUsr &X,XbeJac &J) {
      X.rprm[nr_b] = b;
      X.rprm[nr_c] = c;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
 
    a = X.rprm[nr_a];
    b = X.rprm[nr_b];
@@ -4650,11 +5334,6 @@ void x_linear(Global &G,XbeUsr &X,XbeJac &J) {
          J.dgdvr[ng_1][nvr_x] = -b;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    return;
@@ -4897,44 +5576,6 @@ void x_monostable_1(Global &G,XbeUsr &X,XbeJac &J) {
    }
    return;
 }
-void x_multscl(Global &G,XbeUsr &X,XbeJac &J) {
-   double x;
-   double y;
-   double k;
-   const int nvr_x = 0;
-   const int nvr_y = 1;
-   const int nr_k = 0;
-   const int no_x = 0;
-   const int no_y = 1;
-   const int ng_1 = 0;
-   k = X.rprm[nr_k];
-   if (G.flags[G.i_init_guess]) {
-     X.val_vr[nvr_y] = k*X.val_vr[nvr_x];
-     return;
-   }
-   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
-     if (G.flags[G.i_explicit]) {
-       X.val_vr[nvr_y] = k*X.val_vr[nvr_x];
-//     cout << "multscl.xbe: x = " << X.val_vr[nvr_x]
-//      << " y = " << X.val_vr[nvr_y] << endl;
-     } else if (G.flags[G.i_implicit]) {
-       if (G.flags[G.i_function]) {
-         X.g[ng_1] = X.val_vr[nvr_y] - k*X.val_vr[nvr_x];
-       }
-       if (G.flags[G.i_jacobian]) {
-         J.dgdvr[ng_1][nvr_y] = 1.0;
-         J.dgdvr[ng_1][nvr_x] = -k;
-       }
-     }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
-     return;
-   }
-   return;
-}
 void x_mult_2(Global &G,XbeUsr &X,XbeJac &J) {
    double x1,x2;
    double y;
@@ -4950,6 +5591,12 @@ void x_mult_2(Global &G,XbeUsr &X,XbeJac &J) {
    k = X.rprm[nr_k];
    if (G.flags[G.i_init_guess]) {
      X.val_vr[nvr_y] = k*X.val_vr[nvr_x1]*X.val_vr[nvr_x2];
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
      return;
    }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
@@ -4971,10 +5618,42 @@ void x_mult_2(Global &G,XbeUsr &X,XbeJac &J) {
      }
      return;
    }
+   return;
+}
+void x_multscl(Global &G,XbeUsr &X,XbeJac &J) {
+   double x;
+   double y;
+   double k;
+   const int nvr_x = 0;
+   const int nvr_y = 1;
+   const int nr_k = 0;
+   const int no_x = 0;
+   const int no_y = 1;
+   const int ng_1 = 0;
+   k = X.rprm[nr_k];
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = k*X.val_vr[nvr_x];
+     return;
+   }
    if (G.flags[G.i_outvar]) {
-     X.outprm[no_x1] = X.val_vr[nvr_x1];
-     X.outprm[no_x2] = X.val_vr[nvr_x2];
-     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = k*X.val_vr[nvr_x];
+//     cout << "multscl.xbe: x = " << X.val_vr[nvr_x]
+//      << " y = " << X.val_vr[nvr_y] << endl;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - k*X.val_vr[nvr_x];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+         J.dgdvr[ng_1][nvr_x] = -k;
+       }
+     }
      return;
    }
    return;
@@ -5123,6 +5802,9 @@ void x_pole_complex_order_1(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_aux[na_z1] = 0.0;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
@@ -5131,9 +5813,6 @@ void x_pole_complex_order_1(Global &G,XbeUsr &X,XbeJac &J) {
        X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
        X.h[nf_2] = X.val_aux[na_z1];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -5209,6 +5888,9 @@ void x_pole_complex_order_2(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_aux[na_z3] = 0.0;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
@@ -5221,9 +5903,6 @@ void x_pole_complex_order_2(Global &G,XbeUsr &X,XbeJac &J) {
        X.h[nf_3] = X.val_aux[na_z2];
        X.h[nf_4] = X.val_aux[na_z3];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -5298,15 +5977,15 @@ void x_pole_real_order_1(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr [nvr_y] = 0.0;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
      } else if (G.flags[G.i_implicit]) {
        X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -5358,6 +6037,9 @@ void x_pole_real_order_2(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_aux[na_z1] = 0.0;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
@@ -5366,9 +6048,6 @@ void x_pole_real_order_2(Global &G,XbeUsr &X,XbeJac &J) {
        X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
        X.h[nf_2] = X.val_aux[na_z1];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -5431,6 +6110,9 @@ void x_pole_real_order_3(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_aux[na_z2] = 0.0;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
@@ -5441,9 +6123,6 @@ void x_pole_real_order_3(Global &G,XbeUsr &X,XbeJac &J) {
        X.h[nf_2] = X.val_aux[na_z1];
        X.h[nf_3] = X.val_aux[na_z2];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -5517,6 +6196,9 @@ void x_pole_real_order_4(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_aux[na_z3] = 0.0;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
@@ -5529,9 +6211,6 @@ void x_pole_real_order_4(Global &G,XbeUsr &X,XbeJac &J) {
        X.h[nf_3] = X.val_aux[na_z2];
        X.h[nf_4] = X.val_aux[na_z3];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -5616,6 +6295,9 @@ void x_pole_real_order_5(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_aux[na_z4] = 0.0;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
@@ -5630,9 +6312,6 @@ void x_pole_real_order_5(Global &G,XbeUsr &X,XbeJac &J) {
        X.h[nf_4] = X.val_aux[na_z3];
        X.h[nf_5] = X.val_aux[na_z4];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
      return;
    }
    if (G.flags[G.i_trns]) {
@@ -6459,6 +7138,11 @@ void x_sin(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr[nvr_y] = sin(X.val_vr[nvr_x]);
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = sin(X.val_vr[nvr_x]);
@@ -6474,11 +7158,6 @@ void x_sin(Global &G,XbeUsr &X,XbeJac &J) {
          J.dgdvr[ng_1][nvr_x] = -cos(x);
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    return;
@@ -6522,6 +7201,10 @@ void x_src_ac(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr[nvr_y] = v0;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      a       = X.rprm[nr_a      ];
      t0      = X.rprm[nr_t0     ];
@@ -6540,10 +7223,6 @@ void x_src_ac(Global &G,XbeUsr &X,XbeJac &J) {
          J.dgdvr[ng_1][nvr_y] = 1.0;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    return;
@@ -6567,6 +7246,12 @@ void x_sum_2(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr[nvr_y] = k1*X.val_vr[nvr_x1] + k2*X.val_vr[nvr_x2];
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = k1*X.val_vr[nvr_x1] + k2*X.val_vr[nvr_x2];
@@ -6585,12 +7270,6 @@ void x_sum_2(Global &G,XbeUsr &X,XbeJac &J) {
          J.dgdvr[ng_1][nvr_x2] = -k2;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x1] = X.val_vr[nvr_x1];
-     X.outprm[no_x2] = X.val_vr[nvr_x2];
-     X.outprm[no_y ] = X.val_vr[nvr_y ];
      return;
    }
    return;
@@ -6618,6 +7297,13 @@ void x_sum_3(Global &G,XbeUsr &X,XbeJac &J) {
      X.val_vr[nvr_y] = k1*X.val_vr[nvr_x1] + k2*X.val_vr[nvr_x2] + k3*X.val_vr[nvr_x3];
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_x3] = X.val_vr[nvr_x3];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = k1*X.val_vr[nvr_x1] + k2*X.val_vr[nvr_x2] + k3*X.val_vr[nvr_x3];
@@ -6635,13 +7321,6 @@ void x_sum_3(Global &G,XbeUsr &X,XbeJac &J) {
          J.dgdvr[ng_1][nvr_x3] = -k3;
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x1] = X.val_vr[nvr_x1];
-     X.outprm[no_x2] = X.val_vr[nvr_x2];
-     X.outprm[no_x3] = X.val_vr[nvr_x3];
-     X.outprm[no_y ] = X.val_vr[nvr_y ];
      return;
    }
    return;
@@ -7340,6 +8019,18 @@ void x_vsi_3ph_1(Global &G,XbeUsr &X,XbeJac &J) {
      X.rprm[nr_Lby2] = Lby2;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_va] = X.val_vr[nvr_va];
+     X.outprm[no_vb] = X.val_vr[nvr_vb];
+     X.outprm[no_vc] = X.val_vr[nvr_vc];
+     X.outprm[no_g1] = X.val_vr[nvr_g1];
+     X.outprm[no_g2] = X.val_vr[nvr_g2];
+     X.outprm[no_g3] = X.val_vr[nvr_g3];
+     X.outprm[no_g4] = X.val_vr[nvr_g4];
+     X.outprm[no_g5] = X.val_vr[nvr_g5];
+     X.outprm[no_g6] = X.val_vr[nvr_g6];
+     return;
+   }
 
    g1 = X.val_vr[nvr_g1];
    g2 = X.val_vr[nvr_g2];
@@ -7428,18 +8119,6 @@ void x_vsi_3ph_1(Global &G,XbeUsr &X,XbeJac &J) {
      }
      return;
    }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_va] = X.val_vr[nvr_va];
-     X.outprm[no_vb] = X.val_vr[nvr_vb];
-     X.outprm[no_vc] = X.val_vr[nvr_vc];
-     X.outprm[no_g1] = X.val_vr[nvr_g1];
-     X.outprm[no_g2] = X.val_vr[nvr_g2];
-     X.outprm[no_g3] = X.val_vr[nvr_g3];
-     X.outprm[no_g4] = X.val_vr[nvr_g4];
-     X.outprm[no_g5] = X.val_vr[nvr_g5];
-     X.outprm[no_g6] = X.val_vr[nvr_g6];
-     return;
-   }
    return;
 }
 void x_xfer_fn(Global &G,XbeUsr &X,XbeJac &J) {
@@ -7465,5 +8144,89 @@ void x_xfer_fn(Global &G,XbeUsr &X,XbeJac &J) {
    const int nr_b5 = 11;
    const int nr_f0 = 12;
    const int nst_y_sv = 0;
+   return;
+}
+void x_xor_2(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0;
+   bool X1,X2,Y;
+   double x1,x2;
+   double y;
+   double y_high,hb2;
+   const int nvr_x1 = 0;
+   const int nvr_x2 = 1;
+   const int nvr_y = 2;
+   const int nr_y_high = 0;
+   const int nr_hb2 = 1;
+   const int no_x1 = 0;
+   const int no_x2 = 1;
+   const int no_y = 2;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     y_high = X.rprm[nr_y_high];
+     hb2 = 0.5*y_high;
+     X.rprm[nr_hb2] = hb2;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
+   y_high = X.rprm[nr_y_high];
+   hb2 = X.rprm[nr_hb2];
+
+   x1 = X.val_vr[nvr_x1];
+   x2 = X.val_vr[nvr_x2];
+   X1 = x1 > hb2;
+   X2 = x2 > hb2;
+
+   Y = X1 != X2;
+
+   if (Y) {
+     y0 = y_high;
+   } else {
+     y0 = 0.0;
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y ] =  1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
+void x_x_dummy(Global &G,XbeUsr &X,XbeJac &J) {
+   double x;
+   const int nvr_x = 0;
+   const int no_x = 0;
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     return;
+   }
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     return;
+   }
    return;
 }

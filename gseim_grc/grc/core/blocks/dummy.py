@@ -62,5 +62,13 @@ class DummyBlock(Block):
             self.e_tops.append(port)
         elif port.is_e_bottom:
             self.e_bottoms.append(port)
+        elif port.is_b_left:
+            self.b_lefts.append(port)
+        elif port.is_b_right:
+            self.b_rights.append(port)
+        elif port.is_b_top:
+            self.b_tops.append(port)
+        elif port.is_b_bottom:
+            self.b_bottoms.append(port)
 
         return port

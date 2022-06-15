@@ -4,6 +4,7 @@ options:
     category: '[GRC Hier Blocks]'
     comment: ''
     copyright: ''
+    delta_show_grid: '0'
     description: ''
     drawing_scheme: name
     engine_output: GUI_window
@@ -194,7 +195,7 @@ blocks:
     rotate_strict: 'no'
     type: float
   states:
-    coordinate: [549, 144]
+    coordinate: [555, 144]
     rotation: 0
     state: true
 - name: pad_e_right$2
@@ -230,7 +231,7 @@ blocks:
     rotate_strict: 'no'
     type: float
   states:
-    coordinate: [558, 333]
+    coordinate: [555, 333]
     rotation: 0
     state: true
 - name: xfmr_level0_1ph$0

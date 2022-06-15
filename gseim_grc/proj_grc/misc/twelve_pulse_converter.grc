@@ -425,7 +425,7 @@ blocks:
     port_sep_y: '4'
     rotate_strict: 'no'
   states:
-    coordinate: [303, 351]
+    coordinate: [318, 351]
     rotation: 0
     state: true
 - name: dummy_sink$1
@@ -441,7 +441,7 @@ blocks:
     port_sep_y: '4'
     rotate_strict: 'no'
   states:
-    coordinate: [303, 396]
+    coordinate: [318, 396]
     rotation: 0
     state: true
 - name: dummy_source$0
@@ -628,8 +628,8 @@ blocks:
     coordinate: [108, 339]
     rotation: 0
     state: true
-- name: s_gate_pulse_2$0
-  id: s_gate_pulse_2
+- name: s_gate_pulses_12p$0
+  id: s_gate_pulses_12p
   parameters:
     T: computed
     alpha: '40'
@@ -656,8 +656,8 @@ blocks:
     coordinate: [216, 339]
     rotation: 0
     state: true
-- name: s_gate_pulse_2$1
-  id: s_gate_pulse_2
+- name: s_gate_pulses_12p$1
+  id: s_gate_pulses_12p
   parameters:
     T: computed
     alpha: '70'
@@ -953,8 +953,8 @@ connections:
 - [connector_e_3$7, et0, r$0, el0]
 - [connector_e_3$8, el0, s_thyristor_bridge_3ph_2$1, er1]
 - [connector_e_3$8, et0, l$0, er0]
-- [connector_f_3b$0, '0', s_gate_pulse_2$1, '0']
-- [connector_f_3b$0, '1', s_gate_pulse_2$0, '0']
+- [connector_f_3b$0, '0', s_gate_pulses_12p$1, '0']
+- [connector_f_3b$0, '1', s_gate_pulses_12p$0, '0']
 - [dummy_e$0, el0, connector_e_3$3, et0]
 - [dummy_e$1, el0, connector_e_3$4, et0]
 - [dummy_e$10, el0, voltmeter_1$1, et0]
@@ -974,8 +974,8 @@ connections:
 - [ground$3, et0, s_xfmr_level0_3ph_y_d$0, el3]
 - [l$0, el0, r$0, er0]
 - [s_filter_lp_2$0, '0', connector_f_3b$0, '0']
-- [s_gate_pulse_2$0, '0', dummy_sink$0, '0']
-- [s_gate_pulse_2$1, '0', dummy_sink$1, '0']
+- [s_gate_pulses_12p$0, '0', dummy_sink$0, '0']
+- [s_gate_pulses_12p$1, '0', dummy_sink$1, '0']
 - [s_thyristor_bridge_3ph_2$0, er1, connector_e_3$6, er0]
 - [s_xfmr_level0_3ph_y_d$0, er0, s_thyristor_bridge_3ph_2$1, el0]
 - [s_xfmr_level0_3ph_y_d$0, er1, s_thyristor_bridge_3ph_2$1, el1]
@@ -1082,6 +1082,7 @@ solve_blocks:
     tstep0_x: none
     write_iter_n_e: '1000'
     write_iter_n_x: '1000'
+    write_time_e: 'no'
     write_time_x: 'no'
     x_nr_check_delx_all: 'no'
     x_nr_dmp: 'no'

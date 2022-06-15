@@ -37,6 +37,11 @@ source:
      X.val_vr[nvr_y] = cos(X.val_vr[nvr_x]);
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = cos(X.val_vr[nvr_x]);
@@ -52,11 +57,6 @@ source:
          J.dgdvr[ng_1][nvr_x] = sin(x);
        }
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
 endC

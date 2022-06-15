@@ -50,6 +50,17 @@ source:
      X.rprm[nr_xhb2] = xhb2;
      return;
    }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_anode]-X.val_nd[nnd_cathode];
+     X.outprm[no_i] = X.cur_nd[nnd_anode];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+//    Assume the switch to be closed
+      X.val_nd[nnd_anode] = 0.0;
+      X.val_nd[nnd_cathode] = 0.0;
+      return;
+   }
    if (G.flags[G.i_dc]) {
      cout << "thyristor.ebe: DC not allowed. Halting..." << endl;
      exit(1);
@@ -130,17 +141,6 @@ source:
    if (G.flags[G.i_save_history]) {
      X.iprm[ni_flag_on] = X.iprm[ni_flag1];
      return;
-   }
-   if (G.flags[G.i_outvar]) {
-     X.outprm[no_v] = X.val_nd[nnd_anode]-X.val_nd[nnd_cathode];
-     X.outprm[no_i] = X.cur_nd[nnd_anode];
-     return;
-   }
-   if (G.flags[G.i_init_guess]) {
-//    Assume the switch to be closed
-      X.val_nd[nnd_anode] = 0.0;
-      X.val_nd[nnd_cathode] = 0.0;
-      return;
    }
 endC
 endebe

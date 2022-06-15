@@ -30,6 +30,7 @@ from ._flags import Flags
 def build(id, label='', category='', flags='', documentation='',
     parameters=None, inputs=None, outputs=None,
     e_left_nodes=None, e_right_nodes=None, e_top_nodes=None, e_bottom_nodes=None,
+    b_left_nodes=None, b_right_nodes=None, b_top_nodes=None, b_bottom_nodes=None,
     **kwargs):
 
 #   print('core/block/_build.py: build: id:',  id)
@@ -53,6 +54,11 @@ def build(id, label='', category='', flags='', documentation='',
     cls.e_right_data = build_ports(e_right_nodes, 'e_right') if e_right_nodes else []
     cls.e_top_data = build_ports(e_top_nodes, 'e_top') if e_top_nodes else []
     cls.e_bottom_data = build_ports(e_bottom_nodes, 'e_bottom') if e_bottom_nodes else []
+
+    cls.b_left_data = build_ports(b_left_nodes, 'b_left') if b_left_nodes else []
+    cls.b_right_data = build_ports(b_right_nodes, 'b_right') if b_right_nodes else []
+    cls.b_top_data = build_ports(b_top_nodes, 'b_top') if b_top_nodes else []
+    cls.b_bottom_data = build_ports(b_bottom_nodes, 'b_bottom') if b_bottom_nodes else []
 
     cls.parameters_data = build_params(parameters or [],
          bool(cls.inputs_data), bool(cls.outputs_data), cls.flags, block_id)

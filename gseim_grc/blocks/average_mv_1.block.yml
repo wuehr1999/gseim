@@ -1,0 +1,76 @@
+id: average_mv_1
+label: avg \nmv-1
+
+parameters:
+-   id: active_pos_edge
+    label: active_pos_edge
+    dtype: float
+    default: '1'
+-   id: active_neg_edge
+    label: active_neg_edge
+    dtype: float
+    default: '0'
+-   id: clk_high
+    label: clk_high
+    dtype: float
+    default: '1.0'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'yes'
+-   id: port_offset_l
+    label: port_offset_l
+    dtype: string
+    default: '0'
+-   id: port_offset_r
+    label: port_offset_r
+    dtype: string
+    default: '0'
+-   id: port_offset_t
+    label: port_offset_t
+    dtype: string
+    default: '0'
+-   id: port_offset_b
+    label: port_offset_b
+    dtype: string
+    default: '0'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'name'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '4'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '4'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '4'
+
+inputs:
+-   label: clk
+-   label: x
+
+outputs:
+-   label: y
+
+outvars:
+- clk
+- x
+- y

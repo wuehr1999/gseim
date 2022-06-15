@@ -200,9 +200,7 @@ parameters:
     default: '4'
 
 outputs:
--   domain: stream
-    label: y
-    dtype: float
+-   label: y
 
 outvars:
 - y

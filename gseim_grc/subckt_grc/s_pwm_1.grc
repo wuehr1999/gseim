@@ -403,8 +403,6 @@ gparms:
   delt_min: 0.1u
   delt_nrml: 10u
   drawing_scheme: name
-  flag_invert: '0'
-  flag_quad: '0'
   mirror: none
   port_block_x: '10'
   port_block_y: '4'

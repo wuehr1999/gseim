@@ -418,8 +418,6 @@ blocks:
     delt_min: delt_min
     delt_nrml: delt_nrml
     drawing_scheme: name
-    flag_invert: '0'
-    flag_quad: '0'
     mirror: none
     name: none
     port_block_x: '10'

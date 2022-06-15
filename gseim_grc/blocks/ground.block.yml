@@ -52,7 +52,6 @@ parameters:
     default: '4'
 
 e_top_nodes:
--   dtype: float
-    label: g
+-   label: g
 
 outvars: []

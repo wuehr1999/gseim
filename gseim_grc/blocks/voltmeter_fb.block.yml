@@ -40,17 +40,13 @@ parameters:
     default: '4'
 
 e_top_nodes:
--   dtype: float
-    label: p
+-   label: p
 
 e_bottom_nodes:
--   dtype: float
-    label: n
+-   label: n
 
 outputs:
--   domain: stream
-    label: v_fb
-    dtype: float
+-   label: v_fb
 
 outvars:
 - v

@@ -36,7 +36,7 @@ parameters:
     default: '0'
 
 e_left_nodes:
--   dtype: float
+-   label: e1
 
 documentation: |-
     Can be used for avoiding long wires.

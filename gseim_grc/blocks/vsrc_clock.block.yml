@@ -80,12 +80,10 @@ parameters:
     default: '10'
 
 e_top_nodes:
--   dtype: float
-    label: p
+-   label: p
 
 e_bottom_nodes:
--   dtype: float
-    label: n
+-   label: n
 
 outvars:
 - i

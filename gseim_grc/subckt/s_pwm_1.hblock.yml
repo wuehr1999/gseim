@@ -19,12 +19,6 @@ parameters:
 -   id: delt_nrml
     label: delt_nrml
     default: 10u
--   id: flag_invert
-    label: flag_invert
-    default: '0'
--   id: flag_quad
-    label: flag_quad
-    default: '0'
 -   id: tri_high
     label: tri_high
     default: '1'
@@ -84,4 +78,12 @@ e_right_nodes: []
 e_top_nodes: []
 
 e_bottom_nodes: []
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_pwm_1.grc

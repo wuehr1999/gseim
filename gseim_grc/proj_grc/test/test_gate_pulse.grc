@@ -55,6 +55,10 @@ blocks:
     name: none
     port_block_x: '4'
     port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
     port_sep_x: '4'
     port_sep_y: '4'
     rotate_strict: 'no'
@@ -115,7 +119,7 @@ blocks:
     rotate_strict: 'no'
     text: y1
   states:
-    coordinate: [468, 144]
+    coordinate: [426, 144]
     rotation: 0
     state: true
 - name: show_text$3
@@ -133,7 +137,7 @@ blocks:
     rotate_strict: 'no'
     text: y2
   states:
-    coordinate: [468, 168]
+    coordinate: [426, 168]
     rotation: 0
     state: true
 - name: triangle_2$0
@@ -259,6 +263,7 @@ solve_blocks:
     tstep0_x: delt_nrml
     write_iter_n_e: '1000'
     write_iter_n_x: '1000'
+    write_time_e: 'no'
     write_time_x: 'no'
     x_nr_check_delx_all: 'no'
     x_nr_dmp: 'no'

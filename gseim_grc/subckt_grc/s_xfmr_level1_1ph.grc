@@ -4,6 +4,7 @@ options:
     category: '[GRC Hier Blocks]'
     comment: ''
     copyright: ''
+    delta_show_grid: '0'
     description: ''
     drawing_scheme: name
     engine_output: GUI_window
@@ -301,6 +302,7 @@ blocks:
     comment: ''
     drawing_scheme: text
     element_name: r$0
+    font_size: '9'
     mirror: none
     name: none
     parameter_name: r
@@ -320,6 +322,7 @@ blocks:
     comment: ''
     drawing_scheme: text
     element_name: l$0
+    font_size: '9'
     mirror: none
     name: none
     parameter_name: l
@@ -339,6 +342,7 @@ blocks:
     comment: ''
     drawing_scheme: text
     element_name: r$3
+    font_size: '9'
     mirror: none
     name: none
     parameter_name: r
@@ -349,7 +353,7 @@ blocks:
     rotate_strict: 'no'
     show_name: do_not_show
   states:
-    coordinate: [369, 222]
+    coordinate: [375, 216]
     rotation: 0
     state: true
 - name: show_parameter$3
@@ -358,6 +362,7 @@ blocks:
     comment: ''
     drawing_scheme: text
     element_name: r$2
+    font_size: '9'
     mirror: none
     name: none
     parameter_name: r
@@ -377,6 +382,7 @@ blocks:
     comment: ''
     drawing_scheme: text
     element_name: l$1
+    font_size: '9'
     mirror: none
     name: none
     parameter_name: l
@@ -396,6 +402,7 @@ blocks:
     comment: ''
     drawing_scheme: text
     element_name: r$1
+    font_size: '9'
     mirror: none
     name: none
     parameter_name: r
@@ -407,6 +414,24 @@ blocks:
     show_name: do_not_show
   states:
     coordinate: [663, 132]
+    rotation: 0
+    state: true
+- name: show_text$0
+  id: show_text
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    font_size: '11'
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    text: xfmr1
+  states:
+    coordinate: [471, 306]
     rotation: 0
     state: true
 - name: xfmr_level0_1ph$0

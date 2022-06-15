@@ -59,7 +59,7 @@ outvars: []
 
 inputs:
 -   label: g_in
-    dtype: float
+    dtype: ''
 
 outputs: []
 
@@ -69,9 +69,17 @@ e_right_nodes: []
 
 e_top_nodes:
 -   label: anode
-    dtype: float
+    dtype: ''
 
 e_bottom_nodes:
 -   label: cathode
-    dtype: float
+    dtype: ''
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_thyristor_1.grc

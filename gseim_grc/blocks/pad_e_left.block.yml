@@ -47,7 +47,7 @@ parameters:
     hide: part
 
 e_right_nodes:
--   dtype: float
+-   label: e1
 
 documentation: |-
     This will appear as a left e pad of the subcircuit.

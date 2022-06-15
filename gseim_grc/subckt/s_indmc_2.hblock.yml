@@ -58,23 +58,23 @@ outvars:
 
 inputs:
 -   label: va
-    dtype: float
+    dtype: ''
 -   label: vb
-    dtype: float
+    dtype: ''
 -   label: vc
-    dtype: float
+    dtype: ''
 -   label: tl
-    dtype: float
+    dtype: ''
 
 outputs:
 -   label: wrm
-    dtype: float
+    dtype: ''
 -   label: ia
-    dtype: float
+    dtype: ''
 -   label: ib
-    dtype: float
+    dtype: ''
 -   label: ic
-    dtype: float
+    dtype: ''
 
 e_left_nodes: []
 
@@ -83,4 +83,12 @@ e_right_nodes: []
 e_top_nodes: []
 
 e_bottom_nodes: []
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_indmc_2.grc

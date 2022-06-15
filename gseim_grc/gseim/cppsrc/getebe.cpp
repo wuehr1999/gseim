@@ -13,6 +13,8 @@ void e_c(
  Global &G, EbeUsr &X, EbeJac &J);
 void e_diode_r(
  Global &G, EbeUsr &X, EbeJac &J);
+void e_diode_spice(
+ Global &G, EbeUsr &X, EbeJac &J);
 void e_dummy_e(
  Global &G, EbeUsr &X, EbeJac &J);
 void e_ground(
@@ -20,6 +22,10 @@ void e_ground(
 void e_l(
  Global &G, EbeUsr &X, EbeJac &J);
 void e_r(
+ Global &G, EbeUsr &X, EbeJac &J);
+void e_solar_module_1(
+ Global &G, EbeUsr &X, EbeJac &J);
+void e_solar_module_rs(
  Global &G, EbeUsr &X, EbeJac &J);
 void e_switch_1(
  Global &G, EbeUsr &X, EbeJac &J);
@@ -68,57 +74,66 @@ void get_ebe(
        e_diode_r(G,X,J);
        break;
      case 4:
-       e_dummy_e(G,X,J);
+       e_diode_spice(G,X,J);
        break;
      case 5:
-       e_ground(G,X,J);
+       e_dummy_e(G,X,J);
        break;
      case 6:
-       e_l(G,X,J);
+       e_ground(G,X,J);
        break;
      case 7:
-       e_r(G,X,J);
+       e_l(G,X,J);
        break;
      case 8:
-       e_switch_1(G,X,J);
+       e_r(G,X,J);
        break;
      case 9:
-       e_thyristor(G,X,J);
+       e_solar_module_1(G,X,J);
        break;
      case 10:
-       e_voltmeter(G,X,J);
+       e_solar_module_rs(G,X,J);
        break;
      case 11:
-       e_voltmeter_1(G,X,J);
+       e_switch_1(G,X,J);
        break;
      case 12:
-       e_voltmeter_fb(G,X,J);
+       e_thyristor(G,X,J);
        break;
      case 13:
-       e_vsrc_ac(G,X,J);
+       e_voltmeter(G,X,J);
        break;
      case 14:
-       e_vsrc_clock(G,X,J);
+       e_voltmeter_1(G,X,J);
        break;
      case 15:
-       e_vsrc_dc(G,X,J);
+       e_voltmeter_fb(G,X,J);
        break;
      case 16:
-       e_vsrc_pulse10(G,X,J);
+       e_vsrc_ac(G,X,J);
        break;
      case 17:
-       e_vsrc_x(G,X,J);
+       e_vsrc_clock(G,X,J);
        break;
      case 18:
-       e_xfmr_l1l2(G,X,J);
+       e_vsrc_dc(G,X,J);
        break;
      case 19:
-       e_xfmr_level0_1ph(G,X,J);
+       e_vsrc_pulse10(G,X,J);
        break;
      case 20:
-       e_xfmr_level2_1ph(G,X,J);
+       e_vsrc_x(G,X,J);
        break;
      case 21:
+       e_xfmr_l1l2(G,X,J);
+       break;
+     case 22:
+       e_xfmr_level0_1ph(G,X,J);
+       break;
+     case 23:
+       e_xfmr_level2_1ph(G,X,J);
+       break;
+     case 24:
        e_xfmr_level0_1ph_1_2(G,X,J);
        break;
    }

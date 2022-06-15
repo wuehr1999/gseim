@@ -1,0 +1,188 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    delta_show_grid: '0'
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: hb
+    id: s_gate_pulses_12p
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: gate\npulses-12p
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: cmpr_1_1$0
+  id: cmpr_1_1
+  parameters:
+    comment: ''
+    delt_min: delt_min
+    delt_nrml: delt_nrml
+    drawing_scheme: symbol
+    epsl: '1.0e-6'
+    flag_invert: '0'
+    flag_quad: '0'
+    mirror: none
+    name: none
+    port_block_x: '7'
+    port_block_y: '7'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    x0: '0.0'
+    y_high: x_high
+    y_low: x_low
+  states:
+    coordinate: [240, 165]
+    rotation: 0
+    state: true
+- name: edge_delay$0
+  id: edge_delay
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    flag_frequency: '1'
+    flag_period: '0'
+    frequency: frequency
+    mirror: none
+    n_delay: '1'
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t_period: '0'
+    theta_delay: alpha
+    theta_delay_1: '0'
+    x_high: x_high
+    x_low: x_low
+  states:
+    coordinate: [318, 165]
+    rotation: 0
+    state: true
+- name: monostable_1$0
+  id: monostable_1
+  parameters:
+    T: T
+    active_neg_edge: '0'
+    active_pos_edge: '1'
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    x_high: x_high
+    x_low: x_low
+    y_high: x_high
+    y_low: x_low
+  states:
+    coordinate: [396, 174]
+    rotation: 0
+    state: true
+- name: pad_sink$0
+  id: pad_sink
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: y
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [468, 174]
+    rotation: 0
+    state: true
+- name: pad_source$0
+  id: pad_source
+  parameters:
+    comment: ''
+    drawing_scheme: name
+    label: x
+    mirror: none
+    num_streams: '1'
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    type: float
+  states:
+    coordinate: [171, 174]
+    rotation: 0
+    state: true
+connections:
+- [cmpr_1_1$0, '0', edge_delay$0, '0']
+- [edge_delay$0, '0', monostable_1$0, '0']
+- [monostable_1$0, '0', pad_sink$0, '0']
+- [pad_source$0, '0', cmpr_1_1$0, '0']
+gparms:
+  T: computed
+  alpha: '90'
+  beta: '20'
+  delt_min: 0.1u
+  delt_nrml: 10u
+  drawing_scheme: name
+  frequency: '50'
+  mirror: none
+  port_block_x: '4'
+  port_block_y: '4'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
+  port_sep_x: '0'
+  port_sep_y: '0'
+  rotate_strict: 'no'
+  x_high: '1'
+  x_low: '0'
+outvars:
+  x:
+  - connection
+  - - pad_source$0
+    - '0'
+    - cmpr_1_1$0
+    - '0'
+  y:
+  - connection
+  - - monostable_1$0
+    - '0'
+    - pad_sink$0
+    - '0'
+solve_blocks: []
+output_blocks: []

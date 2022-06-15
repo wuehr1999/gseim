@@ -95,19 +95,27 @@ e_left_nodes: []
 
 e_right_nodes:
 -   label: s1_n
-    dtype: float
+    dtype: ''
 -   label: s2_p
-    dtype: float
+    dtype: ''
 
 e_top_nodes:
 -   label: p_p
-    dtype: float
+    dtype: ''
 -   label: s1_p
-    dtype: float
+    dtype: ''
 
 e_bottom_nodes:
 -   label: p_n
-    dtype: float
+    dtype: ''
 -   label: s2_n
-    dtype: float
+    dtype: ''
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_xfmr_level2_1ph_1_2.grc

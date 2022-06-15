@@ -80,20 +80,12 @@ parameters:
     default: '3'
 
 inputs:
--   domain: stream
-    label: x1
-    dtype: float
--   domain: stream
-    label: x2
-    dtype: float
+-   label: x1
+-   label: x2
 
 outputs:
--   domain: stream
-    label: y1
-    dtype: float
--   domain: stream
-    label: y2
-    dtype: float
+-   label: y1
+-   label: y2
 
 outvars:
 - x1

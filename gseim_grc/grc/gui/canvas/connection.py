@@ -215,6 +215,69 @@ class Connection(CoreConnection, Drawable):
                         rotate(px_sink[1], r_sink),
                         rotate((0, 0), r_sink),
                     ]
+            elif source.port_type == 'bus':
+                if source_mirror == 'none':
+                    px_source = {
+                       'b_right' :(( 15,  0), ( 50,  0)),
+                       'b_left'  :((-15,  0), (-50,  0)),
+                       'b_top'   :((  0,-15), (  0,-50)),
+                       'b_bottom':((  0, 15), (  0, 50)),
+                    }[source.port_subtype]
+                elif source_mirror == 'v':
+                    px_source = {
+                       'b_left'  :(( 15,  0), ( 50,  0)),
+                       'b_right' :((-15,  0), (-50,  0)),
+                       'b_top'   :((  0,-15), (  0,-50)),
+                       'b_bottom':((  0, 15), (  0, 50)),
+                    }[source.port_subtype]
+                elif source_mirror == 'h':
+                    px_source = {
+                       'b_right' :(( 15,  0), ( 50,  0)),
+                       'b_left'  :((-15,  0), (-50,  0)),
+                       'b_bottom':((  0,-15), (  0,-50)),
+                       'b_top'   :((  0, 15), (  0, 50)),
+                    }[source.port_subtype]
+
+                if sink_mirror == 'none':
+                    px_sink = {
+                       'b_right' :(( 50,  0), ( 15,  0)),
+                       'b_left'  :((-50,  0), (-15,  0)),
+                       'b_top'   :((  0,-50), (  0,-15)),
+                       'b_bottom':((  0, 50), (  0, 15)),
+                    }[sink.port_subtype]
+                elif sink_mirror == 'v':
+                    px_sink = {
+                       'b_left'  :(( 50,  0), ( 15,  0)),
+                       'b_right' :((-50,  0), (-15,  0)),
+                       'b_top'   :((  0,-50), (  0,-15)),
+                       'b_bottom':((  0, 50), (  0, 15)),
+                    }[sink.port_subtype]
+                elif sink_mirror == 'h':
+                    px_sink = {
+                       'b_right' :(( 50,  0), ( 15,  0)),
+                       'b_left'  :((-50,  0), (-15,  0)),
+                       'b_bottom':((  0,-50), (  0,-15)),
+                       'b_top'   :((  0, 50), (  0, 15)),
+                    }[sink.port_subtype]
+
+                if source_mirror == 'none' and sink_mirror == 'none':
+                    self._rel_points = [
+                        rotate(px_source[0], source.rotation),
+                        rotate(px_source[1], source.rotation),
+                        rotate(px_sink[0], sink.rotation),
+                        rotate(px_sink[1], sink.rotation),
+                        rotate((0, 0), sink.rotation),
+                    ]
+                else:
+                    r_source = (180 + source.rotation) % 360 if source_mirror == 'h' else source.rotation
+                    r_sink = (180 + sink.rotation) % 360 if sink_mirror == 'h' else sink.rotation
+                    self._rel_points = [
+                        rotate(px_source[0], r_source),
+                        rotate(px_source[1], r_source),
+                        rotate(px_sink[0], r_sink),
+                        rotate(px_sink[1], r_sink),
+                        rotate((0, 0), r_sink),
+                    ]
 
             if source.port_type == 'flowgraph':
                 self._arrow_rotation = -r_sink / 180 * pi
@@ -302,13 +365,17 @@ class Connection(CoreConnection, Drawable):
             d1 = {
               'sink'    : 0,
               'e_left'  : 0,
+              'b_left'  : 0,
               'bottom'  : 1,
               'e_bottom': 1,
+              'b_bottom': 1,
               'source'  : 2,
               'right'   : 2,
               'e_right' : 2,
+              'b_right' : 2,
               'top'     : 3,
               'e_top'   : 3,
+              'b_top'   : 3,
             }
 
             source_mirror = source.parent_block.mirror
@@ -340,6 +407,14 @@ class Connection(CoreConnection, Drawable):
                        ('e_bottom', 'v'): 'e_bottom',
                        ('e_top'   , 'h'): 'e_bottom',
                        ('e_bottom', 'h'): 'e_top',
+                       ('b_left'  , 'v'): 'b_right',
+                       ('b_right' , 'v'): 'b_left',
+                       ('b_left'  , 'h'): 'b_left',
+                       ('b_right' , 'h'): 'b_right',
+                       ('b_top'   , 'v'): 'b_top',
+                       ('b_bottom', 'v'): 'b_bottom',
+                       ('b_top'   , 'h'): 'b_bottom',
+                       ('b_bottom', 'h'): 'b_top',
                     }[(source_subtype, source_mirror)]
 
             sink_subtype = 'sink' if sink.port_subtype == '' else sink.port_subtype
@@ -357,6 +432,14 @@ class Connection(CoreConnection, Drawable):
                    ('e_bottom', 'v'): 'e_bottom',
                    ('e_top'   , 'h'): 'e_bottom',
                    ('e_bottom', 'h'): 'e_top',
+                   ('b_left'  , 'v'): 'b_right',
+                   ('b_right' , 'v'): 'b_left',
+                   ('b_left'  , 'h'): 'b_left',
+                   ('b_right' , 'h'): 'b_right',
+                   ('b_top'   , 'v'): 'b_top',
+                   ('b_bottom', 'v'): 'b_bottom',
+                   ('b_top'   , 'h'): 'b_bottom',
+                   ('b_bottom', 'h'): 'b_top',
                 }[(sink_subtype, sink_mirror)]
 
             kp_source, kp_sink = [d1[x] for x in (source_subtype, sink_subtype)]

@@ -44,6 +44,8 @@ class Port(Element):
             self.port_type = 'flowgraph'
         elif direction in ('e_left', 'e_right', 'e_top', 'e_bottom'):
             self.port_type = 'electrical'
+        elif direction in ('b_left', 'b_right', 'b_top', 'b_bottom'):
+            self.port_type = 'bus'
 
         self.key = id
         if not label:
@@ -55,6 +57,10 @@ class Port(Element):
                 'e_right': 'e',
                 'e_top': 'e',
                 'e_bottom': 'e',
+                'b_left': 'b',
+                'b_right': 'b',
+                'b_top': 'b',
+                'b_bottom': 'b',
             }[direction]
 
         self.name = self._base_name = label
@@ -80,6 +86,14 @@ class Port(Element):
             return 'e_top - {}({})'.format(self.name, self.key)
         if self.is_e_bottom:
             return 'e_bottom - {}({})'.format(self.name, self.key)
+        if self.is_b_left:
+            return 'b_left - {}({})'.format(self.name, self.key)
+        if self.is_b_right:
+            return 'b_right - {}({})'.format(self.name, self.key)
+        if self.is_b_top:
+            return 'b_top - {}({})'.format(self.name, self.key)
+        if self.is_b_bottom:
+            return 'b_bottom - {}({})'.format(self.name, self.key)
 
     def __repr__(self):
         if self.is_source:
@@ -94,6 +108,14 @@ class Port(Element):
             s1 = 'e_tops'
         elif self.is_e_bottom:
             s1 = 'e_bottoms'
+        elif self.is_b_left:
+            s1 = 'b_lefts'
+        elif self.is_b_right:
+            s1 = 'b_rights'
+        elif self.is_b_top:
+            s1 = 'b_tops'
+        elif self.is_b_bottom:
+            s1 = 'b_bottoms'
 
         return '{!r}.{}[{}]'.format(self.parent, s1, self.key)
 
@@ -121,6 +143,22 @@ class Port(Element):
     def is_e_bottom(self):
         return self._dir == 'e_bottom'
 
+    @lazy_property
+    def is_b_left(self):
+        return self._dir == 'b_left'
+
+    @lazy_property
+    def is_b_right(self):
+        return self._dir == 'b_right'
+
+    @lazy_property
+    def is_b_top(self):
+        return self._dir == 'b_top'
+
+    @lazy_property
+    def is_b_bottom(self):
+        return self._dir == 'b_bottom'
+
     def validate(self):
         Element.validate(self)
         platform = self.parent_platform
@@ -137,8 +175,6 @@ class Port(Element):
         del self.dtype
 
         Element.rewrite(self)
-
-#   edited by mbp
 
     def connections(self, enabled=None):
         """Iterator over all connections to/from this port

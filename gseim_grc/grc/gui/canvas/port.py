@@ -78,7 +78,7 @@ class Port(CorePort, Drawable):
 #       them, i.e., all of them would be horizontal or all of them would be
 #       vertical.
 
-        if self.port_category in ('e_top', 'e_bottom'):
+        if self.port_category in ('e_top', 'b_top', 'e_bottom', 'b_bottom'):
             if self.is_horizontal():
                 self._area = (0, 0, self.height, self.width)
             elif self.is_vertical():
@@ -127,7 +127,7 @@ class Port(CorePort, Drawable):
 
     def create_shapes_1(self):
 
-        if self.port_category in ('e_top', 'e_bottom'):
+        if self.port_category in ('e_top', 'b_top', 'e_bottom', 'b_bottom'):
             if self.is_horizontal():
                 self._area = (0, 0, self.height, self.width)
             elif self.is_vertical():
@@ -205,6 +205,8 @@ class Port(CorePort, Drawable):
         else:
             if self.port_category in ('e_left', 'e_right', 'e_top', 'e_bottom'):
                 cr.set_source_rgba(*colors.E_PORT_COLOR)
+            elif self.port_category in ('b_left', 'b_right', 'b_top', 'b_bottom'):
+                cr.set_source_rgba(*colors.B_PORT_COLOR)
             else:
                 cr.set_source_rgba(*colors.F_PORT_COLOR)
 
@@ -236,12 +238,12 @@ class Port(CorePort, Drawable):
                     cr.rotate(-math.pi / 2)
                     cr.translate(-self.width, 0)
         else:
-            if self.port_category in ('sink', 'source', 'e_left', 'e_right'):
+            if self.port_category in ('sink', 'source', 'e_left', 'e_right', 'b_left', 'b_right'):
                 if self.is_vertical():
                     cr.rotate(-math.pi / 2)
                     cr.translate(-self.width, 0)
 
-        if self.port_category in ('e_top', 'e_bottom'):
+        if self.port_category in ('e_top', 'e_bottom', 'b_top', 'b_bottom'):
             if self.is_horizontal():
                 cr.rotate(-math.pi / 2)
                 cr.translate(-self.width, 0)
@@ -262,6 +264,10 @@ class Port(CorePort, Drawable):
                   'e_right' : 'right',
                   'e_top'   : 'top',
                   'e_bottom': 'bottom',
+                  'b_left'  : 'left',
+                  'b_right' : 'right',
+                  'b_top'   : 'top',
+                  'b_bottom': 'bottom',
                 }[self.port_category]
             elif _mirror == 'v':
                 port_pos = {
@@ -271,6 +277,10 @@ class Port(CorePort, Drawable):
                   'e_right' : 'left',
                   'e_top'   : 'top',
                   'e_bottom': 'bottom',
+                  'b_left'  : 'right',
+                  'b_right' : 'left',
+                  'b_top'   : 'top',
+                  'b_bottom': 'bottom',
                 }[self.port_category]
             elif _mirror == 'h':
                 port_pos = {
@@ -280,6 +290,10 @@ class Port(CorePort, Drawable):
                   'e_right' : 'right',
                   'e_top'   : 'bottom',
                   'e_bottom': 'top',
+                  'b_left'  : 'left',
+                  'b_right' : 'right',
+                  'b_top'   : 'bottom',
+                  'b_bottom': 'top',
                 }[self.port_category]
 
         _mirror = self.parent_block.mirror
@@ -354,31 +368,31 @@ class Port(CorePort, Drawable):
             r1 = self.rotation
 
             if _mirror == 'none':
-                if self.is_source or self.is_e_right:
+                if self.is_source or self.is_e_right or self.is_b_right:
                     r = r1
-                elif self.is_sink or self.is_e_left:
+                elif self.is_sink or self.is_e_left or self.is_b_left:
                     r = (r1 + 180) % 360
-                elif self.is_e_top:
+                elif self.is_e_top or self.is_b_top:
                     r = (r1 + 90) % 360
-                elif self.is_e_bottom:
+                elif self.is_e_bottom or self.is_b_bottom:
                     r = (r1 + 270) % 360
             elif _mirror == 'v':
-                if self.is_source or self.is_e_right:
+                if self.is_source or self.is_e_right or self.is_b_right:
                     r = (r1 + 180) % 360
-                elif self.is_sink or self.is_e_left:
+                elif self.is_sink or self.is_e_left or self.is_b_left:
                     r = r1
-                elif self.is_e_top:
+                elif self.is_e_top or self.is_b_top:
                     r = (r1 + 90) % 360
-                elif self.is_e_bottom:
+                elif self.is_e_bottom or self.is_b_bottom:
                     r = (r1 + 270) % 360
             elif _mirror == 'h':
-                if self.is_source or self.is_e_right:
+                if self.is_source or self.is_e_right or self.is_b_right:
                     r = r1
-                elif self.is_sink or self.is_e_left:
+                elif self.is_sink or self.is_e_left or self.is_b_left:
                     r = (r1 + 180) % 360
-                elif self.is_e_top:
+                elif self.is_e_top or self.is_b_top:
                     r = (r1 + 270) % 360
-                elif self.is_e_bottom:
+                elif self.is_e_bottom or self.is_b_bottom:
                     r = (r1 + 90) % 360
 
             return r

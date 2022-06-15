@@ -13,6 +13,15 @@ parameters:
 -   id: is0
     label: is0
     default: '0'
+-   id: k
+    label: k
+    default: '1'
+-   id: l1
+    label: l1
+    default: 1m
+-   id: l2
+    label: l2
+    default: 1m
 -   id: p_ll
     label: p_ll
     default: 1n
@@ -28,15 +37,6 @@ parameters:
 -   id: s_rs
     label: s_rs
     default: 1m
--   id: l1
-    label: l1
-    default: 1m
--   id: l2
-    label: l2
-    default: 1m
--   id: k
-    label: k
-    default: '1'
 -   id: drawing_scheme
     label: drawing_scheme
     default: symbol
@@ -82,13 +82,21 @@ e_right_nodes: []
 
 e_top_nodes:
 -   label: p_p
-    dtype: float
+    dtype: ''
 -   label: s_p
-    dtype: float
+    dtype: ''
 
 e_bottom_nodes:
 -   label: p_n
-    dtype: float
+    dtype: ''
 -   label: s_n
-    dtype: float
+    dtype: ''
+
+b_left_nodes: []
+
+b_right_nodes: []
+
+b_top_nodes: []
+
+b_bottom_nodes: []
 grc_source: ~/gseim_grc/subckt_grc/s_xfmr_level3_1ph.grc

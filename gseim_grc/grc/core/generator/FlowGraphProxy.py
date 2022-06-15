@@ -33,7 +33,7 @@ class FlowGraphProxy(object):  # TODO: move this in a refactored Generator
             a list of pad source blocks in this flow graph
         """
         pads = [b for b in self.get_enabled_blocks() if b.key == 'pad_source']
-        return sorted(pads, key=lambda x: x.name)
+        return sorted(pads, key=lambda x: int(x.name.split('$')[-1]))
 
     def get_pad_sinks(self):
         """
@@ -43,21 +43,37 @@ class FlowGraphProxy(object):  # TODO: move this in a refactored Generator
             a list of pad sink blocks in this flow graph
         """
         pads = [b for b in self.get_enabled_blocks() if b.key == 'pad_sink']
-        return sorted(pads, key=lambda x: x.name)
+        return sorted(pads, key=lambda x: int(x.name.split('$')[-1]))
 
     def get_pad_e_lefts(self):
         pads = [b for b in self.get_enabled_blocks() if b.key == 'pad_e_left']
-        return sorted(pads, key=lambda x: x.name)
+        return sorted(pads, key=lambda x: int(x.name.split('$')[-1]))
 
     def get_pad_e_rights(self):
         pads = [b for b in self.get_enabled_blocks() if b.key == 'pad_e_right']
-        return sorted(pads, key=lambda x: x.name)
+        return sorted(pads, key=lambda x: int(x.name.split('$')[-1]))
 
     def get_pad_e_tops(self):
         pads = [b for b in self.get_enabled_blocks() if b.key == 'pad_e_top']
-        return sorted(pads, key=lambda x: x.name)
+        return sorted(pads, key=lambda x: int(x.name.split('$')[-1]))
 
     def get_pad_e_bottoms(self):
         pads = [b for b in self.get_enabled_blocks() if b.key == 'pad_e_bottom']
-        return sorted(pads, key=lambda x: x.name)
+        return sorted(pads, key=lambda x: int(x.name.split('$')[-1]))
+
+    def get_pad_b_lefts(self):
+        pads = [b for b in self.get_enabled_blocks() if b.key == 'pad_b_left']
+        return sorted(pads, key=lambda x: int(x.name.split('$')[-1]))
+
+    def get_pad_b_rights(self):
+        pads = [b for b in self.get_enabled_blocks() if b.key == 'pad_b_right']
+        return sorted(pads, key=lambda x: int(x.name.split('$')[-1]))
+
+    def get_pad_b_tops(self):
+        pads = [b for b in self.get_enabled_blocks() if b.key == 'pad_b_top']
+        return sorted(pads, key=lambda x: int(x.name.split('$')[-1]))
+
+    def get_pad_b_bottoms(self):
+        pads = [b for b in self.get_enabled_blocks() if b.key == 'pad_b_bottom']
+        return sorted(pads, key=lambda x: int(x.name.split('$')[-1]))
 

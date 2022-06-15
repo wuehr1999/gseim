@@ -43,7 +43,7 @@ blocks:
     port_sep_y: '0'
     rotate_strict: 'yes'
   states:
-    coordinate: [468, 300]
+    coordinate: [465, 300]
     rotation: 270
     state: true
 - name: connector_e_2A$1
@@ -314,7 +314,6 @@ blocks:
 - name: s_vsi_3ph_3$0
   id: s_vsi_3ph_3
   parameters:
-    c_s: 10p
     comment: ''
     drawing_scheme: name
     frequency: '50'
@@ -332,7 +331,6 @@ blocks:
     port_sep_y: '6'
     r_off: 10M
     r_on: 1m
-    r_s: '0.01'
     rotate_strict: 'no'
     theta_1: a1
     theta_10: a10
@@ -628,6 +626,7 @@ solve_blocks:
     tstep0_x: none
     write_iter_n_e: '1000'
     write_iter_n_x: '1000'
+    write_time_e: 'no'
     write_time_x: 'no'
     x_nr_check_delx_all: 'no'
     x_nr_dmp: 'no'

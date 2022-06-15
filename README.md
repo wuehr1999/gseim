@@ -18,7 +18,8 @@ a Qt-python plotting GUI, and a few additional python programs.
 
 ## Installation instructions (for Linux only)
 
-- Make sure you have ``` python3 ``` and ``` g++ ``` installed.
+- Make sure you have ```python3```, ```numpy```, ```psutil```,
+  ```matplotlib```, ``` g++ ``` installed.
 - Download the ```gseim_grc``` folder in your home directory.
 - ```cd ~/gseim_grc/gseim/cppsrc```
 - ```make -f mkgseim```

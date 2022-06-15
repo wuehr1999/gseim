@@ -1,0 +1,143 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=solar_module_rs x_inputs=yes
+#
+#
+# Reference:
+#   Modelling Photovoltaic Systems Using PSpice
+#   by L. Castañer and S. Silvestre
+#
+Jacobian: variable
+nodes: p n
+state_vars:
+aux_vars:
+aux_vars_startup:
+x_vars: ta
+iparms:
+sparms:
+rparms:
++  ns=1
++  vocmr=1
++  iscmr=1
++  pmaxr=1
+stparms:
+igparms:
+outparms: i v rs p
+n_f=2
+f_1: v(p) v(n) ta
+f_2: v(p) v(n) ta
+n_g=0
+n_h=2
+h_1: v(p) v(n) ta
+h_2: v(p) v(n) ta
+C:
+variables:
+   double vt0,vt0n,vocp,ff0n,ff0d,ff0,rs;
+   double c1,c2,i1,i1_vp,i1_ta;
+   double vocp_ta,ff0_ta,rs_ta;
+   double v_p,v_n,v_pn;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_p];
+     X.outprm[no_p] = X.outprm[no_v]*X.outprm[no_i];
+
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     ns        = X.rprm[nr_ns       ];
+     vocmr     = X.rprm[nr_vocmr    ];
+     iscmr     = X.rprm[nr_iscmr    ];
+     pmaxr     = X.rprm[nr_pmaxr    ];
+
+     ta = X.val_xvr[nx_ta];
+
+     vt0 = 0.02585;
+     c1 = ns*vt0/300.0;
+     vt0n = c1*(ta + 273.15);
+
+     vocp = vocmr/vt0n;
+     vocp_ta = -vocp/ta;
+
+     ff0n = vocp-log(vocp+0.72);
+     ff0d = 1.0+vocp;
+
+     ff0 = ff0n/ff0d;
+     ff0_ta = (vocp_ta/ff0d)*(((1.0-(1.0/(vocp+0.72)))/ff0d) - ff0);
+
+     rs = (vocmr/iscmr)-(pmaxr/((iscmr*iscmr)*ff0));
+     X.outprm[no_rs] = rs;
+
+     if (rs < 1.0e-10) {
+       cout << "solar_module_rs.ebe: rs is too small!" << endl;
+       cout << "   rs = " << rs << endl;
+       cout << "   Halting..." << endl;
+       exit (1);
+     }
+
+     c2 = iscmr*ff0;
+     rs_ta = (pmaxr/(c2*c2))*ff0_ta;
+
+     v_p = X.val_nd[nnd_p];
+     v_n = X.val_nd[nnd_n];
+
+     v_pn = v_p-v_n;
+     i1 = v_pn/rs;
+     i1_vp = 1.0/rs;
+     i1_ta = -i1*rs_ta/rs;
+
+     if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+       if (G.flags[G.i_function]) {
+         X.f[nf_1] =  i1;
+         X.f[nf_2] = -i1;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dfdv  [nf_1][nnd_p] =  i1_vp;
+         J.dfdv  [nf_1][nnd_n] = -i1_vp;
+         J.dfdxvr[nf_1][nx_ta] =  i1_ta;
+
+         J.dfdv  [nf_2][nnd_p] = -i1_vp;
+         J.dfdv  [nf_2][nnd_n] =  i1_vp;
+         J.dfdxvr[nf_2][nx_ta] = -i1_ta;
+       }
+     }
+     if (G.flags[G.i_startup]) {
+       if (G.flags[G.i_function]) {
+         X.h[nh_1] =  i1;
+         X.h[nh_2] = -i1;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dhdv  [nh_1][nnd_p] =  i1_vp;
+         J.dhdv  [nh_1][nnd_n] = -i1_vp;
+         J.dhdxvr[nh_1][nx_ta] =  i1_ta;
+
+         J.dhdv  [nh_2][nnd_p] = -i1_vp;
+         J.dhdv  [nh_2][nnd_n] =  i1_vp;
+         J.dhdxvr[nh_2][nx_ta] = -i1_ta;
+       }
+     }
+   }
+endC
+endebe

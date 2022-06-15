@@ -40,6 +40,11 @@ C:
 variables:
    double c1,c2;
 source:
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_i] = X.cur_nd[nnd_p];
+      X.outprm[no_i_fb] = X.rprm[nr_k_scale]*X.cur_nd[nnd_p];
+      return;
+   }
    k_scale = X.rprm[nr_k_scale];
 
    if (k_scale == 0.0) {
@@ -81,11 +86,6 @@ source:
        J.dhdv  [nh_3][nnd_n  ] = -1.0;
      }
      return;
-   }
-   if (G.flags[G.i_outvar]) {
-      X.outprm[no_i] = X.cur_nd[nnd_p];
-      X.outprm[no_i_fb] = X.rprm[nr_k_scale]*X.cur_nd[nnd_p];
-      return;
    }
    if (G.flags[G.i_init_guess]) {
      X.val_xvr[nx_i_fb] = 0.0;

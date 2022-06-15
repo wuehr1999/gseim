@@ -120,22 +120,6 @@ source:
      X.val_vr[nvr_wrm  ] = X.stprm[nst_wrm0  ];
      return;
    }
-   if (G.flags[G.i_startup]) {
-     if (G.flags[G.i_explicit]) {
-       X.val_vr[nvr_psids] = X.stprm[nst_psids0];
-       X.val_vr[nvr_psiqs] = X.stprm[nst_psiqs0];
-       X.val_vr[nvr_psidr] = X.stprm[nst_psidr0];
-       X.val_vr[nvr_psiqr] = X.stprm[nst_psiqr0];
-       X.val_vr[nvr_wrm  ] = X.stprm[nst_wrm0  ];
-     } else {
-       X.h[nf_1] = X.val_vr[nvr_psids] - X.stprm[nst_psids0];
-       X.h[nf_2] = X.val_vr[nvr_psiqs] - X.stprm[nst_psiqs0];
-       X.h[nf_3] = X.val_vr[nvr_psidr] - X.stprm[nst_psidr0];
-       X.h[nf_4] = X.val_vr[nvr_psiqr] - X.stprm[nst_psiqr0];
-       X.h[nf_5] = X.val_vr[nvr_wrm  ] - X.stprm[nst_wrm0  ];
-     }
-     return;
-   }
    if (G.flags[G.i_outvar]) {
      X.outprm[no_wrm] = X.val_vr[nvr_wrm];
      X.outprm[no_vds] = X.val_vr[nvr_vds];
@@ -160,6 +144,22 @@ source:
      tem0 = x1*(iqs*idr-ids*iqr);
      X.outprm[no_tem] = tem0;
 
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_psids] = X.stprm[nst_psids0];
+       X.val_vr[nvr_psiqs] = X.stprm[nst_psiqs0];
+       X.val_vr[nvr_psidr] = X.stprm[nst_psidr0];
+       X.val_vr[nvr_psiqr] = X.stprm[nst_psiqr0];
+       X.val_vr[nvr_wrm  ] = X.stprm[nst_wrm0  ];
+     } else {
+       X.h[nf_1] = X.val_vr[nvr_psids] - X.stprm[nst_psids0];
+       X.h[nf_2] = X.val_vr[nvr_psiqs] - X.stprm[nst_psiqs0];
+       X.h[nf_3] = X.val_vr[nvr_psidr] - X.stprm[nst_psidr0];
+       X.h[nf_4] = X.val_vr[nvr_psiqr] - X.stprm[nst_psiqr0];
+       X.h[nf_5] = X.val_vr[nvr_wrm  ] - X.stprm[nst_wrm0  ];
+     }
      return;
    }
    if (G.flags[G.i_trns]) {

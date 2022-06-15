@@ -1,0 +1,47 @@
+id: connector_b_3
+label: c
+
+parameters:
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'no'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'none'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0' 
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '0' 
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '1' 
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '1' 
+
+b_right_nodes:
+-   label: b3
+
+b_top_nodes:
+-   label: b2
+
+b_left_nodes:
+-   label: b1
+
+outvars: []

@@ -46,6 +46,7 @@ FONT_COLOR = get_color('#000000')
 
 E_PORT_COLOR = get_color('#D2F3FC')
 F_PORT_COLOR = get_color('#fcb772')
+B_PORT_COLOR = get_color('#1bcc6d')
 PORT_NAME_COLOR = get_color('#0000ff')
 GRID_LIGHT_COLOR = get_color('#c0c6cc')
 GRID_DARK_COLOR = get_color('#a3a8ad')
@@ -62,6 +63,9 @@ FLOWGRAPH_EDGE_COLOR = COMMENT_BACKGROUND_COLOR
 
 # Block color constants
 BLOCK_ENABLED_COLOR = get_color('#F1ECFF')
+#BLOCK_BUS_COLOR = get_color('#B0B0B0')
+#BLOCK_BUS_COLOR = get_color('#0048ff')
+BLOCK_BUS_COLOR = get_color('#3f75fc')
 BLOCK_PAD_COLOR = get_color('#e0ffeb')
 
 BLOCK_DUMMY_COLOR = get_color('#fdffcf')

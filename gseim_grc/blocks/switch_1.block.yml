@@ -68,17 +68,13 @@ parameters:
     default: '10'
 
 inputs:
--   domain: stream
-    label: x
-    dtype: float
+-   label: x
 
 e_top_nodes:
--   dtype: float
-    label: p
+-   label: p
 
 e_bottom_nodes:
--   dtype: float
-    label: n
+-   label: n
 
 outvars:
 - i

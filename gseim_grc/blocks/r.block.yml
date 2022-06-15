@@ -60,12 +60,10 @@ parameters:
     default: '4'
 
 e_left_nodes:
--   dtype: float
-    label: p
+-   label: p
 
 e_right_nodes:
--   dtype: float
-    label: n
+-   label: n
 
 outvars:
 - i

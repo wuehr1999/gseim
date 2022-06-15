@@ -41,6 +41,14 @@ source:
      X.val_vr [nvr_y] = X.igprm[nig_y_ig];
      return;
    }
+   if (G.flags[G.i_outvar]) {
+//   cout << "integrator: outvar" << endl;
+//   cout << "integrator: X.val_vr[nvr_x] = " << X.val_vr[nvr_x] << endl;
+//   cout << "integrator: X.val_vr[nvr_y] = " << X.val_vr[nvr_y] << endl;
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
    if (G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y] = X.stprm[nst_y_st];
@@ -51,14 +59,6 @@ source:
 //     cout << "integrator: X.val_vr[nvr_y] = " << X.val_vr[nvr_y] << endl;
        X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
      }
-     return;
-   }
-   if (G.flags[G.i_outvar]) {
-//   cout << "integrator: outvar" << endl;
-//   cout << "integrator: X.val_vr[nvr_x] = " << X.val_vr[nvr_x] << endl;
-//   cout << "integrator: X.val_vr[nvr_y] = " << X.val_vr[nvr_y] << endl;
-     X.outprm[no_x] = X.val_vr[nvr_x];
-     X.outprm[no_y] = X.val_vr[nvr_y];
      return;
    }
    if (G.flags[G.i_trns]) {
