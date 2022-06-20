@@ -1,0 +1,485 @@
+options:
+  parameters:
+    author: mbp
+    category: '[GRC Hier Blocks]'
+    comment: ''
+    copyright: ''
+    delta_show_grid: '0'
+    description: ''
+    drawing_scheme: name
+    engine_output: GUI_window
+    generate_options: circuit
+    id: test_battery_discharge
+    mirror: none
+    placement: (0,0)
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    run: 'True'
+    sizing_mode: fixed
+    title: test_battery_discharge
+    wiring_style: rectilinear
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+blocks:
+- name: clock$0
+  id: clock
+  parameters:
+    L1: '0'
+    L2: '0.16'
+    T1: '500'
+    T2: '2000'
+    comment: ''
+    delta1: '1'
+    delta2: '1'
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '6'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+    t0: '0'
+  states:
+    coordinate: [267, 192]
+    rotation: 0
+    state: true
+- name: connector_e_3$0
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [219, 270]
+    rotation: 270
+    state: true
+- name: connector_e_3$1
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [333, 270]
+    rotation: 0
+    state: true
+- name: connector_e_3$2
+  id: connector_e_3
+  parameters:
+    comment: ''
+    drawing_scheme: none
+    mirror: none
+    name: none
+    port_block_x: '1'
+    port_block_y: '1'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'no'
+  states:
+    coordinate: [333, 132]
+    rotation: 180
+    state: true
+- name: ground$0
+  id: ground
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [210, 276]
+    rotation: 0
+    state: true
+- name: isrc_x$0
+  id: isrc_x
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    mirror: v
+    name: none
+    port_block_x: '9'
+    port_block_y: '10'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    rotate_strict: 'yes'
+  states:
+    coordinate: [309, 174]
+    rotation: 180
+    state: true
+- name: r$0
+  id: r
+  parameters:
+    comment: ''
+    drawing_scheme: symbol
+    k_scale: '1.0'
+    mirror: none
+    name: none
+    port_block_x: '10'
+    port_block_y: '4'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r: 1M
+    rotate_strict: 'yes'
+  states:
+    coordinate: [399, 174]
+    rotation: 270
+    state: true
+- name: s_battery_1$0
+  id: s_battery_1
+  parameters:
+    a0_ctl: '4475'
+    a0_cts: '703.6'
+    a0_rs: '0.07446'
+    a0_rtl: '0.04984'
+    a0_rts: '0.04669'
+    a0_vsrc: '3.685'
+    a1_vsrc: '0.2156'
+    a2_vsrc: '-0.1178'
+    a3_vsrc: '0.3201'
+    b0_ctl: '-6056'
+    b0_cts: '-752.9'
+    b0_rs: '0.1562'
+    b0_rtl: '6.603'
+    b0_rts: '0.3208'
+    b0_vsrc: '-1.031'
+    b1_ctl: '27.12'
+    b1_cts: '13.51'
+    b1_rs: '24.37'
+    b1_rtl: '155.2'
+    b1_rts: '29.14'
+    b1_vsrc: '35'
+    c_capacity: '3060'
+    comment: ''
+    drawing_scheme: name
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '10'
+    port_offset_b: '0'
+    port_offset_l: '0'
+    port_offset_r: '0'
+    port_offset_t: '0'
+    port_sep_x: '0'
+    port_sep_y: '0'
+    r_self_discharge: 1M
+    rotate_strict: 'no'
+    v0_soc: '1'
+  states:
+    coordinate: [198, 174]
+    rotation: 0
+    state: true
+- name: show_parameter$0
+  id: show_parameter
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    element_name: r$0
+    font_size: '9'
+    mirror: none
+    name: none
+    parameter_name: r
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    show_name: do_not_show
+  states:
+    coordinate: [420, 201]
+    rotation: 0
+    state: true
+- name: show_text$0
+  id: show_text
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    font_size: '11'
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    text: load
+  states:
+    coordinate: [348, 219]
+    rotation: 0
+    state: true
+- name: show_text$1
+  id: show_text
+  parameters:
+    comment: ''
+    drawing_scheme: text
+    font_size: '11'
+    mirror: none
+    name: none
+    port_block_x: '4'
+    port_block_y: '4'
+    port_sep_x: '4'
+    port_sep_y: '4'
+    rotate_strict: 'no'
+    text: current
+  states:
+    coordinate: [348, 237]
+    rotation: 0
+    state: true
+connections:
+- [clock$0, '0', isrc_x$0, '0']
+- [connector_e_3$1, el0, connector_e_3$0, et0]
+- [connector_e_3$1, er0, r$0, er0]
+- [connector_e_3$1, et0, isrc_x$0, et0]
+- [connector_e_3$2, el0, r$0, el0]
+- [connector_e_3$2, et0, isrc_x$0, eb0]
+- [ground$0, et0, connector_e_3$0, er0]
+- [s_battery_1$0, eb0, connector_e_3$0, el0]
+- [s_battery_1$0, et0, connector_e_3$2, er0]
+gparms: {}
+outvars:
+  i_load:
+  - outvar
+  - - isrc_x$0
+    - i
+  soc:
+  - outvar
+  - - s_battery_1$0
+    - soc
+  v_out:
+  - connection
+  - - connector_e_3$2
+    - el0
+    - r$0
+    - el0
+solve_blocks:
+- d_parms:
+    algorithm_e: backward_euler
+    algorithm_ex: backward_euler
+    algorithm_x_startup: explicit
+    algorithm_x_trns: RK4
+    block_index: '0'
+    bs23_fctr_max: '1.1'
+    bs23_fctr_min: '0.8'
+    bs23_tolr: '1.0e-8'
+    delt_max_e: none
+    delt_max_ex: none
+    delt_max_x: none
+    delt_min_e: none
+    delt_min_ex: none
+    delt_min_x: none
+    e_nr_check_delx_all: 'no'
+    e_nr_check_spice: 'yes'
+    e_nr_dmp: 'no'
+    e_nr_dmp0: 'no'
+    e_nr_dmp_itermax: '50'
+    e_nr_dmp_itermax0: '50'
+    e_nr_dmp_k: '0.2'
+    e_nr_dmp_k0: '0.2'
+    e_nr_eps_delx_all: '1.0e-4'
+    e_nr_itermax: '500'
+    e_nr_itermax0: '500'
+    e_nr_spice_abstol: '1.0e-6'
+    e_nr_spice_reltol: '1.0e-3'
+    e_nr_spice_vntol: '1.0e-4'
+    e_nr_write_rhs2: 'no'
+    ex_nr_check_delx_all: 'no'
+    ex_nr_dmp: 'no'
+    ex_nr_dmp0: 'no'
+    ex_nr_dmp_itermax: '50'
+    ex_nr_dmp_itermax0: '50'
+    ex_nr_dmp_k: '0.2'
+    ex_nr_dmp_k0: '0.2'
+    ex_nr_eps_delx_all: '1.0e-4'
+    ex_nr_itermax: '500'
+    ex_nr_itermax0: '500'
+    ex_nr_write_rhs2: 'no'
+    factor_step_decrease: '0.6'
+    factor_step_increase: '1.5'
+    initial_sol: initialize
+    initial_sol_file: none
+    itmax_stepred: '20'
+    itmax_trbdf2: '20'
+    itmax_trns: '1000000'
+    output_solution_file: none
+    rkf45_fctr_max: '1.1'
+    rkf45_fctr_min: '0.8'
+    rkf45_tolr: '1.0e-8'
+    solve_type: startup
+    ssw_frequency: none
+    ssw_ndiv: '200'
+    ssw_nr_dmp: 'no'
+    ssw_nr_dmp_itermax: '10'
+    ssw_nr_dmp_k: '0.6'
+    ssw_nr_eps_rhs: '1.0e-10'
+    ssw_nr_itermax: '50'
+    ssw_period: none
+    ssw_period_mult: '2'
+    t_end: '0'
+    t_start: '0'
+    t_startup: '0.0'
+    trbdf2_tolr: '1.0e-5'
+    tstep0_e: none
+    tstep0_ex: none
+    tstep0_x: none
+    write_iter_n_e: '1000'
+    write_iter_n_x: '1000'
+    write_time_e: 'no'
+    write_time_x: 'no'
+    x_nr_check_delx_all: 'no'
+    x_nr_check_rhs2: 'yes'
+    x_nr_dmp: 'no'
+    x_nr_dmp0: 'no'
+    x_nr_dmp_itermax: '50'
+    x_nr_dmp_itermax0: '50'
+    x_nr_dmp_k: '0.2'
+    x_nr_dmp_k0: '0.2'
+    x_nr_eps_delx_all: '1.0e-4'
+    x_nr_eps_rhs: '1.0e-6'
+    x_nr_itermax: '500'
+    x_nr_itermax0: '500'
+    x_nr_write_rhs2: 'no'
+  index: '0'
+  name: s0
+  output_blocks: []
+- d_parms:
+    algorithm_e: backward_euler
+    algorithm_ex: backward_euler
+    algorithm_x_startup: explicit
+    algorithm_x_trns: RK4
+    block_index: '1'
+    bs23_fctr_max: '1.1'
+    bs23_fctr_min: '0.8'
+    bs23_tolr: '1.0e-8'
+    delt_max_e: none
+    delt_max_ex: none
+    delt_max_x: none
+    delt_min_e: none
+    delt_min_ex: none
+    delt_min_x: none
+    e_nr_check_delx_all: 'no'
+    e_nr_check_spice: 'yes'
+    e_nr_dmp: 'no'
+    e_nr_dmp0: 'no'
+    e_nr_dmp_itermax: '50'
+    e_nr_dmp_itermax0: '50'
+    e_nr_dmp_k: '0.2'
+    e_nr_dmp_k0: '0.2'
+    e_nr_eps_delx_all: '1.0e-4'
+    e_nr_itermax: '500'
+    e_nr_itermax0: '500'
+    e_nr_spice_abstol: '1.0e-6'
+    e_nr_spice_reltol: '1.0e-3'
+    e_nr_spice_vntol: '1.0e-4'
+    e_nr_write_rhs2: 'no'
+    ex_nr_check_delx_all: 'no'
+    ex_nr_dmp: 'no'
+    ex_nr_dmp0: 'no'
+    ex_nr_dmp_itermax: '50'
+    ex_nr_dmp_itermax0: '50'
+    ex_nr_dmp_k: '0.2'
+    ex_nr_dmp_k0: '0.2'
+    ex_nr_eps_delx_all: '1.0e-4'
+    ex_nr_itermax: '500'
+    ex_nr_itermax0: '500'
+    ex_nr_write_rhs2: 'no'
+    factor_step_decrease: '0.6'
+    factor_step_increase: '1.5'
+    initial_sol: previous
+    initial_sol_file: none
+    itmax_stepred: '20'
+    itmax_trbdf2: '20'
+    itmax_trns: '1000000'
+    output_solution_file: none
+    rkf45_fctr_max: '1.1'
+    rkf45_fctr_min: '0.8'
+    rkf45_tolr: '1.0e-8'
+    solve_type: trns
+    ssw_frequency: none
+    ssw_ndiv: '200'
+    ssw_nr_dmp: 'no'
+    ssw_nr_dmp_itermax: '10'
+    ssw_nr_dmp_k: '0.6'
+    ssw_nr_eps_rhs: '1.0e-10'
+    ssw_nr_itermax: '50'
+    ssw_period: none
+    ssw_period_mult: '2'
+    t_end: '24000'
+    t_start: '0'
+    t_startup: '0.0'
+    trbdf2_tolr: '1.0e-5'
+    tstep0_e: none
+    tstep0_ex: '2'
+    tstep0_x: none
+    write_iter_n_e: '1000'
+    write_iter_n_x: '1000'
+    write_time_e: 'no'
+    write_time_x: 'no'
+    x_nr_check_delx_all: 'no'
+    x_nr_check_rhs2: 'yes'
+    x_nr_dmp: 'no'
+    x_nr_dmp0: 'no'
+    x_nr_dmp_itermax: '50'
+    x_nr_dmp_itermax0: '50'
+    x_nr_dmp_k: '0.2'
+    x_nr_dmp_k0: '0.2'
+    x_nr_eps_delx_all: '1.0e-4'
+    x_nr_eps_rhs: '1.0e-6'
+    x_nr_itermax: '500'
+    x_nr_itermax0: '500'
+    x_nr_write_rhs2: 'no'
+  index: '1'
+  name: s1
+  output_blocks:
+  - out$1
+output_blocks:
+- d_parms:
+    append: 'no'
+    filename: out2.dat
+    fixed_interval: none
+    limit_lines: '1000000'
+    t_end: none
+    t_start: none
+  index_slv: '1'
+  name: out$1
+  outvars:
+  - i_load
+  - v_out
+  - soc

@@ -2054,15 +2054,15 @@ outvars:
   ia:
   - outvar
   - - ammeter_fb$0
-    - i
+    - i_fb
   ib:
   - outvar
   - - ammeter_fb$1
-    - i
+    - i_fb
   ic:
   - outvar
   - - ammeter_fb$2
-    - i
+    - i_fb
   va:
   - outvar
   - - voltmeter_fb$1

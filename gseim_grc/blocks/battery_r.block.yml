@@ -1,0 +1,61 @@
+id: battery_r
+label: battery_r
+
+parameters:
+-   id: a0
+    label: a0
+    dtype: float
+    default: '0.1'
+-   id: b0
+    label: b0
+    dtype: float
+    default: '0.1'
+-   id: b1
+    label: b1
+    dtype: float
+    default: '20.0'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'yes'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'none'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '0'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '2'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '8'
+
+e_top_nodes:
+-   label: p
+
+e_bottom_nodes:
+-   label: n
+
+inputs:
+-   label: soc
+
+outvars:
+- i
+- v

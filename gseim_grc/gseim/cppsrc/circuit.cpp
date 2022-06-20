@@ -785,18 +785,6 @@ void Circuit::assign_xvr_ebe_1(
          for (int j=0; j < n_xvr1; j++) {
            i_xbeu_vr = ebe_usr[i_ebeu].xvr[j];
            if (i == i_xbeu_vr) {
-             if (flag_xvr_ebe_in[i]) {
-               cout << "Circuit::assign_xvr_ebe_1: i_xbeu_vr = " << i_xbeu_vr
-                 << " is assigned as output of an ebe," << endl;
-               cout << " but it is already an input for another ebe."
-                 << " Halting..." << endl; exit(1);
-             }
-             if (flag_xvr_ebe_out[i]) {
-               cout << "Circuit::assign_xvr_ebe_1: i_xbeu_vr = " << i_xbeu_vr
-                 << " is assigned as output of an ebe," << endl;
-               cout << " but it is already an output for another ebe."
-                 << " Halting..." << endl; exit(1);
-             }
              flag_xvr_ebe_out[i] = true;
              map2_xvr_ebe_out[i_xbeu_vr] = n_xvr_ebe_out;
              map1_xvr_ebe_out.push_back(i_xbeu_vr);

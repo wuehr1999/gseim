@@ -2930,6 +2930,10 @@ void solve_startup_nonlinear_e(
          break;
        }
      }
+     if (slv.e_nr_flag_check_spice) {
+       copy_array_1<double>(smat.m_e.n_row,smat.svec_e,smat.svec_old_nr_1_e);
+       copy_cur_nd_nr_1(ebe_lib,ebe_usr,cct);
+     }
    }
    return;
 } // end of solve_startup_nonlinear_e
@@ -3135,6 +3139,12 @@ void solve_startup_exc(
    } else {
      solve_startup_nonlinear_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,
        smat,cct,slv,global);
+     if (!slv.flag_nr_converged) {
+       cout << "solve_startup_exc: N-R iterations did not converge." << endl;
+       slv.write_flags_failed();
+       cout << "  Halting..." << endl;
+       exit(1);
+     }
    }
    cct_to_ebe_nd_all(ebe_lib,ebe_usr,cct);
    find_ebe_cur_stv_startup(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
@@ -3196,7 +3206,7 @@ void solve_startup_nonlinear_exc(
    smat.w_ex.allocate_1(smat.m_ex.n_nz,smat.m_ex.n_row,smat.m_ex.n_col);
    smat.mo_ex.allocate_1(smat.m_ex.n_row);
 
-   for (i_newt=0; i_newt < slv.x_nr_itermax_a; i_newt++) {
+   for (i_newt=0; i_newt < slv.ex_nr_itermax_a; i_newt++) {
      cout << "solve_startup_nonlinear_exc: i_newt = " << i_newt << endl;
      slv.iter_newton = i_newt;
      form_jac_rhs_startup_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,
@@ -3227,6 +3237,10 @@ void solve_startup_nonlinear_exc(
        if (slv.flag_nr_converged) {
          break;
        }
+     }
+     if (slv.e_nr_flag_check_spice) {
+       copy_array_1<double>(smat.m_ex.n_row,smat.svec_ex,smat.svec_old_nr_1_ex);
+       copy_cur_nd_nr_1(ebe_lib,ebe_usr,cct);
      }
    }
    return;
@@ -6302,7 +6316,6 @@ void solve_trns_nonlinear_exc(
        if (slv.flag_nr_converged) {
          break;
        }
-
        if (slv.e_nr_flag_check_spice) {
          copy_array_1<double>(smat.m_ex.n_row,smat.svec_ex,smat.svec_old_nr_1_ex);
          copy_cur_nd_nr_1(ebe_lib,ebe_usr,cct);

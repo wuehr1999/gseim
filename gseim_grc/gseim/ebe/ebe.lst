@@ -1,10 +1,14 @@
 ammeter
 ammeter_fb
+battery_c
+battery_r
+battery_vsrc
 c
 diode_r
 diode_spice
 dummy_e
 ground
+isrc_x
 l
 r
 solar_module_1

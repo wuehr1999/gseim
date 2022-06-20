@@ -49,5 +49,4 @@ outputs:
 -   label: i_fb
 
 outvars:
-- i
 - i_fb

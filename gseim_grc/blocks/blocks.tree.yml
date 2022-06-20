@@ -99,6 +99,10 @@
     - vsrc_dc
     - vsrc_pulse10
     - vsrc_x
+  - battery:
+    - battery_c
+    - battery_r
+    - battery_vsrc
   - switches:
     - diode_r
     - diode_spice

@@ -1,0 +1,129 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=battery_r x_inputs=yes
+# resistor element for battery modeling
+# Reference:
+#   Chen and Rincon-Mora,
+#   "Accurate Electrical Battery Model Capable of Predicting Runtime
+#   and I-V Performance,"
+#   IEEE Transactions on energy conversion, vol. 21, June 2006.
+Jacobian: variable
+nodes: p n
+state_vars:
+aux_vars:
+aux_vars_startup:
+x_vars: soc
+iparms:
+sparms:
+rparms:
++  a0=0.1
++  b0=0.1
++  b1=20.0
++  r=0.0
+stparms:
+igparms:
+outparms: i v
+n_f=2
+f_1: v(p) v(n) soc
+f_2: v(p) v(n) soc
+n_g=0
+n_h=2
+h_1: v(p) v(n) soc
+h_2: v(p) v(n) soc
+C:
+variables:
+   double r1,g,vp,vn,r_soc,dfdsoc;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_n];
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     a0 = X.rprm[nr_a0];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+     soc = X.val_xvr[nx_soc];
+
+     r1 = b0*exp(-b1*soc);
+     r = a0 + r1;
+     X.rprm[nr_r] = r;
+     g = 1.0/r;
+     r_soc = -b1*r1;
+
+     vp = X.val_nd[nnd_p];
+     vn = X.val_nd[nnd_n];
+
+     dfdsoc = -g*g*r_soc*(vp-vn);
+
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] = g*(vp-vn);
+       X.f[nf_2] = -X.f[nf_1];
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdv[nf_1][nnd_p] =  g;
+       J.dfdv[nf_1][nnd_n] = -g;
+       J.dfdv[nf_2][nnd_p] = -g;
+       J.dfdv[nf_2][nnd_n] =  g;
+
+       J.dfdxvr[nf_1][nx_soc] =  dfdsoc;
+       J.dfdxvr[nf_2][nx_soc] = -dfdsoc;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     a0 = X.rprm[nr_a0];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+     soc = X.val_xvr[nx_soc];
+
+     r1 = b0*exp(-b1*soc);
+     r = a0 + r1;
+     X.rprm[nr_r] = r;
+     g = 1.0/r;
+     r_soc = -b1*r1;
+
+     vp = X.val_nd[nnd_p];
+     vn = X.val_nd[nnd_n];
+
+     dfdsoc = -g*g*r_soc*(vp-vn);
+
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] = g*(vp-vn);
+       X.h[nh_2] = -X.h[nh_1];
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdv[nh_1][nnd_p] =  g;
+       J.dhdv[nh_1][nnd_n] = -g;
+       J.dhdv[nh_2][nnd_p] = -g;
+       J.dhdv[nh_2][nnd_n] =  g;
+
+       J.dhdxvr[nh_1][nx_soc] =  dfdsoc;
+       J.dhdxvr[nh_2][nx_soc] = -dfdsoc;
+     }
+     return;
+   }
+endC
+endebe

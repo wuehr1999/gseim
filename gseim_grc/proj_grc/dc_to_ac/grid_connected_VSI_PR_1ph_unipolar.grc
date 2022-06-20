@@ -1533,7 +1533,7 @@ outvars:
   iLfb:
   - outvar
   - - ammeter_fb$0
-    - i
+    - i_fb
   iLref:
   - outvar
   - - src_ac$0

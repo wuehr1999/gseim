@@ -21,7 +21,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # 1 wdg -> 2 wdg xfmr
 
-delta = 3
+#delta = 3
+delta = Constants.CANVAS_GRID_SIZE
 
 #port_sep_x = 3
 #port_sep_y = 1

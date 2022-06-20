@@ -71,8 +71,7 @@ void e_ammeter_fb(Global &G,EbeUsr &X,EbeJac &J) {
    const int nnd_n = 1;
    const int nx_i_fb = 0;
    const int nr_k_scale = 0;
-   const int no_i = 0;
-   const int no_i_fb = 1;
+   const int no_i_fb = 0;
    const int nf_1 = 0;
    const int nf_2 = 1;
    const int nf_3 = 2;
@@ -80,7 +79,6 @@ void e_ammeter_fb(Global &G,EbeUsr &X,EbeJac &J) {
    const int nh_2 = 1;
    const int nh_3 = 2;
    if (G.flags[G.i_outvar]) {
-      X.outprm[no_i] = X.cur_nd[nnd_p];
       X.outprm[no_i_fb] = X.rprm[nr_k_scale]*X.cur_nd[nnd_p];
       return;
    }
@@ -128,6 +126,309 @@ void e_ammeter_fb(Global &G,EbeUsr &X,EbeJac &J) {
    }
    if (G.flags[G.i_init_guess]) {
      X.val_xvr[nx_i_fb] = 0.0;
+     return;
+   }
+   return;
+}
+void e_battery_c(Global &G,EbeUsr &X,EbeJac &J) {
+   double c1,dfdsoc,vp,vn;
+   double qp,qm;
+   double cur_p;
+   double soc;
+   double a0,b0,b1,c;
+   double v0;
+   const int nnd_p = 0;
+   const int nnd_n = 1;
+   const int nstv_qp = 0;
+   const int nstv_qm = 1;
+   const int nas_cur_p = 0;
+   const int nx_soc = 0;
+   const int nr_a0 = 0;
+   const int nr_b0 = 1;
+   const int nr_b1 = 2;
+   const int nr_c = 3;
+   const int nst_v0 = 0;
+   const int no_i = 0;
+   const int no_v = 1;
+   const int nf_1 = 0;
+   const int nf_2 = 1;
+   const int ng_1 = 0;
+   const int ng_2 = 1;
+   const int nh_1 = 0;
+   const int nh_2 = 1;
+   const int nh_3 = 2;
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_p];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_p] = 0.0;
+     X.val_nd[nnd_n] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     a0 = X.rprm[nr_a0];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+     soc = X.val_xvr[nx_soc];
+
+     c1 = b0*exp(-b1*soc);
+     c = a0 + c1; 
+     X.rprm[nr_c] = c;  
+
+     vp = X.val_nd[nnd_p];
+     vn = X.val_nd[nnd_n];
+
+     dfdsoc = (vp-vn)*(-b1*c1);
+
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] = 0.0;
+       X.f[nf_2] = 0.0;
+
+       X.g[ng_1] = c*(vp-vn);
+       X.g[ng_2] = -X.g[ng_1];
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dgdv[ng_1][nnd_p] =  c;
+       J.dgdv[ng_1][nnd_n] = -c;
+       J.dgdv[ng_2][nnd_p] = -c;
+       J.dgdv[ng_2][nnd_n] =  c;
+
+       J.dgdxvr[ng_1][nx_soc] =  dfdsoc;
+       J.dgdxvr[ng_2][nx_soc] = -dfdsoc;
+     }
+     X.val_stv[nstv_qp] = c*(vp-vn);
+     X.val_stv[nstv_qm] = -X.val_stv[nstv_qp];
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     v0 = X.stprm[nst_v0];
+     cur_p = X.val_auxs[nas_cur_p];
+     vp = X.val_nd[nnd_p];
+     vn = X.val_nd[nnd_n];
+
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] =  cur_p;
+       X.h[nh_2] = -cur_p;
+       X.h[nh_3] = vp-vn-v0;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdauxs[nh_1][nas_cur_p] =  1.0;
+       J.dhdauxs[nh_2][nas_cur_p] = -1.0;
+       J.dhdv   [nh_3][nnd_p    ] =  1.0;
+       J.dhdv   [nh_3][nnd_n    ] = -1.0;
+     }
+     a0 = X.rprm[nr_a0];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+     soc = X.val_xvr[nx_soc];
+
+     c1 = b0*exp(-b1*soc);
+     c = a0 + c1; 
+     X.rprm[nr_c] = c;  
+
+     X.val_stv[nstv_qp] = c*(vp-vn);
+     X.val_stv[nstv_qm] = -X.val_stv[nstv_qp];
+     return;
+   }
+   return;
+}
+void e_battery_r(Global &G,EbeUsr &X,EbeJac &J) {
+   double r1,g,vp,vn,r_soc,dfdsoc;
+   double soc;
+   double a0,b0,b1,r;
+   const int nnd_p = 0;
+   const int nnd_n = 1;
+   const int nx_soc = 0;
+   const int nr_a0 = 0;
+   const int nr_b0 = 1;
+   const int nr_b1 = 2;
+   const int nr_r = 3;
+   const int no_i = 0;
+   const int no_v = 1;
+   const int nf_1 = 0;
+   const int nf_2 = 1;
+   const int nh_1 = 0;
+   const int nh_2 = 1;
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_n];
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     a0 = X.rprm[nr_a0];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+     soc = X.val_xvr[nx_soc];
+
+     r1 = b0*exp(-b1*soc);
+     r = a0 + r1;
+     X.rprm[nr_r] = r;
+     g = 1.0/r;
+     r_soc = -b1*r1;
+
+     vp = X.val_nd[nnd_p];
+     vn = X.val_nd[nnd_n];
+
+     dfdsoc = -g*g*r_soc*(vp-vn);
+
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] = g*(vp-vn);
+       X.f[nf_2] = -X.f[nf_1];
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdv[nf_1][nnd_p] =  g;
+       J.dfdv[nf_1][nnd_n] = -g;
+       J.dfdv[nf_2][nnd_p] = -g;
+       J.dfdv[nf_2][nnd_n] =  g;
+
+       J.dfdxvr[nf_1][nx_soc] =  dfdsoc;
+       J.dfdxvr[nf_2][nx_soc] = -dfdsoc;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     a0 = X.rprm[nr_a0];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+     soc = X.val_xvr[nx_soc];
+
+     r1 = b0*exp(-b1*soc);
+     r = a0 + r1;
+     X.rprm[nr_r] = r;
+     g = 1.0/r;
+     r_soc = -b1*r1;
+
+     vp = X.val_nd[nnd_p];
+     vn = X.val_nd[nnd_n];
+
+     dfdsoc = -g*g*r_soc*(vp-vn);
+
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] = g*(vp-vn);
+       X.h[nh_2] = -X.h[nh_1];
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdv[nh_1][nnd_p] =  g;
+       J.dhdv[nh_1][nnd_n] = -g;
+       J.dhdv[nh_2][nnd_p] = -g;
+       J.dhdv[nh_2][nnd_n] =  g;
+
+       J.dhdxvr[nh_1][nx_soc] =  dfdsoc;
+       J.dhdxvr[nh_2][nx_soc] = -dfdsoc;
+     }
+     return;
+   }
+   return;
+}
+void e_battery_vsrc(Global &G,EbeUsr &X,EbeJac &J) {
+   double v0,v0_soc,soc2,soc3,c1;
+   double cur_p;
+   double cur_p_s;
+   double soc;
+   double a0,a1,a2,a3,b0,b1;
+   const int nnd_p = 0;
+   const int nnd_n = 1;
+   const int na_cur_p = 0;
+   const int nas_cur_p_s = 0;
+   const int nx_soc = 0;
+   const int nr_a0 = 0;
+   const int nr_a1 = 1;
+   const int nr_a2 = 2;
+   const int nr_a3 = 3;
+   const int nr_b0 = 4;
+   const int nr_b1 = 5;
+   const int no_i = 0;
+   const int no_v = 1;
+   const int nf_1 = 0;
+   const int nf_2 = 1;
+   const int nf_3 = 2;
+   const int nh_1 = 0;
+   const int nh_2 = 1;
+   const int nh_3 = 2;
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_n];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     a0 = X.rprm[nr_a0];
+     a1 = X.rprm[nr_a1];
+     a2 = X.rprm[nr_a2];
+     a3 = X.rprm[nr_a3];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+
+     soc = X.val_xvr[nx_soc];
+     soc2 = soc*soc;
+     soc3 = soc2*soc;
+
+     c1 = b0*exp(-b1*soc);
+     v0 = a0 + a1*soc + a2*soc2 + a3*soc3 + c1;
+     v0_soc = a1 + 2.0*a2*soc + 3.0*a3*soc2 -b1*c1;
+
+//   cout << "battery_vsrc.ebe: v0=" << v0 << endl;
+     cur_p = X.val_aux[na_cur_p];
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] =  cur_p;
+       X.f[nf_2] = -cur_p;
+       X.f[nf_3] = X.val_nd[nnd_p]-X.val_nd[nnd_n]-v0;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdaux[nf_1][na_cur_p] =  1.0;
+       J.dfdaux[nf_2][na_cur_p] = -1.0;
+       J.dfdv  [nf_3][nnd_p   ] =  1.0;
+       J.dfdv  [nf_3][nnd_n   ] = -1.0;
+       J.dfdxvr[nf_3][nx_soc  ] = -v0_soc;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     a0 = X.rprm[nr_a0];
+     a1 = X.rprm[nr_a1];
+     a2 = X.rprm[nr_a2];
+     a3 = X.rprm[nr_a3];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+
+     soc = X.val_xvr[nx_soc];
+     soc2 = soc*soc;
+     soc3 = soc2*soc;
+
+     c1 = b0*exp(-b1*soc);
+     v0 = a0 + a1*soc + a2*soc2 + a3*soc3 + c1;
+     v0_soc = a1 + 2.0*a2*soc + 3.0*a3*soc2 -b1*c1;
+
+     cur_p_s = X.val_auxs[nas_cur_p_s];
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] =  cur_p_s;
+       X.h[nh_2] = -cur_p_s;
+       X.h[nh_3] = X.val_nd[nnd_p]-X.val_nd[nnd_n]-v0;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdauxs[nh_1][nas_cur_p_s] =  1.0;
+       J.dhdauxs[nh_2][nas_cur_p_s] = -1.0;
+       J.dhdv   [nh_3][nnd_p      ] =  1.0;
+       J.dhdv   [nh_3][nnd_n      ] = -1.0;
+       J.dhdxvr [nh_3][nx_soc     ] = -v0_soc;
+     }
      return;
    }
    return;
@@ -540,6 +841,58 @@ void e_ground(Global &G,EbeUsr &X,EbeJac &J) {
 // do nothing
    return;
 }
+void e_isrc_x(Global &G,EbeUsr &X,EbeJac &J) {
+   double x_in;
+   const int nnd_p = 0;
+   const int nnd_n = 1;
+   const int nx_x_in = 0;
+   const int no_i = 0;
+   const int no_v = 1;
+   const int nf_1 = 0;
+   const int nf_2 = 1;
+   const int nh_1 = 0;
+   const int nh_2 = 1;
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+      X.outprm[no_i] = X.cur_nd[nnd_n];
+      return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     x_in = X.val_xvr[nx_x_in];
+
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] = -x_in;
+       X.f[nf_2] =  x_in;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdxvr[nf_1][nx_x_in] = -1.0;
+       J.dfdxvr[nf_2][nx_x_in] =  1.0;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     x_in = X.val_xvr[nx_x_in];
+
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] = -x_in;
+       X.h[nh_2] =  x_in;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdxvr[nh_1][nx_x_in] = -1.0;
+       J.dhdxvr[nh_2][nx_x_in] =  1.0;
+     }
+     return;
+   }
+   return;
+}
 void e_l(Global &G,EbeUsr &X,EbeJac &J) {
    double l1;
    double cur_p;
@@ -628,6 +981,11 @@ void e_r(Global &G,EbeUsr &X,EbeJac &J) {
      X.rprm[nr_g] = g;
      return;
    }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
    if (G.flags[G.i_outvar]) {
      g = X.rprm[nr_g];
      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
@@ -669,11 +1027,6 @@ void e_r(Global &G,EbeUsr &X,EbeJac &J) {
        J.dhdv[nh_2][nnd_p] = -g;
        J.dhdv[nh_2][nnd_n] =  g;
      }
-     return;
-   }
-   if (G.flags[G.i_init_guess]) {
-     X.val_nd[nnd_n] = 0.0;
-     X.val_nd[nnd_p] = 0.0;
      return;
    }
    return;
@@ -1279,8 +1632,7 @@ void e_voltmeter_fb(Global &G,EbeUsr &X,EbeJac &J) {
    const int nnd_n = 1;
    const int nx_v_fb = 0;
    const int nr_k_scale = 0;
-   const int no_v = 0;
-   const int no_v_fb = 1;
+   const int no_v_fb = 0;
    const int nf_1 = 0;
    const int nf_2 = 1;
    const int nf_3 = 2;
@@ -1291,7 +1643,6 @@ void e_voltmeter_fb(Global &G,EbeUsr &X,EbeJac &J) {
      return;
    }
    if (G.flags[G.i_outvar]) {
-     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
      X.outprm[no_v_fb] = X.val_xvr[nx_v_fb];
      return;
    }

@@ -56,7 +56,7 @@ parameters:
     default: '10'
 
 inputs:
--   label: x
+-   label: x_in
 
 e_top_nodes:
 -   label: p

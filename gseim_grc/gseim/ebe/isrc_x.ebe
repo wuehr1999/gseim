@@ -1,0 +1,80 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=isrc_x x_inputs=yes
+Jacobian: constant
+nodes: p n
+state_vars:
+aux_vars:
+aux_vars_startup:
+x_vars: x_in
+iparms:
+sparms:
+rparms:
+stparms:
+igparms:
+outparms: i v
+n_f=2
+f_1: x_in
+f_2: x_in
+n_g=0
+n_h=2
+h_1: x_in
+h_2: x_in
+C:
+variables:
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+      X.outprm[no_i] = X.cur_nd[nnd_n];
+      return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     x_in = X.val_xvr[nx_x_in];
+
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] = -x_in;
+       X.f[nf_2] =  x_in;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdxvr[nf_1][nx_x_in] = -1.0;
+       J.dfdxvr[nf_2][nx_x_in] =  1.0;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     x_in = X.val_xvr[nx_x_in];
+
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] = -x_in;
+       X.h[nh_2] =  x_in;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdxvr[nh_1][nx_x_in] = -1.0;
+       J.dhdxvr[nh_2][nx_x_in] =  1.0;
+     }
+     return;
+   }
+endC
+endebe

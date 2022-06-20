@@ -1,0 +1,132 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=battery_vsrc x_inputs=yes
+# voltage source element for battery modeling
+# Reference:
+#   Chen and Rincon-Mora,
+#   "Accurate Electrical Battery Model Capable of Predicting Runtime
+#   and I-V Performance,"
+#   IEEE Transactions on energy conversion, vol. 21, June 2006.
+Jacobian: variable
+nodes: p n
+state_vars:
+aux_vars: cur_p
+aux_vars_startup: cur_p_s
+x_vars: soc
+iparms:
+sparms:
+rparms:
++  a0=3.7
++  a1=0.2
++  a2=-0.1
++  a3=0.3
++  b0=-1
++  b1=35
+stparms:
+igparms:
+outparms: i v
+n_f=3
+f_1: cur_p
+f_2: cur_p
+f_3: v(p) v(n) soc
+n_g=0
+n_h=3
+h_1: cur_p_s
+h_2: cur_p_s
+h_3: v(p) v(n) soc
+C:
+variables:
+   double v0,v0_soc,soc2,soc3,c1;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_n];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     a0 = X.rprm[nr_a0];
+     a1 = X.rprm[nr_a1];
+     a2 = X.rprm[nr_a2];
+     a3 = X.rprm[nr_a3];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+
+     soc = X.val_xvr[nx_soc];
+     soc2 = soc*soc;
+     soc3 = soc2*soc;
+
+     c1 = b0*exp(-b1*soc);
+     v0 = a0 + a1*soc + a2*soc2 + a3*soc3 + c1;
+     v0_soc = a1 + 2.0*a2*soc + 3.0*a3*soc2 -b1*c1;
+
+//   cout << "battery_vsrc.ebe: v0=" << v0 << endl;
+     cur_p = X.val_aux[na_cur_p];
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] =  cur_p;
+       X.f[nf_2] = -cur_p;
+       X.f[nf_3] = X.val_nd[nnd_p]-X.val_nd[nnd_n]-v0;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdaux[nf_1][na_cur_p] =  1.0;
+       J.dfdaux[nf_2][na_cur_p] = -1.0;
+       J.dfdv  [nf_3][nnd_p   ] =  1.0;
+       J.dfdv  [nf_3][nnd_n   ] = -1.0;
+       J.dfdxvr[nf_3][nx_soc  ] = -v0_soc;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     a0 = X.rprm[nr_a0];
+     a1 = X.rprm[nr_a1];
+     a2 = X.rprm[nr_a2];
+     a3 = X.rprm[nr_a3];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+
+     soc = X.val_xvr[nx_soc];
+     soc2 = soc*soc;
+     soc3 = soc2*soc;
+
+     c1 = b0*exp(-b1*soc);
+     v0 = a0 + a1*soc + a2*soc2 + a3*soc3 + c1;
+     v0_soc = a1 + 2.0*a2*soc + 3.0*a3*soc2 -b1*c1;
+
+     cur_p_s = X.val_auxs[nas_cur_p_s];
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] =  cur_p_s;
+       X.h[nh_2] = -cur_p_s;
+       X.h[nh_3] = X.val_nd[nnd_p]-X.val_nd[nnd_n]-v0;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdauxs[nh_1][nas_cur_p_s] =  1.0;
+       J.dhdauxs[nh_2][nas_cur_p_s] = -1.0;
+       J.dhdv   [nh_3][nnd_p      ] =  1.0;
+       J.dhdv   [nh_3][nnd_n      ] = -1.0;
+       J.dhdxvr [nh_3][nx_soc     ] = -v0_soc;
+     }
+     return;
+   }
+endC
+endebe

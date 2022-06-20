@@ -57,6 +57,11 @@ source:
      X.rprm[nr_g] = g;
      return;
    }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_n] = 0.0;
+     X.val_nd[nnd_p] = 0.0;
+     return;
+   }
    if (G.flags[G.i_outvar]) {
      g = X.rprm[nr_g];
      X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
@@ -98,11 +103,6 @@ source:
        J.dhdv[nh_2][nnd_p] = -g;
        J.dhdv[nh_2][nnd_n] =  g;
      }
-     return;
-   }
-   if (G.flags[G.i_init_guess]) {
-     X.val_nd[nnd_n] = 0.0;
-     X.val_nd[nnd_p] = 0.0;
      return;
    }
 endC

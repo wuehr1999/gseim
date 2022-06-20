@@ -1,0 +1,124 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=battery_c x_inputs=yes
+Jacobian: variable
+nodes: p n
+state_vars: qp qm
+aux_vars:
+aux_vars_startup: cur_p
+x_vars: soc
+iparms:
+sparms:
+rparms:
++  a0=700
++  b0=-700
++  b1=20
++  c=0 
+stparms: v0=0
+igparms:
+outparms: i v
+n_f=2
+f_1: d_dt(qp)
+f_2: d_dt(qm)
+n_g=2
+g_1: qp v(p) v(n) soc
+g_2: qm v(p) v(n) soc
+n_h=3
+h_1: cur_p 
+h_2: cur_p 
+h_3: v(p) v(n)
+C:
+variables:
+   double c1,dfdsoc,vp,vn;
+source:
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_p];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_p] = 0.0;
+     X.val_nd[nnd_n] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_dc] || G.flags[G.i_trns]) {
+     a0 = X.rprm[nr_a0];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+     soc = X.val_xvr[nx_soc];
+
+     c1 = b0*exp(-b1*soc);
+     c = a0 + c1; 
+     X.rprm[nr_c] = c;  
+
+     vp = X.val_nd[nnd_p];
+     vn = X.val_nd[nnd_n];
+
+     dfdsoc = (vp-vn)*(-b1*c1);
+
+     if (G.flags[G.i_function]) {
+       X.f[nf_1] = 0.0;
+       X.f[nf_2] = 0.0;
+
+       X.g[ng_1] = c*(vp-vn);
+       X.g[ng_2] = -X.g[ng_1];
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dgdv[ng_1][nnd_p] =  c;
+       J.dgdv[ng_1][nnd_n] = -c;
+       J.dgdv[ng_2][nnd_p] = -c;
+       J.dgdv[ng_2][nnd_n] =  c;
+
+       J.dgdxvr[ng_1][nx_soc] =  dfdsoc;
+       J.dgdxvr[ng_2][nx_soc] = -dfdsoc;
+     }
+     X.val_stv[nstv_qp] = c*(vp-vn);
+     X.val_stv[nstv_qm] = -X.val_stv[nstv_qp];
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     v0 = X.stprm[nst_v0];
+     cur_p = X.val_auxs[nas_cur_p];
+     vp = X.val_nd[nnd_p];
+     vn = X.val_nd[nnd_n];
+
+     if (G.flags[G.i_function]) {
+       X.h[nh_1] =  cur_p;
+       X.h[nh_2] = -cur_p;
+       X.h[nh_3] = vp-vn-v0;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dhdauxs[nh_1][nas_cur_p] =  1.0;
+       J.dhdauxs[nh_2][nas_cur_p] = -1.0;
+       J.dhdv   [nh_3][nnd_p    ] =  1.0;
+       J.dhdv   [nh_3][nnd_n    ] = -1.0;
+     }
+     a0 = X.rprm[nr_a0];
+     b0 = X.rprm[nr_b0];
+     b1 = X.rprm[nr_b1];
+     soc = X.val_xvr[nx_soc];
+
+     c1 = b0*exp(-b1*soc);
+     c = a0 + c1; 
+     X.rprm[nr_c] = c;  
+
+     X.val_stv[nstv_qp] = c*(vp-vn);
+     X.val_stv[nstv_qm] = -X.val_stv[nstv_qp];
+     return;
+   }
+endC
+endebe

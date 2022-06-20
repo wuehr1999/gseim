@@ -49,5 +49,4 @@ outputs:
 -   label: v_fb
 
 outvars:
-- v
 - v_fb

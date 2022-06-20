@@ -19,7 +19,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # begin_coord
 
-delta = 3
+#delta = 3
+delta = Constants.CANVAS_GRID_SIZE
 
 port_block_y = 10
 port_block_x = 7

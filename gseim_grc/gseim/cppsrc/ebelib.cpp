@@ -330,16 +330,6 @@ EbeLib::EbeLib(
      }
    } //end of n_g loop
 
-   for (int i_f=0; i_f < n_f; i_f++) {
-     if (f_ddt[i_f]) {
-       if (n_xvr > 0) {
-         cout << "EbeLib: an ebe with xvr cannot have ddt equations." << endl;
-         cout << "   Check this element: " << name << ".ebe (g_xx)" << endl;
-         cout << "   Halting..." << endl; exit(1);
-       }
-     }
-   }
-
    for (int i_f=0; i_f < n_nd; i_f++) {
      if (f_ddt[i_f]) {
        if (f_ddt_stv_eqn[i_f] == -1) {

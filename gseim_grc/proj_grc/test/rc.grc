@@ -375,10 +375,6 @@ connections:
 - [vsrc_ac$0, et0, r$0, el0]
 gparms: {}
 outvars:
-  i:
-  - outvar
-  - - ammeter_fb$0
-    - i
   i_fb:
   - outvar
   - - ammeter_fb$0
@@ -387,10 +383,6 @@ outvars:
   - outvar
   - - multscl$0
     - y
-  v_out:
-  - outvar
-  - - voltmeter_fb$0
-    - v
   v_out_1:
   - outvar
   - - voltmeter_fb$0
@@ -498,9 +490,7 @@ output_blocks:
   index_slv: '0'
   name: out$0
   outvars:
-  - i
   - i_fb
   - i_fb_1
-  - v_out
   - v_out_1
   - v_out_2

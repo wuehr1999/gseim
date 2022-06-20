@@ -26,7 +26,7 @@ sparms:
 rparms: k_scale=1
 stparms:
 igparms:
-outparms: i i_fb
+outparms: i_fb
 n_f=3
 f_1: i_fb
 f_2: i_fb
@@ -41,7 +41,6 @@ variables:
    double c1,c2;
 source:
    if (G.flags[G.i_outvar]) {
-      X.outprm[no_i] = X.cur_nd[nnd_p];
       X.outprm[no_i_fb] = X.rprm[nr_k_scale]*X.cur_nd[nnd_p];
       return;
    }
