@@ -2,10 +2,11 @@
 # meant for running from user's /gseim/cppsrc directory
 #
 MAKEFILE = mkfilter_so
-GPP = g++
-OPT = -c -fPIC
+
+CXX = g++
+CXXFLAGS = -O3 -fPIC -std=c++11
 #
-OBJ  = \
+OBJ_LIBFILTER_SO = \
   utils_pic.o  \
   matrix_2_pic.o  \
   ijmat_pic.o  \
@@ -20,16 +21,17 @@ endif
 PROGRAM = libfilter.so
 all: $(PROGRAM)
 #
-libfilter.so: $(OBJ) 
-	g++ -shared -Wl,$(LDFLAGS) -o libfilter.so -std=c++11 $(OBJ)
-utils_pic.o: utils.h \
-  utils.cpp
-	$(GPP) -c -fPIC utils.cpp -o utils_pic.o
-matrix_2_pic.o: matrix_2.h \
-  matrix_2.cpp
-	$(GPP) -c -fPIC matrix_2.cpp -o matrix_2_pic.o
-ijmat_pic.o: ijmat.h \
-  ijmat.cpp
-	$(GPP) -c -fPIC ijmat.cpp -o ijmat_pic.o
+libfilter.so: $(OBJ_LIBFILTER_SO) 
+	$(CXX) -shared -Wl,$(LDFLAGS) -o libfilter.so $(OBJ_LIBFILTER_SO)
+
+utils_pic.o: utils.h utils.cpp
+	$(CXX) -c $(CXXFLAGS) utils.cpp -o utils_pic.o
+matrix_2_pic.o: matrix_2.h matrix_2.cpp
+	$(CXX) -c $(CXXFLAGS) matrix_2.cpp -o matrix_2_pic.o
+ijmat_pic.o: ijmat.h ijmat.cpp
+	$(CXX) -c $(CXXFLAGS) ijmat.cpp -o ijmat_pic.o
 pic_dummy.o: pic_dummy.cpp
-	$(GPP) -c -fPIC pic_dummy.cpp -o pic_dummy.o
+
+.PHONY: clean_libfilter_so
+clean_libfilter_so:
+	rm -f $(PROGRAM) $(OBJ_LIBFILTER_SO)
