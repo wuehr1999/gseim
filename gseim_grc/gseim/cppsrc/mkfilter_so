@@ -11,11 +11,17 @@ OBJ  = \
   ijmat_pic.o  \
   pic_dummy.o
 
+ifeq ($(shell uname),Darwin)
+	LDFLAGS=-install_name,libfilter.so
+else
+	LDFLAGS=-soname,libfilter.so
+endif
+
 PROGRAM = libfilter.so
 all: $(PROGRAM)
 #
 libfilter.so: $(OBJ) 
-	g++ -shared -Wl,-install_name,libfilter.so -o libfilter.so -std=c++11 $(OBJ)
+	g++ -shared -Wl,$(LDFLAGS) -o libfilter.so -std=c++11 $(OBJ)
 utils_pic.o: utils.h \
   utils.cpp
 	$(GPP) -c -fPIC utils.cpp -o utils_pic.o
