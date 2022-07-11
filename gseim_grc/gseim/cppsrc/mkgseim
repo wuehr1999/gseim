@@ -1,7 +1,7 @@
 MAKEFILE = mkgseim
 GPP = g++
 
-OPT = -O3
+OPT = -O3 -std=c++11
 OPT1 = -O2
 OPT2 =
 
