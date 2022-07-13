@@ -26,11 +26,11 @@ import matplotlib.pylab as plt
 from matplotlib.ticker import MaxNLocator
 
 from os.path import expanduser
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import (
+from PyQt6.QtCore import *
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import (
     QApplication, QWidget, QLabel, QPushButton, QRadioButton,
-    QFrame, QMenu, QAction, QScrollArea, QLineEdit, QFileDialog,
+    QFrame, QMenu, QScrollArea, QLineEdit, QFileDialog,
     QComboBox, QMainWindow, QSizePolicy, QVBoxLayout, QListWidget,
     QCheckBox, QHeaderView, QListWidgetItem, QAbstractItemView,
     QHBoxLayout, QColorDialog, QPlainTextEdit, QMessageBox,
@@ -40,17 +40,12 @@ import numpy as np
 import random
 import os.path
 from os import path
-from matplotlib.backends.qt_compat import QtCore, QtWidgets, is_pyqt5
+from matplotlib.backends.qt_compat import QtCore, QtWidgets
 from matplotlib.figure import Figure
 
-if is_pyqt5():
-    print('QT5')
-    from matplotlib.backends.backend_qt5agg import (
-        FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
-else:
-    print('Qt4')
-    from matplotlib.backends.backend_qt4agg import (
-        FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
+print('QT6')
+from matplotlib.backends.backend_qt5agg import (
+    FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
 
 class NavigationToolbar(NavigationToolbar):
     toolitems = [t for t in NavigationToolbar.toolitems if
@@ -1047,8 +1042,7 @@ class ScriptObject(QWidget):
         vbox.addWidget(self.plainText)
 
     def openFileSaveDialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
+        options = QFileDialog.Option.DontUseNativeDialog
 
         s, _ = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()", 
             ""," ", options=options)
@@ -1296,7 +1290,7 @@ class LinePropPopup(QMainWindow):
         self.def1 = QLabel("Default:",self.frameD);self.def1.setFont(myFont)
         self.frameCB1 = QFrame(self);self.frameCB1.setGeometry(QRect(65, 175, 25, 25))
         self.cb1 = QCheckBox(self.frameCB1)
-        self.cb1.setCheckState(QtCore.Qt.Unchecked)
+        self.cb1.setCheckState(QtCore.Qt.CheckState.Unchecked)
         self.cb1.stateChanged.connect(self.dafaultLineProp)
 
         self.frame30 = QFrame(self);self.frame30.setGeometry(QRect(120, 1, 175, 25))
@@ -1379,23 +1373,28 @@ class LinePropPopup(QMainWindow):
         self.pixmap.fill(QColor("white"));
         self.redIcon= QIcon(self.pixmap);self.fcBtn.setIcon(self.redIcon);
 
-        painter = QPainter(self.labelC.pixmap())
-        painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        painter.drawLine(QPoint(5, 125), QPoint(180, 125))
-        painter.drawLine(QPoint(180, 10), QPoint(180, 125))
-        painter.drawLine(QPoint(120, 10), QPoint(180, 10))
-        painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        painter.end()
+        # painter = QPainter(self.labelC.pixmap())
+        # # painter.setPen(QPen(QColor("black"), 1, Qt.PenStyle.SolidLine))
+        # painter.setPen(QPen())
+        # print('a')
+        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
+        # print('b')
+        # painter.drawLine(QPoint(5, 125), QPoint(180, 125))
+        # painter.drawLine(QPoint(180, 10), QPoint(180, 125))
+        # painter.drawLine(QPoint(120, 10), QPoint(180, 10))
+        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
+        # print('e')
+        # painter.end()
+        # print('f')
 
-        painter = QPainter(self.labelC2.pixmap())
-        painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        painter.drawLine(QPoint(5, 125), QPoint(175, 125))
-        painter.drawLine(QPoint(175, 10), QPoint(175, 125))
-        painter.drawLine(QPoint(138, 10), QPoint(175, 10))
-        painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        painter.end()
+        # painter = QPainter(self.labelC2.pixmap())
+        # # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
+        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
+        # painter.drawLine(QPoint(5, 125), QPoint(175, 125))
+        # painter.drawLine(QPoint(175, 10), QPoint(175, 125))
+        # painter.drawLine(QPoint(138, 10), QPoint(175, 10))
+        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
+        # painter.end()
 
         self.frame20 =  QFrame(self);self.frame20.setGeometry(QRect(120, 170, 90, 25))
         self.applyBtn = QPushButton("Apply",self.frame20);
@@ -1417,7 +1416,7 @@ class LinePropPopup(QMainWindow):
     def applyBtnAction(self):
         if self.combo1.currentText()!= '':
             linePropSelect = self.combo1.currentText()
-            selIndexL = mainWin.YCols.indexFromItem(mainWin.YCols.findItems(linePropSelect,Qt.MatchContains)[0])
+            selIndexL = mainWin.YCols.indexFromItem(mainWin.YCols.findItems(linePropSelect,Qt.MatchFlag.MatchContains)[0])
             selIndex = int(selIndexL.row())
             mainWin.plotObject_1[selIndex].setLineStyle(self.combo2.currentText())
             mainWin.plotObject_1[selIndex].setDrawStyle(self.combo3.currentText())
@@ -1433,13 +1432,16 @@ class LinePropPopup(QMainWindow):
             mainWin.plotDataWithChangedOptions()
     def yLineProp(self):
         linePropSelect = self.combo1.currentText()
-        selIndexL = mainWin.YCols.indexFromItem(mainWin.YCols.findItems(linePropSelect,Qt.MatchContains)[0])
+        selIndexL = mainWin.YCols.indexFromItem(mainWin.YCols.findItems(linePropSelect,Qt.MatchFlag.MatchContains)[0])
         selIndex = int(selIndexL.row())
         self.combo2.setCurrentText(mainWin.plotObject_1[selIndex].lineStyle)
         self.combo3.setCurrentText(mainWin.plotObject_1[selIndex].drawStyle)
         self.wdBtn.setText(str(mainWin.plotObject_1[selIndex].width))
         self.sizeBtn.setText(str(mainWin.plotObject_1[selIndex].size))
-        self.pixmap.fill(QColor(mainWin.plotObject_1[selIndex].lineColor));
+        if mainWin.plotObject_1[selIndex].lineColor:
+            self.pixmap.fill(QColor(mainWin.plotObject_1[selIndex].lineColor));
+        else:
+            print('Line color missing')
         self.redIcon= QIcon(self.pixmap);
         self.lnBtn.setIcon(self.redIcon);
         self.combo4.setCurrentText(mainWin.plotObject_1[selIndex].marker)
@@ -1450,13 +1452,16 @@ class LinePropPopup(QMainWindow):
         self.redIcon= QIcon(self.pixmap);
         self.edBtn.setIcon(self.redIcon);
         self.leglabel.setText(str(mainWin.plotObject_1[selIndex].label))
-        self.linecolor = QColor(mainWin.plotObject_1[selIndex].lineColor);
+        if mainWin.plotObject_1[selIndex].lineColor:
+            self.linecolor = QColor(mainWin.plotObject_1[selIndex].lineColor);
+        else:
+            print('Line color missing')
         self.edgecolor = QColor(mainWin.plotObject_1[selIndex].edgeColor);
         self.facecolor = QColor(mainWin.plotObject_1[selIndex].faceColor);
-        self.cb1.setCheckState(QtCore.Qt.Unchecked)
+        self.cb1.setCheckState(QtCore.Qt.CheckState.Unchecked)
     def dafaultLineProp(self):
         linePropSelect = self.combo1.currentText()
-        selIndexL = mainWin.YCols.indexFromItem(mainWin.YCols.findItems(linePropSelect,Qt.MatchContains)[0])
+        selIndexL = mainWin.YCols.indexFromItem(mainWin.YCols.findItems(linePropSelect,Qt.MatchFlag.MatchContains)[0])
         selIndex = int(selIndexL.row())
         mainWin.plotObject_1[selIndex] = PlotObject(label = linePropSelect, lineColor = mainWin.colorSet[selIndex])
         self.yLineProp()
@@ -1539,7 +1544,7 @@ class MultiPlotPopup(QMainWindow):
         y_pos += h1 + hp
 
         self.cb2 = QCheckBox(self.frameCB2)
-        self.cb2.setCheckState(QtCore.Qt.Checked)
+        self.cb2.setCheckState(QtCore.Qt.CheckState.Checked)
 
         x_button = 20
         y_button = y_pos + 10
@@ -1574,9 +1579,9 @@ class MultiPlotPopup(QMainWindow):
         mainWin.plotDataWithChangedOptions()
 
     def MultiPlotPropShow(self):
-        bs = QtCore.Qt.Unchecked
+        bs = QtCore.Qt.CheckState.Unchecked
         if mainWin.multiPlotObject_1.multiPlot:
-            bs = QtCore.Qt.Checked
+            bs = QtCore.Qt.CheckState.Checked
         self.cb2.setCheckState(bs)
     def cancelBtnAction(self):
         self.close();
@@ -1619,7 +1624,7 @@ class FourierPopup(QMainWindow):
         y_pos += h1 + hp
 
         self.cb2 = QCheckBox(self.frameCB2)
-        self.cb2.setCheckState(QtCore.Qt.Checked)
+        self.cb2.setCheckState(QtCore.Qt.CheckState.Checked)
 
         self.frame3 = QFrame(self)
         self.label_nfourier = QLabel("NFourier:",self.frame3)
@@ -1756,7 +1761,7 @@ class FourierPopup(QMainWindow):
 
         mainWin.plotDataWithChangedOptions()
     def FourierPropShow(self):
-        bs = QtCore.Qt.Checked if mainWin.fourierObject_1.fourier else QtCore.Qt.Unchecked
+        bs = QtCore.Qt.CheckState.Checked if mainWin.fourierObject_1.fourier else QtCore.Qt.CheckState.Unchecked
         self.cb2.setCheckState(bs)
     def cancelBtnAction(self):
         self.close();
@@ -1800,7 +1805,7 @@ class AvgRmsPopup(QMainWindow):
         self.frameCB2.setGeometry(QRect(x_pos_1, y_pos, button_size, button_size))
 
         self.cb2 = QCheckBox(self.frameCB2)
-        self.cb2.setCheckState(QtCore.Qt.Checked)
+        self.cb2.setCheckState(QtCore.Qt.CheckState.Checked)
 
         self.frame3 = QFrame(self)
         self.Label3 = QLabel("rms:",self.frame3)
@@ -1814,7 +1819,7 @@ class AvgRmsPopup(QMainWindow):
         self.frameCB3.setGeometry(QRect(x_pos_1, y_pos, button_size, button_size))
 
         self.cb3 = QCheckBox(self.frameCB3)
-        self.cb3.setCheckState(QtCore.Qt.Checked)
+        self.cb3.setCheckState(QtCore.Qt.CheckState.Checked)
 
         y_pos += + h1 + yp1
 
@@ -2007,10 +2012,10 @@ class AvgRmsPopup(QMainWindow):
         mainWin.plotDataWithChangedOptions()
 
     def avgRmsPropShow(self):
-        bs = QtCore.Qt.Checked if mainWin.avgrmsObject_1.avg else QtCore.Qt.Unchecked
+        bs = QtCore.Qt.CheckState.Checked if mainWin.avgrmsObject_1.avg else QtCore.Qt.CheckState.Unchecked
         self.cb2.setCheckState(bs)
 
-        bs = QtCore.Qt.Checked if mainWin.avgrmsObject_1.rms else QtCore.Qt.Unchecked
+        bs = QtCore.Qt.CheckState.Checked if mainWin.avgrmsObject_1.rms else QtCore.Qt.CheckState.Unchecked
         self.cb3.setCheckState(bs)
 
     def cancelBtnAction(self):
@@ -2054,7 +2059,7 @@ class PowerPopup(QMainWindow):
         self.frameCB2.setGeometry(QRect(x0+w1+wp, y_pos, button_size, button_size))
 
         self.cb2 = QCheckBox(self.frameCB2)
-        self.cb2.setCheckState(QtCore.Qt.Checked)
+        self.cb2.setCheckState(QtCore.Qt.CheckState.Checked)
 
         y_pos += + y0 + yp1
         self.frame4 = QFrame(self)
@@ -2264,7 +2269,7 @@ class PowerPopup(QMainWindow):
         mainWin.plotDataWithChangedOptions()
 
     def powerPropShow(self):
-        bs = QtCore.Qt.Checked if mainWin.powerObject_1.compute_power else QtCore.Qt.Unchecked
+        bs = QtCore.Qt.CheckState.Checked if mainWin.powerObject_1.compute_power else QtCore.Qt.CheckState.Unchecked
         self.cb2.setCheckState(bs)
 
     def cancelBtnAction(self):
@@ -2289,7 +2294,7 @@ class GridPopup(QMainWindow):
         self.def1 = QLabel("Default:",self.frameD);self.def1.setFont(myFont)
         self.frameCB1 = QFrame(self);self.frameCB1.setGeometry(QRect(65, 175, 25, 25))
         self.cb1 = QCheckBox(self.frameCB1)
-        self.cb1.setCheckState(QtCore.Qt.Unchecked)
+        self.cb1.setCheckState(QtCore.Qt.CheckState.Unchecked)
         self.cb1.stateChanged.connect(self.dafaultLineProp)
 
         self.frame2 = QFrame(self);self.frame2.setGeometry(QRect(20, 25, 250, 25))
@@ -2299,7 +2304,7 @@ class GridPopup(QMainWindow):
         self.Label3 = QLabel("Grid on-off:",self.frame4)
         self.frameCB2 = QFrame(self);self.frameCB2.setGeometry(QRect(90, 50, 25, 25))
         self.cb2 = QCheckBox(self.frameCB2)
-        self.cb2.setCheckState(QtCore.Qt.Checked)
+        self.cb2.setCheckState(QtCore.Qt.CheckState.Checked)
 
         self.frame3 = QFrame(self);self.frame3.setGeometry(QRect(20, 85, 250, 25))
         self.Label2 = QLabel("Line Style:",self.frame3)
@@ -2335,14 +2340,14 @@ class GridPopup(QMainWindow):
         self.combo3 = QComboBox(self.frame24)
         self.combo3.addItem("both");self.combo3.addItem("x");self.combo3.addItem("y");
 
-        painter = QPainter(self.labelC.pixmap())
-        painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        painter.drawLine(QPoint(5, 125), QPoint(375, 125))
-        painter.drawLine(QPoint(375, 10), QPoint(375, 125))
-        painter.drawLine(QPoint(50, 10), QPoint(375, 10))
-        painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        painter.end()
+        # painter = QPainter(self.labelC.pixmap())
+        # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
+        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
+        # painter.drawLine(QPoint(5, 125), QPoint(375, 125))
+        # painter.drawLine(QPoint(375, 10), QPoint(375, 125))
+        # painter.drawLine(QPoint(50, 10), QPoint(375, 10))
+        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
+        # painter.end()
 
         self.frame20 =  QFrame(self);self.frame20.setGeometry(QRect(120, 170, 90, 25))
         self.applyBtn = QPushButton("Apply",self.frame20);
@@ -2377,10 +2382,10 @@ class GridPopup(QMainWindow):
 
         self.combo4.setCurrentText(mainWin.gridObject_1.which)
         self.linecolor = QColor(mainWin.gridObject_1.lineColor);
-        self.cb1.setCheckState(QtCore.Qt.Unchecked)
-        bs = QtCore.Qt.Unchecked
+        self.cb1.setCheckState(QtCore.Qt.CheckState.Unchecked)
+        bs = QtCore.Qt.CheckState.Unchecked
         if mainWin.gridObject_1.gridEnable:
-            bs = QtCore.Qt.Checked
+            bs = QtCore.Qt.CheckState.Checked
         self.cb2.setCheckState(bs)
     def dafaultLineProp(self):
         mainWin.gridObject_1 = GridObject()
@@ -2421,7 +2426,7 @@ class AxesPopup(QMainWindow):
         self.def1 = QLabel("Default:",self.frameD);self.def1.setFont(myFont)
         self.frameCB1 = QFrame(self);self.frameCB1.setGeometry(QRect(65, 145, 25, 25))
         self.cb1 = QCheckBox(self.frameCB1)
-        self.cb1.setCheckState(QtCore.Qt.Unchecked)
+        self.cb1.setCheckState(QtCore.Qt.CheckState.Unchecked)
         self.cb1.stateChanged.connect(self.dafaultLineProp)
 
         self.frame2 = QFrame(self);self.frame2.setGeometry(QRect(20, 15, 250, 25))
@@ -2515,32 +2520,32 @@ class AxesPopup(QMainWindow):
         self.YlimT2.setFixedWidth(120)
         validator = QDoubleValidator()
         self.YlimT2.setValidator(validator)
-        painter = QPainter(self.labelC.pixmap())
-        painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        painter.drawLine(QPoint(5, 125), QPoint(180, 125))
-        painter.drawLine(QPoint(180, 10), QPoint(180, 125))
-        painter.drawLine(QPoint(60, 10), QPoint(180, 10))
-        painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        painter.end()
+        # painter = QPainter(self.labelC.pixmap())
+        # # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
+        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
+        # painter.drawLine(QPoint(5, 125), QPoint(180, 125))
+        # painter.drawLine(QPoint(180, 10), QPoint(180, 125))
+        # painter.drawLine(QPoint(60, 10), QPoint(180, 10))
+        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
+        # painter.end()
 
-        painter = QPainter(self.labelC2.pixmap())
-        painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        painter.drawLine(QPoint(5, 125), QPoint(180, 125))
-        painter.drawLine(QPoint(180, 10), QPoint(180, 125))
-        painter.drawLine(QPoint(60, 10), QPoint(180, 10))
-        painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        painter.end()
+        # painter = QPainter(self.labelC2.pixmap())
+        # # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
+        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
+        # painter.drawLine(QPoint(5, 125), QPoint(180, 125))
+        # painter.drawLine(QPoint(180, 10), QPoint(180, 125))
+        # painter.drawLine(QPoint(60, 10), QPoint(180, 10))
+        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
+        # painter.end()
 
-        painter = QPainter(self.labelY2.pixmap())
-        painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        painter.drawLine(QPoint(5, 125), QPoint(180, 125))
-        painter.drawLine(QPoint(180, 10), QPoint(180, 125))
-        painter.drawLine(QPoint(110, 10), QPoint(180, 10))
-        painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        painter.end()
+        # painter = QPainter(self.labelY2.pixmap())
+        # # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
+        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
+        # painter.drawLine(QPoint(5, 125), QPoint(180, 125))
+        # painter.drawLine(QPoint(180, 10), QPoint(180, 125))
+        # painter.drawLine(QPoint(110, 10), QPoint(180, 10))
+        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
+        # painter.end()
 
         self.frame20 =  QFrame(self);self.frame20.setGeometry(QRect(120, 140, 90, 25))
         self.applyBtn = QPushButton("Apply",self.frame20);
@@ -2609,7 +2614,7 @@ class AxesPopup(QMainWindow):
         self.YlimB2.setText(mainWin.axesPropObject_1.s_yMin2)
         self.YlimT2.setText(mainWin.axesPropObject_1.s_yMax2)
 
-        self.cb1.setCheckState(QtCore.Qt.Unchecked)
+        self.cb1.setCheckState(QtCore.Qt.CheckState.Unchecked)
     def dafaultLineProp(self):
         mainWin.axesPropObject_1 = AxesPropObject()
         self.AxesPropShow()
@@ -2637,7 +2642,7 @@ class TitlePopup(QMainWindow):
         self.def1 = QLabel("Default:",self.frameD);self.def1.setFont(myFont)
         self.frameCB1 = QFrame(self);self.frameCB1.setGeometry(QRect(65, 145, 25, 25))
         self.cb1 = QCheckBox(self.frameCB1)
-        self.cb1.setCheckState(QtCore.Qt.Unchecked)
+        self.cb1.setCheckState(QtCore.Qt.CheckState.Unchecked)
         self.cb1.stateChanged.connect(self.dafaultLineProp)
 
         self.frame2 = QFrame(self);self.frame2.setGeometry(QRect(20, 15, 250, 25))
@@ -2647,7 +2652,7 @@ class TitlePopup(QMainWindow):
         self.def1 = QLabel("Title:",self.frameT);
         self.frameTE = QFrame(self);self.frameTE.setGeometry(QRect(80, 30, 25, 25))
         self.cb3 = QCheckBox(self.frameTE)
-        self.cb3.setCheckState(QtCore.Qt.Checked)
+        self.cb3.setCheckState(QtCore.Qt.CheckState.Checked)
 
         self.frame3 = QFrame(self);self.frame3.setGeometry(QRect(20, 55, 250, 25))
         self.Label2 = QLabel("Position:",self.frame3)
@@ -2661,13 +2666,13 @@ class TitlePopup(QMainWindow):
         self.labelEdit = QLineEdit("",self.frame8);
         self.labelEdit.setFixedWidth(175)
 
-        painter = QPainter(self.labelC.pixmap())
-        painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        painter.drawLine(QPoint(5, 5), QPoint(5, 95))
-        painter.drawLine(QPoint(5, 95), QPoint(245, 95))
-        painter.drawLine(QPoint(245, 5), QPoint(245, 95))
-        painter.drawLine(QPoint(5, 5), QPoint(245, 5))
-        painter.end()
+        # painter = QPainter(self.labelC.pixmap())
+        # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
+        # painter.drawLine(QPoint(5, 5), QPoint(5, 95))
+        # painter.drawLine(QPoint(5, 95), QPoint(245, 95))
+        # painter.drawLine(QPoint(245, 5), QPoint(245, 95))
+        # painter.drawLine(QPoint(5, 5), QPoint(245, 5))
+        # painter.end()
 
         self.frame20 =  QFrame(self);self.frame20.setGeometry(QRect(20, 170, 80, 25))
         self.applyBtn = QPushButton("Apply",self.frame20);
@@ -2690,14 +2695,14 @@ class TitlePopup(QMainWindow):
     def TitlePropShow(self):
         self.combo2.setCurrentText(str(mainWin.titleObject_1.loc))
         self.labelEdit.setText(str(mainWin.titleObject_1.label))
-        bs = QtCore.Qt.Unchecked
+        bs = QtCore.Qt.CheckState.Unchecked
         if mainWin.titleObject_1.titleEnable:
-            bs = QtCore.Qt.Checked
+            bs = QtCore.Qt.CheckState.Checked
         self.cb3.setCheckState(bs)
 
     def dafaultLineProp(self):
         mainWin.titleObject_1 = TitleObject()
-        self.cb1.setCheckState(QtCore.Qt.Unchecked)
+        self.cb1.setCheckState(QtCore.Qt.CheckState.Unchecked)
         self.TitlePropShow()
 
     def cancelBtnAction(self):
@@ -2738,7 +2743,7 @@ class TickLabelNotation(QMainWindow):
         self.SNXM = QLabel("UseMathsText:",self.frameSNXM);self.SNXM.setFont(myFont)
         self.frameCB1 = QFrame(self);self.frameCB1.setGeometry(QRect(355, 75, 25, 25))
         self.cb1 = QCheckBox(self.frameCB1)
-        self.cb1.setCheckState(QtCore.Qt.Checked)
+        self.cb1.setCheckState(QtCore.Qt.CheckState.Checked)
 
         self.frameYSNLb = QFrame(self);self.frameYSNLb.setGeometry(QRect(20, 100, 170, 25))
         self.YSNLb = QLabel("Y-TickLabels: m:",self.frameYSNLb);self.YSNLb.setFont(myFont)
@@ -2754,15 +2759,15 @@ class TickLabelNotation(QMainWindow):
         self.SNYM = QLabel("UseMathsText:",self.frameSNYM);self.SNYM.setFont(myFont)
         self.frameCB2 = QFrame(self);self.frameCB2.setGeometry(QRect(355, 100, 25, 25))
         self.cb2 = QCheckBox(self.frameCB2)
-        self.cb2.setCheckState(QtCore.Qt.Checked)
+        self.cb2.setCheckState(QtCore.Qt.CheckState.Checked)
 
-        painter = QPainter(self.labelC.pixmap())
-        painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        painter.drawLine(QPoint(5, 5), QPoint(5, 125))
-        painter.drawLine(QPoint(5, 125), QPoint(455, 125))
-        painter.drawLine(QPoint(455, 5), QPoint(455, 125))
-        painter.drawLine(QPoint(5, 5), QPoint(455, 5))
-        painter.end()
+        # painter = QPainter(self.labelC.pixmap())
+        # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
+        # painter.drawLine(QPoint(5, 5), QPoint(5, 125))
+        # painter.drawLine(QPoint(5, 125), QPoint(455, 125))
+        # painter.drawLine(QPoint(455, 5), QPoint(455, 125))
+        # painter.drawLine(QPoint(5, 5), QPoint(455, 5))
+        # painter.end()
 
         self.frame23 =  QFrame(self);self.frame23.setGeometry(QRect(20, 170, 80, 25))
         self.applyBtn = QPushButton("Apply",self.frame23)
@@ -2787,15 +2792,15 @@ class TickLabelNotation(QMainWindow):
             mainWin.axesPropObject_1.setxSNU(float(self.SNUEdit.text()))
         if self.SNLEdit.text() != 'None':
             mainWin.axesPropObject_1.setxSNL(float(self.SNLEdit.text()))
-        bs = QtCore.Qt.Unchecked
+        bs = QtCore.Qt.CheckState.Unchecked
         if self.cb2.isChecked():
-            bs = QtCore.Qt.Checked
+            bs = QtCore.Qt.CheckState.Checked
             mainWin.axesPropObject_1.setySNM(True)
         else:
             mainWin.axesPropObject_1.setySNM(False)
 
         if self.cb1.isChecked():
-            bs = QtCore.Qt.Checked
+            bs = QtCore.Qt.CheckState.Checked
             mainWin.axesPropObject_1.setxSNM(True)
         else:
             mainWin.axesPropObject_1.setxSNM(False)
@@ -2820,7 +2825,7 @@ class LegendPopup(QMainWindow):
         self.combo1 = QLabel("Show Legend",self.frame1)
         self.frameCB1 = QFrame(self);self.frameCB1.setGeometry(QRect(150, 10, 25, 25))
         self.cb1 = QCheckBox(self.frameCB1)
-        self.cb1.setCheckState(QtCore.Qt.Checked)
+        self.cb1.setCheckState(QtCore.Qt.CheckState.Checked)
 
         myFont = QFont(); myFont.setBold(True);
         self.frame3 = QFrame(self);self.frame3.setGeometry(QRect(20, 40, 250, 25))
@@ -2848,7 +2853,7 @@ class LegendPopup(QMainWindow):
         self.Label5 = QLabel("Frame:",self.frame6)
         self.frame25 = QFrame(self);self.frame25.setGeometry(QRect(100,130,30,25))
         self.fr1 = QCheckBox(self.frame25)
-        self.fr1.setCheckState(QtCore.Qt.Checked)
+        self.fr1.setCheckState(QtCore.Qt.CheckState.Checked)
 
         self.frame12 = QFrame(self);self.frame12.setGeometry(QRect(205, 40, 250, 25))
         self.Label7 = QLabel("Label Spacing:",self.frame12)
@@ -2868,7 +2873,7 @@ class LegendPopup(QMainWindow):
         self.Label9 = QLabel("Marker First:",self.frame16)
         self.frame24 = QFrame(self);self.frame24.setGeometry(QRect(308,100,30,25))
         self.m1 = QCheckBox(self.frame24)
-        self.m1.setCheckState(QtCore.Qt.Checked)
+        self.m1.setCheckState(QtCore.Qt.CheckState.Checked)
         self.frame17 = QFrame(self);self.frame17.setGeometry(QRect(205, 130, 250, 25))
         self.Label10 = QLabel("Column Spacing:",self.frame17)
         self.frame23 = QFrame(self);self.frame23.setGeometry(QRect(308,125,250,25))
@@ -2879,11 +2884,11 @@ class LegendPopup(QMainWindow):
 
         painter = QPainter(self.labelC.pixmap())
 
-        painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        painter.drawLine(QPoint(5, 5), QPoint(5, 120))
-        painter.drawLine(QPoint(5, 120), QPoint(375, 120))
-        painter.drawLine(QPoint(375, 120), QPoint(375, 5))
-        painter.drawLine(QPoint(375, 5), QPoint(5, 5))
+        # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
+        # painter.drawLine(QPoint(5, 5), QPoint(5, 120))
+        # painter.drawLine(QPoint(5, 120), QPoint(375, 120))
+        # painter.drawLine(QPoint(375, 120), QPoint(375, 5))
+        # painter.drawLine(QPoint(375, 5), QPoint(5, 5))
 
         painter.end()
         self.frame20 =  QFrame(self);self.frame20.setGeometry(QRect(120, 170, 90, 25))
@@ -2923,17 +2928,17 @@ class LegendPopup(QMainWindow):
         self.lblSpc.setText(str(mainWin.legendObject_1.labelspacing))
         self.mscale.setText(str(mainWin.legendObject_1.markerscale))
         self.clmSpc.setText(str(mainWin.legendObject_1.columnspacing))
-        bs = QtCore.Qt.Unchecked
+        bs = QtCore.Qt.CheckState.Unchecked
         if mainWin.legendObject_1.markerfirst :
-            bs = QtCore.Qt.Checked
+            bs = QtCore.Qt.CheckState.Checked
         self.m1.setCheckState(bs)
-        bs = QtCore.Qt.Unchecked
+        bs = QtCore.Qt.CheckState.Unchecked
         if mainWin.legendObject_1.frameon:
-            bs = QtCore.Qt.Checked
+            bs = QtCore.Qt.CheckState.Checked
         self.fr1.setCheckState(bs)
-        bs = QtCore.Qt.Unchecked
+        bs = QtCore.Qt.CheckState.Unchecked
         if mainWin.legendEnable:
-            bs = QtCore.Qt.Checked
+            bs = QtCore.Qt.CheckState.Checked
         self.cb1.setCheckState(bs)
 
     def cancelBtnAction(self):
@@ -3013,7 +3018,7 @@ class ApplicationWindow(QMainWindow):
         self.scrollFile = QScrollArea(self)
         self.scrollFile.setWidget(self.labelFile)
         self.scrollFile.setWidgetResizable(True)
-        self.scrollFile.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff);
+        self.scrollFile.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
         self.scrollFile.setFixedHeight(45)
         self.scrollFile.setFixedWidth(680)
         layout.addWidget(self.scrollFile)
@@ -3027,10 +3032,10 @@ class ApplicationWindow(QMainWindow):
         self.scrollFilen = QScrollArea(self)
         self.scrollFilen.setWidget(self.labelFilen)
         self.scrollFilen.setWidgetResizable(True)
-        self.scrollFilen.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff);
+        self.scrollFilen.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
         self.scrollFilen.setFixedHeight(45)
         self.scrollFilen.setFixedWidth(172)
-        self.scrollFilen.setFrameShape(QFrame.NoFrame)
+        self.scrollFilen.setFrameShape(QFrame.Shape.NoFrame)
         layout.addWidget(self.scrollFilen)
         self.scrollFilen.move(10,65)
 
@@ -3043,7 +3048,7 @@ class ApplicationWindow(QMainWindow):
         self.frameg9.setGeometry(QRect(10, 133, 200, 150))
         self.OPFiles = QListWidget(self.frameg9)
         self.OPFiles.clicked.connect(self.FileSelectionChange)
-        self.OPFiles.setSelectionMode(QAbstractItemView.NoSelection)
+        self.OPFiles.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         layout.addWidget(self.OPFiles)
         self.scrollg2 = QScrollArea(self)
         self.scrollg2.setWidget(self.OPFiles)
@@ -3063,7 +3068,7 @@ class ApplicationWindow(QMainWindow):
         self.senList = QListWidget(self.frame7)
         self.senList.clicked.connect(self.XSelectionChange)
 
-        self.senList.setSelectionMode(QAbstractItemView.NoSelection)
+        self.senList.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         layout.addWidget(self.senList)
         self.scroll = QScrollArea(self)
         self.scroll.setWidget(self.senList)
@@ -3085,11 +3090,11 @@ class ApplicationWindow(QMainWindow):
         self.YCols.setColumnCount(3)
         self.YCols.setHorizontalHeaderLabels(["L","R",""])
         header = self.YCols.horizontalHeader()
-        header.setSectionResizeMode(2, QHeaderView.Stretch)
-        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
         self.YCols.clicked.connect(self.YSelectionChange)
-        self.YCols.setSelectionMode(QAbstractItemView.NoSelection)
+        self.YCols.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         layout.addWidget(self.YCols)
         self.scroll2 = QScrollArea(self)
         self.scroll2.setWidget(self.YCols)
@@ -4223,7 +4228,7 @@ class ApplicationWindow(QMainWindow):
         if len(listOfFileIndex)>1:
             for i in range(0,len(listOfFileIndex)):
                 if self.FileIndex == listOfFileIndex[i]:
-                    self.OPFiles.item(listOfFileIndex[i]).setCheckState(QtCore.Qt.Unchecked)
+                    self.OPFiles.item(listOfFileIndex[i]).setCheckState(QtCore.Qt.CheckState.Unchecked)
                 else:
                     prev = listOfFileIndex[i]
         else:
@@ -4268,7 +4273,7 @@ class ApplicationWindow(QMainWindow):
         if len(listOfXIndex)>1:
             for i in range(0,len(listOfXIndex)):
                 if self.XIndex == listOfXIndex[i]:
-                    self.senList.item(listOfXIndex[i]).setCheckState(QtCore.Qt.Unchecked)
+                    self.senList.item(listOfXIndex[i]).setCheckState(QtCore.Qt.CheckState.Unchecked)
                 else:
                     prev = listOfXIndex[i]
 
@@ -4293,29 +4298,28 @@ class ApplicationWindow(QMainWindow):
             pixmap.fill(QColor("white"));
             self.redIcon= QIcon(pixmap);
 
-            if (item.checkState()==2 and (item2.checkState()!=2)) or (item.checkState()==2 and \
+            checked = QtCore.Qt.CheckState.Checked
+            if (item.checkState()==checked and item2.checkState()!=checked) or (item.checkState()==checked and \
                 (self.FlagLR[i] == 'N' or self.FlagLR[i] == 'R')):
-
                 listOfYIndex.append(i)
                 self.FlagLR[i]='L'
-                self.YCols.item(i,1).setCheckState(QtCore.Qt.Unchecked)
+                self.YCols.item(i,1).setCheckState(QtCore.Qt.CheckState.Unchecked)
                 self.YCols.item(i,1).setIcon(QIcon(self.redIcon))
 
             else:
                 self.YCols.item(i,0).setIcon(QIcon(self.redIcon))
 
-            if (item2.checkState()==2 and (item.checkState()!=2)) or \
-               (item2.checkState()==2 and (self.FlagLR[i] == 'N' or self.FlagLR[i] == 'L')):
+            if (item2.checkState()==checked and (item.checkState()!=checked)) or \
+               (item2.checkState()==checked and (self.FlagLR[i] == 'N' or self.FlagLR[i] == 'L')):
                 listOfYIndexR.append(i)
                 self.FlagLR[i]='R'
-                self.YCols.item(i,0).setCheckState(QtCore.Qt.Unchecked)
+                self.YCols.item(i,0).setCheckState(QtCore.Qt.CheckState.Unchecked)
                 self.YCols.item(i,0).setIcon(QIcon(self.redIcon))
             else:
                 self.YCols.item(i,1).setIcon(QIcon(self.redIcon))
-                self.YCols.item(i,1).setCheckState(QtCore.Qt.Unchecked)
+                self.YCols.item(i,1).setCheckState(QtCore.Qt.CheckState.Unchecked)
 
         if self.YIndex != listOfYIndex or self.YIndexR != listOfYIndexR:
-
             self.YIndex = listOfYIndex
             self.YIndexR = listOfYIndexR
             if self.XIndex == None:
@@ -4324,9 +4328,7 @@ class ApplicationWindow(QMainWindow):
                 self.plotDataWithChangedOptions();
 
     def openFileNameDialog(self):
-
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog#"All Files (*);;Python Files (*.py)"*.xlsx *.csv
+        options = QFileDialog.Option.DontUseNativeDialog#"All Files (*);;Python Files (*.py)"*.xlsx *.csv
 
         if path.exists(self.file_last_opened):
             with open(os.path.expanduser(self.file_last_opened),'r') as f:
@@ -4389,8 +4391,8 @@ class ApplicationWindow(QMainWindow):
 
                                 itm = QListWidgetItem()
                                 itm.setText(dfile)
-                                itm.setFlags(itm.flags() | QtCore.Qt.ItemIsUserCheckable)
-                                itm.setCheckState(QtCore.Qt.Unchecked)
+                                itm.setFlags(itm.flags() | QtCore.Qt.ItemFlag.ItemIsUserCheckable)
+                                itm.setCheckState(QtCore.Qt.CheckState.Unchecked)
 
                                 self.OPFiles.addItem(itm)
                             else:
@@ -4436,22 +4438,22 @@ class ApplicationWindow(QMainWindow):
         ax = self.plotCanvas_1.fig.axes;
         self.plotCanvas_1.fig.savefig(self.fileName)
     def showWarningDialog(self):
-        self.msg.setIcon(QMessageBox.Information)
+        self.msg.setIcon(QMessageBox.Icon.Information)
         self.msg.setWindowTitle("Warning!")
-        self.msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        self.msg.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
         returnValue = self.msg.exec()
     def displayMessage1(self, message_1, message_2):
-        self.msg.setIcon(QMessageBox.Information)
+        self.msg.setIcon(QMessageBox.Icon.Information)
         self.msg.setText(message_1)
         self.msg.setWindowTitle("Message")
         self.msg.setDetailedText(message_2)
-        self.msg.setStandardButtons(QMessageBox.Ok)
+        self.msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         returnValue = self.msg.exec()
     def displayMessage2(self, message_1):
         self.msg.setIcon(QMessageBox.Information)
         self.msg.setWindowTitle("Message")
         self.msg.setText(message_1)
-        self.msg.setStandardButtons(QMessageBox.Ok)
+        self.msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         returnValue = self.msg.exec()
     def readFile(self):
         NoOfItem =self.senList.count()
@@ -4499,26 +4501,26 @@ class ApplicationWindow(QMainWindow):
                         self.plotObject_1.append(PlotObject(label=cl))
                         itm =QListWidgetItem()
                         itm.setText(cl)
-                        itm.setFlags(itm.flags() | QtCore.Qt.ItemIsUserCheckable)
-                        itm.setCheckState(QtCore.Qt.Unchecked)
+                        itm.setFlags(itm.flags() | QtCore.Qt.ItemFlag.ItemIsUserCheckable)
+                        itm.setCheckState(QtCore.Qt.CheckState.Unchecked)
                         self.senList.addItem(itm)
                         pixmap = QPixmap(10,10);
                         pixmap.fill(QColor("white"));
                         self.redIcon= QIcon(pixmap);
                         itm =  QTableWidgetItem("")
-                        itm.setFlags(itm.flags() | QtCore.Qt.ItemIsUserCheckable)
-                        itm.setCheckState(QtCore.Qt.Unchecked)
+                        itm.setFlags(itm.flags() | QtCore.Qt.ItemFlag.ItemIsUserCheckable)
+                        itm.setCheckState(QtCore.Qt.CheckState.Unchecked)
                         itm.setIcon(self.redIcon)
                         self.YCols.setItem(cln,0,itm)
                         itm =  QTableWidgetItem("")
-                        itm.setFlags(itm.flags() | QtCore.Qt.ItemIsUserCheckable)
-                        itm.setCheckState(QtCore.Qt.Unchecked)
+                        itm.setFlags(itm.flags() | QtCore.Qt.ItemFlag.ItemIsUserCheckable)
+                        itm.setCheckState(QtCore.Qt.CheckState.Unchecked)
                         itm.setIcon(self.redIcon)
                         self.YCols.setItem(cln,1,itm)
-                        self.YCols.verticalHeader().setSectionResizeMode(cln, QHeaderView.ResizeToContents)
+                        self.YCols.verticalHeader().setSectionResizeMode(cln, QHeaderView.ResizeMode.ResizeToContents)
                         itm =  QTableWidgetItem(cl)
                         self.YCols.setItem(cln,2,itm)
-                        self.YCols.verticalHeader().setSectionResizeMode(cln, QHeaderView.ResizeToContents)
+                        self.YCols.verticalHeader().setSectionResizeMode(cln, QHeaderView.ResizeMode.ResizeToContents)
 
                 texC = "Columns: " + str(self.n_col)
                 texR = "Rows: " + str(self.total_rows)
@@ -4531,7 +4533,7 @@ class ApplicationWindow(QMainWindow):
                     self.XIndex = 0;
                     self.YIndex = [];
                     self.YIndexR = [];
-                    self.senList.item(0).setCheckState(QtCore.Qt.Checked)
+                    self.senList.item(0).setCheckState(QtCore.Qt.CheckState.Checked)
                     self.pltBtn.setEnabled(1)
 
 class PlotCanvas(FigureCanvas):
@@ -4539,7 +4541,7 @@ class PlotCanvas(FigureCanvas):
         self.fig = Figure(figsize=(width, height))
         FigureCanvas.__init__(self, self.fig)
         self.setParent(parent)
-        FigureCanvas.setSizePolicy(self, QSizePolicy.Fixed, QSizePolicy.Fixed)
+        FigureCanvas.setSizePolicy(self, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
         FigureCanvas.setGeometry(self,QRect(695,200,700,450))
         FigureCanvas.updateGeometry(self)
@@ -4781,7 +4783,7 @@ class PlotWindow(QMainWindow, PlotCanvas):
         super().__init__()
 
 if __name__ == "__main__":
-    QGuiApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True);
+    # QGuiApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True);
     app = QtWidgets.QApplication([])
 
 #   Note: include / at the end in passing dir_output_files
@@ -4794,4 +4796,4 @@ if __name__ == "__main__":
     mainWin = ApplicationWindow(dir_output_files, file_last_opened)
 
     mainWin.show()
-    sys.exit( app.exec_())
+    sys.exit( app.exec())
