@@ -74,8 +74,8 @@ blocks:
     coordinate: [309, 312]
     rotation: 270
     state: true
-- name: connector_f_2A$0
-  id: connector_f_2A
+- name: connector_f_2x$0
+  id: connector_f_2x
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -95,8 +95,8 @@ blocks:
     coordinate: [375, 393]
     rotation: 0
     state: true
-- name: connector_f_2A$1
-  id: connector_f_2A
+- name: connector_f_2x$1
+  id: connector_f_2x
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -449,14 +449,14 @@ connections:
 - [connector_e_3$1, er0, vsrc_dc$1, eb0]
 - [connector_e_3$2, er0, ground$0, et0]
 - [connector_e_3$2, et0, connector_e_3$1, el0]
-- [connector_f_2A$0, '0', s_switch_diode_2$1, '0']
-- [connector_f_2A$1, '0', s_switch_diode_2$0, '0']
+- [connector_f_2x$0, '0', s_switch_diode_2$1, '0']
+- [connector_f_2x$1, '0', s_switch_diode_2$0, '0']
 - [r$0, el0, connector_e_3$0, el0]
 - [r$0, er0, l$0, el0]
 - [s_clock_2a$0, '0', s_gate_pulses_1ph_1$0, '0']
 - [s_clock_2a$0, '1', s_gate_pulses_1ph_1$0, '1']
-- [s_gate_pulses_1ph_1$0, '0', connector_f_2A$1, '0']
-- [s_gate_pulses_1ph_1$0, '1', connector_f_2A$0, '0']
+- [s_gate_pulses_1ph_1$0, '0', connector_f_2x$1, '0']
+- [s_gate_pulses_1ph_1$0, '1', connector_f_2x$0, '0']
 - [s_switch_diode_2$0, eb0, connector_e_3$1, et0]
 - [s_switch_diode_2$0, et0, connector_e_3$0, et0]
 - [s_switch_diode_2$1, eb0, connector_e_3$0, er0]

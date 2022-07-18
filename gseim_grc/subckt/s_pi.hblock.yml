@@ -37,7 +37,21 @@ parameters:
 -   id: mirror
     label: mirror
     default: none
-outvars: []
+-   id: port_offset_l
+    label: port_offset_l
+    default: '0'
+-   id: port_offset_r
+    label: port_offset_r
+    default: '0'
+-   id: port_offset_t
+    label: port_offset_t
+    default: '0'
+-   id: port_offset_b
+    label: port_offset_b
+    default: '0'
+outvars:
+- x
+- y
 
 inputs:
 -   label: x

@@ -26,24 +26,24 @@ using namespace std;
 class EbeLib {
 
   public:
-   int n_iprm  ;
-   int n_sprm  ;
-   int n_rprm  ;
-   int n_stprm ;
-   int n_igprm ;
+   int n_iprm;
+   int n_sprm;
+   int n_rprm;
+   int n_stprm;
+   int n_igprm;
    int n_outprm;
-   int n_nd    ;
-   int n_aux   ;
-   int n_auxs  ;
-   int n_stv   ;
-   int n_xvr   ;
+   int n_nd;
+   int n_aux;
+   int n_auxs;
+   int n_stv;
+   int n_xvr;
 
-   bool flag_lmttstep ;
-   bool flag_lmtnewt  ;
-   bool flag_savehist ;
+   bool flag_lmttstep;
+   bool flag_lmtnewt;
+   bool flag_savehist;
    bool flag_jac_const;
    bool flag_gmin_step;
-   bool flag_x_inputs ;
+   bool flag_x_inputs;
    bool flag_x_outputs;
    bool flag_allow_ssw;
 

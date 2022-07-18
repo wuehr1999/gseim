@@ -22,7 +22,7 @@ Jacobian: variable
 input_vars: x
 output_vars: y
 aux_vars:
-iparms:
+iparms: index=0
 sparms:
 rparms:
 +  T=10u
@@ -40,7 +40,7 @@ g_1: y
 C:
 prototypes:
 variables:
-   double time0,rsd1,rsd2;
+   double time0;
    int n;
    double t0_new,t_a,t_b,t_c,t_d,y0;
 source:
@@ -48,6 +48,9 @@ source:
      dt = X.rprm[nr_dt];
      X.rprm[nr_epsl1] = dt/10.0;
      X.rprm[nr_epsl2] = dt/100.0;
+
+     index = X.iprm[ni_index];
+     G.sampler_flag[index] = 0;
      return;
    }
    if (G.flags[G.i_outvar]) {
@@ -111,16 +114,24 @@ source:
        return;
      } else {
        t_d = abs(t_b-T);
+       index = X.iprm[ni_index];
        if ((t_d < epsl1) || (abs(t_b) < epsl1)) {
          y0 = X.val_vr[nvr_x];
+         G.sampler_flag[index] = 1;
        } else {
          y0 = v_previous;
+         G.sampler_flag[index] = 0;
        }
-       if (G.flags[G.i_function]) {
-         X.g[ng_1] = X.val_vr[nvr_y] - y0;
-       }
-       if (G.flags[G.i_jacobian]) {
-         J.dgdvr[ng_1][nvr_y] = 1.0;
+       cout << "sampler: time0: " << time0 << " sampler_flag: " << G.sampler_flag[index] << endl;
+       if (G.flags[G.i_explicit]) {
+         X.val_vr[nvr_y] = y0;
+       } else if (G.flags[G.i_implicit]) {
+         if (G.flags[G.i_function]) {
+           X.g[ng_1] = X.val_vr[nvr_y] - y0;
+         }
+         if (G.flags[G.i_jacobian]) {
+           J.dgdvr[ng_1][nvr_y] = 1.0;
+         }
        }
      }
      return;

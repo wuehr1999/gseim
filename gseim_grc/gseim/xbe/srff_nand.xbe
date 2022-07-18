@@ -1,0 +1,162 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=srff_nand evaluate=yes save_history=yes allow_ssw=no
+#
+# SR flip-flop (cross-coupled NAND gates)
+# Assume zero gate delay.
+#
+Jacobian: variable
+input_vars: s r
+output_vars: q qbar
+aux_vars:
+iparms:
+sparms:
+rparms:
++  x_high=1
++  x_cross=0
++  q_prev=0
+stparms: q_st=0
+igparms:
+outparms: s r q
+n_f= 0
+n_g= 2
+g_1: q
+g_2: qbar
+C:
+prototypes:
+variables:
+   double time0,q0,q0bar;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     x_high = X.rprm[nr_x_high];
+
+     if (x_high < 0.0) {
+       cout << "srff_nand.xbe: check x_high. Halting..." << endl;
+       exit(1);
+     }
+     x_cross = 0.5*x_high;
+     X.rprm[nr_x_cross] = x_cross;
+     X.rprm[nr_q_prev] = 0.0;
+     return;
+   }
+
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_s] = X.val_vr[nvr_s];
+     X.outprm[no_r] = X.val_vr[nvr_r];
+     X.outprm[no_q] = X.val_vr[nvr_q];
+     return;
+   }
+   if (G.flags[G.i_save_history]) {
+     X.rprm[nr_q_prev] = X.val_vr[nvr_q];
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     q_st = X.stprm[nst_q_st];
+
+     x_cross = X.rprm[nr_x_cross];
+     x_high  = X.rprm[nr_x_high ];
+
+     if (G.flags[G.i_explicit]) {
+       if (q_st > x_cross) {
+         X.val_vr[nvr_q   ] = x_high;
+         X.val_vr[nvr_qbar] = 0.0;
+       } else {
+         X.val_vr[nvr_q   ] = 0.0;
+         X.val_vr[nvr_qbar] = x_high;
+       }
+     } else if (G.flags[G.i_implicit]) {
+       if (q_st > x_cross) {
+         q0    = x_high;
+         q0bar = 0.0;
+       } else {
+         q0    = 0.0;
+         q0bar = x_high;
+       }
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_q   ] - q0;
+         X.g[ng_2] = X.val_vr[nvr_qbar] - q0bar;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_q   ] = 1.0;
+         J.dgdvr[ng_2][nvr_qbar] = 1.0;
+       }
+     }
+     return;
+   }
+   x_cross = X.rprm[nr_x_cross];
+   x_high  = X.rprm[nr_x_high ];
+   q_prev  = X.rprm[nr_q_prev ];
+
+   s = X.val_vr[nvr_s];
+   r = X.val_vr[nvr_r];
+
+   if (s < x_cross) {
+     if (r < x_cross) {
+//      Both outputs zero, not expected generally.
+        q0 = x_high;
+     } else {
+        q0 = 0.0;
+     }
+   } else {
+     if (r > x_cross) {
+       q0= 0.0;
+     } else {
+       q0 = q_prev;
+     }
+   }
+   if (G.flags[G.i_init_guess]) {
+     if (q0 > x_cross) {
+       q0bar = 0.0;
+     } else {
+       q0bar = x_high;
+     }
+     X.val_vr[nvr_q   ] = q0;
+     X.val_vr[nvr_qbar] = q0bar;
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+
+     if (G.iter_trns_x == 0) {
+       if ((G.flags[G.i_slv_previous]) || (G.flags[G.i_slv_readfile])) {
+         q0 = X.val_vr[nvr_q];
+       }
+     }
+
+     x_cross = X.rprm[nr_x_cross];
+     x_high  = X.rprm[nr_x_high ];
+
+     if (q0 > x_cross) {
+       q0bar = 0.0;
+     } else {
+       q0bar = x_high;
+     }
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_q   ] = q0;
+       X.val_vr[nvr_qbar] = q0bar;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_q   ] - q0;
+         X.g[ng_2] = X.val_vr[nvr_qbar] - q0bar;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_q   ] = 1.0;
+         J.dgdvr[ng_2][nvr_qbar] = 1.0;
+       }
+     }
+   }
+endC
+endxbe

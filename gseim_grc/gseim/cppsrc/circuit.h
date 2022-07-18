@@ -113,9 +113,12 @@ public:
    bool flag_x_matrix;
    bool flag_e,flag_x_e,flag_e_only;
    bool flag_exc,flag_exs,flag_exs_fex,flag_exs_fe,flag_exs_fx;
+   bool flag_time_parms;
 
    bool flag_linear_x;
    bool flag_linear_e,flag_linear_ex;
+
+   int n_samplers;
 
 public:
   Circuit();
@@ -154,6 +157,15 @@ public:
    const vector<EbeLib> &ebe_lib,
    const vector<XbeUsr> &xbe_usr,
    const vector<EbeUsr> &ebe_usr);
+
+  void check_time_parms(
+   const vector<XbeLib> &xbe_lib,
+   const vector<XbeUsr> &xbe_usr);
+
+  void check_sampler_index(
+   const vector<XbeLib> &xbe_lib,
+   const vector<XbeUsr> &xbe_usr,
+   Global &global);
 
   void xbe_map_vr(
    const vector<XbeLib> &xbe_lib,

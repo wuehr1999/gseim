@@ -275,8 +275,8 @@ blocks:
     coordinate: [447, 165]
     rotation: 180
     state: true
-- name: connector_f_2B$0
-  id: connector_f_2B
+- name: connector_f_2y$0
+  id: connector_f_2y
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -296,8 +296,8 @@ blocks:
     coordinate: [234, 189]
     rotation: 0
     state: true
-- name: connector_f_2B$1
-  id: connector_f_2B
+- name: connector_f_2y$1
+  id: connector_f_2y
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -317,8 +317,8 @@ blocks:
     coordinate: [219, 213]
     rotation: 0
     state: true
-- name: connector_f_2B$2
-  id: connector_f_2B
+- name: connector_f_2y$2
+  id: connector_f_2y
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -338,8 +338,8 @@ blocks:
     coordinate: [975, 375]
     rotation: 270
     state: true
-- name: connector_f_2B$3
-  id: connector_f_2B
+- name: connector_f_2y$3
+  id: connector_f_2y
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -1074,7 +1074,7 @@ blocks:
 connections:
 - [c$0, el0, connector_e_3$8, et0]
 - [c$1, el0, connector_e_3$10, et0]
-- [cmpr_2_1$0, '0', connector_f_2B$2, '0']
+- [cmpr_2_1$0, '0', connector_f_2y$2, '0']
 - [connector_e_3$0, et0, connector_e_3$1, el0]
 - [connector_e_3$10, el0, connector_e_3$11, er0]
 - [connector_e_3$11, el0, voltmeter_fb$0, et0]
@@ -1090,17 +1090,17 @@ connections:
 - [connector_e_3$8, er0, connector_e_3$7, el0]
 - [connector_e_3$9, el0, diode_r$0, el0]
 - [connector_e_3$9, et0, switch_1$0, et0]
-- [connector_f_2B$0, '0', s_solar_module_1$1, '0']
-- [connector_f_2B$1, '0', s_solar_module_1$1, '1']
-- [connector_f_2B$2, '0', delay_onestep$0, '0']
-- [connector_f_2B$3, '0', switch_1$0, '0']
+- [connector_f_2y$0, '0', s_solar_module_1$1, '0']
+- [connector_f_2y$1, '0', s_solar_module_1$1, '1']
+- [connector_f_2y$2, '0', delay_onestep$0, '0']
+- [connector_f_2y$3, '0', switch_1$0, '0']
 - [connector_f_3b$0, '0', s_solar_module_1$0, '0']
-- [connector_f_3b$0, '1', connector_f_2B$0, '0']
+- [connector_f_3b$0, '1', connector_f_2y$0, '0']
 - [connector_f_3b$1, '0', s_solar_module_1$0, '1']
-- [connector_f_3b$1, '1', connector_f_2B$1, '0']
+- [connector_f_3b$1, '1', connector_f_2y$1, '0']
 - [const$0, '0', connector_f_3b$0, '0']
 - [const$1, '0', connector_f_3b$1, '0']
-- [delay_onestep$0, '0', connector_f_2B$3, '0']
+- [delay_onestep$0, '0', connector_f_2y$3, '0']
 - [diff$0, '0', s_pi$0, '0']
 - [diode_r$0, er0, connector_e_3$10, er0]
 - [ground$0, et0, connector_e_3$0, er0]

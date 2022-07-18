@@ -841,6 +841,99 @@ void e_ground(Global &G,EbeUsr &X,EbeJac &J) {
 // do nothing
    return;
 }
+void e_igbt_1(Global &G,EbeUsr &X,EbeJac &J) {
+   double r,g,vp,vn;
+   bool l_closed;
+   double x;
+   double r_on,r_off,v_on,x_high;
+   const int nnd_p = 0;
+   const int nnd_n = 1;
+   const int nx_x = 0;
+   const int nr_r_on = 0;
+   const int nr_r_off = 1;
+   const int nr_v_on = 2;
+   const int nr_x_high = 3;
+   const int no_i = 0;
+   const int no_v = 1;
+   const int nf_1 = 0;
+   const int nf_2 = 1;
+   const int nh_1 = 0;
+   const int nh_2 = 1;
+   if (G.flags[G.i_one_time_parms]) {
+     v_on  = X.rprm[nr_v_on ];
+     r_on  = X.rprm[nr_r_on ];
+     r_off = X.rprm[nr_r_off];
+
+     if (v_on < 0.0) {
+       cout << "igbt_g1.ebe: v_on < 0 ?!" << endl;
+       cout << "   Halting..." << endl;
+       exit(1);
+     }
+     if (r_on == 0.0) {
+       cout << "igbt_g1.ebe: r_on  =  0 ?!" << endl;
+       cout << "   Halting..." << endl;
+       exit(1);
+     }
+     if (r_off < r_on) {
+       cout << "igbt_g1.ebe: r_off < r_on ?!" << endl;
+       cout << "   Halting..." << endl;
+       exit(1);
+     }
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_p];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_p] = 0.0;
+     X.val_nd[nnd_n] = 0.0;
+     return;
+   }
+   x_high = X.rprm[nr_x_high];
+
+   v_on  = X.rprm[nr_v_on ];
+   r_on  = X.rprm[nr_r_on ];
+   r_off = X.rprm[nr_r_off];
+
+   vp = X.val_nd[nnd_p];
+   vn = X.val_nd[nnd_n];
+
+   if (G.flags[G.i_trns] || G.flags[G.i_startup] || G.flags[G.i_dc]) {
+     l_closed = (X.val_xvr[nx_x] > (0.5*x_high)) && (vp > (vn + v_on));
+     if (l_closed) {
+       g = 1.0/r_on;
+     } else {
+       g = 1.0/r_off;
+     }
+     if (G.flags[G.i_trns] || G.flags[G.i_dc]) {
+       if (G.flags[G.i_function]) {
+         X.f[nf_1] = g*(vp-vn-v_on);
+         X.f[nf_2] = -X.f[nf_1];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dfdv[nf_1][nnd_p] =  g;
+         J.dfdv[nf_1][nnd_n] = -g;
+         J.dfdv[nf_2][nnd_p] = -g;
+         J.dfdv[nf_2][nnd_n] =  g;
+       }
+     }
+     if (G.flags[G.i_startup]) {
+       if (G.flags[G.i_function]) {
+         X.h[nf_1] = g*(vp-vn-v_on);
+         X.h[nh_2] = -X.h[nh_1];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dhdv[nh_1][nnd_p] =  g;
+         J.dhdv[nh_1][nnd_n] = -g;
+         J.dhdv[nh_2][nnd_p] = -g;
+         J.dhdv[nh_2][nnd_n] =  g;
+       }
+     }
+     return;
+   }
+   return;
+}
 void e_isrc_x(Global &G,EbeUsr &X,EbeJac &J) {
    double x_in;
    const int nnd_p = 0;
@@ -1405,7 +1498,8 @@ void e_switch_1(Global &G,EbeUsr &X,EbeJac &J) {
    vn = X.val_nd[nnd_n];
 
    if (G.flags[G.i_trns] || G.flags[G.i_startup] || G.flags[G.i_dc]) {
-     l_closed = (X.val_xvr[nx_x] > (0.5*x_high));
+     l_closed = (X.val_xvr[nx_x] > (0.5*x_high)) &&
+                ((vp > (vn + v_on)) || (vn > (vp + v_on)));
      if (l_closed) {
        g = 1.0/r_on;
      } else {
@@ -1413,7 +1507,11 @@ void e_switch_1(Global &G,EbeUsr &X,EbeJac &J) {
      }
      if (G.flags[G.i_trns] || G.flags[G.i_dc]) {
        if (G.flags[G.i_function]) {
-         X.f[nf_1] = g*(vp-vn-v_on);
+         if (vp >= vn) {
+            X.f[nf_1] = g*(vp-vn-v_on);
+         } else {
+            X.f[nf_1] = g*(vp-vn+v_on);
+         }
          X.f[nf_2] = -X.f[nf_1];
        }
        if (G.flags[G.i_jacobian]) {
@@ -1425,7 +1523,11 @@ void e_switch_1(Global &G,EbeUsr &X,EbeJac &J) {
      }
      if (G.flags[G.i_startup]) {
        if (G.flags[G.i_function]) {
-         X.h[nh_1] = g*(vp-vn-v_on);
+         if (vp >= vn) {
+            X.h[nf_1] = g*(vp-vn-v_on);
+         } else {
+            X.h[nf_1] = g*(vp-vn+v_on);
+         }
          X.h[nh_2] = -X.h[nh_1];
        }
        if (G.flags[G.i_jacobian]) {
@@ -2725,6 +2827,177 @@ void e_xfmr_level0_1ph_1_2(Global &G,EbeUsr &X,EbeJac &J) {
       X.val_aux[na_cur_p_p ] = ip0;
       X.val_aux[na_cur_s1_p] = is10;
       X.val_aux[na_cur_s2_p] = is20;
+      return;
+   }
+   return;
+}
+void e_xfmr_level0_1ph_1_3(Global &G,EbeUsr &X,EbeJac &J) {
+   int nfp_p_p=0;
+   int nfp_p_n=1;
+   int nfp_s1_p=2;
+   int nfp_s1_n=3;
+   int nfp_s2_p=4;
+   int nfp_s2_n=5;
+   int nfp_s3_p=6;
+   int nfp_s3_n=7;
+   double cur_p_p,cur_s1_p,cur_s2_p,cur_s3_p;
+   double p_turns,s1_turns,s2_turns,s3_turns;
+   double ip0,is10,is20,is30;
+   const int nnd_p_p = 0;
+   const int nnd_p_n = 1;
+   const int nnd_s1_p = 2;
+   const int nnd_s1_n = 3;
+   const int nnd_s2_p = 4;
+   const int nnd_s2_n = 5;
+   const int nnd_s3_p = 6;
+   const int nnd_s3_n = 7;
+   const int na_cur_p_p = 0;
+   const int na_cur_s1_p = 1;
+   const int na_cur_s2_p = 2;
+   const int na_cur_s3_p = 3;
+   const int nr_p_turns = 0;
+   const int nr_s1_turns = 1;
+   const int nr_s2_turns = 2;
+   const int nr_s3_turns = 3;
+   const int nst_ip0 = 0;
+   const int nst_is10 = 1;
+   const int nst_is20 = 2;
+   const int nst_is30 = 3;
+   const int no_ip = 0;
+   const int no_is1 = 1;
+   const int no_is2 = 2;
+   const int no_is3 = 3;
+   const int no_vp = 4;
+   const int no_vs1 = 5;
+   const int no_vs2 = 6;
+   const int no_vs3 = 7;
+   const int nf_1 = 0;
+   const int nf_2 = 1;
+   const int nf_3 = 2;
+   const int nf_4 = 3;
+   const int nf_5 = 4;
+   const int nf_6 = 5;
+   const int nf_7 = 6;
+   const int nf_8 = 7;
+   const int nf_9 = 8;
+   const int nf_10 = 9;
+   const int nf_11 = 10;
+   const int nf_12 = 11;
+   const int nh_1 = 0;
+   const int nh_2 = 1;
+   const int nh_3 = 2;
+   const int nh_4 = 3;
+   const int nh_5 = 4;
+   const int nh_6 = 5;
+   const int nh_7 = 6;
+   const int nh_8 = 7;
+   if (G.flags[G.i_init_guess]) {
+     X.val_aux[na_cur_p_p ] = 0.0;
+     X.val_aux[na_cur_s1_p] = 0.0;
+     X.val_aux[na_cur_s2_p] = 0.0;
+     X.val_aux[na_cur_s3_p] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+      X.outprm[no_vp ] = X.val_nd[nnd_p_p ]-X.val_nd[nnd_p_n ];
+      X.outprm[no_vs1] = X.val_nd[nnd_s1_p]-X.val_nd[nnd_s1_n];
+      X.outprm[no_vs2] = X.val_nd[nnd_s2_p]-X.val_nd[nnd_s2_n];
+      X.outprm[no_vs3] = X.val_nd[nnd_s3_p]-X.val_nd[nnd_s3_n];
+      X.outprm[no_ip ] = X.cur_nd[nnd_p_p ];
+      X.outprm[no_is1] = X.cur_nd[nnd_s1_p];
+      X.outprm[no_is2] = X.cur_nd[nnd_s2_p];
+      X.outprm[no_is3] = X.cur_nd[nnd_s3_p];
+      return;
+   }
+   if (G.flags[G.i_dc]) {
+     cout << "xfmr_level0_1ph_1_2.ebe: dc not implemented." << endl;
+     cout << "  Halting..." << endl; exit(1);
+   }
+   if (G.flags[G.i_trns]) {
+     p_turns  = X.rprm[nr_p_turns ];
+     s1_turns = X.rprm[nr_s1_turns];
+     s2_turns = X.rprm[nr_s2_turns];
+     s3_turns = X.rprm[nr_s3_turns];
+
+     cur_p_p  = X.val_aux[na_cur_p_p ];
+     cur_s1_p = X.val_aux[na_cur_s1_p];
+     cur_s2_p = X.val_aux[na_cur_s2_p];
+     cur_s3_p = X.val_aux[na_cur_s3_p];
+
+     if (G.flags[G.i_function]) {
+       X.f[nfp_p_p ] =  cur_p_p;
+       X.f[nfp_p_n ] = -cur_p_p;
+       X.f[nfp_s1_p] =  cur_s1_p;
+       X.f[nfp_s1_n] = -cur_s1_p;
+       X.f[nfp_s2_p] =  cur_s2_p;
+       X.f[nfp_s2_n] = -cur_s2_p;
+       X.f[nfp_s3_p] =  cur_s3_p;
+       X.f[nfp_s3_n] = -cur_s3_p;
+
+       X.f[nf_9] = (X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n])/p_turns -
+                   (X.val_nd[nnd_s1_p]-X.val_nd[nnd_s1_n])/s1_turns;
+       X.f[nf_10] = (X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n])/p_turns -
+                   (X.val_nd[nnd_s2_p]-X.val_nd[nnd_s2_n])/s2_turns;
+       X.f[nf_11] = (X.val_nd[nnd_p_p]-X.val_nd[nnd_p_n])/p_turns -
+                   (X.val_nd[nnd_s3_p]-X.val_nd[nnd_s3_n])/s3_turns;
+       X.f[nf_12] = p_turns*cur_p_p +
+                   s1_turns*cur_s1_p +
+                   s2_turns*cur_s2_p +
+                   s3_turns*cur_s3_p;
+     }
+     if (G.flags[G.i_jacobian]) {
+       J.dfdaux[nfp_p_p ][na_cur_p_p ] =  1.0;
+       J.dfdaux[nfp_p_n ][na_cur_p_p ] = -1.0;
+       J.dfdaux[nfp_s1_p][na_cur_s1_p] =  1.0;
+       J.dfdaux[nfp_s1_n][na_cur_s1_p] = -1.0;
+       J.dfdaux[nfp_s2_p][na_cur_s2_p] =  1.0;
+       J.dfdaux[nfp_s2_n][na_cur_s2_p] = -1.0;
+       J.dfdaux[nfp_s3_p][na_cur_s3_p] =  1.0;
+       J.dfdaux[nfp_s3_n][na_cur_s3_p] = -1.0;
+
+       J.dfdv[nf_9][nnd_p_p] =  1.0/p_turns;
+       J.dfdv[nf_9][nnd_p_n] = -1.0/p_turns;
+       J.dfdv[nf_9][nnd_s1_p] = -1.0/s1_turns;
+       J.dfdv[nf_9][nnd_s1_n] =  1.0/s1_turns;
+
+       J.dfdv[nf_10][nnd_p_p] =  1.0/p_turns;
+       J.dfdv[nf_10][nnd_p_n] = -1.0/p_turns;
+       J.dfdv[nf_10][nnd_s2_p] = -1.0/s2_turns;
+       J.dfdv[nf_10][nnd_s2_n] =  1.0/s2_turns;
+
+       J.dfdv[nf_11][nnd_p_p] =  1.0/p_turns;
+       J.dfdv[nf_11][nnd_p_n] = -1.0/p_turns;
+       J.dfdv[nf_11][nnd_s3_p] = -1.0/s3_turns;
+       J.dfdv[nf_11][nnd_s3_n] =  1.0/s3_turns;
+
+       J.dfdaux[nf_12][na_cur_p_p] = p_turns;
+       J.dfdaux[nf_12][na_cur_s1_p] = s1_turns;
+       J.dfdaux[nf_12][na_cur_s2_p] = s2_turns;
+       J.dfdaux[nf_12][na_cur_s3_p] = s3_turns;
+     }
+   }
+   if (G.flags[G.i_startup]) {
+      ip0  = X.stprm[nst_ip0 ];
+      is10 = X.stprm[nst_is10];
+      is20 = X.stprm[nst_is20];
+      is30 = X.stprm[nst_is30];
+
+      cout << "xfmr_level0_1ph_1_3.ebe: startup not implemented. Halting..." << endl;
+      exit(1);
+      if (G.flags[G.i_function]) {
+         X.h[nh_1] =  ip0;
+         X.h[nh_2] = -ip0;
+         X.h[nh_3] =  is10;
+         X.h[nh_4] = -is10;
+         X.h[nh_5] =  is20;
+         X.h[nh_6] = -is20;
+         X.h[nh_7] =  is30;
+         X.h[nh_8] = -is30;
+      }
+      X.val_aux[na_cur_p_p ] = ip0;
+      X.val_aux[na_cur_s1_p] = is10;
+      X.val_aux[na_cur_s2_p] = is20;
+      X.val_aux[na_cur_s3_p] = is30;
       return;
    }
    return;

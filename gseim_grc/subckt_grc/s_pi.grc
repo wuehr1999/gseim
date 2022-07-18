@@ -4,6 +4,7 @@ options:
     category: '[GRC Hier Blocks]'
     comment: ''
     copyright: ''
+    delta_show_grid: '0'
     description: ''
     drawing_scheme: name
     engine_output: GUI_window
@@ -178,12 +179,29 @@ gparms:
   Ki: '1'
   Kp: '1'
   drawing_scheme: name
+  mirror: none
   port_block_x: '5'
   port_block_y: '5'
+  port_offset_b: '0'
+  port_offset_l: '0'
+  port_offset_r: '0'
+  port_offset_t: '0'
   port_sep_x: '0'
   port_sep_y: '0'
   rotate_strict: 'no'
   y20: '0'
-outvars: {}
+outvars:
+  x:
+  - connection
+  - - pad_source$0
+    - '0'
+    - connector_f_3c$0
+    - '0'
+  y:
+  - connection
+  - - sum_2$0
+    - '0'
+    - pad_sink$0
+    - '0'
 solve_blocks: []
 output_blocks: []

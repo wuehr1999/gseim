@@ -8,6 +8,7 @@ diode_r
 diode_spice
 dummy_e
 ground
+igbt_1
 isrc_x
 l
 r
@@ -27,3 +28,4 @@ xfmr_l1l2
 xfmr_level0_1ph
 xfmr_level2_1ph
 xfmr_level0_1ph_1_2
+xfmr_level0_1ph_1_3

@@ -4,6 +4,7 @@ options:
     category: '[GRC Hier Blocks]'
     comment: ''
     copyright: ''
+    delta_show_grid: '0'
     description: ''
     drawing_scheme: name
     engine_output: GUI_window
@@ -71,7 +72,7 @@ blocks:
     t0: '0'
     y_high: '1'
   states:
-    coordinate: [351, 351]
+    coordinate: [327, 351]
     rotation: 0
     state: true
 - name: connector_e_2A$1
@@ -107,7 +108,7 @@ blocks:
     port_sep_y: '0'
     rotate_strict: 'no'
   states:
-    coordinate: [258, 414]
+    coordinate: [300, 414]
     rotation: 270
     state: true
 - name: connector_e_3$1
@@ -308,7 +309,7 @@ blocks:
     port_sep_y: '0'
     rotate_strict: 'yes'
   states:
-    coordinate: [249, 420]
+    coordinate: [291, 420]
     rotation: 0
     state: true
 - name: ground$1
@@ -416,6 +417,7 @@ blocks:
     comment: ''
     drawing_scheme: text
     element_name: vsrc_dc$0
+    font_size: '9'
     mirror: none
     name: none
     parameter_name: vdc
@@ -426,7 +428,7 @@ blocks:
     rotate_strict: 'no'
     show_name: do_not_show
   states:
-    coordinate: [216, 243]
+    coordinate: [258, 243]
     rotation: 0
     state: true
 - name: show_parameter$1
@@ -435,6 +437,7 @@ blocks:
     comment: ''
     drawing_scheme: text
     element_name: c$0
+    font_size: '9'
     mirror: none
     name: none
     parameter_name: c
@@ -454,6 +457,7 @@ blocks:
     comment: ''
     drawing_scheme: text
     element_name: r$0
+    font_size: '9'
     mirror: none
     name: none
     parameter_name: r
@@ -473,6 +477,7 @@ blocks:
     comment: ''
     drawing_scheme: text
     element_name: l$0
+    font_size: '9'
     mirror: none
     name: none
     parameter_name: l
@@ -529,7 +534,7 @@ blocks:
     rotate_strict: 'yes'
     vdc: '100'
   states:
-    coordinate: [246, 219]
+    coordinate: [288, 219]
     rotation: 0
     state: true
 connections:
@@ -596,6 +601,7 @@ solve_blocks:
     delt_min_e: none
     delt_min_ex: none
     delt_min_x: none
+    e_nr_check_delx_all: 'no'
     e_nr_check_spice: 'yes'
     e_nr_dmp: 'no'
     e_nr_dmp0: 'no'
@@ -603,18 +609,21 @@ solve_blocks:
     e_nr_dmp_itermax0: '50'
     e_nr_dmp_k: '0.2'
     e_nr_dmp_k0: '0.2'
+    e_nr_eps_delx_all: '1.0e-4'
     e_nr_itermax: '500'
     e_nr_itermax0: '500'
     e_nr_spice_abstol: '1.0e-6'
     e_nr_spice_reltol: '1.0e-3'
     e_nr_spice_vntol: '1.0e-4'
     e_nr_write_rhs2: 'no'
+    ex_nr_check_delx_all: 'no'
     ex_nr_dmp: 'no'
     ex_nr_dmp0: 'no'
     ex_nr_dmp_itermax: '50'
     ex_nr_dmp_itermax0: '50'
     ex_nr_dmp_k: '0.2'
     ex_nr_dmp_k0: '0.2'
+    ex_nr_eps_delx_all: '1.0e-4'
     ex_nr_itermax: '500'
     ex_nr_itermax0: '500'
     ex_nr_write_rhs2: 'no'
@@ -648,13 +657,18 @@ solve_blocks:
     tstep0_x: none
     write_iter_n_e: '1000'
     write_iter_n_x: '1000'
+    write_time_e: 'no'
     write_time_x: 'no'
+    x_nr_check_delx_all: 'no'
+    x_nr_check_rhs2: 'yes'
     x_nr_dmp: 'no'
     x_nr_dmp0: 'no'
     x_nr_dmp_itermax: '50'
     x_nr_dmp_itermax0: '50'
     x_nr_dmp_k: '0.2'
     x_nr_dmp_k0: '0.2'
+    x_nr_eps_delx_all: '1.0e-4'
+    x_nr_eps_rhs: '1.0e-6'
     x_nr_itermax: '500'
     x_nr_itermax0: '500'
     x_nr_write_rhs2: 'no'

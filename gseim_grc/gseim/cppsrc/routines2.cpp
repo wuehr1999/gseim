@@ -1560,10 +1560,16 @@ void xbe_init_guess(
      }
    }
 
-   for (int i_pass=0; i_pass < cct.x_n_pass; i_pass++) {
-     for (int i=0; i < cct.x_pass_n_beu[i_pass]; i++) {
-       i_xbeu = cct.x_pass_beu[i_pass][i];
+   if (cct.flag_alg_loop) {
+     for (i_xbeu=0; i_xbeu < cct.n_xbeu; i_xbeu++) {
        get_xbe_1(i_xbeu,xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
+   } else {
+     for (int i_pass=0; i_pass < cct.x_n_pass; i_pass++) {
+       for (int i=0; i < cct.x_pass_n_beu[i_pass]; i++) {
+         i_xbeu = cct.x_pass_beu[i_pass][i];
+         get_xbe_1(i_xbeu,xbe_lib,xbe_usr,xbe_jac,cct,global);
+       }
      }
    }
 
@@ -2013,7 +2019,6 @@ void xbe_find_nextbreak(
 
    int i_xbeu,i_xbel;
 
-   global.flags[global.i_trns] = true;
    global.flags[global.i_next_time] = true;
 
    for (i_xbeu=0; i_xbeu < cct.n_xbeu; i_xbeu++) {
@@ -2025,7 +2030,6 @@ void xbe_find_nextbreak(
        xbe_usr[i_xbeu].next_break = global.time_nextbreak_x;
      }
    }
-   global.flags[global.i_trns] = false;
    global.flags[global.i_next_time] = false;
 
    return;
@@ -2040,7 +2044,6 @@ void ebe_find_nextbreak(
 
    int i_ebeu,i_ebel;
 
-   global.flags[global.i_trns] = true;
    global.flags[global.i_next_time] = true;
 
    for (i_ebeu=0; i_ebeu < cct.n_ebeu; i_ebeu++) {
@@ -2052,7 +2055,6 @@ void ebe_find_nextbreak(
        ebe_usr[i_ebeu].next_break = global.time_nextbreak_e;
      }
    }
-   global.flags[global.i_trns] = false;
    global.flags[global.i_next_time] = false;
 
    return;
@@ -2069,7 +2071,6 @@ void get_tnext_x(
    int i_xbeu,i_xbel;
    double time_next_1,t_next,delt1;
 
-   global.flags[global.i_trns] = true;
    global.flags[global.i_next_time] = true;
 
    global.time_given_x = slv.time_present_x;
@@ -2084,11 +2085,12 @@ void get_tnext_x(
        global.time_nextbreak_x = global.time_end;
        cct_to_xbe_1(i_xbeu,xbe_lib,xbe_usr,cct);
 
-       get_xbe(i_xbel,global,xbe_usr[i_xbeu],xbe_jac[i_xbeu]);
+       if (xbe_lib[i_xbel].flag_lmttstep) {
+         get_xbe(i_xbel,global,xbe_usr[i_xbeu],xbe_jac[i_xbeu]);
+       }
        xbe_usr[i_xbeu].next_break = global.time_nextbreak_x;
      }
    }
-   global.flags[global.i_trns] = false;
    global.flags[global.i_next_time] = false;
 
    if (slv.delt_x != slv.delt_min_x) {
@@ -2122,7 +2124,6 @@ void get_tnext_e(
    int i_ebeu,i_ebel;
    double time_next_1,t_next,delt1;
 
-   global.flags[global.i_trns] = true;
    global.flags[global.i_next_time] = true;
 
    global.time_given_e = slv.time_present_e;
@@ -2137,11 +2138,12 @@ void get_tnext_e(
        global.time_nextbreak_e = global.time_end;
        cct_to_ebe_nd_1(i_ebeu,ebe_lib,ebe_usr,cct);
 
-       get_ebe(i_ebel,global,ebe_usr[i_ebeu],ebe_jac[i_ebel]);
+       if (ebe_lib[i_ebel].flag_lmttstep) {
+         get_ebe(i_ebel,global,ebe_usr[i_ebeu],ebe_jac[i_ebel]);
+       }
        ebe_usr[i_ebeu].next_break = global.time_nextbreak_e;
      }
    }
-   global.flags[global.i_trns] = false;
    global.flags[global.i_next_time] = false;
 
    if (slv.delt_e != slv.delt_min_e) {
@@ -2179,7 +2181,6 @@ void get_tnext_ex(
    int i_xbeu,i_xbel;
    double time_next_1,t_next,delt1;
 
-   global.flags[global.i_trns] = true;
    global.flags[global.i_next_time] = true;
 
    global.time_given_e = slv.time_present_e;
@@ -2195,7 +2196,9 @@ void get_tnext_ex(
        global.time_nextbreak_e = global.time_end;
        cct_to_ebe_nd_1(i_ebeu,ebe_lib,ebe_usr,cct);
 
-       get_ebe(i_ebel,global,ebe_usr[i_ebeu],ebe_jac[i_ebel]);
+       if (ebe_lib[i_ebel].flag_lmttstep) {
+         get_ebe(i_ebel,global,ebe_usr[i_ebeu],ebe_jac[i_ebel]);
+       }
        ebe_usr[i_ebeu].next_break = global.time_nextbreak_e;
      }
    }
@@ -2212,7 +2215,6 @@ void get_tnext_ex(
        xbe_usr[i_xbeu].next_break = global.time_nextbreak_x;
      }
    }
-   global.flags[global.i_trns] = false;
    global.flags[global.i_next_time] = false;
 
    if (slv.delt_e != slv.delt_min_ex) {
@@ -2340,8 +2342,8 @@ void xbe_reset_1(
    Global &global) {
 
    int i_xbeu,i_xbel;
+   int n_vr1,i_xbeu_vr,i_svec;
 
-   global.flags[global.i_trns] = true;
    global.flags[global.i_reset_x] = true;
 
    for (i_xbeu=0; i_xbeu < cct.n_xbeu; i_xbeu++) {
@@ -2354,18 +2356,88 @@ void xbe_reset_1(
        get_xbe(i_xbel,global,xbe_usr[i_xbeu],xbe_jac[i_xbeu]);
 
        if (flag_implicit) {
-         xbe_to_cct_all(xbe_lib,xbe_usr,cct);
-         form_solvec_x(xbe_lib,xbe_usr,smat,cct);
+
+         n_vr1 = xbe_lib[i_xbel].n_vr;
+
+         for (int i=0; i < n_vr1; i++) {
+           i_xbeu_vr = xbe_usr[i_xbeu].vr[i];
+           cct.val_xvr[i_xbeu_vr] = xbe_usr[i_xbeu].val_vr[i];
+           i_svec = cct.map_xbeuvr_to_svec[i_xbeu_vr];
+           smat.svec_x[i_svec] = xbe_usr[i_xbeu].val_vr[i];
+         }
+
        } else {
          xbe_to_cct_op_1(i_xbeu,xbe_lib,xbe_usr,cct);
        }
      }
    }
-   global.flags[global.i_trns] = false;
+
    global.flags[global.i_reset_x] = false;
 
    return;
 } // end of xbe_reset_1
+// -----------------------------------------------------------------------------
+void xbe_reset_1_exc(
+   vector<EbeLib> &ebe_lib,
+   vector<EbeUsr> &ebe_usr,
+   vector<EbeJac> &ebe_jac,
+   vector<XbeLib> &xbe_lib,
+   vector<XbeUsr> &xbe_usr,
+   vector<XbeJac> &xbe_jac,
+   SolveBlocks &slv,
+   Circuit &cct,
+   SysMat &smat,
+   Global &global) {
+
+   int i_xbeu,i_xbel;
+   int n_vr1,i_xbeu_vr,i_svec;
+
+   global.flags[global.i_reset_x] = true;
+
+   for (i_xbeu=0; i_xbeu < cct.n_xbeu; i_xbeu++) {
+     i_xbel = xbe_usr[i_xbeu].index_xbel;
+
+     if (xbe_lib[i_xbel].flag_reset) {
+       get_xbe(i_xbel,global,xbe_usr[i_xbeu],xbe_jac[i_xbeu]);
+
+       n_vr1 = xbe_lib[i_xbel].n_vr;
+
+       for (int i=0; i < n_vr1; i++) {
+         i_xbeu_vr = xbe_usr[i_xbeu].vr[i];
+         cct.val_xvr[i_xbeu_vr] = xbe_usr[i_xbeu].val_vr[i];
+         i_svec = cct.map_xbeuvr_to_svec[i_xbeu_vr];
+         smat.svec_ex[i_svec] = xbe_usr[i_xbeu].val_vr[i];
+       }
+
+     }
+   }
+   global.flags[global.i_reset_x] = false;
+
+   return;
+} // end of xbe_reset_1_exc
+// -----------------------------------------------------------------------------
+void xbe_time_parms(
+   vector<XbeLib> &xbe_lib,
+   vector<XbeUsr> &xbe_usr,
+   vector<XbeJac> &xbe_jac,
+   Circuit &cct,
+   Global &global) {
+
+   int i_xbeu,i_xbel;
+
+   global.flags[global.i_time_parms] = true;
+
+   for (i_xbeu=0; i_xbeu < cct.n_xbeu; i_xbeu++) {
+     i_xbel = xbe_usr[i_xbeu].index_xbel;
+
+     if (xbe_lib[i_xbel].flag_time_parms) {
+       get_xbe(i_xbel,global,xbe_usr[i_xbeu],xbe_jac[i_xbeu]);
+     }
+   }
+   global.flags[global.i_time_parms] = false;
+
+   return;
+} // end of xbe_time_parms
 // -----------------------------------------------------------------------------
 void xbeu_copy_1(
    vector<XbeLib> &xbe_lib,

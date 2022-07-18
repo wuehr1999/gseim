@@ -2030,8 +2030,6 @@ void SysMat::delete_1(
      delete[] svec_w_e;
      delete[] svec_w_ex;
      delete[] svec_w_x;
-//   cout << "SysMat::delete_1: debug 1b" << endl;
-//   cout << "debug halt." << endl; exit(1);
 
      delete[] svec_orig_e;
      delete[] svec_orig_ex;

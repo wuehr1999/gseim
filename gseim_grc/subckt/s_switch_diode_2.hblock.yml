@@ -55,11 +55,14 @@ parameters:
 -   id: rotate_strict
     label: rotate_strict
     default: 'yes'
-outvars: []
+outvars:
+- Is
+- Vs
+- Id
 
 inputs:
 -   label: x
-    dtype: float
+    dtype: ''
 
 outputs: []
 
@@ -69,11 +72,11 @@ e_right_nodes: []
 
 e_top_nodes:
 -   label: p
-    dtype: float
+    dtype: ''
 
 e_bottom_nodes:
 -   label: n
-    dtype: float
+    dtype: ''
 
 b_left_nodes: []
 

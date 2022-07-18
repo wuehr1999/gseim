@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-xbe name=delay_onestep_1 evaluate=yes limit_tstep=yes save_history=yes allow_ssw=no
+xbe name=delay_onestep_1 delay=yes limit_tstep=yes save_history=yes allow_ssw=no
 #
 # delay by one time step; also limit time step
 #

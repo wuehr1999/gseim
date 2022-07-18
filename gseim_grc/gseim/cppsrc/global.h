@@ -122,7 +122,7 @@ class Global {
 
 // indices for flags:
    int i_init_guess,i_dc,i_startup,i_trns,i_ssw,i_one_time_parms,
-       i_save_history,i_next_time,i_update_states;
+       i_save_history,i_next_time,i_update_states,i_time_parms;
    int i_evaluate,i_reset_x;
    int i_outvar;
    int i_explicit,i_implicit,i_alg_loop;
@@ -148,6 +148,11 @@ class Global {
 
 // flag to specify if a method is explicit
    vector<bool> flag_exp;
+
+// variables for sampler elements:
+   int sampler_index_max;
+   int n_samplers_max;
+   vector<int> sampler_flag;
 
   public:
    Global();

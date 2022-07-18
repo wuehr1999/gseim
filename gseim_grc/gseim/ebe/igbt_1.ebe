@@ -1,0 +1,121 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+ebe name=igbt_1 x_inputs=yes
+Jacobian: variable
+nodes: p n 
+state_vars:
+aux_vars:
+aux_vars_startup:
+x_vars: x
+iparms:
+sparms:
+rparms:
++  r_on=1m
++  r_off=1M
++  v_on=0
++  x_high=1.0
+stparms:
+igparms:
+outparms: i v 
+n_f=2
+f_1: v(p) v(n)
+f_2: v(p) v(n)
+n_g=0
+n_h=2
+h_1: v(p) v(n)
+h_2: v(p) v(n)
+C:
+prototypes:
+variables:
+   double r,g,vp,vn;
+   bool l_closed;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     v_on  = X.rprm[nr_v_on ];
+     r_on  = X.rprm[nr_r_on ];
+     r_off = X.rprm[nr_r_off];
+
+     if (v_on < 0.0) {
+       cout << "igbt_g1.ebe: v_on < 0 ?!" << endl;
+       cout << "   Halting..." << endl;
+       exit(1);
+     }
+     if (r_on == 0.0) {
+       cout << "igbt_g1.ebe: r_on  =  0 ?!" << endl;
+       cout << "   Halting..." << endl;
+       exit(1);
+     }
+     if (r_off < r_on) {
+       cout << "igbt_g1.ebe: r_off < r_on ?!" << endl;
+       cout << "   Halting..." << endl;
+       exit(1);
+     }
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_v] = X.val_nd[nnd_p]-X.val_nd[nnd_n];
+     X.outprm[no_i] = X.cur_nd[nnd_p];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_nd[nnd_p] = 0.0;
+     X.val_nd[nnd_n] = 0.0;
+     return;
+   }
+   x_high = X.rprm[nr_x_high];
+
+   v_on  = X.rprm[nr_v_on ];
+   r_on  = X.rprm[nr_r_on ];
+   r_off = X.rprm[nr_r_off];
+
+   vp = X.val_nd[nnd_p];
+   vn = X.val_nd[nnd_n];
+
+   if (G.flags[G.i_trns] || G.flags[G.i_startup] || G.flags[G.i_dc]) {
+     l_closed = (X.val_xvr[nx_x] > (0.5*x_high)) && (vp > (vn + v_on));
+     if (l_closed) {
+       g = 1.0/r_on;
+     } else {
+       g = 1.0/r_off;
+     }
+     if (G.flags[G.i_trns] || G.flags[G.i_dc]) {
+       if (G.flags[G.i_function]) {
+         X.f[nf_1] = g*(vp-vn-v_on);
+         X.f[nf_2] = -X.f[nf_1];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dfdv[nf_1][nnd_p] =  g;
+         J.dfdv[nf_1][nnd_n] = -g;
+         J.dfdv[nf_2][nnd_p] = -g;
+         J.dfdv[nf_2][nnd_n] =  g;
+       }
+     }
+     if (G.flags[G.i_startup]) {
+       if (G.flags[G.i_function]) {
+         X.h[nf_1] = g*(vp-vn-v_on);
+         X.h[nh_2] = -X.h[nh_1];
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dhdv[nh_1][nnd_p] =  g;
+         J.dhdv[nh_1][nnd_n] = -g;
+         J.dhdv[nh_2][nnd_p] = -g;
+         J.dhdv[nh_2][nnd_n] =  g;
+       }
+     }
+     return;
+   }
+endC
+endebe

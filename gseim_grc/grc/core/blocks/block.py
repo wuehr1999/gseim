@@ -23,6 +23,8 @@ import collections
 import itertools
 import copy
 
+import sys
+
 import re
 
 import ast
@@ -79,6 +81,7 @@ class Block(Element):
             (data['id'], param_factory(parent=self, **data))
             for data in self.parameters_data
         )
+
         if self.key == 'options':
             self.params['id'].hide = 'part'
 
@@ -97,6 +100,11 @@ class Block(Element):
 
         self.active_sources = []  # on rewrite
         self.active_sinks = []  # on rewrite
+
+        self.n_ttl_l = 0
+        self.n_ttl_r = 0
+        self.n_ttl_t = 0
+        self.n_ttl_b = 0
 
         self.states = {'state': True}
 
@@ -122,6 +130,60 @@ class Block(Element):
 
         self.active_sources = [p for p in self.sources]
         self.active_sinks = [p for p in self.sinks]
+
+        self.n_ttl_l = len(self.active_sinks) + len(self.e_lefts) + len(self.b_lefts)
+        self.n_ttl_r = len(self.active_sources) + len(self.e_rights) + len(self.b_rights)
+        self.n_ttl_t = len(self.e_tops) + len(self.b_tops)
+        self.n_ttl_b = len(self.e_bottoms) + len(self.b_bottoms)
+
+        self.p_off_l = [] if self.n_ttl_l == 0 else self.n_ttl_l*[0]
+        self.p_off_r = [] if self.n_ttl_r == 0 else self.n_ttl_r*[0]
+        self.p_off_t = [] if self.n_ttl_t == 0 else self.n_ttl_t*[0]
+        self.p_off_b = [] if self.n_ttl_b == 0 else self.n_ttl_b*[0]
+
+        if ('port_offset_l' in self.params.keys()):
+            l1 = self.params['port_offset_l'].get_value().split(',')
+            if len(l1) == 1:
+                self.p_off_l = self.n_ttl_l*[int(l1[0])]
+            elif len(l1) == self.n_ttl_l:
+                self.p_off_l = [int(x) for x in l1]
+            else:
+                print('blocks/block.py: rewrite:', self.key, 'check port_offset_l:',
+                  self.params['port_offset_l'].get_value())
+                sys.exit()
+
+        if ('port_offset_r' in self.params.keys()):
+            l1 = self.params['port_offset_r'].get_value().split(',')
+            if len(l1) == 1:
+                self.p_off_r = self.n_ttl_r*[int(l1[0])]
+            elif len(l1) == self.n_ttl_r:
+                self.p_off_r = [int(x) for x in l1]
+            else:
+                print('blocks/block.py: rewrite:', self.key, 'check port_offset_r:',
+                  self.params['port_offset_r'].get_value())
+                sys.exit()
+
+        if ('port_offset_t' in self.params.keys()):
+            l1 = self.params['port_offset_t'].get_value().split(',')
+            if len(l1) == 1:
+                self.p_off_t = self.n_ttl_t*[int(l1[0])]
+            elif len(l1) == self.n_ttl_t:
+                self.p_off_t = [int(x) for x in l1]
+            else:
+                print('blocks/block.py: rewrite:', self.key, 'check port_offset_t:',
+                  self.params['port_offset_t'].get_value())
+                sys.exit()
+
+        if ('port_offset_b' in self.params.keys()):
+            l1 = self.params['port_offset_b'].get_value().split(',')
+            if len(l1) == 1:
+                self.p_off_b = self.n_ttl_b*[int(l1[0])]
+            elif len(l1) == self.n_ttl_b:
+                self.p_off_b = [int(x) for x in l1]
+            else:
+                print('blocks/block.py: rewrite:', self.key, 'check port_offset_b:',
+                  self.params['port_offset_b'].get_value())
+                sys.exit()
 
 #       e nodes: don't bother with "active" e nodes since we don't have active
 #       and hidden in gseim -> use e_lefts rather than active_e_lefts (etc)

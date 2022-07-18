@@ -103,6 +103,8 @@ int main(int argc, char** argv) {
 
    cct.check_reset_x(xbe_lib,xbe_usr);
    cct.check_modulo_x(xbe_lib,xbe_usr);
+   cct.check_time_parms(xbe_lib,xbe_usr);
+   cct.check_sampler_index(xbe_lib,xbe_usr,global);
 
    cct.check_limit_tstep(xbe_lib,ebe_lib,xbe_usr,ebe_usr);
    cct.check_limit_newton(xbe_lib,ebe_lib,xbe_usr,ebe_usr);

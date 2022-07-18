@@ -86,7 +86,8 @@ source:
    vn = X.val_nd[nnd_n];
 
    if (G.flags[G.i_trns] || G.flags[G.i_startup] || G.flags[G.i_dc]) {
-     l_closed = (X.val_xvr[nx_x] > (0.5*x_high));
+     l_closed = (X.val_xvr[nx_x] > (0.5*x_high)) &&
+                ((vp > (vn + v_on)) || (vn > (vp + v_on)));
      if (l_closed) {
        g = 1.0/r_on;
      } else {
@@ -94,7 +95,11 @@ source:
      }
      if (G.flags[G.i_trns] || G.flags[G.i_dc]) {
        if (G.flags[G.i_function]) {
-         X.f[nf_1] = g*(vp-vn-v_on);
+         if (vp >= vn) {
+            X.f[nf_1] = g*(vp-vn-v_on);
+         } else {
+            X.f[nf_1] = g*(vp-vn+v_on);
+         }
          X.f[nf_2] = -X.f[nf_1];
        }
        if (G.flags[G.i_jacobian]) {
@@ -106,7 +111,11 @@ source:
      }
      if (G.flags[G.i_startup]) {
        if (G.flags[G.i_function]) {
-         X.h[nh_1] = g*(vp-vn-v_on);
+         if (vp >= vn) {
+            X.h[nf_1] = g*(vp-vn-v_on);
+         } else {
+            X.h[nf_1] = g*(vp-vn+v_on);
+         }
          X.h[nh_2] = -X.h[nh_1];
        }
        if (G.flags[G.i_jacobian]) {

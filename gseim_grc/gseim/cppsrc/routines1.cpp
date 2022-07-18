@@ -221,6 +221,10 @@ void solve_trns_x_feuler(
      slv.time_next_x  = slv.time_present_x + slv.delt_x;
      global.time_given_x = slv.time_next_x;
 
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
+
 //   evaluate/integrate and update:
 
      if (cct.flag_alg_loop) {
@@ -947,6 +951,9 @@ void xbe_rk4(
      cout << "xbe_rk4: slv.time_present_x is NAN. Halting..." << endl;
      exit(1);
    }
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    xbe_evaluate(global.I_INTEGRATE,xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -956,6 +963,9 @@ void xbe_rk4(
 
 // RK4: stage 2
    global.time_given_x = slv.time_present_x + 0.5*h;
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -976,6 +986,9 @@ void xbe_rk4(
    update_rk4(3,h,xbe_lib,xbe_usr,cct,global);
 
    global.time_given_x = slv.time_present_x + h;
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1018,6 +1031,9 @@ void xbe_rk4_al(
      cout << "xbe_rk4_al: slv.time_present_x is NAN. Halting..." << endl;
      exit(1);
    }
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
    xbe_evaluate_al(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
    xbeu_copy_2(0,xbe_lib,xbe_usr,cct);
@@ -1026,6 +1042,9 @@ void xbe_rk4_al(
 
 // RK4: stage 2
    global.time_given_x = slv.time_present_x + 0.5*h;
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    if (cct.flag_linear_x) {
      solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1056,6 +1075,9 @@ void xbe_rk4_al(
    update_rk4_al(3,h,xbe_lib,xbe_usr,cct,global);
 
    global.time_given_x = slv.time_present_x + h;
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    if (cct.flag_linear_x) {
      solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1103,6 +1125,9 @@ void xbe_rkf45(
        cout << "xbe_rkf45: slv.time_present_x is NAN. Halting..." << endl;
        exit(1);
      }
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
      xbe_evaluate(global.I_INTEGRATE,xbe_lib,xbe_usr,xbe_jac,cct,global);
 
      xbeu_copy_2(0,xbe_lib,xbe_usr,cct);
@@ -1111,6 +1136,9 @@ void xbe_rkf45(
 
 //   RKF45: stage 2
      global.time_given_x = slv.time_present_x + slv.rkf45_a1*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1122,6 +1150,9 @@ void xbe_rkf45(
 
 //   RKF45: stage 3
      global.time_given_x = slv.time_present_x + slv.rkf45_a2*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1133,6 +1164,9 @@ void xbe_rkf45(
 
 //   RKF45: stage 4
      global.time_given_x = slv.time_present_x + slv.rkf45_a3*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1144,6 +1178,9 @@ void xbe_rkf45(
 
 //   RKF45: stage 5
      global.time_given_x = slv.time_present_x + h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1155,6 +1192,9 @@ void xbe_rkf45(
 
 //   RKF45: stage 5A
      global.time_given_x = slv.time_present_x + slv.rkf45_a5*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1173,6 +1213,9 @@ void xbe_rkf45(
 //   Note that time_present_x has already been updated to (t + h).
 
      global.time_given_x = slv.time_present_x;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
    } else if (flag == global.I_RKF45_NORM) {
@@ -1208,6 +1251,9 @@ void xbe_rkf45_al(
        cout << "xbe_rkf45_al: slv.time_present_x is NAN. Halting..." << endl;
        exit(1);
      }
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
      xbe_evaluate_al(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
      xbeu_copy_2(0,xbe_lib,xbe_usr,cct);
@@ -1216,6 +1262,9 @@ void xbe_rkf45_al(
 
 //   RKF45: stage 2
      global.time_given_x = slv.time_present_x + slv.rkf45_a1*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1232,6 +1281,9 @@ void xbe_rkf45_al(
 
 //   RKF45: stage 3
      global.time_given_x = slv.time_present_x + slv.rkf45_a2*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1248,6 +1300,9 @@ void xbe_rkf45_al(
 
 //   RKF45: stage 4
      global.time_given_x = slv.time_present_x + slv.rkf45_a3*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1264,6 +1319,9 @@ void xbe_rkf45_al(
 
 //   RKF45: stage 5
      global.time_given_x = slv.time_present_x + h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1280,6 +1338,9 @@ void xbe_rkf45_al(
 
 //   RKF45: stage 5A
      global.time_given_x = slv.time_present_x + slv.rkf45_a5*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1303,6 +1364,9 @@ void xbe_rkf45_al(
 //   Note that time_present_x has already been updated to (t + h).
 
      global.time_given_x = slv.time_present_x;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1341,6 +1405,9 @@ void xbe_bs23(
        cout << "xbe_bs23: slv.time_present_x is NAN. Halting..." << endl;
        exit(1);
      }
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
      xbe_evaluate(global.I_INTEGRATE,xbe_lib,xbe_usr,xbe_jac,cct,global);
 
      xbeu_copy_2(0,xbe_lib,xbe_usr,cct);
@@ -1348,6 +1415,9 @@ void xbe_bs23(
 
 //   bs23: stage 2
      global.time_given_x = slv.time_present_x + slv.bs23_a1*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1358,6 +1428,9 @@ void xbe_bs23(
 
 //   bs23: stage 3
      global.time_given_x = slv.time_present_x + slv.bs23_a2*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1368,6 +1441,9 @@ void xbe_bs23(
 
 //   bs23: stage 4
      global.time_given_x = slv.time_present_x + h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1385,6 +1461,9 @@ void xbe_bs23(
 //   final update of non-integrator variables
 //   Note that time_present_x has already been updated to (t + h).
      global.time_given_x = slv.time_present_x;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
    } else if (flag == global.I_BS23_NORM) {
@@ -1421,6 +1500,9 @@ void xbe_bs23_al(
        cout << "xbe_bs23_al: slv.time_present_x is NAN. Halting..." << endl;
        exit(1);
      }
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
      xbe_evaluate_al(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
      xbeu_copy_2(0,xbe_lib,xbe_usr,cct);
@@ -1428,6 +1510,9 @@ void xbe_bs23_al(
 
 //   bs23: stage 2
      global.time_given_x = slv.time_present_x + slv.bs23_a1*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1443,6 +1528,9 @@ void xbe_bs23_al(
 
 //   bs23: stage 3
      global.time_given_x = slv.time_present_x + slv.bs23_a2*h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1458,6 +1546,9 @@ void xbe_bs23_al(
 
 //   bs23: stage 4
      global.time_given_x = slv.time_present_x + h;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1479,6 +1570,9 @@ void xbe_bs23_al(
 
 //   final update of non-integrator variables
      global.time_given_x = slv.time_present_x;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1517,6 +1611,9 @@ void xbe_meuler(
      cout << "xbe_rk4_meuler: slv.time_present_x is NAN. Halting..." << endl;
      exit(1);
    }
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
    xbe_evaluate(global.I_INTEGRATE,xbe_lib,xbe_usr,xbe_jac,cct,global);
 
    xbeu_copy_2(0,xbe_lib,xbe_usr,cct);
@@ -1524,6 +1621,9 @@ void xbe_meuler(
 
 // meuler: stage 2
    global.time_given_x = slv.time_present_x + h;
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1563,6 +1663,9 @@ void xbe_meuler_al(
      cout << "xbe_meuler_al: slv.time_present_x is NAN. Halting..." << endl;
      exit(1);
    }
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
    xbe_evaluate_al(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
    xbeu_copy_2(0,xbe_lib,xbe_usr,cct);
@@ -1570,6 +1673,9 @@ void xbe_meuler_al(
 
 // meuler: stage 2
    global.time_given_x = slv.time_present_x + h;
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    if (cct.flag_linear_x) {
      solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1615,6 +1721,9 @@ void xbe_heun(
      cout << "xbe_heun: slv.time_present_x is NAN. Halting..." << endl;
      exit(1);
    }
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
    xbe_evaluate(global.I_INTEGRATE,xbe_lib,xbe_usr,xbe_jac,cct,global);
 
    xbeu_copy_2(0,xbe_lib,xbe_usr,cct);
@@ -1623,6 +1732,9 @@ void xbe_heun(
 
 // heun: stage 2
    global.time_given_x = slv.time_present_x + (slv.heun_a1*h);
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1634,6 +1746,9 @@ void xbe_heun(
 // final update of non-integrator variables
 
    global.time_given_x = slv.time_present_x + h;
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    xbe_evaluate_2(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
@@ -1663,6 +1778,9 @@ void xbe_heun_al(
      cout << "xbe_heun_al: slv.time_present_x is NAN. Halting..." << endl;
      exit(1);
    }
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
    xbe_evaluate_al(xbe_lib,xbe_usr,xbe_jac,cct,global);
 
    xbeu_copy_2(0,xbe_lib,xbe_usr,cct);
@@ -1671,6 +1789,9 @@ void xbe_heun_al(
 
 // heun: stage 2
    global.time_given_x = slv.time_present_x + (slv.heun_a1*h);
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    if (cct.flag_linear_x) {
      solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -1687,6 +1808,9 @@ void xbe_heun_al(
 // final update of non-integrator variables
 
    global.time_given_x = slv.time_present_x + h;
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
 
    if (cct.flag_linear_x) {
      solve_trns_linear_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
@@ -4309,12 +4433,17 @@ void solve_trns_x_be(
        cout << "solve_trns_x_be: slv.time_next_x is NAN. Halting..." << endl;
        exit(1);
      }
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      slv.trns_constants_2_x();
+
      form_solvec_x(xbe_lib,xbe_usr,smat,cct);
 
      if (cct.flag_linear_x) {
        solve_trns_linear_x(xbe_lib,xbe_usr,xbe_jac,smat,cct,slv,global);
+
      } else {
        solve_trns_nonlinear_x(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,
          smat,cct,slv,global);
@@ -4339,8 +4468,6 @@ void solve_trns_x_be(
      write_trns(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
        cct,slv,cct_file,global);
 
-     copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
-
      slv.delt_x = slv.delt0_x;
      slv.delt_x = max(slv.delt_x,slv.delt_min_x);
 
@@ -4354,6 +4481,11 @@ void solve_trns_x_be(
        slv.delt_x = global.time_end - slv.time_present_x + slv.delt_small;
        slv.delt_x = max(slv.delt_x,slv.delt_min_x);
      }
+     if (cct.flag_reset_x) {
+       xbe_reset_1(true,xbe_lib,xbe_usr,xbe_jac,cct,smat,global);
+     }
+     copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
+
      if (cct.flag_save_history_x) {
        save_history_x(xbe_lib,xbe_usr,xbe_jac,cct,global);
      }
@@ -4414,6 +4546,9 @@ void solve_trns_x_trz(
      cout << "solve_trns_x_trz: slv.time_next_x is NAN. Halting..." << endl;
      exit(1);
    }
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
    slv.trns_constants_2_x();
    find_functions_trns_x(xbe_lib,xbe_usr,xbe_jac,smat,cct,global);
 
@@ -4429,6 +4564,9 @@ void solve_trns_x_trz(
      }
      slv.time_next_x  = slv.time_present_x + slv.delt_x;
      global.time_given_x = slv.time_next_x;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      form_solvec_x(xbe_lib,xbe_usr,smat,cct);
 
@@ -4464,8 +4602,6 @@ void solve_trns_x_trz(
      write_trns(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
        cct,slv,cct_file,global);
 
-     copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
-
 //   find the new time step if necessary
 
      slv.delt_x = slv.delt0_x;
@@ -4481,6 +4617,10 @@ void solve_trns_x_trz(
        slv.delt_x = global.time_end - slv.time_present_x + slv.delt_small;
        slv.delt_x = max(slv.delt_x,slv.delt_min_x);
      }
+     if (cct.flag_reset_x) {
+       xbe_reset_1(true,xbe_lib,xbe_usr,xbe_jac,cct,smat,global);
+     }
+     copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
      if (cct.flag_save_history_x) {
        save_history_x(xbe_lib,xbe_usr,xbe_jac,cct,global);
      }
@@ -4558,6 +4698,9 @@ void solve_trns_x_be_auto(
        cout << "solve_trns_x_be_auto: slv.time_next_x is NAN. Halting..." << endl;
        exit(1);
      }
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      slv.trns_constants_2_x();
 
@@ -4609,8 +4752,6 @@ void solve_trns_x_be_auto(
        write_trns(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
          cct,slv,cct_file,global);
 
-       copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
-
        slv.delt_x = max(slv.delt_x,slv.delt_min_x);
 
        if (cct.flag_limit_tstep_x) {
@@ -4621,6 +4762,10 @@ void solve_trns_x_be_auto(
          slv.delt_x = global.time_end - slv.time_present_x + slv.delt_small;
          slv.delt_x = max(slv.delt_x,slv.delt_min_x);
        }
+       if (cct.flag_reset_x) {
+         xbe_reset_1(true,xbe_lib,xbe_usr,xbe_jac,cct,smat,global);
+       }
+       copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
        if (cct.flag_save_history_x) {
          save_history_x(xbe_lib,xbe_usr,xbe_jac,cct,global);
        }
@@ -4684,6 +4829,9 @@ void solve_trns_x_trz_auto(
      cout << "solve_trns_x_trz_auto: slv.time_next_x is NAN. Halting..." << endl;
      exit(1);
    }
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
    slv.trns_constants_2_x();
    find_functions_trns_x(xbe_lib,xbe_usr,xbe_jac,smat,cct,global);
 
@@ -4704,6 +4852,9 @@ void solve_trns_x_trz_auto(
 
      slv.time_next_x  = slv.time_present_x + slv.delt_x;
      global.time_given_x = slv.time_next_x;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      form_solvec_x(xbe_lib,xbe_usr,smat,cct);
 
@@ -4760,8 +4911,6 @@ void solve_trns_x_trz_auto(
        write_trns(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
          cct,slv,cct_file,global);
 
-       copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
-
        slv.delt_x = max(slv.delt_x,slv.delt_min_x);
 
        if (cct.flag_limit_tstep_x) {
@@ -4772,6 +4921,10 @@ void solve_trns_x_trz_auto(
          slv.delt_x = global.time_end - slv.time_present_x + slv.delt_small;
          slv.delt_x = max(slv.delt_x,slv.delt_min_x);
        }
+       if (cct.flag_reset_x) {
+         xbe_reset_1(true,xbe_lib,xbe_usr,xbe_jac,cct,smat,global);
+       }
+       copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
        if (cct.flag_save_history_x) {
          save_history_x(xbe_lib,xbe_usr,xbe_jac,cct,global);
        }
@@ -4871,6 +5024,9 @@ void solve_trns_x_trbdf2(
        cout << "solve_trns_x_trbdf2: slv.time_next_x is NAN. Halting..." << endl;
        exit(1);
      }
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
 //   solve trz part:
 
@@ -4929,6 +5085,9 @@ void solve_trns_x_trbdf2(
 
        slv.time_next_x  = t_present_tmp + delt_tmp;
        global.time_given_x = slv.time_next_x;
+       if (cct.flag_time_parms) {
+         xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+       }
        slv.delt_x = delt_tmp;
        slv.trns_constants_2_x();
 
@@ -4994,7 +5153,7 @@ void solve_trns_x_trbdf2(
        write_trns(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
          cct,slv,cct_file,global);
 
-       copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
+//     copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
 
        slv.delt_x = max(slv.delt_x,slv.delt_min_x);
 
@@ -5008,6 +5167,10 @@ void solve_trns_x_trbdf2(
          slv.delt_x = global.time_end - slv.time_present_x + slv.delt_small;
          slv.delt_x = max(slv.delt_x,slv.delt_min_x);
        }
+       if (cct.flag_reset_x) {
+         xbe_reset_1(true,xbe_lib,xbe_usr,xbe_jac,cct,smat,global);
+       }
+       copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
        if (cct.flag_save_history_x) {
          save_history_x(xbe_lib,xbe_usr,xbe_jac,cct,global);
        }
@@ -5051,8 +5214,6 @@ void solve_trns_linear_x(
 
    add_arrays_1<double>(smat.m_x.n_row,smat.delsvec_x,smat.svec_x);
    dcmp_solvec_x(xbe_lib,xbe_usr,smat,cct);
-
-   xbe_reset_1(true,xbe_lib,xbe_usr,xbe_jac,cct,smat,global);
 
    return;
 } // end of solve_trns_linear_x
@@ -5150,8 +5311,6 @@ void solve_trns_linear_x_al(
    add_arrays_1<double>(smat.m_x.n_row,smat.delsvec_x,smat.svec_x);
    dcmp_solvec_x(xbe_lib,xbe_usr,smat,cct);
 
-   xbe_reset_1(true,xbe_lib,xbe_usr,xbe_jac,cct,smat,global);
-
    return;
 } // end of solve_trns_linear_x_al
 // -----------------------------------------------------------------------------
@@ -5215,7 +5374,6 @@ void solve_trns_nonlinear_x_al(
      slv.write_flags_failed();
      exit(1);
    }
-   xbe_reset_1(true,xbe_lib,xbe_usr,xbe_jac,cct,smat,global);
 
    return;
 } // end of solve_trns_nonlinear_x_al
@@ -5232,6 +5390,8 @@ void solve_trns_exc(
    SolveBlocks &slv,
    CctFile &cct_file,
    Global &global) {
+
+   form_map_xbeuvr_1(smat,cct);
 
    init_sol_ex(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
      slv,cct,smat,global);
@@ -5346,6 +5506,9 @@ void solve_trns_exc_be(
        cout << "solve_trns_exc_be: slv.time_next_e is NAN. Halting..." << endl;
        exit(1);
      }
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
      if (slv.delt_e < slv.delt_min_e) {
        cout << "solve_trns_exc_be: check slv.delt_e. Halting..." << endl;
        exit(1);
@@ -5383,9 +5546,6 @@ void solve_trns_exc_be(
      write_trns(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
        cct,slv,cct_file,global);
 
-     copy_array_1<double>(smat.n_solvec_ex,smat.svec_ex,smat.svec_old_1_ex);
-     ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
-
 //   find the new time step if necessary
 
      slv.delt_e = slv.delt0_ex;
@@ -5404,6 +5564,12 @@ void solve_trns_exc_be(
        slv.delt_e = max(slv.delt_e,slv.delt_min_ex);
        slv.delt_x = slv.delt_e;
      }
+
+     if (cct.flag_reset_x) {
+       xbe_reset_1_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,slv,cct,smat,global);
+     }
+     copy_array_1<double>(smat.n_solvec_ex,smat.svec_ex,smat.svec_old_1_ex);
+     ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
 
      if (cct.flag_save_history_e) {
        save_history_e(ebe_lib,ebe_usr,ebe_jac,cct,global);
@@ -5482,6 +5648,9 @@ void solve_trns_exc_trz(
      cout << "solve_trns_exc_trz: slv.time_next_e is NAN. Halting..." << endl;
      exit(1);
    }
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
    slv.trns_constants_2_ex();
    find_functions_trns_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,
      smat,cct,slv,global);
@@ -5505,6 +5674,9 @@ void solve_trns_exc_trz(
      slv.time_next_x  = slv.time_present_x + slv.delt_x;
      global.time_given_e = slv.time_next_e;
      global.time_given_x = slv.time_next_x;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      form_solvec_ex(ebe_lib,xbe_lib,ebe_usr,xbe_usr,smat,slv,cct);
 
@@ -5544,9 +5716,6 @@ void solve_trns_exc_trz(
      write_trns(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
        cct,slv,cct_file,global);
 
-     copy_array_1<double>(smat.n_solvec_ex,smat.svec_ex,smat.svec_old_1_ex);
-     ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
-
      slv.delt_e = slv.delt0_ex;
      slv.delt_e = max(slv.delt_e,slv.delt_min_ex);
      slv.delt_x = slv.delt_e;
@@ -5563,6 +5732,12 @@ void solve_trns_exc_trz(
        slv.delt_e = max(slv.delt_e,slv.delt_min_ex);
        slv.delt_x = slv.delt_e;
      }
+     if (cct.flag_reset_x) {
+       xbe_reset_1_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,slv,cct,smat,global);
+     }
+     copy_array_1<double>(smat.n_solvec_ex,smat.svec_ex,smat.svec_old_1_ex);
+     ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
+
      if (cct.flag_save_history_e) {
        save_history_e(ebe_lib,ebe_usr,ebe_jac,cct,global);
      }
@@ -5658,6 +5833,9 @@ void solve_trns_exc_be_auto(
        cout << "solve_trns_exc_be_auto: slv.time_next_e is NAN. Halting..." << endl;
        exit(1);
      }
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      slv.trns_constants_2_ex();
 
@@ -5715,9 +5893,6 @@ void solve_trns_exc_be_auto(
        write_trns(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
          cct,slv,cct_file,global);
 
-       copy_array_1<double>(smat.n_solvec_ex,smat.svec_ex,smat.svec_old_1_ex);
-       ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
-
        slv.delt_e = max(slv.delt_e,slv.delt_min_ex);
        slv.delt_x = slv.delt_e;
 
@@ -5731,6 +5906,12 @@ void solve_trns_exc_be_auto(
          slv.delt_e = max(slv.delt_e,slv.delt_min_ex);
          slv.delt_x = slv.delt_e;
        }
+       if (cct.flag_reset_x) {
+         xbe_reset_1_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,slv,cct,smat,global);
+       }
+       copy_array_1<double>(smat.n_solvec_ex,smat.svec_ex,smat.svec_old_1_ex);
+       ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
+
        if (cct.flag_save_history_e) {
          save_history_e(ebe_lib,ebe_usr,ebe_jac,cct,global);
        }
@@ -5807,6 +5988,9 @@ void solve_trns_exc_trz_auto(
      cout << "solve_trns_exc_trz_auto: slv.time_next_e is NAN. Halting..." << endl;
      exit(1);
    }
+   if (cct.flag_time_parms) {
+     xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+   }
    slv.trns_constants_2_ex();
    find_functions_trns_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,
      smat,cct,slv,global);
@@ -5835,6 +6019,9 @@ void solve_trns_exc_trz_auto(
      slv.time_next_x  = slv.time_present_x + slv.delt_x;
      global.time_given_e = slv.time_next_e;
      global.time_given_x = slv.time_next_x;
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
      form_solvec_ex(ebe_lib,xbe_lib,ebe_usr,xbe_usr,smat,slv,cct);
 
@@ -5898,9 +6085,6 @@ void solve_trns_exc_trz_auto(
        write_trns(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
          cct,slv,cct_file,global);
 
-       copy_array_1<double>(smat.n_solvec_ex,smat.svec_ex,smat.svec_old_1_ex);
-       ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
-
        slv.delt_e = max(slv.delt_e,slv.delt_min_ex);
        slv.delt_x = slv.delt_e;
 
@@ -5914,6 +6098,12 @@ void solve_trns_exc_trz_auto(
          slv.delt_e = max(slv.delt_e,slv.delt_min_ex);
          slv.delt_x = slv.delt_e;
        }
+       if (cct.flag_reset_x) {
+         xbe_reset_1_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,slv,cct,smat,global);
+       }
+       copy_array_1<double>(smat.n_solvec_ex,smat.svec_ex,smat.svec_old_1_ex);
+       ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
+
        if (cct.flag_save_history_e) {
          save_history_e(ebe_lib,ebe_usr,ebe_jac,cct,global);
        }
@@ -6033,6 +6223,9 @@ void solve_trns_exc_trbdf2(
        cout << "solve_trns_exc_trbdf2: slv.time_next_e is NAN. Halting..." << endl;
        exit(1);
      }
+     if (cct.flag_time_parms) {
+       xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+     }
 
 //   solve trz part:
 
@@ -6100,6 +6293,9 @@ void solve_trns_exc_trbdf2(
        slv.time_next_x  = t_present_tmp + delt_tmp;
        global.time_given_e = slv.time_next_e;
        global.time_given_x = slv.time_next_x;
+       if (cct.flag_time_parms) {
+         xbe_time_parms(xbe_lib,xbe_usr,xbe_jac,cct,global);
+       }
        slv.delt_e = delt_tmp;
        slv.delt_x = delt_tmp;
        slv.trns_constants_2_ex();
@@ -6178,10 +6374,6 @@ void solve_trns_exc_trbdf2(
        write_trns(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
          cct,slv,cct_file,global);
 
-       copy_array_1<double>
-         (smat.n_solvec_ex,smat.svec_ex,smat.svec_old_1_ex);
-       ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
-
        slv.delt_e = max(slv.delt_e,slv.delt_min_ex);
        slv.delt_x = slv.delt_e;
 
@@ -6195,6 +6387,12 @@ void solve_trns_exc_trbdf2(
          slv.delt_e = max(slv.delt_e,slv.delt_min_ex);
          slv.delt_x = slv.delt_e;
        }
+       if (cct.flag_reset_x) {
+         xbe_reset_1_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,slv,cct,smat,global);
+       }
+       copy_array_1<double>(smat.n_solvec_ex,smat.svec_ex,smat.svec_old_1_ex);
+       ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
+
        if (cct.flag_save_history_e) {
          save_history_e(ebe_lib,ebe_usr,ebe_jac,cct,global);
        }
@@ -6250,8 +6448,6 @@ void solve_trns_linear_exc(
 
    cct_to_ebe_nd_all(ebe_lib,ebe_usr,cct);
    find_ebe_cur_trns_ex(true,ebe_lib,ebe_usr,ebe_jac,smat,cct,slv,global);
-
-   xbe_reset_1(true,xbe_lib,xbe_usr,xbe_jac,cct,smat,global);
 
    return;
 } // end of solve_trns_linear_exc
@@ -6325,8 +6521,6 @@ void solve_trns_nonlinear_exc(
 
    cct_to_ebe_nd_all(ebe_lib,ebe_usr,cct);
    find_ebe_cur_trns_ex(true,ebe_lib,ebe_usr,ebe_jac,smat,cct,slv,global);
-
-   xbe_reset_1(true,xbe_lib,xbe_usr,xbe_jac,cct,smat,global);
 
    return;
 } // end of solve_trns_nonlinear_exc
@@ -11597,6 +11791,7 @@ void form_jac_rhs_ssw_trns_ex(
    global.flags[global.i_ssw     ] = false;
    global.flags[global.i_function] = false;
    global.flags[global.i_jacobian] = false;
+   global.flags[global.i_implicit] = false;
 
    return;
 } // end of form_jac_rhs_ssw_trns_ex
@@ -11632,6 +11827,7 @@ void form_jac_rhs_ssw_trns_x(
    global.flags[global.i_ssw     ] = false;
    global.flags[global.i_function] = false;
    global.flags[global.i_jacobian] = false;
+   global.flags[global.i_implicit] = false;
 
    return;
 } // end of form_jac_rhs_ssw_trns_x

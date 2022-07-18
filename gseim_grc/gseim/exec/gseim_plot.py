@@ -1,6 +1,6 @@
 """
 Copyright (C) 2022 - Ruchita Korgaonkar <ruchita@iitb.ac.in>,
-Mahesh Patil <mbpatil@ee.iitb.ac.in>
+Mahesh Patil <mbpatil@ee.iitb.ac.in>, Jeff Wheeler <jeffwheeler@gmail.com>.
 This file is part of GSEIM.
 
 GSEIM is free software: you can redistribute it and/or modify
@@ -25,29 +25,53 @@ import matplotlib
 import matplotlib.pylab as plt
 from matplotlib.ticker import MaxNLocator
 
+from matplotlib.backends.qt_compat import QT_API, QT_API_PYQT5, QtCore, QtWidgets
+
 from os.path import expanduser
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
-from PyQt6.QtWidgets import (
-    QApplication, QWidget, QLabel, QPushButton, QRadioButton,
-    QFrame, QMenu, QScrollArea, QLineEdit, QFileDialog,
-    QComboBox, QMainWindow, QSizePolicy, QVBoxLayout, QListWidget,
-    QCheckBox, QHeaderView, QListWidgetItem, QAbstractItemView,
-    QHBoxLayout, QColorDialog, QPlainTextEdit, QMessageBox,
-    QTableWidget, QTableWidgetItem
-    )
+if QT_API == QT_API_PYQT5:
+    print('Matplotlib selected PyQt5, so trying to import that version')
+    from PyQt5.QtCore import *
+    from PyQt5.QtGui import *
+    from PyQt5.QtWidgets import (
+        QApplication, QWidget, QLabel, QPushButton, QRadioButton,
+        QFrame, QMenu, QScrollArea, QLineEdit, QFileDialog,
+        QComboBox, QMainWindow, QSizePolicy, QVBoxLayout, QListWidget,
+        QCheckBox, QHeaderView, QListWidgetItem, QAbstractItemView,
+        QHBoxLayout, QColorDialog, QPlainTextEdit, QMessageBox,
+        QTableWidget, QTableWidgetItem
+        )
+
+else:
+    print('Matplotlib selected PyQt6, so trying to import that version')
+    from PyQt6.QtCore import *
+    from PyQt6.QtGui import *
+    from PyQt6.QtWidgets import (
+        QApplication, QWidget, QLabel, QPushButton, QRadioButton,
+        QFrame, QMenu, QScrollArea, QLineEdit, QFileDialog,
+        QComboBox, QMainWindow, QSizePolicy, QVBoxLayout, QListWidget,
+        QCheckBox, QHeaderView, QListWidgetItem, QAbstractItemView,
+        QHBoxLayout, QColorDialog, QPlainTextEdit, QMessageBox,
+        QTableWidget, QTableWidgetItem
+        )
+
 import numpy as np
 import random
 import os.path
 from os import path
-from matplotlib.backends.qt_compat import QtCore, QtWidgets
 from matplotlib.figure import Figure
 
-print('QT6')
-from matplotlib.backends.backend_qt5agg import (
-    FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
+# This will use the PyQt6 backend because it depends on the previously-
+# imported modules, and PyQt6 is imported above.
+try:
+    from matplotlib.backends.backend_qtagg import (
+        FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
+except ImportError:
+    print('Faield to import matplotlib.backends.backend_qtagg, so falling back'
+            ' to matplotlib.backends.backend_qt5agg')
+    from matplotlib.backends.backend_qt5agg import (
+        FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
 
-class NavigationToolbar(NavigationToolbar):
+class GSEIMPlotNavigationToolbar(NavigationToolbar):
     toolitems = [t for t in NavigationToolbar.toolitems if
                  t[0] in ('Home', 'Pan', 'Zoom', 'Save')]
 
@@ -1044,7 +1068,7 @@ class ScriptObject(QWidget):
     def openFileSaveDialog(self):
         options = QFileDialog.Option.DontUseNativeDialog
 
-        s, _ = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()", 
+        s, _ = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()",
             ""," ", options=options)
         s1 = s.replace(' ', '')
         if ('.py' in s1):
@@ -1275,12 +1299,6 @@ class LinePropPopup(QMainWindow):
         canvas = QPixmap(185, 130)
         canvas.fill(QColor("#FFFFFF"));
         myFont = QFont(); myFont.setBold(True);
-        self.frame18 = QFrame(self);self.frame18.setGeometry(QRect(10, 40, 185, 130))
-        self.labelC = QLabel(self.frame18)
-        self.labelC.setPixmap(canvas)
-        self.frame19 = QFrame(self);self.frame19.setGeometry(QRect(210, 40, 180, 130))
-        self.labelC2 = QLabel(self.frame19)
-        self.labelC2.setPixmap(canvas)
 
         self.frame1 = QFrame(self);self.frame1.setGeometry(QRect(10, 10, 250, 25))
         self.combo1 = QComboBox(self.frame1)
@@ -1372,29 +1390,6 @@ class LinePropPopup(QMainWindow):
         self.fcBtn = QPushButton(self.frame23);self.fcBtn.clicked.connect(self.openFcColorDlg)
         self.pixmap.fill(QColor("white"));
         self.redIcon= QIcon(self.pixmap);self.fcBtn.setIcon(self.redIcon);
-
-        # painter = QPainter(self.labelC.pixmap())
-        # # painter.setPen(QPen(QColor("black"), 1, Qt.PenStyle.SolidLine))
-        # painter.setPen(QPen())
-        # print('a')
-        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        # print('b')
-        # painter.drawLine(QPoint(5, 125), QPoint(180, 125))
-        # painter.drawLine(QPoint(180, 10), QPoint(180, 125))
-        # painter.drawLine(QPoint(120, 10), QPoint(180, 10))
-        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        # print('e')
-        # painter.end()
-        # print('f')
-
-        # painter = QPainter(self.labelC2.pixmap())
-        # # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        # painter.drawLine(QPoint(5, 125), QPoint(175, 125))
-        # painter.drawLine(QPoint(175, 10), QPoint(175, 125))
-        # painter.drawLine(QPoint(138, 10), QPoint(175, 10))
-        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        # painter.end()
 
         self.frame20 =  QFrame(self);self.frame20.setGeometry(QRect(120, 170, 90, 25))
         self.applyBtn = QPushButton("Apply",self.frame20);
@@ -2286,9 +2281,6 @@ class GridPopup(QMainWindow):
         canvas = QPixmap(380, 130)
         canvas.fill(QColor("#FFFFFF"));
         myFont = QFont(); myFont.setBold(True);
-        self.frame18 = QFrame(self);self.frame18.setGeometry(QRect(10, 20, 380, 130))
-        self.labelC = QLabel(self.frame18)
-        self.labelC.setPixmap(canvas)
 
         self.frameD = QFrame(self);self.frameD.setGeometry(QRect(10, 175, 50, 25))
         self.def1 = QLabel("Default:",self.frameD);self.def1.setFont(myFont)
@@ -2340,15 +2332,6 @@ class GridPopup(QMainWindow):
         self.combo3 = QComboBox(self.frame24)
         self.combo3.addItem("both");self.combo3.addItem("x");self.combo3.addItem("y");
 
-        # painter = QPainter(self.labelC.pixmap())
-        # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        # painter.drawLine(QPoint(5, 125), QPoint(375, 125))
-        # painter.drawLine(QPoint(375, 10), QPoint(375, 125))
-        # painter.drawLine(QPoint(50, 10), QPoint(375, 10))
-        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        # painter.end()
-
         self.frame20 =  QFrame(self);self.frame20.setGeometry(QRect(120, 170, 90, 25))
         self.applyBtn = QPushButton("Apply",self.frame20);
         self.applyBtn.clicked.connect(self.applyBtnAction)
@@ -2370,7 +2353,7 @@ class GridPopup(QMainWindow):
         mainWin.gridObject_1.setLineColor(self.linecolor.name())
         mainWin.gridObject_1.gridEnable = self.cb2.isChecked()
         mainWin.plotCanvas_1.changeGridProps()
-        mainWin.plotWindow_1.changeGridProps()
+        mainWin.plotWindow_1.canvas.changeGridProps()
     def GridPropShow(self):
         self.combo2.setCurrentText(mainWin.gridObject_1.lineStyle)
         self.combo3.setCurrentText(mainWin.gridObject_1.axis)
@@ -2412,15 +2395,6 @@ class AxesPopup(QMainWindow):
         canvas = QPixmap(185, 130)
         canvas.fill(QColor("#FFFFFF"));
         myFont = QFont(); myFont.setBold(True);
-        self.frame18 = QFrame(self);self.frame18.setGeometry(QRect(10, 10, 185, 130))
-        self.labelC = QLabel(self.frame18)
-        self.labelC.setPixmap(canvas)
-        self.frame19 = QFrame(self);self.frame19.setGeometry(QRect(210, 10, 185, 130))
-        self.labelC2 = QLabel(self.frame19)
-        self.labelC2.setPixmap(canvas)
-        self.frameY2 = QFrame(self);self.frameY2.setGeometry(QRect(410, 10, 185, 130))
-        self.labelY2 = QLabel(self.frameY2)
-        self.labelY2.setPixmap(canvas)
 
         self.frameD = QFrame(self);self.frameD.setGeometry(QRect(10, 145, 50, 25))
         self.def1 = QLabel("Default:",self.frameD);self.def1.setFont(myFont)
@@ -2520,32 +2494,6 @@ class AxesPopup(QMainWindow):
         self.YlimT2.setFixedWidth(120)
         validator = QDoubleValidator()
         self.YlimT2.setValidator(validator)
-        # painter = QPainter(self.labelC.pixmap())
-        # # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        # painter.drawLine(QPoint(5, 125), QPoint(180, 125))
-        # painter.drawLine(QPoint(180, 10), QPoint(180, 125))
-        # painter.drawLine(QPoint(60, 10), QPoint(180, 10))
-        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        # painter.end()
-
-        # painter = QPainter(self.labelC2.pixmap())
-        # # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        # painter.drawLine(QPoint(5, 125), QPoint(180, 125))
-        # painter.drawLine(QPoint(180, 10), QPoint(180, 125))
-        # painter.drawLine(QPoint(60, 10), QPoint(180, 10))
-        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        # painter.end()
-
-        # painter = QPainter(self.labelY2.pixmap())
-        # # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        # painter.drawLine(QPoint(5, 10), QPoint(5, 125))
-        # painter.drawLine(QPoint(5, 125), QPoint(180, 125))
-        # painter.drawLine(QPoint(180, 10), QPoint(180, 125))
-        # painter.drawLine(QPoint(110, 10), QPoint(180, 10))
-        # painter.drawLine(QPoint(5, 10), QPoint(7, 10))
-        # painter.end()
 
         self.frame20 =  QFrame(self);self.frame20.setGeometry(QRect(120, 140, 90, 25))
         self.applyBtn = QPushButton("Apply",self.frame20);
@@ -2592,7 +2540,7 @@ class AxesPopup(QMainWindow):
            mainWin.multiPlotObject_1.multiPlot or \
            mainWin.fourierObject_1.fourier):
             mainWin.plotCanvas_1.changeAxesProps()
-            mainWin.plotWindow_1.changeAxesProps()
+            mainWin.plotWindow_1.canvas.changeAxesProps()
         else:
             mainWin.plotDataWithChangedOptions()
 
@@ -2634,9 +2582,6 @@ class TitlePopup(QMainWindow):
         canvas = QPixmap(250, 100)
         canvas.fill(QColor("#FFFFFF"));
         myFont = QFont(); myFont.setBold(True);
-        self.frame18 = QFrame(self);self.frame18.setGeometry(QRect(10, 10, 250, 100))
-        self.labelC = QLabel(self.frame18)
-        self.labelC.setPixmap(canvas)
 
         self.frameD = QFrame(self);self.frameD.setGeometry(QRect(10, 145, 50, 25))
         self.def1 = QLabel("Default:",self.frameD);self.def1.setFont(myFont)
@@ -2666,14 +2611,6 @@ class TitlePopup(QMainWindow):
         self.labelEdit = QLineEdit("",self.frame8);
         self.labelEdit.setFixedWidth(175)
 
-        # painter = QPainter(self.labelC.pixmap())
-        # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        # painter.drawLine(QPoint(5, 5), QPoint(5, 95))
-        # painter.drawLine(QPoint(5, 95), QPoint(245, 95))
-        # painter.drawLine(QPoint(245, 5), QPoint(245, 95))
-        # painter.drawLine(QPoint(5, 5), QPoint(245, 5))
-        # painter.end()
-
         self.frame20 =  QFrame(self);self.frame20.setGeometry(QRect(20, 170, 80, 25))
         self.applyBtn = QPushButton("Apply",self.frame20);
         self.applyBtn.clicked.connect(self.applyBtnAction)
@@ -2691,7 +2628,7 @@ class TitlePopup(QMainWindow):
         mainWin.titleObject_1.setLabel(self.labelEdit.text())
         mainWin.titleObject_1.setTitleEnable(self.cb3.isChecked())
         mainWin.plotCanvas_1.changeTitle()
-        mainWin.plotWindow_1.changeTitle()
+        mainWin.plotWindow_1.canvas.changeTitle()
     def TitlePropShow(self):
         self.combo2.setCurrentText(str(mainWin.titleObject_1.loc))
         self.labelEdit.setText(str(mainWin.titleObject_1.label))
@@ -2717,9 +2654,6 @@ class TickLabelNotation(QMainWindow):
         canvas = QPixmap(460, 130)
         canvas.fill(QColor("#FFFFFF"));
         myFont = QFont(); myFont.setBold(False);
-        self.frame18 = QFrame(self);self.frame18.setGeometry(QRect(10, 10, 460, 130))
-        self.labelC = QLabel(self.frame18)
-        self.labelC.setPixmap(canvas)
 
         self.frameEg = QFrame(self);self.frameEg.setGeometry(QRect(20, 15, 450, 40))
         self.LabelEg = QLabel(
@@ -2761,14 +2695,6 @@ class TickLabelNotation(QMainWindow):
         self.cb2 = QCheckBox(self.frameCB2)
         self.cb2.setCheckState(QtCore.Qt.CheckState.Checked)
 
-        # painter = QPainter(self.labelC.pixmap())
-        # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        # painter.drawLine(QPoint(5, 5), QPoint(5, 125))
-        # painter.drawLine(QPoint(5, 125), QPoint(455, 125))
-        # painter.drawLine(QPoint(455, 5), QPoint(455, 125))
-        # painter.drawLine(QPoint(5, 5), QPoint(455, 5))
-        # painter.end()
-
         self.frame23 =  QFrame(self);self.frame23.setGeometry(QRect(20, 170, 80, 25))
         self.applyBtn = QPushButton("Apply",self.frame23)
         self.applyBtn.clicked.connect(self.applyBtnAction)
@@ -2805,7 +2731,7 @@ class TickLabelNotation(QMainWindow):
         else:
             mainWin.axesPropObject_1.setxSNM(False)
         mainWin.plotCanvas_1.changeAxesProps()
-        mainWin.plotWindow_1.changeAxesProps()
+        mainWin.plotWindow_1.canvas.changeAxesProps()
 
 class LegendPopup(QMainWindow):
 
@@ -2816,10 +2742,6 @@ class LegendPopup(QMainWindow):
     def widget(self):
         canvas = QPixmap(380, 125)
         canvas.fill(QColor("#FFFFFF"));
-
-        self.frame18 = QFrame(self);self.frame18.setGeometry(QRect(10, 30, 380, 125))
-        self.labelC = QLabel(self.frame18)
-        self.labelC.setPixmap(canvas)
 
         self.frame1 = QFrame(self);self.frame1.setGeometry(QRect(20, 10, 250, 25))
         self.combo1 = QLabel("Show Legend",self.frame1)
@@ -2882,15 +2804,6 @@ class LegendPopup(QMainWindow):
         validator = QDoubleValidator()
         self.clmSpc.setValidator(validator)
 
-        painter = QPainter(self.labelC.pixmap())
-
-        # painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
-        # painter.drawLine(QPoint(5, 5), QPoint(5, 120))
-        # painter.drawLine(QPoint(5, 120), QPoint(375, 120))
-        # painter.drawLine(QPoint(375, 120), QPoint(375, 5))
-        # painter.drawLine(QPoint(375, 5), QPoint(5, 5))
-
-        painter.end()
         self.frame20 =  QFrame(self);self.frame20.setGeometry(QRect(120, 170, 90, 25))
         self.applyBtn = QPushButton("Apply",self.frame20);
         self.applyBtn.clicked.connect(self.applyBtnAction)
@@ -2916,10 +2829,10 @@ class LegendPopup(QMainWindow):
         mainWin.legendEnable = self.cb1.isChecked()
         if mainWin.legendEnable:
             mainWin.plotCanvas_1.showLegend();
-            mainWin.plotWindow_1.showLegend();
+            mainWin.plotWindow_1.canvas.showLegend();
         else:
             mainWin.plotCanvas_1.removeLegend()
-            mainWin.plotWindow_1.removeLegend()
+            mainWin.plotWindow_1.canvas.removeLegend()
 
     def LegendPropShow(self):
         self.combo2.setCurrentText(mainWin.legendObject_1.location)
@@ -2956,6 +2869,8 @@ class ApplicationWindow(QMainWindow):
         self.dir_output_files = dir_output_files
         self.file_last_opened = file_last_opened
 
+        self.project_file_last_opened = ''
+
         self.title = "Demo"
         self.left = 200
         self.top = 50
@@ -2985,12 +2900,20 @@ class ApplicationWindow(QMainWindow):
         layout = QtWidgets.QVBoxLayout()#._main)
         self.DefaultPath = ""
         self.msg = QMessageBox()
+
         self.frame1 = QFrame(self)
         self.frame1.setGeometry(QRect(10, 40, 100, 25))
         self.LegBtn1 = QPushButton("Load File",self.frame1)
         self.LegBtn1.setChecked(True)
         self.LegBtn1.clicked.connect(self.openFileNameDialog)
         layout.addWidget(self.LegBtn1)
+
+        self.frame1a = QFrame(self)
+        self.frame1a.setGeometry(QRect(100, 40, 100, 25))
+        self.LegBtn1a = QPushButton("Reload File",self.frame1a)
+        self.LegBtn1a.setChecked(True)
+        self.LegBtn1a.clicked.connect(self.reloadFile)
+        layout.addWidget(self.LegBtn1a)
 
         self.frame6 = QFrame(self)
         self.frame6.setGeometry(QRect(300, 570, 1000, 30))
@@ -3103,8 +3026,8 @@ class ApplicationWindow(QMainWindow):
         self.scroll2.setFixedWidth(270)
         layout.addWidget(self.scroll2)
         self.scroll2.move(10,465)
-        self.YIndex = None;
-        self.YIndexR = None;
+        self.YIndex = [];
+        self.YIndexR = [];
 
         self.x_pos = 160
         self.dely = 25
@@ -3204,12 +3127,12 @@ class ApplicationWindow(QMainWindow):
 
         self.plotCanvas_1 = PlotCanvas(self, width=5, height=3)
         self.plotCanvas_1.move(285,40)
-        self.navi = self.addToolBar(NavigationToolbar(self.plotCanvas_1,self))
+        self.navi = self.addToolBar(GSEIMPlotNavigationToolbar(self.plotCanvas_1,self))
 
-        self.plotWindow_1 = PlotWindow()#self, width=5, height=3)
+        self.plotWindow_1 = PlotWindow()
         self.plotWindow_1.move(1,1)
         self.navi2 = self.plotWindow_1.addToolBar(
-            NavigationToolbar(self.plotWindow_1,self.plotWindow_1))
+            GSEIMPlotNavigationToolbar(self.plotWindow_1.canvas, self.plotWindow_1.canvas))
 
         self.frame13 = QFrame(self)
         self.frame13.setGeometry(QRect(600,520,120,25))
@@ -3356,7 +3279,7 @@ class ApplicationWindow(QMainWindow):
                 x = self.reader[:,self.XIndex]
 
         self.plotCanvas_1.ax_multi = [None]*self.n_variables_max
-        self.plotWindow_1.ax_multi = [None]*self.n_variables_max
+        self.plotWindow_1.canvas.ax_multi = [None]*self.n_variables_max
 
         if self.powerObject_1.compute_power:
             self.displayMessage2("Power computation:" + \
@@ -3364,10 +3287,10 @@ class ApplicationWindow(QMainWindow):
               "\nIt is also available in this file:\n" + self.filename_power)
             n_plots = 3
             self.plotCanvas_1.ax_power = [None]*n_plots
-            self.plotWindow_1.ax_power = [None]*n_plots
+            self.plotWindow_1.canvas.ax_power = [None]*n_plots
 
             self.plotCanvas_1.ax2_power = [None]*n_plots
-            self.plotWindow_1.ax2_power = [None]*n_plots
+            self.plotWindow_1.canvas.ax2_power = [None]*n_plots
 
             reader_power = np.loadtxt(self.filename_power)
             t_power = reader_power[:,0]
@@ -3407,19 +3330,19 @@ class ApplicationWindow(QMainWindow):
                 if (self.axesPropObject_1.s_xMax.split()):
                     self.plotCanvas_1.ax_power[i].set_xlim(right = float(self.axesPropObject_1.s_xMax))
 
-                self.plotWindow_1.ax_power[i] = self.plotWindow_1.fig.add_subplot(n_plots, 1, i+1)
-                self.plotWindow_1.ax_power[i].label_outer()
-                self.plotWindow_1.ax_power[i].grid(color='lightgrey')
-                self.plotWindow_1.ax_power[i].legend(loc='best')
-                self.plotWindow_1.ax_power[i].ticklabel_format(axis="x", style="sci",
+                self.plotWindow_1.canvas.ax_power[i] = self.plotWindow_1.fig.add_subplot(n_plots, 1, i+1)
+                self.plotWindow_1.canvas.ax_power[i].label_outer()
+                self.plotWindow_1.canvas.ax_power[i].grid(color='lightgrey')
+                self.plotWindow_1.canvas.ax_power[i].legend(loc='best')
+                self.plotWindow_1.canvas.ax_power[i].ticklabel_format(axis="x", style="sci",
                     scilimits=(-2, 2),useMathText=True)
-                self.plotWindow_1.ax_power[i].ticklabel_format(axis="y", style="sci",
+                self.plotWindow_1.canvas.ax_power[i].ticklabel_format(axis="y", style="sci",
                     scilimits=(-2, 2),useMathText=True)
 
                 if (self.axesPropObject_1.s_xMin.split()):
-                    self.plotWindow_1.ax_power[i].set_xlim(left = float(self.axesPropObject_1.s_xMin))
+                    self.plotWindow_1.canvas.ax_power[i].set_xlim(left = float(self.axesPropObject_1.s_xMin))
                 if (self.axesPropObject_1.s_xMax.split()):
-                    self.plotWindow_1.ax_power[i].set_xlim(right = float(self.axesPropObject_1.s_xMax))
+                    self.plotWindow_1.canvas.ax_power[i].set_xlim(right = float(self.axesPropObject_1.s_xMax))
 
             pl1 = self.plotCanvas_1.ax_power[0].plot(t, voltage,
                  color='dodgerblue',
@@ -3473,60 +3396,60 @@ class ApplicationWindow(QMainWindow):
                  label='pf')
             self.plotCanvas_1.ax_power[2].legend()
 
-            pl1w = self.plotWindow_1.ax_power[0].plot(t, voltage,
+            pl1w = self.plotWindow_1.canvas.ax_power[0].plot(t, voltage,
                  color='dodgerblue',
                  linestyle='solid',
                  linewidth=1.0,
                  drawstyle='default',
                  label="'" + self.v_string + "'")
-            self.plotWindow_1.ax_power[0].plot(t_power, v_rms,
+            self.plotWindow_1.canvas.ax_power[0].plot(t_power, v_rms,
                  color='dodgerblue',
                  linestyle='dashed',
                  linewidth=1.0,
                  drawstyle='default',
                  label='')
-            self.plotWindow_1.ax_power[0].legend()
+            self.plotWindow_1.canvas.ax_power[0].legend()
 
-            self.plotWindow_1.ax2_power[0] = self.plotWindow_1.ax_power[0].twinx()
-            pl2w = self.plotWindow_1.ax2_power[0].plot(t, current,
+            self.plotWindow_1.canvas.ax2_power[0] = self.plotWindow_1.canvas.ax_power[0].twinx()
+            pl2w = self.plotWindow_1.canvas.ax2_power[0].plot(t, current,
                  color='orangered',
                  linestyle='solid',
                  linewidth=1.0,
                  drawstyle='default',
                  label="'" + self.i_string + "'")
-            self.plotWindow_1.ax2_power[0].plot(t_power, i_rms,
+            self.plotWindow_1.canvas.ax2_power[0].plot(t_power, i_rms,
                  color='orangered',
                  linestyle='dashed',
                  linewidth=1.0,
                  drawstyle='default',
                  label='')
             plsw = pl1w + pl2w
-            self.plotWindow_1.ax_power[0].legend(plsw, labs, loc='best')
+            self.plotWindow_1.canvas.ax_power[0].legend(plsw, labs, loc='best')
 
-            self.plotWindow_1.ax_power[1].plot(t_power, p_avg,
+            self.plotWindow_1.canvas.ax_power[1].plot(t_power, p_avg,
                  color='teal',
                  linestyle='solid',
                  linewidth=1.0,
                  drawstyle='default',
                  label='p_avg')
-            self.plotWindow_1.ax_power[1].plot(t_power, p_app,
+            self.plotWindow_1.canvas.ax_power[1].plot(t_power, p_app,
                  color='deeppink',
                  linestyle='solid',
                  linewidth=1.0,
                  drawstyle='default',
                  label='p_app')
-            self.plotWindow_1.ax_power[1].legend()
+            self.plotWindow_1.canvas.ax_power[1].legend()
 
-            self.plotWindow_1.ax_power[2].plot(t_power, pf,
+            self.plotWindow_1.canvas.ax_power[2].plot(t_power, pf,
                  color='darkgoldenrod',
                  linestyle='solid',
                  linewidth=1.0,
                  drawstyle='default',
                  label='pf')
-            self.plotWindow_1.ax_power[2].legend()
+            self.plotWindow_1.canvas.ax_power[2].legend()
 
             self.plotCanvas_1.draw()
-            self.plotWindow_1.draw()
+            self.plotWindow_1.canvas.draw()
         elif self.fourierObject_1.fourier:
 #           It would not make sense to plot different variables in a single plot;
 #           assume multi-plot even if it is not specified.
@@ -3559,14 +3482,14 @@ class ApplicationWindow(QMainWindow):
                 self.plotCanvas_1.ax_multi[i].set_axisbelow(True)
                 self.plotCanvas_1.ax_multi[i].xaxis.set_major_locator(MaxNLocator(integer=True))
 
-                self.plotWindow_1.ax_multi[i] = self.plotWindow_1.fig.add_subplot(self.n_variables, 1, i+1)
-                self.plotWindow_1.ax_multi[i].label_outer()
-                self.plotWindow_1.ax_multi[i].grid(color='lightgrey')
-                self.plotWindow_1.ax_multi[i].legend(loc='best')
-                self.plotWindow_1.ax_multi[i].ticklabel_format(axis="y", style="sci",
+                self.plotWindow_1.canvas.ax_multi[i] = self.plotWindow_1.fig.add_subplot(self.n_variables, 1, i+1)
+                self.plotWindow_1.canvas.ax_multi[i].label_outer()
+                self.plotWindow_1.canvas.ax_multi[i].grid(color='lightgrey')
+                self.plotWindow_1.canvas.ax_multi[i].legend(loc='best')
+                self.plotWindow_1.canvas.ax_multi[i].ticklabel_format(axis="y", style="sci",
                     scilimits=(-2, 2),useMathText=True)
-                self.plotWindow_1.ax_multi[i].set_axisbelow(True)
-                self.plotWindow_1.ax_multi[i].xaxis.set_major_locator(MaxNLocator(integer=True))
+                self.plotWindow_1.canvas.ax_multi[i].set_axisbelow(True)
+                self.plotWindow_1.canvas.ax_multi[i].xaxis.set_major_locator(MaxNLocator(integer=True))
 
             if self.n_variables == 1:
                 y_thd = 0.88
@@ -3595,10 +3518,10 @@ class ApplicationWindow(QMainWindow):
                    verticalalignment='top',
                    transform=self.plotCanvas_1.ax_multi[i_ax].transAxes)
 
-                self.plotWindow_1.ax_multi[i_ax].bar(x, y1, width=bar_width, color='darkorange',align='center',
+                self.plotWindow_1.canvas.ax_multi[i_ax].bar(x, y1, width=bar_width, color='darkorange',align='center',
                    label=self.plotObject_1[self.YIndex[i]].label)
-                self.plotWindow_1.ax_multi[i_ax].legend()
-                self.plotWindow_1.ax_multi[i_ax].text(0.9, y_thd, s,
+                self.plotWindow_1.canvas.ax_multi[i_ax].legend()
+                self.plotWindow_1.canvas.ax_multi[i_ax].text(0.9, y_thd, s,
                    horizontalalignment='center',
                    verticalalignment='top',
                    transform=self.plotCanvas_1.ax_multi[i_ax].transAxes)
@@ -3622,10 +3545,10 @@ class ApplicationWindow(QMainWindow):
                    verticalalignment='top',
                    transform=self.plotCanvas_1.ax_multi[i_ax].transAxes)
 
-                self.plotWindow_1.ax_multi[i_ax].bar(x, y1, width=bar_width, color='darkorange',align='center',
+                self.plotWindow_1.canvas.ax_multi[i_ax].bar(x, y1, width=bar_width, color='darkorange',align='center',
                    label=self.plotObject_1[self.YIndexR[i]].label)
-                self.plotWindow_1.ax_multi[i_ax].legend()
-                self.plotWindow_1.ax_multi[i_ax].text(0.9, y_thd, s,
+                self.plotWindow_1.canvas.ax_multi[i_ax].legend()
+                self.plotWindow_1.canvas.ax_multi[i_ax].text(0.9, y_thd, s,
                    horizontalalignment='center',
                    verticalalignment='top',
                    transform=self.plotCanvas_1.ax_multi[i_ax].transAxes)
@@ -3634,7 +3557,7 @@ class ApplicationWindow(QMainWindow):
                 i_ax += 1
 
             self.plotCanvas_1.draw()
-            self.plotWindow_1.draw()
+            self.plotWindow_1.canvas.draw()
 
         elif self.multiPlotObject_1.multiPlot:
             self.plotCanvas_1.fig.clf()
@@ -3678,20 +3601,20 @@ class ApplicationWindow(QMainWindow):
                     self.plotCanvas_1.ax_multi[i].set_xlim(right = float(self.axesPropObject_1.s_xMax))
 
                 if i == 0:
-                    self.plotWindow_1.ax_multi[i] = self.plotWindow_1.fig.add_subplot(self.n_variables, 1, i+1)
+                    self.plotWindow_1.canvas.ax_multi[i] = self.plotWindow_1.fig.add_subplot(self.n_variables, 1, i+1)
                 else:
-                    self.plotWindow_1.ax_multi[i] = self.plotWindow_1.fig.add_subplot(self.n_variables, 1, i+1,
-                      sharex=self.plotWindow_1.ax_multi[0])
-                self.plotWindow_1.ax_multi[i].label_outer()
-                self.plotWindow_1.ax_multi[i].grid(color='lightgrey')
-                self.plotWindow_1.ax_multi[i].legend(loc='best')
-                self.plotWindow_1.ax_multi[i].ticklabel_format(axis="x", style="sci",
+                    self.plotWindow_1.canvas.ax_multi[i] = self.plotWindow_1.fig.add_subplot(self.n_variables, 1, i+1,
+                      sharex=self.plotWindow_1.canvas.ax_multi[0])
+                self.plotWindow_1.canvas.ax_multi[i].label_outer()
+                self.plotWindow_1.canvas.ax_multi[i].grid(color='lightgrey')
+                self.plotWindow_1.canvas.ax_multi[i].legend(loc='best')
+                self.plotWindow_1.canvas.ax_multi[i].ticklabel_format(axis="x", style="sci",
                     scilimits=(-2, 2),useMathText=True)
 
                 if (self.axesPropObject_1.s_xMin.split()):
-                    self.plotWindow_1.ax_multi[i].set_xlim(left = float(self.axesPropObject_1.s_xMin))
+                    self.plotWindow_1.canvas.ax_multi[i].set_xlim(left = float(self.axesPropObject_1.s_xMin))
                 if (self.axesPropObject_1.s_xMax.split()):
-                    self.plotWindow_1.ax_multi[i].set_xlim(right = float(self.axesPropObject_1.s_xMax))
+                    self.plotWindow_1.canvas.ax_multi[i].set_xlim(right = float(self.axesPropObject_1.s_xMax))
 
             if not (self.avgrmsObject_1.avg or self.avgrmsObject_1.rms):
                 i_ax = 0
@@ -3724,7 +3647,8 @@ class ApplicationWindow(QMainWindow):
                     if self.plotObject_1[self.YIndex[i]].multiLinLog == 'linear':
                         self.plotCanvas_1.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
                             scilimits=(-2, 2),useMathText=True)
-                    self.plotWindow_1.ax_multi[i_ax].plot(x,y,
+
+                    self.plotWindow_1.canvas.ax_multi[i_ax].plot(x,y,
                          color=self.plotObject_1[self.YIndex[i]].lineColor,
                          linestyle=self.plotObject_1[self.YIndex[i]].lineStyle,
                          linewidth=self.plotObject_1[self.YIndex[i]].width,
@@ -3734,11 +3658,12 @@ class ApplicationWindow(QMainWindow):
                          markersize=self.plotObject_1[self.YIndex[i]].size,
                          markeredgecolor=self.plotObject_1[self.YIndex[i]].edgeColor,
                          markerfacecolor=self.plotObject_1[self.YIndex[i]].faceColor)
-                    self.plotWindow_1.ax_multi[i_ax].legend()
+                    self.plotWindow_1.canvas.ax_multi[i_ax].legend()
                     self.linePropPopup_1.combo1.addItem(self.YCols.item(self.YIndex[i],2).text())
                     if self.plotObject_1[self.YIndex[i]].multiLinLog == 'linear':
-                        self.plotWindow_1.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
+                        self.plotWindow_1.canvas.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
                             scilimits=(-2, 2),useMathText=True)
+
                     i_ax += 1
                 for i in range(0,len(self.YIndexR)):
                     pltColor = self.colorSet[(self.YIndexR[i])%self.nColorSet]
@@ -3768,7 +3693,8 @@ class ApplicationWindow(QMainWindow):
                     if self.plotObject_1[self.YIndexR[i]].multiLinLog == 'linear':
                         self.plotCanvas_1.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
                             scilimits=(-2, 2),useMathText=True)
-                    self.plotWindow_1.ax_multi[i_ax].plot(x,y,
+
+                    self.plotWindow_1.canvas.ax_multi[i_ax].plot(x,y,
                          color=self.plotObject_1[self.YIndexR[i]].lineColor,
                          linestyle=self.plotObject_1[self.YIndexR[i]].lineStyle,
                          linewidth=self.plotObject_1[self.YIndexR[i]].width,
@@ -3778,10 +3704,11 @@ class ApplicationWindow(QMainWindow):
                          markersize=self.plotObject_1[self.YIndexR[i]].size,
                          markeredgecolor=self.plotObject_1[self.YIndexR[i]].edgeColor,
                          markerfacecolor=self.plotObject_1[self.YIndexR[i]].faceColor)
-                    self.plotWindow_1.ax_multi[i_ax].legend()
+                    self.plotWindow_1.canvas.ax_multi[i_ax].legend()
                     if self.plotObject_1[self.YIndexR[i]].multiLinLog == 'linear':
-                        self.plotWindow_1.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
+                        self.plotWindow_1.canvas.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
                             scilimits=(-2, 2),useMathText=True)
+
                     i_ax += 1
             else:
 
@@ -3838,7 +3765,7 @@ class ApplicationWindow(QMainWindow):
                     self.plotCanvas_1.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
                         scilimits=(-2, 2),useMathText=True)
 
-                    self.plotWindow_1.ax_multi[i_ax].plot(x,y,
+                    self.plotWindow_1.canvas.ax_multi[i_ax].plot(x,y,
                          color=pltColor,
                          linestyle='solid',
                          linewidth=1.0,
@@ -3849,21 +3776,21 @@ class ApplicationWindow(QMainWindow):
                          markeredgecolor=self.plotObject_1[self.YIndex[i]].edgeColor,
                          markerfacecolor=self.plotObject_1[self.YIndex[i]].faceColor)
                     if self.avgrmsObject_1.avg:
-                        self.plotWindow_1.ax_multi[i_ax].plot(t_avg,y_avg,
+                        self.plotWindow_1.canvas.ax_multi[i_ax].plot(t_avg,y_avg,
                              color=pltColor,
                              linestyle='dashed',
                              linewidth=1.0,
                              drawstyle='default',
                              label='')
                     if self.avgrmsObject_1.rms:
-                        self.plotWindow_1.ax_multi[i_ax].plot(t_rms,y_rms,
+                        self.plotWindow_1.canvas.ax_multi[i_ax].plot(t_rms,y_rms,
                              color=pltColor,
                              linestyle='dashdot',
                              linewidth=1.0,
                              drawstyle='default',
                              label='')
-                    self.plotWindow_1.ax_multi[i_ax].legend(loc='best')
-                    self.plotWindow_1.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
+                    self.plotWindow_1.canvas.ax_multi[i_ax].legend(loc='best')
+                    self.plotWindow_1.canvas.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
                         scilimits=(-2, 2),useMathText=True)
 
                     i_ax += 1
@@ -3912,7 +3839,7 @@ class ApplicationWindow(QMainWindow):
                     self.plotCanvas_1.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
                         scilimits=(-2, 2),useMathText=True)
 
-                    self.plotWindow_1.ax_multi[i_ax].plot(x,y,
+                    self.plotWindow_1.canvas.ax_multi[i_ax].plot(x,y,
                          color=pltColor,
                          linestyle='solid',
                          linewidth=1.0,
@@ -3923,27 +3850,27 @@ class ApplicationWindow(QMainWindow):
                          markeredgecolor=self.plotObject_1[self.YIndexR[i]].edgeColor,
                          markerfacecolor=self.plotObject_1[self.YIndexR[i]].faceColor)
                     if self.avgrmsObject_1.avg:
-                        self.plotWindow_1.ax_multi[i_ax].plot(t_avg,y_avg,
+                        self.plotWindow_1.canvas.ax_multi[i_ax].plot(t_avg,y_avg,
                              color=pltColor,
                              linestyle='dashed',
                              linewidth=1.0,
                              drawstyle='default',
                              label='')
                     if self.avgrmsObject_1.rms:
-                        self.plotWindow_1.ax_multi[i_ax].plot(t_rms,y_rms,
+                        self.plotWindow_1.canvas.ax_multi[i_ax].plot(t_rms,y_rms,
                              color=pltColor,
                              linestyle='dashdot',
                              linewidth=1.0,
                              drawstyle='default',
                              label='')
-                    self.plotWindow_1.ax_multi[i_ax].legend(loc='best')
-                    self.plotWindow_1.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
+                    self.plotWindow_1.canvas.ax_multi[i_ax].legend(loc='best')
+                    self.plotWindow_1.canvas.ax_multi[i_ax].ticklabel_format(axis="y", style="sci",
                         scilimits=(-2, 2),useMathText=True)
 
                     i_ax += 1
 
             self.plotCanvas_1.draw()
-            self.plotWindow_1.draw()
+            self.plotWindow_1.canvas.draw()
         else:
             self.plotCanvas_1.fig.clf()
             self.plotWindow_1.fig.clf()
@@ -3952,16 +3879,16 @@ class ApplicationWindow(QMainWindow):
                 if self.plotCanvas_1.ax_multi[i]:
                     self.plotCanvas_1.ax_multi[i].remove()
             for i in range(self.n_variables_max):
-                if self.plotWindow_1.ax_multi[i]:
-                    self.plotWindow_1.ax_multi[i].remove()
+                if self.plotWindow_1.canvas.ax_multi[i]:
+                    self.plotWindow_1.canvas.ax_multi[i].remove()
 
             self.plotCanvas_1.ax = self.plotCanvas_1.fig.add_subplot(1, 1, 1)
             self.plotCanvas_1.ax.grid()
             self.plotCanvas_1.ax2 = self.plotCanvas_1.ax.twinx()
 
-            self.plotWindow_1.ax = self.plotWindow_1.fig.add_subplot(1, 1, 1)
-            self.plotWindow_1.ax.grid()
-            self.plotWindow_1.ax2 = self.plotWindow_1.ax.twinx()
+            self.plotWindow_1.canvas.ax = self.plotWindow_1.fig.add_subplot(1, 1, 1)
+            self.plotWindow_1.canvas.ax.grid()
+            self.plotWindow_1.canvas.ax2 = self.plotWindow_1.canvas.ax.twinx()
 
             if not (self.avgrmsObject_1.avg or self.avgrmsObject_1.rms):
                 self.pls  = [];self.plbs = [];
@@ -3986,7 +3913,7 @@ class ApplicationWindow(QMainWindow):
                          self.plotObject_1[self.YIndex[i]].edgeColor,
                          self.plotObject_1[self.YIndex[i]].faceColor);
                     self.pls.append(pl);self.plbs.append(self.plotObject_1[self.YIndex[i]].label);
-                    self.plotWindow_1.plotData(x,y,
+                    self.plotWindow_1.canvas.plotData(x,y,
                          self.plotObject_1[self.YIndex[i]].lineColor,
                          self.plotObject_1[self.YIndex[i]].lineStyle,
                          self.plotObject_1[self.YIndex[i]].width,
@@ -4023,7 +3950,7 @@ class ApplicationWindow(QMainWindow):
                         self.plotObject_1[self.YIndexR[i]].edgeColor,
                         self.plotObject_1[self.YIndexR[i]].faceColor,yax='right');
                     self.pls.append(pl);self.plbs.append(self.plotObject_1[self.YIndexR[i]].label);
-                    self.plotWindow_1.plotData(x,y,
+                    self.plotWindow_1.canvas.plotData(x,y,
                         self.plotObject_1[self.YIndexR[i]].lineColor,
                         self.plotObject_1[self.YIndexR[i]].lineStyle,
                         self.plotObject_1[self.YIndexR[i]].width,
@@ -4094,7 +4021,7 @@ class ApplicationWindow(QMainWindow):
                     self.redIcon= QIcon(pixmap);
                     self.YCols.item(self.YIndex[i],0).setIcon(QIcon(self.redIcon))
 
-                    self.plotWindow_1.ax.plot(x,y,
+                    self.plotWindow_1.canvas.ax.plot(x,y,
                          color=pltColor,
                          linestyle='solid',
                          linewidth=1.0,
@@ -4105,20 +4032,20 @@ class ApplicationWindow(QMainWindow):
                          markeredgecolor=self.plotObject_1[self.YIndex[i]].edgeColor,
                          markerfacecolor=self.plotObject_1[self.YIndex[i]].faceColor)
                     if self.avgrmsObject_1.avg:
-                        self.plotWindow_1.ax.plot(t_avg,y_avg,
+                        self.plotWindow_1.canvas.ax.plot(t_avg,y_avg,
                              color=pltColor,
                              linestyle='dashed',
                              linewidth=1.0,
                              drawstyle='default',
                              label='')
                     if self.avgrmsObject_1.rms:
-                        self.plotWindow_1.ax.plot(t_rms,y_rms,
+                        self.plotWindow_1.canvas.ax.plot(t_rms,y_rms,
                              color=pltColor,
                              linestyle='dashdot',
                              linewidth=1.0,
                              drawstyle='default',
                              label='')
-                    self.plotWindow_1.ax.legend()
+                    self.plotWindow_1.canvas.ax.legend()
                     i_ax += 1
                 for i in range(0,len(self.YIndexR)):
                     pltColor = self.colorSet[(self.YIndexR[i])%self.nColorSet]
@@ -4168,7 +4095,7 @@ class ApplicationWindow(QMainWindow):
                     self.redIcon= QIcon(pixmap);
                     self.YCols.item(self.YIndexR[i],0).setIcon(QIcon(self.redIcon))
 
-                    self.plotWindow_1.ax2.plot(x,y,
+                    self.plotWindow_1.canvas.ax2.plot(x,y,
                          color=pltColor,
                          linestyle='solid',
                          linewidth=1.0,
@@ -4179,29 +4106,29 @@ class ApplicationWindow(QMainWindow):
                          markeredgecolor=self.plotObject_1[self.YIndexR[i]].edgeColor,
                          markerfacecolor=self.plotObject_1[self.YIndexR[i]].faceColor)
                     if self.avgrmsObject_1.avg:
-                        self.plotWindow_1.ax2.plot(t_avg,y_avg,
+                        self.plotWindow_1.canvas.ax2.plot(t_avg,y_avg,
                              color=pltColor,
                              linestyle='dashed',
                              linewidth=1.0,
                              drawstyle='default',
                              label='')
                     if self.avgrmsObject_1.rms:
-                        self.plotWindow_1.ax2.plot(t_rms,y_rms,
+                        self.plotWindow_1.canvas.ax2.plot(t_rms,y_rms,
                              color=pltColor,
                              linestyle='dashdot',
                              linewidth=1.0,
                              drawstyle='default',
                              label='')
-                    self.plotWindow_1.ax2.legend()
+                    self.plotWindow_1.canvas.ax2.legend()
                     i_ax += 1
 
             if self.legendEnable:
                 self.plotCanvas_1.showLegend();
-                self.plotWindow_1.showLegend();
+                self.plotWindow_1.canvas.showLegend();
             self.axesPropObject_1.setxLabel(self.senList.item(self.XIndex).text())
 
             self.plotCanvas_1.changeAxesProps();
-            self.plotWindow_1.changeAxesProps();
+            self.plotWindow_1.canvas.changeAxesProps();
 
             self.linePropBtn.setEnabled(1)
             self.axesBtn.setEnabled(1)
@@ -4210,11 +4137,11 @@ class ApplicationWindow(QMainWindow):
             self.saveBtn.setEnabled(1)
 
             self.plotCanvas_1.changeGridProps();
-            self.plotWindow_1.changeGridProps();
+            self.plotWindow_1.canvas.changeGridProps();
 
             self.titleBtn.setEnabled(1)
             self.plotCanvas_1.changeTitle()
-            self.plotWindow_1.changeTitle();
+            self.plotWindow_1.canvas.changeTitle();
             self.plotCanvas_1.getxTicks();
 
     def FileSelectionChange(self):
@@ -4301,6 +4228,7 @@ class ApplicationWindow(QMainWindow):
             checked = QtCore.Qt.CheckState.Checked
             if (item.checkState()==checked and item2.checkState()!=checked) or (item.checkState()==checked and \
                 (self.FlagLR[i] == 'N' or self.FlagLR[i] == 'R')):
+
                 listOfYIndex.append(i)
                 self.FlagLR[i]='L'
                 self.YCols.item(i,1).setCheckState(QtCore.Qt.CheckState.Unchecked)
@@ -4320,6 +4248,7 @@ class ApplicationWindow(QMainWindow):
                 self.YCols.item(i,1).setCheckState(QtCore.Qt.CheckState.Unchecked)
 
         if self.YIndex != listOfYIndex or self.YIndexR != listOfYIndexR:
+
             self.YIndex = listOfYIndex
             self.YIndexR = listOfYIndexR
             if self.XIndex == None:
@@ -4328,6 +4257,7 @@ class ApplicationWindow(QMainWindow):
                 self.plotDataWithChangedOptions();
 
     def openFileNameDialog(self):
+
         options = QFileDialog.Option.DontUseNativeDialog#"All Files (*);;Python Files (*.py)"*.xlsx *.csv
 
         if path.exists(self.file_last_opened):
@@ -4339,7 +4269,12 @@ class ApplicationWindow(QMainWindow):
 
         self.ProjectfileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", \
             self.DefaultPath," *.in", options=options)
-        print(self.ProjectfileName)
+        self.project_file_last_opened = self.ProjectfileName
+        self.openFile1()
+   
+    def openFile1(self):
+        print('openFile1: self.ProjectfileName:', self.ProjectfileName)
+
         if path.exists(self.ProjectfileName):
             self.labelFile.setText(self.ProjectfileName)
             self.labelFile.setEnabled(1)
@@ -4427,8 +4362,18 @@ class ApplicationWindow(QMainWindow):
                 self.YCols.setRowCount(0)
             else:
                 self.displayMessage2("File Error:" + \
-                    "\nFile " + self.fileName + \
+                    "\nFile " + self.netlist + \
                     "\ndoes not exist.")
+
+    def reloadFile(self):
+
+        if self.project_file_last_opened == '':
+            self.displayMessage2("File Error:" + \
+                "\nNo file previously opened.")
+        else:
+            self.ProjectfileName = self.project_file_last_opened
+
+        self.openFile1()
 
     def openFileSaveDialog(self):
         options = QFileDialog.Options()
@@ -4450,7 +4395,7 @@ class ApplicationWindow(QMainWindow):
         self.msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         returnValue = self.msg.exec()
     def displayMessage2(self, message_1):
-        self.msg.setIcon(QMessageBox.Information)
+        self.msg.setIcon(QMessageBox.Icon.Information)
         self.msg.setWindowTitle("Message")
         self.msg.setText(message_1)
         self.msg.setStandardButtons(QMessageBox.StandardButton.Ok)
@@ -4778,12 +4723,21 @@ class PlotCanvas(FigureCanvas):
         else:
             self.ax2.set_yticks([])
         self.draw()
-class PlotWindow(QMainWindow, PlotCanvas):
+
+class PlotWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle('Plot Data')
+
+        self.canvas = PlotCanvas()
+        self.fig = self.canvas.fig
+
+        self.setCentralWidget(self.canvas)
 
 if __name__ == "__main__":
-    # QGuiApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True);
+    print('QT API used by MatPlotLib', QT_API)
+
+    # QGuiApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True);
     app = QtWidgets.QApplication([])
 
 #   Note: include / at the end in passing dir_output_files
@@ -4796,4 +4750,4 @@ if __name__ == "__main__":
     mainWin = ApplicationWindow(dir_output_files, file_last_opened)
 
     mainWin.show()
-    sys.exit( app.exec())
+    sys.exit( app.exec_())

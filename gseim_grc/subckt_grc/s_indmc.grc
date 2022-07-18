@@ -41,8 +41,8 @@ blocks:
     coordinate: [273, 51]
     rotation: 0
     state: true
-- name: connector_f_2B$0
-  id: connector_f_2B
+- name: connector_f_2y$0
+  id: connector_f_2y
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -1043,8 +1043,8 @@ blocks:
     state: true
 connections:
 - [abc_to_dq$0, '0', sum_2$2, '0']
-- [abc_to_dq$0, '1', connector_f_2B$0, '0']
-- [connector_f_2B$0, '0', sum_2$1, '0']
+- [abc_to_dq$0, '1', connector_f_2y$0, '0']
+- [connector_f_2y$0, '0', sum_2$1, '0']
 - [connector_f_3a$0, '0', sum_2$8, '1']
 - [connector_f_3a$0, '1', dummy_sink$0, '0']
 - [connector_f_3a$1, '0', sum_2$9, '1']

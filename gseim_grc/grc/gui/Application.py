@@ -201,7 +201,7 @@ class Application(Gtk.Application):
                     s_message = "process already completed\nno need to stop"
                     self.display_message(s_message)
 
-    def gparm_add(self, widget, parm_dict):
+    def gparm_add(self, widget, flow_graph_1):
         dialog = gp.AddGparm(self.main_window)
         flag_done = False
 
@@ -212,12 +212,12 @@ class Application(Gtk.Application):
                 s_name = dialog.entry_name.get_text()
                 s_value = dialog.entry_value.get_text()
 
-                if s_name in parm_dict.keys():
+                if s_name in flow_graph_1.gparms.keys():
                     self.display_message(s_name + ' already exists!')
                 elif len(s_name.split()) != 1:
                     self.display_message('gparms name should be a single word.')
                 else:
-                    parm_dict[s_name] = s_value
+                    flow_graph_1.gparms[s_name] = s_value
                     flag_done = True
                     self.main_window.current_page.saved = False
             elif response == Gtk.ResponseType.CANCEL:
@@ -225,47 +225,47 @@ class Application(Gtk.Application):
 
         dialog.destroy()
 
-    def gparm_delete(self, widget, parm_dict):
-        if len(parm_dict) == 0:
+    def gparm_delete(self, widget, flow_graph_1):
+        if len(flow_graph_1.gparms) == 0:
             self.display_message('The gparms list\n is empty!')
             return
 
-        dialog = gp.DelGparm(self.main_window, parm_dict)
+        dialog = gp.DelGparm(self.main_window, flow_graph_1.gparms)
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
 
-            l_names = list(parm_dict.keys())
-            l_values = list(parm_dict.values())
-            parm_dict.clear()
+            l_names = list(flow_graph_1.gparms.keys())
+            l_values = list(flow_graph_1.gparms.values())
+            flow_graph_1.gparms.clear()
 
             for i in range(len(l_names)):
                 if not dialog.tick[i].get_active():
-                    parm_dict[l_names[i]] = l_values[i]
+                    flow_graph_1.gparms[l_names[i]] = l_values[i]
 
             self.main_window.current_page.saved = False
 
         dialog.destroy()
 
-    def gparm_edit(self, widget, parm_dict):
-        if len(parm_dict) == 0:
+    def gparm_edit(self, widget, flow_graph_1):
+        if len(flow_graph_1.gparms) == 0:
             self.display_message('The gparms list\n is empty!')
             return
 
-        dialog = gp.EditGparm(self.main_window, parm_dict)
+        dialog = gp.EditGparm(self.main_window, flow_graph_1.gparms)
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
 
-            l_names = list(parm_dict.keys())
-            l_values = list(parm_dict.values())
+            l_names = list(flow_graph_1.gparms.keys())
+            l_values = list(flow_graph_1.gparms.values())
 
             for i in range(len(l_names)):
                 l_values[i] = dialog.value[i].get_text()
 
-            parm_dict.clear()
+            flow_graph_1.gparms.clear()
             for i in range(len(l_names)):
-                parm_dict[l_names[i]] = l_values[i]
+                flow_graph_1.gparms[l_names[i]] = l_values[i]
 
             self.main_window.current_page.saved = False
 
@@ -281,9 +281,9 @@ class Application(Gtk.Application):
         ovname_next = 'outvar' + str(n_max + 1)
         return ovname_next
 
-    def outvar_add_connection(self, widget, ov_dict, connection):
+    def outvar_add_connection(self, widget, flow_graph_1, connection):
 
-        ovname_next = self.get_next_outvar_name(ov_dict)
+        ovname_next = self.get_next_outvar_name(flow_graph_1.outvars)
 
         l1 = list(connection.export_data())
 
@@ -296,7 +296,7 @@ class Application(Gtk.Application):
             self.display_message('bus connection not allowed as outvar.')
             return
 
-        for v in ov_dict.values():
+        for v in flow_graph_1.outvars.values():
             if l1 == v[1]:
                 print('outvar_add_connection: wire already exists in outvars.')
                 self.display_message('wire already exists in outvars!')
@@ -314,12 +314,12 @@ class Application(Gtk.Application):
                 s_name = dialog.entry_name.get_text()
                 s_value = dialog.entry_value.get_text()
 
-                if s_name in ov_dict.keys():
+                if s_name in flow_graph_1.outvars.keys():
                     self.display_message(s_name + ' already exists in outvars!')
                 elif len(s_name.split()) != 1:
                     self.display_message('outvar name should be a single word.')
                 else:
-                    ov_dict[s_name] = ['connection', l1]
+                    flow_graph_1.outvars[s_name] = ['connection', l1]
                     flag_done = True
                     self.main_window.current_page.saved = False
             elif response == Gtk.ResponseType.CANCEL:
@@ -361,28 +361,28 @@ class Application(Gtk.Application):
 
         dialog.destroy()
 
-    def outvar_delete(self, widget, ov_dict, l_output_blocks, l_solve_blocks):
-        if len(ov_dict) == 0:
+    def outvar_delete(self, widget, flow_graph_1):
+        if len(flow_graph_1.outvars) == 0:
             self.display_message('The outvars list\n is empty!')
             return
 
-        dialog = ov.DelOutvar(self.main_window, ov_dict)
+        dialog = ov.DelOutvar(self.main_window, flow_graph_1.outvars)
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
 
-            l_names = list(ov_dict.keys())
-            l_values = list(ov_dict.values())
-            ov_dict.clear()
+            l_names = list(flow_graph_1.outvars.keys())
+            l_values = list(flow_graph_1.outvars.values())
+            flow_graph_1.outvars.clear()
 
             for i in range(len(l_names)):
                 if not dialog.tick[i].get_active():
-                    ov_dict[l_names[i]] = l_values[i]
+                    flow_graph_1.outvars[l_names[i]] = l_values[i]
 
             for i in range(len(l_names)):
                 if dialog.tick[i].get_active():
                     ov_name = l_names[i]
-                    for out in l_output_blocks:
+                    for out in flow_graph_1.l_output_blocks:
                         if ov_name in out.l_outvars:
                             i_ov = out.l_outvars.index(ov_name)
                             del out.l_outvars[i_ov]
@@ -395,40 +395,40 @@ class Application(Gtk.Application):
 
         l_empty_output_blocks = []
 
-        for out in l_output_blocks:
+        for out in flow_graph_1.l_output_blocks:
             if len(out.l_outvars) == 0:
                 print('outvar_delete: output block <' + out.name + '> is empty')
                 l_empty_output_blocks.append(out.name)
 
         for out_name in l_empty_output_blocks:
-            l_out_names = list(map(lambda x: x.name, l_output_blocks))
+            l_out_names = list(map(lambda x: x.name, flow_graph_1.l_output_blocks))
 
             i_out = l_out_names.index(out_name)
-            i_slv = int(l_output_blocks[i_out].index_slv)
+            i_slv = int(flow_graph_1.l_output_blocks[i_out].index_slv)
 
             print('outvar_delete: out_name:', out_name, 'i_out:', i_out, 'i_slv:', i_slv)
             print('type(i_out):', type(i_out), 'type(i_slv):', type(i_slv))
 
-            i_slv_out = l_solve_blocks[i_slv].l_out.index(out_name)
-            del l_solve_blocks[i_slv].l_out[i_slv_out]
-            del l_output_blocks[i_out]
+            i_slv_out = flow_graph_1.l_solve_blocks[i_slv].l_out.index(out_name)
+            del flow_graph_1.l_solve_blocks[i_slv].l_out[i_slv_out]
+            del flow_graph_1.l_output_blocks[i_out]
 
         self.main_window.current_page.saved = False
 
-    def outvar_edit(self, widget, ov_dict, l_output_blocks):
-        if len(ov_dict) == 0:
+    def outvar_edit(self, widget, flow_graph_1):
+        if len(flow_graph_1.outvars) == 0:
             self.display_message('The outvars list\n is empty!')
             return
 
-        dialog = ov.EditOutvar(self.main_window, ov_dict)
+        dialog = ov.EditOutvar(self.main_window, flow_graph_1.outvars)
         flag_done = False
 
         while not flag_done:
             response = dialog.run()
             if response == Gtk.ResponseType.OK:
 
-                l_names = list(ov_dict.values())
-                l_values = list(ov_dict.keys())
+                l_names = list(flow_graph_1.outvars.values())
+                l_values = list(flow_graph_1.outvars.keys())
 
                 for i in range(len(l_names)):
                     l_values[i] = dialog.value[i].get_text()
@@ -441,30 +441,30 @@ class Application(Gtk.Application):
 #                   handle output blocks
 
                     l_1 = []
-                    for out in l_output_blocks:
+                    for out in flow_graph_1.l_output_blocks:
                         l_2 = []
                         for ov_name in out.l_outvars:
-                            l_2.append(ov_dict[ov_name])
+                            l_2.append(flow_graph_1.outvars[ov_name])
                         l_1.append(l_2)
 
 #                   re-assign ov_dict values
-                    ov_dict.clear()
+                    flow_graph_1.outvars.clear()
                     for i in range(len(l_names)):
-                        ov_dict[l_values[i]] = l_names[i]
+                        flow_graph_1.outvars[l_values[i]] = l_names[i]
                     flag_done = True
 
                     l_new_1 = []
-                    for i_out, out in enumerate(l_output_blocks):
+                    for i_out, out in enumerate(flow_graph_1.l_output_blocks):
                         l_new_2 = []
                         for i_ov, ov_name in enumerate(out.l_outvars):
                             ov_value = l_1[i_out][i_ov]
-                            for k, v in ov_dict.items():
+                            for k, v in flow_graph_1.outvars.items():
                                 if ov_value == v:
                                     l_new_2.append(k)
                                     break
                         l_new_1.append(l_new_2)
 
-                    for i_out, out in enumerate(l_output_blocks):
+                    for i_out, out in enumerate(flow_graph_1.l_output_blocks):
                         for i_ov in range(len(out.l_outvars)):
                             out.l_outvars[i_ov] = l_new_1[i_out][i_ov]
 
@@ -474,7 +474,7 @@ class Application(Gtk.Application):
 
         dialog.destroy()
 
-    def solve_add(self, widget, l_solve_blocks, d_slvparms):
+    def solve_add(self, widget, flow_graph_1):
         dialog = slvblk.AddSolveBlock(self.main_window)
 
         flag_done = False
@@ -486,8 +486,8 @@ class Application(Gtk.Application):
                 s_name = dialog.entry_name.get_text()
                 s_value = dialog.entry_value.get_text()
 
-                l_slv_names = list(map(lambda x: x.name, l_solve_blocks))
-                l_slv_indices = list(map(lambda x: x.index, l_solve_blocks))
+                l_slv_names = list(map(lambda x: x.name, flow_graph_1.l_solve_blocks))
+                l_slv_indices = list(map(lambda x: x.index, flow_graph_1.l_solve_blocks))
 
                 if s_name in l_slv_names:
                     self.display_message(s_name + ' already exists!')
@@ -499,12 +499,14 @@ class Application(Gtk.Application):
                     elif len(s_name.split()) != 1:
                         self.display_message('solve block name should be a single word.')
                     else:
-                        slv = SolveBlock(d_slvparms, s_name, s_value)
-                        l_solve_blocks.append(slv)
-                        l_1 = sorted(l_solve_blocks, key=lambda x: x.index)
-                        l_solve_blocks.clear()
+
+                        slv = SolveBlock(flow_graph_1.d_slvparms, s_name, s_value)
+                        flow_graph_1.l_solve_blocks.append(slv)
+                        l_1 = sorted(flow_graph_1.l_solve_blocks, key=lambda x: x.index)
+                        flow_graph_1.l_solve_blocks.clear()
                         for slv in l_1:
-                            l_solve_blocks.append(slv)
+                            flow_graph_1.l_solve_blocks.append(slv)
+
                         flag_done = True
                         self.main_window.current_page.saved = False
             elif response == Gtk.ResponseType.CANCEL:
@@ -512,59 +514,60 @@ class Application(Gtk.Application):
 
         dialog.destroy()
 
-    def solve_delete(self, widget, l_solve_blocks, l_output_blocks):
-        if len(l_solve_blocks) == 0:
+    def solve_delete(self, widget, flow_graph_1):
+        if len(flow_graph_1.l_solve_blocks) == 0:
             self.display_message('The solve blocks list\n is empty!')
             return
 
-        dialog = slvblk.DelSolveBlock(self.main_window, l_solve_blocks)
+        dialog = slvblk.DelSolveBlock(self.main_window, flow_graph_1.l_solve_blocks)
         response = dialog.run()
 
         if response == Gtk.ResponseType.OK:
 
-            l_1 = [slv.name for i, slv in enumerate(l_solve_blocks)
+            l_1 = [slv.name for i, slv in enumerate(flow_graph_1.l_solve_blocks)
                    if dialog.tick[i].get_active()]
 
-            l_out_names = list(map(lambda x: x.name, l_output_blocks))
+            l_out_names = list(map(lambda x: x.name, flow_graph_1.l_output_blocks))
 
             for name1 in l_1:
-                for i, slv in enumerate(l_solve_blocks):
+                for i, slv in enumerate(flow_graph_1.l_solve_blocks):
                     if slv.name == name1:
-                        for out_name in l_solve_blocks[i].l_out:
+                        for out_name in flow_graph_1.l_solve_blocks[i].l_out:
                             i_out = l_out_names.index(out_name)
-                            del l_output_blocks[i_out]
+                            del flow_graph_1.l_output_blocks[i_out]
 
-                        del l_solve_blocks[i]
+                        del flow_graph_1.l_solve_blocks[i]
                         break
             self.main_window.current_page.saved = False
 
         dialog.destroy()
 
-    def solve_pick(self, widget, l_solve_blocks, d_slv_categories):
-        if len(l_solve_blocks) == 0:
+    def solve_pick(self, widget, flow_graph_1, d_slv_categories):
+        if len(flow_graph_1.l_solve_blocks) == 0:
             self.display_message('The solve blocks list\n is empty!')
             return
-        elif len(l_solve_blocks) == 1:
+        elif len(flow_graph_1.l_solve_blocks) == 1:
 #           some code repetition here for dialog1; clean up later:
             i_active = 0
             dialog1 = slvblk.EditSolveBlock(self.main_window,
-                l_solve_blocks[i_active], d_slv_categories)
+                flow_graph_1.l_solve_blocks[i_active], d_slv_categories)
             response = dialog1.run()
             if response == Gtk.ResponseType.OK:
+
                 gu.assign_parms_1(dialog1.d_widgets_1,
-                   l_solve_blocks[i_active].d_parms)
-                l_solve_blocks[i_active].index = \
-                l_solve_blocks[i_active].d_parms['block_index']
-                l_1 = sorted(l_solve_blocks, key=lambda x: x.index)
-                l_solve_blocks.clear()
+                   flow_graph_1.l_solve_blocks[i_active].d_parms)
+                flow_graph_1.l_solve_blocks[i_active].index = \
+                flow_graph_1.l_solve_blocks[i_active].d_parms['block_index']
+                l_1 = sorted(flow_graph_1.l_solve_blocks, key=lambda x: x.index)
+                flow_graph_1.l_solve_blocks.clear()
                 for slv in l_1:
-                    l_solve_blocks.append(slv)
+                    flow_graph_1.l_solve_blocks.append(slv)
 
                 self.main_window.current_page.saved = False
 
             dialog1.destroy()
         else:
-            dialog = slvblk.PickSolveBlock(self.main_window, l_solve_blocks)
+            dialog = slvblk.PickSolveBlock(self.main_window, flow_graph_1.l_solve_blocks)
 
             response = dialog.run()
             if response == Gtk.ResponseType.OK:
@@ -578,19 +581,21 @@ class Application(Gtk.Application):
                         break
 
                 dialog1 = slvblk.EditSolveBlock(self.main_window,
-                    l_solve_blocks[i_active], d_slv_categories)
+                    flow_graph_1.l_solve_blocks[i_active], d_slv_categories)
+
                 response = dialog1.run()
                 if response == Gtk.ResponseType.OK:
-                    gu.assign_parms_1(dialog1.d_widgets_1,
-                       l_solve_blocks[i_active].d_parms)
-                    l_solve_blocks[i_active].index = \
-                    l_solve_blocks[i_active].d_parms['block_index']
-                    l_1 = sorted(l_solve_blocks, key=lambda x: x.index)
 
-                    l_solve_blocks.clear()
+                    gu.assign_parms_1(dialog1.d_widgets_1,
+                       flow_graph_1.l_solve_blocks[i_active].d_parms)
+                    flow_graph_1.l_solve_blocks[i_active].index = \
+                    flow_graph_1.l_solve_blocks[i_active].d_parms['block_index']
+                    l_1 = sorted(flow_graph_1.l_solve_blocks, key=lambda x: x.index)
+
+                    flow_graph_1.l_solve_blocks.clear()
 
                     for slv in l_1:
-                        l_solve_blocks.append(slv)
+                        flow_graph_1.l_solve_blocks.append(slv)
 
                     self.main_window.current_page.saved = False
 
@@ -598,15 +603,15 @@ class Application(Gtk.Application):
 
             dialog.destroy()
 
-    def solve_pick_1(self, widget, l_solve_blocks, d_slv_categories):
-        if len(l_solve_blocks) == 0:
+    def solve_pick_1(self, widget, flow_graph_1, d_slv_categories):
+        if len(flow_graph_1.l_solve_blocks) == 0:
             self.display_message('The solve blocks list\n is empty!')
             return
         else:
-            if len(l_solve_blocks) == 1:
+            if len(flow_graph_1.l_solve_blocks) == 1:
                 i_active = 0
             else:
-                dialog = slvblk.PickSolveBlock(self.main_window, l_solve_blocks)
+                dialog = slvblk.PickSolveBlock(self.main_window, flow_graph_1.l_solve_blocks)
                 response = dialog.run()
                 if response == Gtk.ResponseType.OK:
                     for i in range(len(dialog.l_buttons)):
@@ -616,18 +621,18 @@ class Application(Gtk.Application):
                 dialog.destroy()
 
             for k, v in self.d_slvparms.items():
-                l_solve_blocks[i_active].d_parms[k] = v['default']
+                flow_graph_1.l_solve_blocks[i_active].d_parms[k] = v['default']
 
-    def solve_pick_2(self, widget, l_solve_blocks):
-        if len(l_solve_blocks) == 0:
+    def solve_pick_2(self, widget, flow_graph_1):
+        if len(flow_graph_1.l_solve_blocks) == 0:
             self.display_message('The solve blocks list\n is empty!')
             k = -1
             return k
         else:
-            if len(l_solve_blocks) == 1:
+            if len(flow_graph_1.l_solve_blocks) == 1:
                 i_active = 0
             else:
-                dialog = slvblk.PickSolveBlock(self.main_window, l_solve_blocks)
+                dialog = slvblk.PickSolveBlock(self.main_window, flow_graph_1.l_solve_blocks)
                 response = dialog.run()
                 if response == Gtk.ResponseType.OK:
                     for i in range(len(dialog.l_buttons)):
@@ -637,12 +642,12 @@ class Application(Gtk.Application):
                 dialog.destroy()
             return i_active
 
-    def output_add(self, widget, d_outparms, l_output_blocks, l_solve_blocks):
-        if len(l_solve_blocks) == 0:
+    def output_add(self, widget, d_outparms, flow_graph_1):
+        if len(flow_graph_1.l_solve_blocks) == 0:
             self.display_message('The solve blocks list\n is empty!')
             return
 
-        dialog = outblk.AddOutputBlock(self.main_window, l_solve_blocks)
+        dialog = outblk.AddOutputBlock(self.main_window, flow_graph_1.l_solve_blocks)
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
@@ -651,31 +656,32 @@ class Application(Gtk.Application):
             print('output_add: s1:', s1)
             slv_name = s1.split(' (')[0]
 
-            l_slv_names = list(map(lambda x: x.name, l_solve_blocks))
+            l_slv_names = list(map(lambda x: x.name, flow_graph_1.l_solve_blocks))
             i_slv = l_slv_names.index(slv_name)
             print('output_add: i_slv:', i_slv)
 
-            if len(l_output_blocks) == 0:
+            if len(flow_graph_1.l_output_blocks) == 0:
                 n_max = -1
             else:
-                n_max = max(map(lambda x: int(x.name.split('$')[-1]), l_output_blocks))
+                n_max = max(map(lambda x: int(x.name.split('$')[-1]), flow_graph_1.l_output_blocks))
 
             out_name = 'out$' + str(n_max+1)
             out_block = OutputBlock(self.d_outparms, str(i_slv), out_name)
-            l_output_blocks.append(out_block)
-            l_solve_blocks[i_slv].l_out.append(out_name)
+
+            flow_graph_1.l_output_blocks.append(out_block)
+            flow_graph_1.l_solve_blocks[i_slv].l_out.append(out_name)
 
             self.main_window.current_page.saved = False
 
         dialog.destroy()
 
-    def output_delete(self, widget, l_output_blocks, l_solve_blocks):
-        if len(l_output_blocks) == 0:
+    def output_delete(self, widget, flow_graph_1):
+        if len(flow_graph_1.l_output_blocks) == 0:
             self.display_message('The output blocks list\n is empty!')
             return
 
-        dialog = outblk.PickOutputBlock(self.main_window, l_output_blocks,
-            l_solve_blocks)
+        dialog = outblk.PickOutputBlock(self.main_window, flow_graph_1.l_output_blocks,
+            flow_graph_1.l_solve_blocks)
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
@@ -687,46 +693,46 @@ class Application(Gtk.Application):
             l1 = dialog.l_names[i_active].replace(':', ' ').split()
             slv_name, out_name = l1[0], l1[1]
 
-            l_slv_names = list(map(lambda x: x.name, l_solve_blocks))
-            l_out_names = list(map(lambda x: x.name, l_output_blocks))
+            l_slv_names = list(map(lambda x: x.name, flow_graph_1.l_solve_blocks))
+            l_out_names = list(map(lambda x: x.name, flow_graph_1.l_output_blocks))
 
             i_slv = l_slv_names.index(slv_name)
             i_out = l_out_names.index(out_name)
 
-            i_slv_out = l_solve_blocks[i_slv].l_out.index(out_name)
-            del l_solve_blocks[i_slv].l_out[i_slv_out]
-            del l_output_blocks[i_out]
+            i_slv_out = flow_graph_1.l_solve_blocks[i_slv].l_out.index(out_name)
+            del flow_graph_1.l_solve_blocks[i_slv].l_out[i_slv_out]
+            del flow_graph_1.l_output_blocks[i_out]
 
             self.main_window.current_page.saved = False
 
         dialog.destroy()
 
-    def output_pick(self, widget, l_output_blocks, l_solve_blocks,
-        d_outparms, l_outvars):
+    def output_pick(self, widget, flow_graph_1, d_outparms, l_outvars):
 
-        if len(l_output_blocks) == 0:
+        if len(flow_graph_1.l_output_blocks) == 0:
             self.display_message('The output blocks list\n is empty!')
             return
-        elif len(l_output_blocks) == 1:
+        elif len(flow_graph_1.l_output_blocks) == 1:
             i_active = 0
             dialog1 = outblk.EditOutputBlock(self.main_window,
-               l_output_blocks[i_active], d_outparms, l_outvars, l_solve_blocks)
+               flow_graph_1.l_output_blocks[i_active], d_outparms, l_outvars, flow_graph_1.l_solve_blocks)
             response = dialog1.run()
             if response == Gtk.ResponseType.OK:
-                gu.assign_parms_1(dialog1.d_widgets_1,
-                   l_output_blocks[i_active].d_parms)
 
-                l_output_blocks[i_active].l_outvars.clear()
+                gu.assign_parms_1(dialog1.d_widgets_1,
+                   flow_graph_1.l_output_blocks[i_active].d_parms)
+
+                flow_graph_1.l_output_blocks[i_active].l_outvars.clear()
                 for i, button in enumerate(dialog1.l_ov_buttons):
                     if button.get_active():
-                        l_output_blocks[i_active].l_outvars.append(l_outvars[i])
+                        flow_graph_1.l_output_blocks[i_active].l_outvars.append(l_outvars[i])
 
                 self.main_window.current_page.saved = False
 
             dialog1.destroy()
         else:
-            dialog = outblk.PickOutputBlock(self.main_window, l_output_blocks,
-                l_solve_blocks)
+            dialog = outblk.PickOutputBlock(self.main_window, flow_graph_1.l_output_blocks,
+                flow_graph_1.l_solve_blocks)
 
             response = dialog.run()
             if response == Gtk.ResponseType.OK:
@@ -739,7 +745,7 @@ class Application(Gtk.Application):
 
                 out_name = dialog.l_names[i_active].split(' ')[-1]
                 i_output_block = -1
-                for i1, out in enumerate(l_output_blocks):
+                for i1, out in enumerate(flow_graph_1.l_output_blocks):
                     if out.name == out_name:
                         i_output_block = i1
                         break
@@ -748,16 +754,17 @@ class Application(Gtk.Application):
                     exit(0)
 
                 dialog1 = outblk.EditOutputBlock(self.main_window,
-                   l_output_blocks[i_output_block], d_outparms, l_outvars, l_solve_blocks)
+                   flow_graph_1.l_output_blocks[i_output_block], d_outparms, l_outvars,
+                   flow_graph_1.l_solve_blocks)
                 response = dialog1.run()
                 if response == Gtk.ResponseType.OK:
                     gu.assign_parms_1(dialog1.d_widgets_1,
-                       l_output_blocks[i_active].d_parms)
+                       flow_graph_1.l_output_blocks[i_active].d_parms)
 
-                    l_output_blocks[i_active].l_outvars.clear()
+                    flow_graph_1.l_output_blocks[i_active].l_outvars.clear()
                     for i, button in enumerate(dialog1.l_ov_buttons):
                         if button.get_active():
-                            l_output_blocks[i_active].l_outvars.append(l_outvars[i])
+                            flow_graph_1.l_output_blocks[i_active].l_outvars.append(l_outvars[i])
 
                     self.main_window.current_page.saved = False
 
@@ -946,10 +953,10 @@ class Application(Gtk.Application):
 
         elif action == Actions.GPARM_ADD:
 
-            self.gparm_add(self.main_window, flow_graph.gparms)
+            self.gparm_add(self.main_window, flow_graph)
 
         elif action == Actions.GPARM_DEL:
-            self.gparm_delete(self.main_window, flow_graph.gparms)
+            self.gparm_delete(self.main_window, flow_graph)
         elif action == Actions.GPARM_EDIT:
             if 'hb' in flow_graph.get_option('generate_options'):
                 if 'drawing_scheme' not in flow_graph.gparms.keys():
@@ -975,14 +982,14 @@ class Application(Gtk.Application):
                 if 'port_offset_b' not in flow_graph.gparms.keys():
                     flow_graph.gparms['port_offset_b'] = '0'
 
-            self.gparm_edit(self.main_window, flow_graph.gparms)
+            self.gparm_edit(self.main_window, flow_graph)
         elif action == Actions.OUTVAR_ADD:
             n1 = len(flow_graph.selected_elements)
 
             if n1 == 1:
                 e1 = list(flow_graph.selected_elements)[0]
                 if isinstance(e1, Connection):
-                    self.outvar_add_connection(self.main_window, flow_graph.outvars, e1)
+                    self.outvar_add_connection(self.main_window, flow_graph, e1)
                 else:
                     k = str(type(e1)).split("'")[-2].split('.')[-1]
                     l_outvars = self.dict_outvars[k]
@@ -990,26 +997,22 @@ class Application(Gtk.Application):
                         flow_graph.outvars, l_outvars, e1.name)
 
         elif action == Actions.OUTVAR_DEL:
-            self.outvar_delete(self.main_window, flow_graph.outvars,
-               flow_graph.l_output_blocks, flow_graph.l_solve_blocks)
+            self.outvar_delete(self.main_window, flow_graph)
         elif action == Actions.OUTVAR_EDIT:
-            self.outvar_edit(self.main_window, flow_graph.outvars,
-               flow_graph.l_output_blocks)
+            self.outvar_edit(self.main_window, flow_graph_1)
         elif action == Actions.SOLVEBLOCK_ADD:
-            self.solve_add(self.main_window, flow_graph.l_solve_blocks,
-               self.d_slvparms)
+            self.solve_add(self.main_window, flow_graph)
         elif action == Actions.SOLVEBLOCK_DEL:
-            self.solve_delete(self.main_window, flow_graph.l_solve_blocks,
-            flow_graph.l_output_blocks)
+            self.solve_delete(self.main_window, flow_graph)
         elif action == Actions.SOLVEBLOCK_EDIT:
-            self.solve_pick(self.main_window, flow_graph.l_solve_blocks,
+            self.solve_pick(self.main_window, flow_graph,
                self.d_slv_categories)
         elif action == Actions.SOLVEBLOCK_RESET:
-            self.solve_pick_1(self.main_window, flow_graph.l_solve_blocks,
+            self.solve_pick_1(self.main_window, flow_graph,
                self.d_slv_categories)
         elif action == Actions.SOLVEBLOCK_DISP:
             print('solve disp clicked')
-            i_picked = self.solve_pick_2(self.main_window, flow_graph.l_solve_blocks)
+            i_picked = self.solve_pick_2(self.main_window, flow_graph)
             print('i_picked:', i_picked)
             if i_picked > -1:
 
@@ -1062,16 +1065,13 @@ class Application(Gtk.Application):
                 slist1.show_all()
 
         elif action == Actions.OUTPUTBLOCK_ADD:
-            self.output_add(self.main_window, self.d_outparms,
-               flow_graph.l_output_blocks, flow_graph.l_solve_blocks)
+            self.output_add(self.main_window, self.d_outparms, flow_graph)
         elif action == Actions.OUTPUTBLOCK_DEL:
-            self.output_delete(self.main_window,
-               flow_graph.l_output_blocks, flow_graph.l_solve_blocks)
+            self.output_delete(self.main_window, flow_graph)
         elif action == Actions.OUTPUTBLOCK_EDIT:
 
             l_outvars_1 = list(flow_graph.outvars.keys())
-            self.output_pick(self.main_window,
-               flow_graph.l_output_blocks, flow_graph.l_solve_blocks,
+            self.output_pick(self.main_window, flow_graph,
                self.d_outparms, l_outvars_1)
         elif action == Actions.ELEMENT_DISPLAY:
             n1 = len(flow_graph.selected_elements)

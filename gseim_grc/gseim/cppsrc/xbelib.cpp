@@ -68,14 +68,15 @@ XbeLib::XbeLib(
      exit (1);
    }
 
-   flag_lmttstep  = assign_bool_3(v1,1,2,"limit_tstep" ,false);
-   flag_lmtnewt   = assign_bool_3(v1,1,2,"limit_newton",false);
-   flag_savehist  = assign_bool_3(v1,1,2,"save_history",false);
-   flag_modulo    = assign_bool_3(v1,1,2,"limit_modulo",false);
-   flag_setrparm  = assign_bool_3(v1,1,2,"set_rparm_1" ,false);
-   flag_getrparm  = assign_bool_3(v1,1,2,"get_rparm_1" ,false);
-   flag_reset     = assign_bool_3(v1,1,2,"reset"       ,false);
-   flag_allow_ssw = assign_bool_3(v1,1,2,"allow_ssw"   ,true );
+   flag_lmttstep   = assign_bool_3(v1,1,2,"limit_tstep"       ,false);
+   flag_lmtnewt    = assign_bool_3(v1,1,2,"limit_newton"      ,false);
+   flag_savehist   = assign_bool_3(v1,1,2,"save_history"      ,false);
+   flag_modulo     = assign_bool_3(v1,1,2,"limit_modulo"      ,false);
+   flag_setrparm   = assign_bool_3(v1,1,2,"set_rparm_1"       ,false);
+   flag_getrparm   = assign_bool_3(v1,1,2,"get_rparm_1"       ,false);
+   flag_reset      = assign_bool_3(v1,1,2,"reset"             ,false);
+   flag_allow_ssw  = assign_bool_3(v1,1,2,"allow_ssw"         ,true );
+   flag_time_parms = assign_bool_3(v1,1,2,"compute_time_parms",false);
 
    next_line(inf,v1);
    check_word_1(v1,0,"Jacobian:");
@@ -102,7 +103,7 @@ XbeLib::XbeLib(
 
    next_line(inf,v1);
    n_f = assign_int_2(v1,0,"n_f");
-   if (flag_evaluate) {
+   if ((flag_evaluate) || (flag_delay)) {
      if (n_f != 0) {
        cout << "XbeLib: n_f must be 0 for evaluate type elements.." << endl;
        cout << "  Check this element: " << name << ".xbe" << endl;

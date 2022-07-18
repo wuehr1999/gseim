@@ -390,6 +390,91 @@ void Circuit::check_limit_newton(
    return;
 } //end of Circuit::check_limit_newton
 // -----------------------------------------------------------------------------
+void Circuit::check_time_parms(
+   const vector<XbeLib> &xbe_lib,
+   const vector<XbeUsr> &xbe_usr) {
+
+   int i_xbeu,i_xbel;
+
+   flag_time_parms = false;
+   for (i_xbeu=0; i_xbeu < n_xbeu; i_xbeu++) {
+     i_xbel = xbe_usr[i_xbeu].index_xbel;
+     if (xbe_lib[i_xbel].flag_time_parms) {
+       flag_time_parms = true; break;
+     }
+   }
+   return;
+} //end of Circuit::check_time_parms
+// -----------------------------------------------------------------------------
+void Circuit::check_sampler_index(
+   const vector<XbeLib> &xbe_lib,
+   const vector<XbeUsr> &xbe_usr,
+   Global &global) {
+
+   int i_xbeu,i_xbel,i_iprm;
+   int index1,sampler_index1;
+   std::string xbe_name;
+   vector<bool> tick; 
+
+   tick.resize(global.sampler_index_max);
+   for (int i=0; i < (global.sampler_index_max+1); i++) {
+     tick[i] = false;
+   }
+   n_samplers = 0;
+
+   for (i_xbeu=0; i_xbeu < n_xbeu; i_xbeu++) {
+     i_xbel = xbe_usr[i_xbeu].index_xbel;
+     xbe_name = xbe_lib[i_xbel].name;
+     if (xbe_name == "sampler_1") {
+       n_samplers++;
+       if (n_samplers > global.n_samplers_max) {
+         cout << "Circuit::check_sampler_index: n_samplers = " << n_samplers
+           << " is greater than "  << global.n_samplers_max << endl;
+         cout << "  Halting..." << endl; exit(1);
+       }
+       for (i_iprm=0; i_iprm < xbe_lib[i_xbel].n_iprm; i_iprm++) {
+         if (xbe_lib[i_xbel].iprm_name[i_iprm] == "index") {
+           index1 = xbe_usr[i_xbeu].iprm[i_iprm];
+           if (index1 > global.sampler_index_max) {
+             cout << "Circuit::check_sampler_index: sampler index = " << index1
+               << " is greater than "  << global.sampler_index_max << endl;
+             cout << "  Halting..." << endl; exit(1);
+           }
+           if (index1 <= 0) {
+             cout << "Circuit::check_sampler_index: sampler index = " << index1
+               << " (it must be a positive integer)." << endl;
+             cout << "  Halting..." << endl; exit(1);
+           }
+           if (tick[index1]) {
+             cout << "Circuit::check_sampler_index: sampler index = " << index1
+               << " has repeated." << endl;
+             cout << "  Halting..." << endl; exit(1);
+           }
+           tick[index1] = true;
+         }
+       }
+     }
+   }
+
+   for (i_xbeu=0; i_xbeu < n_xbeu; i_xbeu++) {
+     i_xbel = xbe_usr[i_xbeu].index_xbel;
+     xbe_name = xbe_lib[i_xbel].name;
+     if (xbe_name == "delay_discrete_1") {
+       for (i_iprm=0; i_iprm < xbe_lib[i_xbel].n_iprm; i_iprm++) {
+         if (xbe_lib[i_xbel].iprm_name[i_iprm] == "sampler_index") {
+           sampler_index1 = xbe_usr[i_xbeu].iprm[i_iprm];
+           if (!tick[sampler_index1]) {
+             cout << "Circuit::check_sampler_index: sampler_index = "
+               << sampler_index1 << " is not found in any sampler elements." << endl;
+             cout << "  Halting..." << endl; exit(1);
+           }
+         }
+       }
+     }
+   }
+   return;
+} //end of Circuit::check_sampler_index
+// -----------------------------------------------------------------------------
 void Circuit::xbe_map_vr(
    const vector<XbeLib> &xbe_lib,
    vector<XbeUsr> &xbe_usr) {
@@ -823,6 +908,7 @@ void Circuit::set_flags_default() {
    flag_linear_e       = false;
    flag_linear_x       = false;
    flag_linear_ex      = false;
+   flag_reset_x        = false;
 
    return;
 } //end of Circuit::set_flags_default

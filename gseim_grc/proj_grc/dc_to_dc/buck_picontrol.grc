@@ -306,8 +306,8 @@ blocks:
     coordinate: [645, 348]
     rotation: 0
     state: true
-- name: connector_f_2A$0
-  id: connector_f_2A
+- name: connector_f_2x$0
+  id: connector_f_2x
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -845,7 +845,7 @@ connections:
 - [c$0, el0, connector_e_3$5, et0]
 - [c$1, el0, connector_e_3$12, et0]
 - [c$1, er0, connector_e_3$8, et0]
-- [cmpr_2_1$0, '0', connector_f_2A$0, '0']
+- [cmpr_2_1$0, '0', connector_f_2x$0, '0']
 - [connector_e_3$0, el0, diode_r$0, er0]
 - [connector_e_3$0, er0, s_rl_series$1, er0]
 - [connector_e_3$1, el0, vsrc_ac$0, eb0]
@@ -865,7 +865,7 @@ connections:
 - [connector_e_3$7, er0, connector_e_3$8, el0]
 - [connector_e_3$7, et0, diode_r$4, el0]
 - [connector_e_3$9, el0, connector_e_3$8, er0]
-- [connector_f_2A$0, '0', switch_1$0, '0']
+- [connector_f_2x$0, '0', switch_1$0, '0']
 - [diff$0, '0', s_pi_limiter_2$0, '0']
 - [diode_r$1, el0, connector_e_3$2, et0]
 - [diode_r$2, el0, connector_e_3$0, et0]

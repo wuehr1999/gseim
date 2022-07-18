@@ -26,30 +26,31 @@ using namespace std;
 class XbeLib {
 
   public:
-   int n_vr    ;
-   int n_ipvr  ;
-   int n_opvr  ;
-   int n_iprm  ;
-   int n_sprm  ;
-   int n_rprm  ;
-   int n_igprm ;
-   int n_aux   ;
-   int n_stprm ;
+   int n_vr;
+   int n_ipvr;
+   int n_opvr;
+   int n_iprm;
+   int n_sprm;
+   int n_rprm;
+   int n_igprm;
+   int n_aux;
+   int n_stprm;
    int n_outprm;
 
-   bool flag_lmttstep ;
-   bool flag_lmtnewt  ;
-   bool flag_savehist ;
-   bool flag_modulo   ;
-   bool flag_setrparm ;
-   bool flag_getrparm ;
-   bool flag_evaluate ;
+   bool flag_lmttstep;
+   bool flag_lmtnewt;
+   bool flag_savehist;
+   bool flag_modulo;
+   bool flag_setrparm;
+   bool flag_getrparm;
+   bool flag_evaluate;
    bool flag_integrate;
-   bool flag_source   ;
-   bool flag_reset    ;
-   bool flag_delay    ;
+   bool flag_source;
+   bool flag_reset;
+   bool flag_delay;
    bool flag_jac_const;
    bool flag_allow_ssw;
+   bool flag_time_parms;
 
    std::string name;
 

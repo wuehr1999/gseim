@@ -253,26 +253,42 @@ class FlowGraph(CoreFlowgraph, Drawable):
         if len(self.get_elements()) <= 1:
             x_off, y_off = 0, 0
 
+        d1 = {}
+
+        for block_n in blocks_n:
+            block_key = block_n.get('id')
+            if block_key == 'show_parameter':
+                s_name = block_n.get('name')
+                for k, v in block_n.items():
+                    if k == 'parameters':
+                        e_name = v['element_name']
+                        d1[s_name] = e_name
+
+        print('paste_from_clipboard: d1 (before):', d1)
+
         # create blocks
         for block_n in blocks_n:
             block_key = block_n.get('id')
             if block_key == 'options':
                 continue
+            if block_key == 'show_parameter':
+                continue
 
             block_name = block_n.get('name')
             block_name_old = block_name
-            # Verify whether a block with this name exists before adding it
-            if block_name in (blk.name for blk in self.blocks):
-                block_name = self._get_unique_id(block_name.split('$')[0])
-                block_n['name'] = block_name
 
-            print('canvas/flowgraph.py: paste_from_clipboard: block_key:', block_key)
+            block_name = self._get_unique_id(block_name.split('$')[0])
+
             block = self.new_block(block_key)
             if not block:
                 continue  # unknown block was pasted (e.g. dummy block)
 
             selected.add(block)
             block.import_data(**block_n)
+            block.params['id'].set_value(block_name)
+
+            print('block_name_old:', block_name_old)
+            print('block_name:', block_name)
 
             old_id2block[block_name_old] = block
 
@@ -280,6 +296,39 @@ class FlowGraph(CoreFlowgraph, Drawable):
             block.move((x_off, y_off))
 
             #TODO: prevent block from being pasted directly on top of another block
+
+            for k, v in d1.items():
+                if v == block_name_old:
+                    d1[k] = block_name
+
+        print('paste_from_clipboard: d1 (after):', d1)
+
+        for block_n in blocks_n:
+            block_key = block_n.get('id')
+            if block_key == 'options':
+                continue
+            if block_key != 'show_parameter':
+                continue
+
+            block_name = block_n.get('name')
+            block_name_old = block_name
+
+            if block_name in (blk.name for blk in self.blocks):
+                block_name = self._get_unique_id(block_name.split('$')[0])
+                block_n['name'] = block_name
+            block = self.new_block(block_key)
+            if not block:
+                continue  # unknown block was pasted (e.g. dummy block)
+
+            selected.add(block)
+            block.import_data(**block_n)
+            old_id2block[block_name_old] = block
+            block.move((x_off, y_off))
+
+            for k, v in block.params.items():
+                if k == 'element_name':
+                    new_parent = d1[block_name_old]
+                    block.params['element_name'].set_value(new_parent)
 
         # update before creating connections
         self.update()
@@ -351,6 +400,7 @@ class FlowGraph(CoreFlowgraph, Drawable):
         """
         Paste the blocks and connections from the clipboard at x_off, y_off.
         """
+
         (x_min, y_min), blocks_n, connections_n = clipboard
         selected = set()
         old_id2block = dict()
@@ -358,31 +408,27 @@ class FlowGraph(CoreFlowgraph, Drawable):
         x_off = x_off0 - x_min
         y_off = y_off0 - y_min
 
-        d_names = {}
-        s_names = set(b.name for b in self.blocks)
+        d1 = {}
+
+        for block_n in blocks_n:
+            block_key = block_n.get('id')
+            if block_key == 'show_parameter':
+                s_name = block_n.get('name')
+                for k, v in block_n.items():
+                    if k == 'parameters':
+                        e_name = v['element_name']
+                        d1[s_name] = e_name
 
         for block_n in blocks_n:
             block_key = block_n.get('id')
             if block_key == 'options':
                 continue
-            block_old_name = block_n.get('name')
-            if block_old_name in (blk.name for blk in self.blocks):
-                block_new_name = self._get_unique_id_1(block_old_name.split('$')[0], s_names)
-                d_names[block_old_name] = block_new_name
-                s_names.add(block_new_name)
-            else:
-                print('paste_from_clipboard_1:', block_old_name, 'not found in block names')
-                print('  halting...')
-                sys.exit()
-
-        for block_n in blocks_n:
-            block_key = block_n.get('id')
-            if block_key == 'options':
+            if block_key == 'show_parameter':
                 continue
 
-            block_old_name = block_n.get('name')
-            block_new_name = d_names[block_old_name]
-            block_n['name'] = block_new_name
+            block_name = block_n.get('name')
+            block_name_old = block_name
+            block_name = self._get_unique_id(block_name.split('$')[0])
 
             block = self.new_block(block_key)
             if not block:
@@ -390,24 +436,44 @@ class FlowGraph(CoreFlowgraph, Drawable):
 
             selected.add(block)
             block.import_data(**block_n)
+            block.params['id'].set_value(block_name)
 
-            old_id2block[block_old_name] = block
+            old_id2block[block_name_old] = block
             block.move((x_off, y_off))
 
-            if block_old_name.startswith('show_parameter'):
-                for k, v in block.params.items():
-                    if k == 'element_name':
-                        old_parent = v.get_value()
-                        if old_parent in d_names.keys():
-                            new_parent = d_names[old_parent]
-                        else:
-                            print('paste_from_clipboard_1: copy/paste of a show_parameter')
-                            print('  block without parent is not allowed.')
-                            print('  Halting...')
-                            sys.exit()
-                        block.params['element_name'].set_value(new_parent)
+            for k, v in d1.items():
+                if v == block_name_old:
+                    d1[k] = block_name
+
+        for block_n in blocks_n:
+            block_key = block_n.get('id')
+            if block_key == 'options':
+                continue
+            if block_key != 'show_parameter':
+                continue
+
+            block_name = block_n.get('name')
+            block_name_old = block_name
+
+            if block_name in (blk.name for blk in self.blocks):
+                block_name = self._get_unique_id(block_name.split('$')[0])
+                block_n['name'] = block_name
+            block = self.new_block(block_key)
+            if not block:
+                continue  # unknown block was pasted (e.g. dummy block)
+
+            selected.add(block)
+            block.import_data(**block_n)
+            old_id2block[block_name_old] = block
+            block.move((x_off, y_off))
+
+            for k, v in block.params.items():
+                if k == 'element_name':
+                    new_parent = d1[block_name_old]
+                    block.params['element_name'].set_value(new_parent)
 
         self.update()
+
         for connection_n in connections_n:
             src_port_id = connection_n[1]
             snk_port_id = connection_n[3]

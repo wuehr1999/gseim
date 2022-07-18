@@ -505,6 +505,72 @@ void x_and_2(Global &G,XbeUsr &X,XbeJac &J) {
    }
    return;
 }
+void x_and_3(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0;
+   bool X1,X2,X3,Y;
+   double x1,x2,x3;
+   double y;
+   double y_high,hb2;
+   const int nvr_x1 = 0;
+   const int nvr_x2 = 1;
+   const int nvr_x3 = 2;
+   const int nvr_y = 3;
+   const int nr_y_high = 0;
+   const int nr_hb2 = 1;
+   const int no_x1 = 0;
+   const int no_x2 = 1;
+   const int no_x3 = 2;
+   const int no_y = 3;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     y_high = X.rprm[nr_y_high];
+     hb2 = 0.5*y_high;
+     X.rprm[nr_hb2] = hb2;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_x3] = X.val_vr[nvr_x3];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
+   y_high = X.rprm[nr_y_high];
+   hb2 = X.rprm[nr_hb2];
+
+   x1 = X.val_vr[nvr_x1];
+   x2 = X.val_vr[nvr_x2];
+   x3 = X.val_vr[nvr_x3];
+   X1 = x1 > hb2;
+   X2 = x2 > hb2;
+   X3 = x3 > hb2;
+   Y = (X1 && X2) && X3;
+
+   if (Y) {
+     y0 = y_high;
+   } else {
+     y0 = 0.0;
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y ] =  1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
 void x_atan2_rad(Global &G,XbeUsr &X,XbeJac &J) {
    double x,y;
    double theta;
@@ -1116,6 +1182,177 @@ void x_clock_1(Global &G,XbeUsr &X,XbeJac &J) {
    L0 = X.rprm[nr_L0];
    L1 = X.rprm[nr_y_high];
    L2 = 0.0;
+   slope1 = X.rprm[nr_slope1];
+   slope2 = X.rprm[nr_slope2];
+
+   if (t_b < tk1) {
+     y0 = L0 + slope1*t_b;
+   } else if (t_b < tk2) {
+     y0 = L1;
+   } else if (t_b < tk3) {
+     y0 = L1 + slope2*(t_b-tk2);
+   } else if (t_b < tk4) {
+     y0 = L2;
+   } else {
+     y0 = L2 + slope1*(t_b-tk4);
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
+void x_clock_1a(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0,t0_new,delta_min,del1,del2,t_a,t_b,tnext_p;
+   double L1,L2;
+   int n;
+   double y;
+   double f_hz,D,y_low,y_high,delta1,delta2,t0,T1,T2,T,L0,tk1,tk2,tk3,tk4,tk5,
+     slope1,slope2,epsl;
+   const int nvr_y = 0;
+   const int nr_f_hz = 0;
+   const int nr_D = 1;
+   const int nr_y_low = 2;
+   const int nr_y_high = 3;
+   const int nr_delta1 = 4;
+   const int nr_delta2 = 5;
+   const int nr_t0 = 6;
+   const int nr_T1 = 7;
+   const int nr_T2 = 8;
+   const int nr_T = 9;
+   const int nr_L0 = 10;
+   const int nr_tk1 = 11;
+   const int nr_tk2 = 12;
+   const int nr_tk3 = 13;
+   const int nr_tk4 = 14;
+   const int nr_tk5 = 15;
+   const int nr_slope1 = 16;
+   const int nr_slope2 = 17;
+   const int nr_epsl = 18;
+   const int no_y = 0;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     f_hz = X.rprm[nr_f_hz];
+     D    = X.rprm[nr_D   ];
+
+     if (D >= 1.0) {
+       cout << "clock_1a.xbe: D.ge.1.0 ? Halting..." << endl;
+       exit(1);
+     }
+     if (D <= 0.0) {
+       cout << "clock_1a.xbe: D.le.0.0 ? Halting..." << endl;
+       exit(1);
+     }
+     T = 1.0/f_hz;
+     T1 = D*T;
+     T2 = T - T1;
+
+     X.rprm[nr_T1] = T1;
+     X.rprm[nr_T2] = T2;
+     X.rprm[nr_T ] = T;
+
+     X.rprm[nr_T1] = T1;
+     X.rprm[nr_T2] = T2;
+     X.rprm[nr_T] = T;
+
+     L1 = X.rprm[nr_y_high];
+     L2 = X.rprm[nr_y_low ];
+
+     delta1 = X.rprm[nr_delta1];
+     delta2 = X.rprm[nr_delta2];
+
+     delta_min = 0.1*min(delta1,delta2);
+     del1 = T1-0.5*(delta1+delta2);
+     del2 = T2-0.5*(delta1+delta2);
+
+     if (del1 < delta_min) {
+       cout << "clock_1a.xbe: T1 is too small. Check delta1, delta2. Halting..." << endl; exit(1);
+     }
+     if (del2 < delta_min) {
+       cout << "clock_1a.xbe: T2 is too small. Check delta1, delta2. Halting..." << endl; exit(1);
+     }
+     tk1 = 0.5*delta1;
+     tk2 = T1 - 0.5*delta2;
+     tk3 = T1 + 0.5*delta2;
+     tk4 = T  - 0.5*delta1;
+     tk5 = T  + 0.5*delta1;
+
+     slope1 = (L1-L2)/delta1;
+     slope2 = (L2-L1)/delta2;
+     epsl = min(delta1,delta2)/10.0;
+     L0 = 0.5*(L1+L2);
+
+     X.rprm[nr_tk1] = tk1;
+     X.rprm[nr_tk2] = tk2;
+     X.rprm[nr_tk3] = tk3;
+     X.rprm[nr_tk4] = tk4;
+     X.rprm[nr_tk5] = tk5;
+     X.rprm[nr_slope1] = slope1;
+     X.rprm[nr_slope2] = slope2;
+     X.rprm[nr_epsl] = epsl;
+     X.rprm[nr_L0] = L0;
+
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+
+   t0   = X.rprm[nr_t0  ];
+   T    = X.rprm[nr_T   ];
+   epsl = X.rprm[nr_epsl];
+   tk1  = X.rprm[nr_tk1 ];
+   tk2  = X.rprm[nr_tk2 ];
+   tk3  = X.rprm[nr_tk3 ];
+   tk4  = X.rprm[nr_tk4 ];
+   tk5  = X.rprm[nr_tk5 ];
+
+   if (G.time_given_x < t0) {
+     n = ((t0-G.time_given_x)/T) + 1;
+     t0_new = t0-n*T;
+   } else {
+     t0_new = t0;
+   }
+   t_a = G.time_given_x-t0_new;
+   t_b = fmod(t_a,T);
+
+   if (abs(t_b-T) < epsl) t_b = 0.0;
+
+   if (G.flags[G.i_next_time]) {
+
+     if (t_b < tk1) {
+       tnext_p = tk1;
+     } else if (t_b < tk2) {
+       tnext_p = tk2;
+     } else if (t_b < tk3) {
+       tnext_p = tk3;
+     } else if (t_b < tk4) {
+       tnext_p = tk4;
+     } else {
+       tnext_p = tk5;
+     }
+     G.time_nextbreak_x = G.time_given_x + (tnext_p-t_b);
+     return;
+   }
+
+   L0 = X.rprm[nr_L0];
+   L1 = X.rprm[nr_y_high];
+   L2 = X.rprm[nr_y_low];
    slope1 = X.rprm[nr_slope1];
    slope2 = X.rprm[nr_slope2];
 
@@ -2889,6 +3126,132 @@ void x_dead_zone(Global &G,XbeUsr &X,XbeJac &J) {
    }
    return;
 }
+void x_decoder_2_4(Global &G,XbeUsr &X,XbeJac &J) {
+   const int NX=2;
+   const int NY=4;
+   int k1,XIN[NX];
+   double Y0[NY];
+   double x0,x1;
+   double y0,y1,y2,y3;
+   double y00,y01,y02,y03,y10,y11,y12,y13,y20,y21,y22,y23,y30,y31,y32,y33,
+     x_high,hb2;
+   const int nvr_x0 = 0;
+   const int nvr_x1 = 1;
+   const int nvr_y0 = 2;
+   const int nvr_y1 = 3;
+   const int nvr_y2 = 4;
+   const int nvr_y3 = 5;
+   const int nr_y00 = 0;
+   const int nr_y01 = 1;
+   const int nr_y02 = 2;
+   const int nr_y03 = 3;
+   const int nr_y10 = 4;
+   const int nr_y11 = 5;
+   const int nr_y12 = 6;
+   const int nr_y13 = 7;
+   const int nr_y20 = 8;
+   const int nr_y21 = 9;
+   const int nr_y22 = 10;
+   const int nr_y23 = 11;
+   const int nr_y30 = 12;
+   const int nr_y31 = 13;
+   const int nr_y32 = 14;
+   const int nr_y33 = 15;
+   const int nr_x_high = 16;
+   const int nr_hb2 = 17;
+   const int no_x0 = 0;
+   const int no_x1 = 1;
+   const int no_y0 = 2;
+   const int no_y1 = 3;
+   const int no_y2 = 4;
+   const int no_y3 = 5;
+   const int ng_1 = 0;
+   const int ng_2 = 1;
+   const int ng_3 = 2;
+   const int ng_4 = 3;
+   if (G.flags[G.i_one_time_parms]) {
+     x_high = X.rprm[nr_x_high];
+     hb2 = 0.5*x_high;
+     X.rprm[nr_hb2] = hb2;
+
+     X.vec3d_1.resize(NX);
+     for (int i = 0; i < NX; ++i) {
+       X.vec3d_1[i].resize(NX);
+       for (int j = 0; j < NX; ++j) {
+         X.vec3d_1[i][j].resize(NY);
+       }
+     }
+     k1 = 0;
+     for (int i = 0; i < NX; ++i) {
+       for (int j = 0; j < NX; ++j) {
+         for (int k = 0; k < NY; ++k) {
+           X.vec3d_1[i][j][k] = X.rprm[k1];
+           k1++;
+         }
+       }
+     }
+     for (int i = 0; i < NX; ++i) {
+       for (int j = 0; j < NX; ++j) {
+         for (int k = 0; k < NY; ++k) {
+           cout
+             << " i: " << i
+             << " j: " << j
+             << " k: " << k
+             << " vec3d_1: " << X.vec3d_1[i][j][k] << endl;
+         }
+       }
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x0] = X.val_vr[nvr_x0];
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_y0] = X.val_vr[nvr_y0];
+     X.outprm[no_y1] = X.val_vr[nvr_y1];
+     X.outprm[no_y2] = X.val_vr[nvr_y2];
+     X.outprm[no_y3] = X.val_vr[nvr_y3];
+     return;
+   }
+   hb2 = X.rprm[nr_hb2];
+
+   for (int i = 0; i < NX; ++i) {
+     if (X.val_vr[i] > hb2) {
+       XIN[i] = 1;
+     } else {
+       XIN[i] = 0;
+     }
+   }
+   for (int i = 0; i < NY; ++i) {
+     Y0[i] = X.vec3d_1[XIN[1]][XIN[0]][i];
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     for (int i = 0; i < NY; ++i) {
+       X.val_vr[i + NX] = Y0[i];
+     }
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       for (int i = 0; i < NY; ++i) {
+         X.val_vr[i + NX] = Y0[i];
+       }
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         for (int i = 0; i < NY; ++i) {
+           X.g[i] = X.val_vr[i + NX] - Y0[i];
+         }
+       }
+       if (G.flags[G.i_jacobian]) {
+         for (int i = 0; i < NY; ++i) {
+           J.dgdvr[i][i + NX] = 1.0;
+         }
+       }
+     }
+     return;
+   }
+   return;
+}
 void x_delay_discrete(Global &G,XbeUsr &X,XbeJac &J) {
    double time0,rsd1,rsd2;
    double t0_new,t_a,t_b,t_c,t_d,y0;
@@ -2952,6 +3315,7 @@ void x_delay_discrete(Global &G,XbeUsr &X,XbeJac &J) {
      return;
    }   
    if (G.flags[G.i_trns] || G.flags[G.i_save_history]) {
+
      time0 = G.time_given_x;
      T = X.rprm[nr_T];
      y_current = X.rprm[nr_y_current];
@@ -2981,41 +3345,155 @@ void x_delay_discrete(Global &G,XbeUsr &X,XbeJac &J) {
      if ((t_d < epsl1) || (abs(t_b) < epsl1)) {
        l_cross = 1;
      }
-     if (G.flags[G.i_function]) {
-       if (l_cross == 1) {
-         if (n_delay == 1) {
-           y0 = X.rprm[nr_y_current];
-         } else if (n_delay == 2) {
-           y0 = X.rprm[nr_y_old_1];
-         } else if (n_delay == 3) {
-           y0 = X.rprm[nr_y_old_2];
-         } else if (n_delay == 4) {
-           y0 = X.rprm[nr_y_old_3];
-         }
-       } else {
-         if (n_delay == 1) {
-           y0 = X.rprm[nr_y_old_1];
-         } else if (n_delay == 2) {
-           y0 = X.rprm[nr_y_old_2];
-         } else if (n_delay == 3) {
-           y0 = X.rprm[nr_y_old_3];
-         } else if (n_delay == 4) {
-           y0 = X.rprm[nr_y_old_4];
-         }
+     if (l_cross == 1) {
+       if (n_delay == 1) {
+         y0 = X.rprm[nr_y_current];
+       } else if (n_delay == 2) {
+         y0 = X.rprm[nr_y_old_1];
+       } else if (n_delay == 3) {
+         y0 = X.rprm[nr_y_old_2];
+       } else if (n_delay == 4) {
+         y0 = X.rprm[nr_y_old_3];
        }
-       X.g[ng_1] = X.val_vr[nvr_y] - y0;
+     } else {
+       if (n_delay == 1) {
+         y0 = X.rprm[nr_y_old_1];
+       } else if (n_delay == 2) {
+         y0 = X.rprm[nr_y_old_2];
+       } else if (n_delay == 3) {
+         y0 = X.rprm[nr_y_old_3];
+       } else if (n_delay == 4) {
+         y0 = X.rprm[nr_y_old_4];
+       }
      }
-     if (G.flags[G.i_jacobian]) {
-       J.dgdvr[ng_1][nvr_y] = 1.0;
-     }
-     if (G.flags[G.i_save_history]) {
-       if (l_cross == 1) {
-         X.rprm[nr_y_old_4] = X.rprm[nr_y_old_3];
-         X.rprm[nr_y_old_3] = X.rprm[nr_y_old_2];
-         X.rprm[nr_y_old_2] = X.rprm[nr_y_old_1];
-         X.rprm[nr_y_old_1] = X.rprm[nr_y_current];
+   }
+   if (G.flags[G.i_save_history]) {
+     if (l_cross == 1) {
+       X.rprm[nr_y_old_4] = X.rprm[nr_y_old_3];
+       X.rprm[nr_y_old_3] = X.rprm[nr_y_old_2];
+       X.rprm[nr_y_old_2] = X.rprm[nr_y_old_1];
+       X.rprm[nr_y_old_1] = X.rprm[nr_y_current];
 
-         X.rprm[nr_y_current] = X.val_vr[nvr_x];
+       X.rprm[nr_y_current] = X.val_vr[nvr_x];
+     }
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
+void x_delay_discrete_1(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0;
+   int n;
+   double x;
+   double y;
+   int n_delay,sampler_index;
+   double y_current,y_old_1,y_old_2,y_old_3,y_old_4;
+   double y_st;
+   const int nvr_x = 0;
+   const int nvr_y = 1;
+   const int ni_n_delay = 0;
+   const int ni_sampler_index = 1;
+   const int nr_y_current = 0;
+   const int nr_y_old_1 = 1;
+   const int nr_y_old_2 = 2;
+   const int nr_y_old_3 = 3;
+   const int nr_y_old_4 = 4;
+   const int nst_y_st = 0;
+   const int no_x = 0;
+   const int no_y = 1;
+   const int ng_1 = 0;
+
+   if (G.flags[G.i_one_time_parms]) {
+     n_delay = X.iprm[ni_n_delay];
+     if ((n_delay < 1) || (n_delay > 4)) {
+       cout << "delay_discrete_1: n_delay must be 1, 2, or 3. Halting.." << endl;
+       exit (1);
+     }
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.stprm[nst_y_st];
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
+       }   
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }   
+     }   
+     return;
+   }   
+   if (G.flags[G.i_save_history]) {
+     sampler_index = X.iprm[ni_sampler_index];
+
+     if (G.sampler_flag[sampler_index] == 1) {
+       X.rprm[nr_y_old_4] = X.rprm[nr_y_old_3];
+       X.rprm[nr_y_old_3] = X.rprm[nr_y_old_2];
+       X.rprm[nr_y_old_2] = X.rprm[nr_y_old_1];
+       X.rprm[nr_y_old_1] = X.rprm[nr_y_current];
+
+       X.rprm[nr_y_current] = X.val_vr[nvr_x];
+     }
+     return;
+   }
+
+   if (G.flags[G.i_trns]) {
+     sampler_index = X.iprm[ni_sampler_index];
+
+     n_delay = X.iprm[ni_n_delay];
+
+     if (G.sampler_flag[sampler_index] == 1) {
+       if (n_delay == 1) {
+         y0 = X.rprm[nr_y_current];
+       } else if (n_delay == 2) {
+         y0 = X.rprm[nr_y_old_1];
+       } else if (n_delay == 3) {
+         y0 = X.rprm[nr_y_old_2];
+       } else if (n_delay == 4) {
+         y0 = X.rprm[nr_y_old_3];
+       }
+     } else {
+       if (n_delay == 1) {
+         y0 = X.rprm[nr_y_old_1];
+       } else if (n_delay == 2) {
+         y0 = X.rprm[nr_y_old_2];
+       } else if (n_delay == 3) {
+         y0 = X.rprm[nr_y_old_3];
+       } else if (n_delay == 4) {
+         y0 = X.rprm[nr_y_old_4];
+       }
+     }
+
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
        }
      }
      return;
@@ -3745,7 +4223,6 @@ void x_edge_delay(Global &G,XbeUsr &X,XbeJac &J) {
      }
      return;
    }
-
    if (G.flags[G.i_trns]) {
      if (flag_zero_delay == 1) {
        y0 = X.val_vr[nvr_x];
@@ -3763,7 +4240,6 @@ void x_edge_delay(Global &G,XbeUsr &X,XbeJac &J) {
            }
          }
        }
-
        if (l == -1) {
          y0 = X.val_vr[nvr_y];
        } else {
@@ -4829,6 +5305,159 @@ void x_integrator_1(Global &G,XbeUsr &X,XbeJac &J) {
    }
    return;
 }
+void x_integrator_reset_1(Global &G,XbeUsr &X,XbeJac &J) {
+   int flag_active_edge;
+   double time0;
+   double x,r;
+   double y;
+   int active_pos_edge,active_neg_edge;
+   double k,r_high,delt_min,y_reset,r_prev,r_cross;
+   double y_st;
+   double y_ig;
+   const int nvr_x = 0;
+   const int nvr_r = 1;
+   const int nvr_y = 2;
+   const int ni_active_pos_edge = 0;
+   const int ni_active_neg_edge = 1;
+   const int nr_k = 0;
+   const int nr_r_high = 1;
+   const int nr_delt_min = 2;
+   const int nr_y_reset = 3;
+   const int nr_r_prev = 4;
+   const int nr_r_cross = 5;
+   const int nst_y_st = 0;
+   const int nig_y_ig = 0;
+   const int no_x = 0;
+   const int no_y = 1;
+   const int no_r = 2;
+   const int nf_1 = 0;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     active_pos_edge = X.iprm[ni_active_pos_edge];
+     active_neg_edge = X.iprm[ni_active_neg_edge];
+
+     if (active_pos_edge == 0) {
+       if (active_neg_edge == 0) {
+         cout << "integrator_reset_1.xbe: one of pos/neg edge must be 1. Halting..." << endl;
+         exit(1);
+       }
+     } else {
+       if (active_neg_edge != 0) {
+         cout << "integrator_reset_1.xbe: only one of pos/neg edge must be 1. Halting..." << endl;
+         exit(1);
+       }
+     }
+     r_high = X.rprm[nr_r_high];
+
+     if (r_high < 0.0) {
+       cout << "integrator_reset_1.xbe: check r_high. Halting..." << endl;
+       exit(1);
+     }
+     r_cross = 0.5*r_high;
+     X.rprm[nr_r_cross] = r_cross;
+     X.rprm[nr_r_prev] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr [nvr_y] = X.igprm[nig_y_ig];
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     X.outprm[no_r] = X.val_vr[nvr_r];
+     return;
+   }
+   if (G.flags[G.i_reset_x]) {
+     time0 = G.time_given_x;
+     active_pos_edge = X.iprm[ni_active_pos_edge];
+
+     r_prev  = X.rprm[nr_r_prev ];
+     r_cross = X.rprm[nr_r_cross];
+
+     r = X.val_vr[nvr_r];
+
+     if (active_pos_edge == 1) {
+       if ((r_prev <= r_cross) && (r >= r_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     } else {
+       if ((r_prev >= r_cross) && (r <= r_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     }
+     if (flag_active_edge == 1) {
+       X.val_vr[nvr_y] = X.rprm[nr_y_reset];
+     }
+     return;
+   }
+   if (G.flags[G.i_save_history]) {
+     X.rprm[nr_r_prev] = X.val_vr[nvr_r];
+     return;
+   }
+   if (G.flags[G.i_next_time]) {
+     time0 = G.time_given_x;
+
+     active_pos_edge = X.iprm[ni_active_pos_edge];
+     r_prev  = X.rprm[nr_r_prev ];
+     r_cross = X.rprm[nr_r_cross];
+     r = X.val_vr[nvr_r];
+
+     if (active_pos_edge == 1) {
+       if ((r_prev <= r_cross) && (r >= r_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     } else {
+       if ((r_prev >= r_cross) && (r <= r_cross)) {
+         flag_active_edge = 1;
+       } else {
+         flag_active_edge = 0;
+       }
+     }
+     if (flag_active_edge == 1) {
+       G.time_nextbreak_x = time0 + X.rprm[nr_delt_min];
+     } else {
+       G.time_nextbreak_x = G.time_end;
+     }
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.stprm[nst_y_st];
+     } else if (G.flags[G.i_implicit]) {
+       X.h[nf_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
+     }
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     if (G.flags[G.i_explicit]) {
+       if (G.flags[G.i_alg_loop]) {
+         X.h[nf_1] = X.val_vr[nvr_y] - X.val_vr_u[nvr_y];
+       } else {
+         k = X.rprm[nr_k];
+         x = X.val_vr[nvr_x];
+         X.f[nf_1] = k*x;
+       }
+     } else if (G.flags[G.i_implicit]) {
+       k = X.rprm[nr_k];
+       x = X.val_vr[nvr_x];
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = k*x;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_x] = k;
+       }
+     }
+     return;
+   }
+   return;
+}
 void x_jkff(Global &G,XbeUsr &X,XbeJac &J) {
    int flag_active_edge;
    double time0,q0,q0bar;
@@ -5338,6 +5967,92 @@ void x_linear(Global &G,XbeUsr &X,XbeJac &J) {
    }
    return;
 }
+void x_max(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0;
+   double x1,x2;
+   double y;
+   const int nvr_x1 = 0;
+   const int nvr_x2 = 1;
+   const int nvr_y = 2;
+   const int no_x1 = 0;
+   const int no_x2 = 1;
+   const int no_y = 2;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
+   x1 = X.val_vr[nvr_x1];
+   x2 = X.val_vr[nvr_x2];
+   y0 = max(x1,x2);
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y ] =  1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
+void x_min(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0;
+   double x1,x2;
+   double y;
+   const int nvr_x1 = 0;
+   const int nvr_x2 = 1;
+   const int nvr_y = 2;
+   const int no_x1 = 0;
+   const int no_x2 = 1;
+   const int no_y = 2;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
+   x1 = X.val_vr[nvr_x1];
+   x2 = X.val_vr[nvr_x2];
+   y0 = min(x1,x2);
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y ] =  1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
 void x_modulo(Global &G,XbeUsr &X,XbeJac &J) {
    double x;
    double x1,x2;
@@ -5658,6 +6373,128 @@ void x_multscl(Global &G,XbeUsr &X,XbeJac &J) {
    }
    return;
 }
+void x_nand_2(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0;
+   bool X1,X2,Y;
+   double x1,x2;
+   double y;
+   double y_high,hb2;
+   const int nvr_x1 = 0;
+   const int nvr_x2 = 1;
+   const int nvr_y = 2;
+   const int nr_y_high = 0;
+   const int nr_hb2 = 1;
+   const int no_x1 = 0;
+   const int no_x2 = 1;
+   const int no_y = 2;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     y_high = X.rprm[nr_y_high];
+     hb2 = 0.5*y_high;
+     X.rprm[nr_hb2] = hb2;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
+   y_high = X.rprm[nr_y_high];
+   hb2 = X.rprm[nr_hb2];
+
+   x1 = X.val_vr[nvr_x1];
+   x2 = X.val_vr[nvr_x2];
+   X1 = x1 > hb2;
+   X2 = x2 > hb2;
+   Y = !(X1 && X2);
+
+   if (Y) {
+     y0 = y_high;
+   } else {
+     y0 = 0.0;
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y ] =  1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
+void x_nor_2(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0;
+   bool X1,X2,Y;
+   double x1,x2;
+   double y;
+   double y_high,hb2;
+   const int nvr_x1 = 0;
+   const int nvr_x2 = 1;
+   const int nvr_y = 2;
+   const int nr_y_high = 0;
+   const int nr_hb2 = 1;
+   const int no_x1 = 0;
+   const int no_x2 = 1;
+   const int no_y = 2;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     y_high = X.rprm[nr_y_high];
+     hb2 = 0.5*y_high;
+     X.rprm[nr_hb2] = hb2;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
+   y_high = X.rprm[nr_y_high];
+   hb2 = X.rprm[nr_hb2];
+
+   x1 = X.val_vr[nvr_x1];
+   x2 = X.val_vr[nvr_x2];
+   X1 = x1 > hb2;
+   X2 = x2 > hb2;
+   Y = !(X1 || X2);
+
+   if (Y) {
+     y0 = y_high;
+   } else {
+     y0 = 0.0;
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y ] =  1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
 void x_not(Global &G,XbeUsr &X,XbeJac &J) {
    double y0;
    bool X1,Y;
@@ -5749,6 +6586,72 @@ void x_or_2(Global &G,XbeUsr &X,XbeJac &J) {
    X1 = x1 > hb2;
    X2 = x2 > hb2;
    Y = X1 || X2;
+
+   if (Y) {
+     y0 = y_high;
+   } else {
+     y0 = 0.0;
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y ] =  1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
+void x_or_3(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0;
+   bool X1,X2,X3,Y;
+   double x1,x2,x3;
+   double y;
+   double y_high,hb2;
+   const int nvr_x1 = 0;
+   const int nvr_x2 = 1;
+   const int nvr_x3 = 2;
+   const int nvr_y = 3;
+   const int nr_y_high = 0;
+   const int nr_hb2 = 1;
+   const int no_x1 = 0;
+   const int no_x2 = 1;
+   const int no_x3 = 2;
+   const int no_y = 3;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     y_high = X.rprm[nr_y_high];
+     hb2 = 0.5*y_high;
+     X.rprm[nr_hb2] = hb2;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_x3] = X.val_vr[nvr_x3];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
+   y_high = X.rprm[nr_y_high];
+   hb2 = X.rprm[nr_hb2];
+
+   x1 = X.val_vr[nvr_x1];
+   x2 = X.val_vr[nvr_x2];
+   x3 = X.val_vr[nvr_x3];
+   X1 = x1 > hb2;
+   X2 = x2 > hb2;
+   X3 = x3 > hb2;
+   Y = (X1 || X2) || X3;
 
    if (Y) {
      y0 = y_high;
@@ -6979,15 +7882,17 @@ void x_pwm20_1(Global &G,XbeUsr &X,XbeJac &J) {
    return;
 }
 void x_sampler(Global &G,XbeUsr &X,XbeJac &J) {
-   double time0,rsd1,rsd2;
+   double time0;
    int n;
    double t0_new,t_a,t_b,t_c,t_d,y0;
    double x;
    double y;
+   int index;
    double T,t0,v_previous,dt,epsl1,epsl2;
    double y_st;
    const int nvr_x = 0;
    const int nvr_y = 1;
+   const int ni_index = 0;
    const int nr_T = 0;
    const int nr_t0 = 1;
    const int nr_v_previous = 2;
@@ -7002,6 +7907,9 @@ void x_sampler(Global &G,XbeUsr &X,XbeJac &J) {
      dt = X.rprm[nr_dt];
      X.rprm[nr_epsl1] = dt/10.0;
      X.rprm[nr_epsl2] = dt/100.0;
+
+     index = X.iprm[ni_index];
+     G.sampler_flag[index] = 0;
      return;
    }
    if (G.flags[G.i_outvar]) {
@@ -7065,16 +7973,206 @@ void x_sampler(Global &G,XbeUsr &X,XbeJac &J) {
        return;
      } else {
        t_d = abs(t_b-T);
+       index = X.iprm[ni_index];
        if ((t_d < epsl1) || (abs(t_b) < epsl1)) {
          y0 = X.val_vr[nvr_x];
+         G.sampler_flag[index] = 1;
        } else {
          y0 = v_previous;
+         G.sampler_flag[index] = 0;
        }
+       cout << "sampler: time0: " << time0 << " sampler_flag: " << G.sampler_flag[index] << endl;
+       if (G.flags[G.i_explicit]) {
+         X.val_vr[nvr_y] = y0;
+       } else if (G.flags[G.i_implicit]) {
+         if (G.flags[G.i_function]) {
+           X.g[ng_1] = X.val_vr[nvr_y] - y0;
+         }
+         if (G.flags[G.i_jacobian]) {
+           J.dgdvr[ng_1][nvr_y] = 1.0;
+         }
+       }
+     }
+     return;
+   }
+   return;
+}
+void x_sampler_1(Global &G,XbeUsr &X,XbeJac &J) {
+   double time0;
+   int n;
+   double t0_new,t_a,t_b,t_c,t_d,y0;
+   double x;
+   double y;
+   int index;
+   double T,t0,v_previous,dt,epsl1,epsl2;
+   double y_st;
+   const int nvr_x = 0;
+   const int nvr_y = 1;
+   const int ni_index = 0;
+   const int nr_T = 0;
+   const int nr_t0 = 1;
+   const int nr_v_previous = 2;
+   const int nr_dt = 3;
+   const int nr_epsl1 = 4;
+   const int nr_epsl2 = 5;
+   const int nst_y_st = 0;
+   const int no_x = 0;
+   const int no_y = 1;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     dt = X.rprm[nr_dt];
+     X.rprm[nr_epsl1] = dt/10.0;
+     X.rprm[nr_epsl2] = dt/100.0;
+
+     index = X.iprm[ni_index];
+     G.sampler_flag[index] = 0;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_x] = X.val_vr[nvr_x];
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = 0.0;
+     return;
+   }
+   if (G.flags[G.i_time_parms] || G.flags[G.i_next_time]) {
+     T  = X.rprm[nr_T ];
+     t0 = X.rprm[nr_t0];
+     dt = X.rprm[nr_dt];
+
+     time0 = G.time_given_x;
+
+     if (time0 < t0) {
+       n = ((t0-time0)/T)+1;
+       t0_new = t0 - n*T;
+     } else {
+       t0_new = t0;
+     }
+
+     epsl1 = X.rprm[nr_epsl1];
+     epsl2 = X.rprm[nr_epsl2];
+     t_a = time0 - t0_new;
+     t_b = fmod(t_a,T);
+     if (abs(t_b-T) < epsl2) t_b = 0.0;
+     t_c = T - dt;
+
+     if (G.flags[G.i_next_time]) {
+       if (t_b == 0.0) {
+         G.time_nextbreak_x = time0 + t_c;
+       } else if (abs(t_b-t_c) <= epsl2) {
+         G.time_nextbreak_x = time0 + dt;
+       } else if (t_b < t_c) {
+         G.time_nextbreak_x = time0 - t_b + t_c;
+       } else {
+         G.time_nextbreak_x = time0 - t_b + T;
+       }
+       return;
+     } else if (G.flags[G.i_time_parms]) {
+       t_d = abs(t_b-T);
+       index = X.iprm[ni_index];
+       if ((t_d < epsl1) || (abs(t_b) < epsl1)) {
+         G.sampler_flag[index] = 1;
+       } else {
+         G.sampler_flag[index] = 0;
+       }
+       return;
+     }
+   }
+   if (G.flags[G.i_save_history]) {
+     X.rprm[nr_v_previous] = X.val_vr[nvr_y];
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = X.stprm[nst_y_st];
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - X.stprm[nst_y_st];
+       }   
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }   
+     }   
+     return;
+   }   
+   if (G.flags[G.i_trns]) {
+     index = X.iprm[ni_index];
+     if (G.sampler_flag[index] == 1) {
+       y0 = X.val_vr[nvr_x];
+     } else {
+       y0 = X.rprm[nr_v_previous];
+     }
+//   cout << "sampler_1: time0: " << time0 << " sampler_flag: " << G.sampler_flag[index] << endl;
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
        if (G.flags[G.i_function]) {
          X.g[ng_1] = X.val_vr[nvr_y] - y0;
        }
        if (G.flags[G.i_jacobian]) {
          J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
+void x_signal_switch(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0;
+   double s,x1,x2;
+   double y;
+   double s_high,s_cross;
+   const int nvr_s = 0;
+   const int nvr_x1 = 1;
+   const int nvr_x2 = 2;
+   const int nvr_y = 3;
+   const int nr_s_high = 0;
+   const int nr_s_cross = 1;
+   const int no_s = 0;
+   const int no_x1 = 1;
+   const int no_x2 = 2;
+   const int no_y = 3;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     s_high = X.rprm[nr_s_high];
+     s_cross = 0.5*s_high;
+     X.rprm[nr_s_cross] = s_cross;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_s ] = X.val_vr[nvr_s ];
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
+   s_high = X.rprm[nr_s_high];
+   s_cross = X.rprm[nr_s_cross];
+
+   s = X.val_vr[nvr_s];
+   x2 = X.val_vr[nvr_x2];
+
+   if (s > s_cross) {
+     y0 = X.val_vr[nvr_x1];
+   } else {
+     y0 = X.val_vr[nvr_x2];
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y ] =  1.0;
        }
      }
      return;
@@ -7224,6 +8322,282 @@ void x_src_ac(Global &G,XbeUsr &X,XbeJac &J) {
        }
      }
      return;
+   }
+   return;
+}
+void x_srff_nand(Global &G,XbeUsr &X,XbeJac &J) {
+   double time0,q0,q0bar;
+   double s,r;
+   double q,qbar;
+   double x_high,x_cross,q_prev;
+   double q_st;
+   const int nvr_s = 0;
+   const int nvr_r = 1;
+   const int nvr_q = 2;
+   const int nvr_qbar = 3;
+   const int nr_x_high = 0;
+   const int nr_x_cross = 1;
+   const int nr_q_prev = 2;
+   const int nst_q_st = 0;
+   const int no_s = 0;
+   const int no_r = 1;
+   const int no_q = 2;
+   const int ng_1 = 0;
+   const int ng_2 = 1;
+   if (G.flags[G.i_one_time_parms]) {
+     x_high = X.rprm[nr_x_high];
+
+     if (x_high < 0.0) {
+       cout << "srff_nand.xbe: check x_high. Halting..." << endl;
+       exit(1);
+     }
+     x_cross = 0.5*x_high;
+     X.rprm[nr_x_cross] = x_cross;
+     X.rprm[nr_q_prev] = 0.0;
+     return;
+   }
+
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_s] = X.val_vr[nvr_s];
+     X.outprm[no_r] = X.val_vr[nvr_r];
+     X.outprm[no_q] = X.val_vr[nvr_q];
+     return;
+   }
+   if (G.flags[G.i_save_history]) {
+     X.rprm[nr_q_prev] = X.val_vr[nvr_q];
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     q_st = X.stprm[nst_q_st];
+
+     x_cross = X.rprm[nr_x_cross];
+     x_high  = X.rprm[nr_x_high ];
+
+     if (G.flags[G.i_explicit]) {
+       if (q_st > x_cross) {
+         X.val_vr[nvr_q   ] = x_high;
+         X.val_vr[nvr_qbar] = 0.0;
+       } else {
+         X.val_vr[nvr_q   ] = 0.0;
+         X.val_vr[nvr_qbar] = x_high;
+       }
+     } else if (G.flags[G.i_implicit]) {
+       if (q_st > x_cross) {
+         q0    = x_high;
+         q0bar = 0.0;
+       } else {
+         q0    = 0.0;
+         q0bar = x_high;
+       }
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_q   ] - q0;
+         X.g[ng_2] = X.val_vr[nvr_qbar] - q0bar;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_q   ] = 1.0;
+         J.dgdvr[ng_2][nvr_qbar] = 1.0;
+       }
+     }
+     return;
+   }
+   x_cross = X.rprm[nr_x_cross];
+   x_high  = X.rprm[nr_x_high ];
+   q_prev  = X.rprm[nr_q_prev ];
+
+   s = X.val_vr[nvr_s];
+   r = X.val_vr[nvr_r];
+
+   if (s < x_cross) {
+     if (r < x_cross) {
+//      Both outputs zero, not expected generally.
+        q0 = x_high;
+     } else {
+        q0 = 0.0;
+     }
+   } else {
+     if (r > x_cross) {
+       q0= 0.0;
+     } else {
+       q0 = q_prev;
+     }
+   }
+   if (G.flags[G.i_init_guess]) {
+     if (q0 > x_cross) {
+       q0bar = 0.0;
+     } else {
+       q0bar = x_high;
+     }
+     X.val_vr[nvr_q   ] = q0;
+     X.val_vr[nvr_qbar] = q0bar;
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+
+     if (G.iter_trns_x == 0) {
+       if ((G.flags[G.i_slv_previous]) || (G.flags[G.i_slv_readfile])) {
+         q0 = X.val_vr[nvr_q];
+       }
+     }
+
+     x_cross = X.rprm[nr_x_cross];
+     x_high  = X.rprm[nr_x_high ];
+
+     if (q0 > x_cross) {
+       q0bar = 0.0;
+     } else {
+       q0bar = x_high;
+     }
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_q   ] = q0;
+       X.val_vr[nvr_qbar] = q0bar;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_q   ] - q0;
+         X.g[ng_2] = X.val_vr[nvr_qbar] - q0bar;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_q   ] = 1.0;
+         J.dgdvr[ng_2][nvr_qbar] = 1.0;
+       }
+     }
+   }
+   return;
+}
+void x_srff_nor(Global &G,XbeUsr &X,XbeJac &J) {
+   double time0,q0,q0bar;
+   double s,r;
+   double q,qbar;
+   double x_high,x_cross,q_prev;
+   double q_st;
+   const int nvr_s = 0;
+   const int nvr_r = 1;
+   const int nvr_q = 2;
+   const int nvr_qbar = 3;
+   const int nr_x_high = 0;
+   const int nr_x_cross = 1;
+   const int nr_q_prev = 2;
+   const int nst_q_st = 0;
+   const int no_s = 0;
+   const int no_r = 1;
+   const int no_q = 2;
+   const int ng_1 = 0;
+   const int ng_2 = 1;
+   if (G.flags[G.i_one_time_parms]) {
+     x_high = X.rprm[nr_x_high];
+
+     if (x_high < 0.0) {
+       cout << "srff_nor.xbe: check x_high. Halting..." << endl;
+       exit(1);
+     }
+     x_cross = 0.5*x_high;
+     X.rprm[nr_x_cross] = x_cross;
+     X.rprm[nr_q_prev] = 0.0;
+     return;
+   }
+
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_s] = X.val_vr[nvr_s];
+     X.outprm[no_r] = X.val_vr[nvr_r];
+     X.outprm[no_q] = X.val_vr[nvr_q];
+     return;
+   }
+   if (G.flags[G.i_save_history]) {
+     X.rprm[nr_q_prev] = X.val_vr[nvr_q];
+     return;
+   }
+   if (G.flags[G.i_startup]) {
+     q_st = X.stprm[nst_q_st];
+
+     x_cross = X.rprm[nr_x_cross];
+     x_high  = X.rprm[nr_x_high ];
+
+     if (G.flags[G.i_explicit]) {
+       if (q_st > x_cross) {
+         X.val_vr[nvr_q   ] = x_high;
+         X.val_vr[nvr_qbar] = 0.0;
+       } else {
+         X.val_vr[nvr_q   ] = 0.0;
+         X.val_vr[nvr_qbar] = x_high;
+       }
+     } else if (G.flags[G.i_implicit]) {
+       if (q_st > x_cross) {
+         q0    = x_high;
+         q0bar = 0.0;
+       } else {
+         q0    = 0.0;
+         q0bar = x_high;
+       }
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_q   ] - q0;
+         X.g[ng_2] = X.val_vr[nvr_qbar] - q0bar;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_q   ] = 1.0;
+         J.dgdvr[ng_2][nvr_qbar] = 1.0;
+       }
+     }
+     return;
+   }
+   x_cross = X.rprm[nr_x_cross];
+   x_high  = X.rprm[nr_x_high ];
+   q_prev  = X.rprm[nr_q_prev ];
+
+   s = X.val_vr[nvr_s];
+   r = X.val_vr[nvr_r];
+
+   if (s > x_cross) {
+     if (r > x_cross) {
+//      Both outputs zero, not expected generally.
+        q0 = 0.0;
+     } else {
+        q0 = x_high;
+     }
+   } else {
+     if (r > x_cross) {
+       q0= 0.0;
+     } else {
+       q0 = q_prev;
+     }
+   }
+   if (G.flags[G.i_init_guess]) {
+     if (q0 > x_cross) {
+       q0bar = 0.0;
+     } else {
+       q0bar = x_high;
+     }
+     X.val_vr[nvr_q   ] = q0;
+     X.val_vr[nvr_qbar] = q0bar;
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+
+     if (G.iter_trns_x == 0) {
+       if ((G.flags[G.i_slv_previous]) || (G.flags[G.i_slv_readfile])) {
+         q0 = X.val_vr[nvr_q];
+       }
+     }
+
+     x_cross = X.rprm[nr_x_cross];
+     x_high  = X.rprm[nr_x_high ];
+
+     if (q0 > x_cross) {
+       q0bar = 0.0;
+     } else {
+       q0bar = x_high;
+     }
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_q   ] = q0;
+       X.val_vr[nvr_qbar] = q0bar;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_q   ] - q0;
+         X.g[ng_2] = X.val_vr[nvr_qbar] - q0bar;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_q   ] = 1.0;
+         J.dgdvr[ng_2][nvr_qbar] = 1.0;
+       }
+     }
    }
    return;
 }
@@ -7584,6 +8958,135 @@ void x_triangle_3(Global &G,XbeUsr &X,XbeJac &J) {
      X.rprm[nr_epsl] = epsl;
 
      X.rprm[nr_T ] = T;
+     X.rprm[nr_T1] = T1;
+     X.rprm[nr_T2] = T2;
+
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_y] = X.val_vr[nvr_y];
+     return;
+   }
+
+   t0   = X.rprm[nr_t0  ];
+   T    = X.rprm[nr_T   ];
+   T1   = X.rprm[nr_T1  ];
+   epsl = X.rprm[nr_epsl];
+
+   if (G.time_given_x < t0) {
+     n = ((t0-G.time_given_x)/T) + 1;
+     t0_new = t0-n*T;
+   } else {
+     t0_new = t0;
+   }
+   t_a = G.time_given_x-t0_new;
+   t_b = fmod(t_a,T);
+
+   if (abs(t_b-T) < epsl) t_b = 0.0;
+
+   if (G.flags[G.i_next_time]) {
+     if (t_b < T1) {
+       tnext_p = T1;
+     } else {
+       tnext_p = T;
+     }
+     G.time_nextbreak_x = G.time_given_x + (tnext_p-t_b);
+     return;
+   }
+
+   L1 = X.rprm[nr_L1];
+   L2 = X.rprm[nr_L2];
+   slope1 = X.rprm[nr_slope1];
+   slope2 = X.rprm[nr_slope2];
+
+   if (t_b < T1) {
+     y0 = L1 + slope1*t_b;
+   } else {
+     y0 = L2 + slope2*(t_b-T1);
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
+       }
+     }
+     return;
+   }
+   return;
+}
+void x_triangle_4(Global &G,XbeUsr &X,XbeJac &J) {
+   double y0,t0_new,delta_min,t_a,t_b,tnext_p;
+   int n;
+   double y;
+   int flag_frequency,flag_period;
+   double T,frequency,L1,L2,D,t0,slope1,slope2,epsl,T1,T2;
+   const int nvr_y = 0;
+   const int ni_flag_frequency = 0;
+   const int ni_flag_period = 1;
+   const int nr_T = 0;
+   const int nr_frequency = 1;
+   const int nr_L1 = 2;
+   const int nr_L2 = 3;
+   const int nr_D = 4;
+   const int nr_t0 = 5;
+   const int nr_slope1 = 6;
+   const int nr_slope2 = 7;
+   const int nr_epsl = 8;
+   const int nr_T1 = 9;
+   const int nr_T2 = 10;
+   const int no_y = 0;
+   const int ng_1 = 0;
+   if (G.flags[G.i_one_time_parms]) {
+     flag_frequency = X.iprm[ni_flag_frequency];
+     flag_period    = X.iprm[ni_flag_period   ];
+
+     if ((flag_frequency == 0) && (flag_period == 0)) {
+       cout << "triangle_2.xbe: check flag_frequency and flag_period" << endl;
+       cout << "  Both cannot be zero." << endl;
+       cout << "  Halting..." << endl; exit(1);
+     }
+     if ((flag_frequency != 0) && (flag_period != 0)) {
+       cout << "triangle_2.xbe: check flag_frequency and flag_period" << endl;
+       cout << "  Both cannot be non-zero." << endl;
+       cout << "  Halting..." << endl; exit(1);
+     }
+     if (flag_frequency != 0) {
+       frequency = X.rprm[nr_frequency];
+       T = 1.0/frequency;
+       X.rprm[nr_T] = T;
+     }
+     if (flag_period != 0) {
+       T = X.rprm[nr_T];
+       frequency = 1.0/T;
+       X.rprm[nr_frequency] = frequency;
+     }
+
+     T = X.rprm[nr_T];
+     D = X.rprm[nr_D];
+     T1 = D*T;
+     T2 = T - T1;
+
+     L1 = X.rprm[nr_L1];
+     L2 = X.rprm[nr_L2];
+
+     slope1 = (L2-L1)/T1;
+     slope2 = (L1-L2)/T2;
+     epsl = T/1000.0;
+
+     X.rprm[nr_slope1] = slope1;
+     X.rprm[nr_slope2] = slope2;
+     X.rprm[nr_epsl] = epsl;
+
      X.rprm[nr_T1] = T1;
      X.rprm[nr_T2] = T2;
 

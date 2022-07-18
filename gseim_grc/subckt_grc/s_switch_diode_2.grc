@@ -184,6 +184,18 @@ gparms:
   v_on_d: '0'
   v_on_s: '0'
   x_high: '1'
-outvars: {}
+outvars:
+  Id:
+  - outvar
+  - - diode_r$0
+    - i
+  Is:
+  - outvar
+  - - switch_1$0
+    - i
+  Vs:
+  - outvar
+  - - switch_1$0
+    - v
 solve_blocks: []
 output_blocks: []

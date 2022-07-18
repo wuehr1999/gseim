@@ -170,8 +170,8 @@ blocks:
     coordinate: [387, 279]
     rotation: 0
     state: true
-- name: connector_f_2A$0
-  id: connector_f_2A
+- name: connector_f_2x$0
+  id: connector_f_2x
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -191,8 +191,8 @@ blocks:
     coordinate: [615, 255]
     rotation: 0
     state: true
-- name: connector_f_2B$0
-  id: connector_f_2B
+- name: connector_f_2y$0
+  id: connector_f_2y
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -399,13 +399,13 @@ connections:
 - [cmpr_1_1$1, '0', and_2$1, '1']
 - [cmpr_2_1$0, '0', connector_f_3b$1, '0']
 - [cmpr_2_1$1, '0', connector_f_3a$0, '0']
-- [connector_f_2A$0, '0', and_2$0, '1']
-- [connector_f_2B$0, '0', and_2$1, '0']
-- [connector_f_3a$0, '0', connector_f_2A$0, '0']
+- [connector_f_2x$0, '0', and_2$0, '1']
+- [connector_f_2y$0, '0', and_2$1, '0']
+- [connector_f_3a$0, '0', connector_f_2x$0, '0']
 - [connector_f_3a$0, '1', lag_2$1, '0']
 - [connector_f_3b$0, '0', cmpr_2_1$1, '1']
 - [connector_f_3b$0, '1', cmpr_2_1$0, '0']
-- [connector_f_3b$1, '0', connector_f_2B$0, '0']
+- [connector_f_3b$1, '0', connector_f_2y$0, '0']
 - [connector_f_3b$1, '1', lag_2$0, '0']
 - [connector_f_3c$0, '0', cmpr_2_1$0, '1']
 - [connector_f_3c$0, '1', cmpr_2_1$1, '0']

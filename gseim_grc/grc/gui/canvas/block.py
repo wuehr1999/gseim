@@ -77,11 +77,6 @@ class Block(CoreBlock, Drawable):
         self.s__ = self.s_
         self.has_arc = False
 
-        self.port_offset_l = 0
-        self.port_offset_r = 0
-        self.port_offset_t = 0
-        self.port_offset_b = 0
-
         if self.category:
             if 'Hier' in self.category[0]:
                 self.file_symbol = parent.parent.config.hier_block_lib_dir + '/' + self.key + '.symbol.py'
@@ -98,11 +93,6 @@ class Block(CoreBlock, Drawable):
         if self.drawing_scheme == 'symbol':
 #           if the block name is b_1, assume that the python code for the symbol
 #           is in b_1.symbol.py (in the blocks/ directory)
-
-            self.port_offset_l = int(self.params['port_offset_l'].get_value())
-            self.port_offset_r = int(self.params['port_offset_r'].get_value())
-            self.port_offset_t = int(self.params['port_offset_t'].get_value())
-            self.port_offset_b = int(self.params['port_offset_b'].get_value())
 
             self.l_coord = gu.python_code_to_list(
                 filename=self.file_symbol,
@@ -221,23 +211,22 @@ class Block(CoreBlock, Drawable):
 
         port_offs = del1*port_offset
 
-        if self.drawing_scheme == 'symbol':
-          if theta == 0:
-            port_offset_1 = port_offs
-          elif theta == 180:
+        if theta == 0:
+          port_offset_1 = port_offs
+        elif theta == 180:
+          port_offset_1 = -port_offs
+        elif theta == 90:
+          if side == 'horizontal':
             port_offset_1 = -port_offs
-          elif theta == 90:
-            if side == 'horizontal':
-              port_offset_1 = -port_offs
-            else:
-              port_offset_1 = port_offs
-          elif theta == 270:
-            if side == 'horizontal':
-              port_offset_1 = port_offs
-            else:
-              port_offset_1 = -port_offs
+          else:
+            port_offset_1 = port_offs
+        elif theta == 270:
+          if side == 'horizontal':
+            port_offset_1 = port_offs
+          else:
+            port_offset_1 = -port_offs
 
-        if self.drawing_scheme == 'symbol':
+        if self.drawing_scheme in ('none', 'name', 'symbol'):
 
             if side == 'vertical':
                 del_port = 2*del1*self.port_sep_y
@@ -247,16 +236,6 @@ class Block(CoreBlock, Drawable):
                 _offset = (U - (N-1)*del_port - h1)/2 + k*del_port + port_offset_1
             elif _flag1 == 'reverse':
                 _offset = (U - (N-1)*del_port - h1)/2 + (N-k-1)*del_port + port_offset_1
-
-        elif self.drawing_scheme in ('none', 'name'):
-            if side == 'vertical':
-                del_port = 2*del1*self.port_sep_y
-            elif side == 'horizontal':
-                del_port = 2*del1*self.port_sep_x
-            if _flag1 == 'normal':
-                _offset = (U - (N-1)*del_port - h1)/2 + k*del_port
-            elif _flag1 == 'reverse':
-                _offset = (U - (N-1)*del_port - h1)/2 + (N-k-1)*del_port
         else:
             if _flag1 == 'normal':
                 _offset = (U - (N-1)*PORT_SEPARATION - h1)/2 + k*PORT_SEPARATION
@@ -369,7 +348,7 @@ class Block(CoreBlock, Drawable):
 
                             offset = self.get_offset(
                                self.params['rotate_strict'].get_value(),
-                               'vertical', self.rotation, self.port_offset_r,
+                               'vertical', self.rotation, self.p_off_r[_k],
                                self.height, _N, h1, _k)
 
                             port.coordinate = {
@@ -395,7 +374,7 @@ class Block(CoreBlock, Drawable):
                         port.create_shapes()
                         offset = self.get_offset(
                            self.params['rotate_strict'].get_value(),
-                           'vertical', self.rotation, self.port_offset_l,
+                           'vertical', self.rotation, self.p_off_l[_k],
                            self.height, _N, h1, _k)
                         port.coordinate = {
                             0: (+self.width, offset),
@@ -418,7 +397,7 @@ class Block(CoreBlock, Drawable):
                         port.create_shapes()
                         offset = self.get_offset(
                            self.params['rotate_strict'].get_value(),
-                           'horizontal', self.rotation, self.port_offset_t,
+                           'horizontal', self.rotation, self.p_off_t[_k],
                            self.width, _N, h1, _k)
                         port.coordinate = {
                             0: (+self.height, offset),
@@ -441,7 +420,7 @@ class Block(CoreBlock, Drawable):
                         port.create_shapes()
                         offset = self.get_offset(
                            self.params['rotate_strict'].get_value(),
-                           'horizontal', self.rotation, self.port_offset_b,
+                           'horizontal', self.rotation, self.p_off_b[_k],
                            self.width, _N, h1, _k)
                         port.coordinate = {
                             0: (+self.height, offset),
@@ -488,7 +467,7 @@ class Block(CoreBlock, Drawable):
                         Hp, Wp = port.height, port.width
 
                         offset = self.get_offset_1('vertical',
-                            self.port_offset_r, Hb, _N, h1, _k)
+                            self.p_off_r[_k], Hb, _N, h1, _k)
 
                         port.coordinate = {
                             (  0, 'v'): (-Wp         , offset      ),
@@ -518,7 +497,7 @@ class Block(CoreBlock, Drawable):
                         Hp, Wp = port.height, port.width
 
                         offset = self.get_offset_1('vertical',
-                            self.port_offset_l, Hb, _N, h1, _k)
+                            self.p_off_l[_k], Hb, _N, h1, _k)
 
                         port.coordinate = {
                             (  0, 'v'): (Wb          , offset      ),
@@ -547,7 +526,7 @@ class Block(CoreBlock, Drawable):
                         Hp, Wp = port.height, port.width
 
                         offset = self.get_offset_1('horizontal',
-                            self.port_offset_t, Wb, _N, h1, _k)
+                            self.p_off_t[_k], Wb, _N, h1, _k)
                         port.coordinate = {
                             (  0, 'v'): (Wb-offset-Hp, -Wp         ),
                             (180, 'h'): (Wb-offset-Hp, -Wp         ),
@@ -574,7 +553,7 @@ class Block(CoreBlock, Drawable):
                         Hp, Wp = port.height, port.width
 
                         offset = self.get_offset_1('horizontal',
-                            self.port_offset_b, Wb, _N, h1, _k)
+                            self.p_off_b[_k], Wb, _N, h1, _k)
                         port.coordinate = {
                             (  0, 'v'): (Wb-offset-Hp, Hb          ),
                             (180, 'h'): (Wb-offset-Hp, Hb          ),
@@ -1075,7 +1054,7 @@ class Block(CoreBlock, Drawable):
 
             cr.set_source_rgb(0, 0, 0)
 
-            if self.key in('connector_e_2A', 'connector_b_2A', 'connector_f_2A', 'connector_f_2B'):
+            if self.key in('connector_e_2A', 'connector_b_2A', 'connector_f_2x', 'connector_f_2y'):
                 cr.set_line_width(Constants.temp1)
             else:
                 cr.set_line_width(1.5*Constants.temp1)

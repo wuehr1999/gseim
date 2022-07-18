@@ -336,6 +336,23 @@ void xbe_reset_1(
    Circuit &cct,
    SysMat &smat,
    Global &global);
+void xbe_reset_1_exc(
+   vector<EbeLib> &ebe_lib,
+   vector<EbeUsr> &ebe_usr,
+   vector<EbeJac> &ebe_jac,
+   vector<XbeLib> &xbe_lib,
+   vector<XbeUsr> &xbe_usr,
+   vector<XbeJac> &xbe_jac,
+   SolveBlocks &slv,
+   Circuit &cct,
+   SysMat &smat,
+   Global &global);
+void xbe_time_parms(
+   vector<XbeLib> &xbe_lib,
+   vector<XbeUsr> &xbe_usr,
+   vector<XbeJac> &xbe_jac,
+   Circuit &cct,
+   Global &global);
 void xbeu_copy_1(
    vector<XbeLib> &xbe_lib,
    vector<XbeUsr> &xbe_usr,

@@ -1,0 +1,90 @@
+id: xfmr_level0_1ph_1_3
+label: xfmr\n 1-3
+
+parameters:
+-   id: p_turns
+    label: p_turns
+    dtype: float
+    default: '1'
+-   id: s1_turns
+    label: s1_turns
+    dtype: float
+    default: '1'
+-   id: s2_turns
+    label: s2_turns
+    dtype: float
+    default: '1'
+-   id: s3_turns
+    label: s3_turns
+    dtype: float
+    default: '1'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'yes'
+-   id: port_offset_l
+    label: port_offset_l
+    dtype: string
+    default: '-8,8'
+-   id: port_offset_r
+    label: port_offset_r
+    dtype: string
+    default: '0,4,-4,4,-4,0'
+-   id: port_offset_t
+    label: port_offset_t
+    dtype: string
+    default: '0'
+-   id: port_offset_b
+    label: port_offset_b
+    dtype: string
+    default: '0'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'name'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '8'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '8'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '4'
+
+e_left_nodes:
+-   label: p_p
+-   label: p_n
+
+e_right_nodes:
+-   label: s1_p
+-   label: s1_n
+-   label: s2_p
+-   label: s2_n
+-   label: s3_p
+-   label: s3_n
+
+outvars:
+- ip
+- is1
+- is2
+- is3
+- vp
+- vs1
+- vs2
+- vs3

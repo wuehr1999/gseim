@@ -1,0 +1,81 @@
+id: igbt_1
+label: igbt_1
+
+parameters:
+-   id: r_on
+    label: r_on
+    dtype: float
+    default: '1m'
+-   id: r_off
+    label: r_off
+    dtype: float
+    default: '1M'
+-   id: v_on
+    label: v_on
+    dtype: float
+    default: '0'
+-   id: x_high
+    label: x_high
+    dtype: float
+    default: '1'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'yes'
+-   id: port_offset_l
+    label: port_offset_l
+    dtype: string
+    default: '0'
+-   id: port_offset_r
+    label: port_offset_r
+    dtype: string
+    default: '0'
+-   id: port_offset_t
+    label: port_offset_t
+    dtype: string
+    default: '5'
+-   id: port_offset_b
+    label: port_offset_b
+    dtype: string
+    default: '5'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'symbol'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '0'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '6'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '10'
+
+inputs:
+-   label: G
+
+e_top_nodes:
+-   label: C
+
+e_bottom_nodes:
+-   label: E
+
+outvars:
+- i
+- v

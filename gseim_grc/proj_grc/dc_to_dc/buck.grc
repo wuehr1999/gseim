@@ -511,8 +511,10 @@ solve_blocks:
     tstep0_x: 0.05m
     write_iter_n_e: '1000'
     write_iter_n_x: '1000'
+    write_time_e: 'no'
     write_time_x: 'no'
     x_nr_check_delx_all: 'no'
+    x_nr_check_rhs2: 'yes'
     x_nr_dmp: 'no'
     x_nr_dmp0: 'no'
     x_nr_dmp_itermax: '50'
@@ -520,6 +522,7 @@ solve_blocks:
     x_nr_dmp_k: '0.2'
     x_nr_dmp_k0: '0.2'
     x_nr_eps_delx_all: '1.0e-4'
+    x_nr_eps_rhs: '1.0e-6'
     x_nr_itermax: '500'
     x_nr_itermax0: '500'
     x_nr_write_rhs2: 'no'

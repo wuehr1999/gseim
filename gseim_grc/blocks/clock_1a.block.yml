@@ -1,0 +1,86 @@
+id: clock_1a
+label: clock_1a
+
+parameters:
+-   id: f_hz
+    label: f_hz
+    dtype: float
+    default: '1k'
+-   id: D
+    label: D
+    dtype: float
+    default: '0.5'
+-   id: y_low
+    label: y_low
+    dtype: float
+    default: '0'
+-   id: y_high
+    label: y_high
+    dtype: float
+    default: '1'
+-   id: t0
+    label: t0
+    dtype: float
+    default: '0'
+-   id: delta1
+    label: delta1
+    dtype: float
+    default: '0.01'
+-   id: delta2
+    label: delta2
+    dtype: float
+    default: '0.01'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'yes'
+-   id: port_offset_l
+    label: port_offset_l
+    dtype: string
+    default: '0'
+-   id: port_offset_r
+    label: port_offset_r
+    dtype: string
+    default: '0'
+-   id: port_offset_t
+    label: port_offset_t
+    dtype: string
+    default: '0'
+-   id: port_offset_b
+    label: port_offset_b
+    dtype: string
+    default: '0'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'symbol'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '0'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '6'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '4'
+
+outputs:
+-   label: y
+
+outvars:
+- y

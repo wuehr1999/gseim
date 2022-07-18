@@ -42,8 +42,8 @@ blocks:
     coordinate: [510, 147]
     rotation: 90
     state: true
-- name: connector_f_2A$0
-  id: connector_f_2A
+- name: connector_f_2x$0
+  id: connector_f_2x
   parameters:
     comment: ''
     drawing_scheme: symbol
@@ -375,14 +375,14 @@ blocks:
 connections:
 - [ammeter_fb$0, '0', multscl$1, '0']
 - [ammeter_fb$0, et0, l$0, er0]
-- [connector_f_2A$0, '0', sum_3$0, '0']
+- [connector_f_2x$0, '0', sum_3$0, '0']
 - [connector_f_4$0, '0', multscl$0, '0']
 - [connector_f_4$0, '1', pad_sink$0, '0']
 - [connector_f_4$0, '2', vsrc_x$0, '0']
 - [integrator$0, '0', connector_f_4$0, '0']
 - [l$0, el0, r$0, er0]
 - [linear$0, '0', integrator$0, '0']
-- [multscl$0, '0', connector_f_2A$0, '0']
+- [multscl$0, '0', connector_f_2x$0, '0']
 - [multscl$1, '0', sum_3$0, '1']
 - [pad_e_top$0, eb0, r$0, el0]
 - [pad_source$0, '0', sum_3$0, '2']

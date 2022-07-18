@@ -1,0 +1,82 @@
+# Copyright (C) 2022 - Mahesh Patil <mbpatil@ee.iitb.ac.in>
+# This file is part of GSEIM.
+#
+# GSEIM is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+xbe name=signal_switch evaluate=yes
+# if s is high, y = x1; else x2
+Jacobian: variable
+input_vars: s x1 x2
+output_vars: y
+aux_vars:
+iparms:
+sparms:
+rparms:
++  s_high=1
++  s_cross=0
+stparms:
+igparms:
+outparms: s x1 x2 y
+n_f= 0
+n_g= 1
+g_1: y
+C:
+prototypes:
+variables:
+   double y0;
+source:
+   if (G.flags[G.i_one_time_parms]) {
+     s_high = X.rprm[nr_s_high];
+     s_cross = 0.5*s_high;
+     X.rprm[nr_s_cross] = s_cross;
+     return;
+   }
+   if (G.flags[G.i_outvar]) {
+     X.outprm[no_s ] = X.val_vr[nvr_s ];
+     X.outprm[no_x1] = X.val_vr[nvr_x1];
+     X.outprm[no_x2] = X.val_vr[nvr_x2];
+     X.outprm[no_y ] = X.val_vr[nvr_y ];
+     return;
+   }
+   s_high = X.rprm[nr_s_high];
+   s_cross = X.rprm[nr_s_cross];
+
+   s = X.val_vr[nvr_s];
+   x2 = X.val_vr[nvr_x2];
+
+   if (s > s_cross) {
+     y0 = X.val_vr[nvr_x1];
+   } else {
+     y0 = X.val_vr[nvr_x2];
+   }
+
+   if (G.flags[G.i_init_guess]) {
+     X.val_vr[nvr_y] = y0;
+     return;
+   }
+   if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y ] =  1.0;
+       }
+     }
+     return;
+   }
+endC
+endxbe

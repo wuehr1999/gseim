@@ -14,18 +14,6 @@ parameters:
     label: s2_turns
     dtype: float
     default: '1'
--   id: ip0
-    label: ip0
-    dtype: float
-    default: '0'
--   id: is10
-    label: is10
-    dtype: float
-    default: '0'
--   id: is20
-    label: is20
-    dtype: float
-    default: '0'
 -   id: name
     label: name
     dtype: string

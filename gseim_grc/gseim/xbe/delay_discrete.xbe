@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-xbe name=delay_discrete evaluate=yes save_history=yes allow_ssw=no
+xbe name=delay_discrete save_history=yes allow_ssw=no delay=yes
 #
 # The input (x) is assumed to be a sampled quantity (or a function
 # of sampled quantities). The output is a delayed version of the
@@ -87,6 +87,7 @@ source:
      return;
    }   
    if (G.flags[G.i_trns] || G.flags[G.i_save_history]) {
+
      time0 = G.time_given_x;
      T = X.rprm[nr_T];
      y_current = X.rprm[nr_y_current];
@@ -116,41 +117,48 @@ source:
      if ((t_d < epsl1) || (abs(t_b) < epsl1)) {
        l_cross = 1;
      }
-     if (G.flags[G.i_function]) {
-       if (l_cross == 1) {
-         if (n_delay == 1) {
-           y0 = X.rprm[nr_y_current];
-         } else if (n_delay == 2) {
-           y0 = X.rprm[nr_y_old_1];
-         } else if (n_delay == 3) {
-           y0 = X.rprm[nr_y_old_2];
-         } else if (n_delay == 4) {
-           y0 = X.rprm[nr_y_old_3];
-         }
-       } else {
-         if (n_delay == 1) {
-           y0 = X.rprm[nr_y_old_1];
-         } else if (n_delay == 2) {
-           y0 = X.rprm[nr_y_old_2];
-         } else if (n_delay == 3) {
-           y0 = X.rprm[nr_y_old_3];
-         } else if (n_delay == 4) {
-           y0 = X.rprm[nr_y_old_4];
-         }
+     if (l_cross == 1) {
+       if (n_delay == 1) {
+         y0 = X.rprm[nr_y_current];
+       } else if (n_delay == 2) {
+         y0 = X.rprm[nr_y_old_1];
+       } else if (n_delay == 3) {
+         y0 = X.rprm[nr_y_old_2];
+       } else if (n_delay == 4) {
+         y0 = X.rprm[nr_y_old_3];
        }
-       X.g[ng_1] = X.val_vr[nvr_y] - y0;
+     } else {
+       if (n_delay == 1) {
+         y0 = X.rprm[nr_y_old_1];
+       } else if (n_delay == 2) {
+         y0 = X.rprm[nr_y_old_2];
+       } else if (n_delay == 3) {
+         y0 = X.rprm[nr_y_old_3];
+       } else if (n_delay == 4) {
+         y0 = X.rprm[nr_y_old_4];
+       }
      }
-     if (G.flags[G.i_jacobian]) {
-       J.dgdvr[ng_1][nvr_y] = 1.0;
-     }
-     if (G.flags[G.i_save_history]) {
-       if (l_cross == 1) {
-         X.rprm[nr_y_old_4] = X.rprm[nr_y_old_3];
-         X.rprm[nr_y_old_3] = X.rprm[nr_y_old_2];
-         X.rprm[nr_y_old_2] = X.rprm[nr_y_old_1];
-         X.rprm[nr_y_old_1] = X.rprm[nr_y_current];
+   }
+   if (G.flags[G.i_save_history]) {
+     if (l_cross == 1) {
+       X.rprm[nr_y_old_4] = X.rprm[nr_y_old_3];
+       X.rprm[nr_y_old_3] = X.rprm[nr_y_old_2];
+       X.rprm[nr_y_old_2] = X.rprm[nr_y_old_1];
+       X.rprm[nr_y_old_1] = X.rprm[nr_y_current];
 
-         X.rprm[nr_y_current] = X.val_vr[nvr_x];
+       X.rprm[nr_y_current] = X.val_vr[nvr_x];
+     }
+     return;
+   }
+   if (G.flags[G.i_trns]) {
+     if (G.flags[G.i_explicit]) {
+       X.val_vr[nvr_y] = y0;
+     } else if (G.flags[G.i_implicit]) {
+       if (G.flags[G.i_function]) {
+         X.g[ng_1] = X.val_vr[nvr_y] - y0;
+       }
+       if (G.flags[G.i_jacobian]) {
+         J.dgdvr[ng_1][nvr_y] = 1.0;
        }
      }
      return;

@@ -37,6 +37,7 @@ Global::Global() {
    i_trns           = a; flags.push_back(false); a++;
    i_ssw            = a; flags.push_back(false); a++;
    i_one_time_parms = a; flags.push_back(false); a++;
+   i_time_parms     = a; flags.push_back(false); a++;
    i_save_history   = a; flags.push_back(false); a++;
    i_next_time      = a; flags.push_back(false); a++;
    i_update_states  = a; flags.push_back(false); a++;
@@ -89,6 +90,10 @@ Global::Global() {
    flag_exp[i_trz_auto ] = false;
    flag_exp[i_be_const ] = false;
    flag_exp[i_trz_const] = false;
+
+   n_samplers_max = 20;
+   sampler_index_max = 20;
+   sampler_flag.resize(sampler_index_max + 1);
 
    return;
 }

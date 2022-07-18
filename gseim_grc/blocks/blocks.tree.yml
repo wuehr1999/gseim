@@ -21,6 +21,7 @@
   - sources:
     - clock
     - clock_1
+    - clock_1a
     - clock_3
     - clock_3ph
     - clock_thyr
@@ -32,11 +33,19 @@
     - triangle_1
     - triangle_2
     - triangle_3
+    - triangle_4
   - logic operations:
     - not
     - and_2
+    - and_3
     - or_2
+    - or_3
     - xor_2
+    - decoder_2_4
+    - srff_nand
+    - srff_nor
+    - jkff
+    - signal_switch
   - math Operations:
     - abs
     - atan2_rad
@@ -46,8 +55,11 @@
     - div
     - integrator
     - integrator_1
+    - integrator_reset_1
     - lag_1
     - lag_2
+    - max
+    - min
     - limiter
     - linear
     - modulo
@@ -63,6 +75,7 @@
   - sample/delay:
     - sampler
     - delay_discrete
+    - delay_discrete_1
     - delay_onestep
     - delay_onestep_1
     - edge_delay
@@ -94,6 +107,7 @@
     - l
     - r
   - sources:
+    - isrc_x
     - vsrc_ac
     - vsrc_clock
     - vsrc_dc
@@ -106,6 +120,7 @@
   - switches:
     - diode_r
     - diode_spice
+    - igbt_1
     - switch_1
     - thyristor
   - solar:
@@ -116,6 +131,7 @@
     - xfmr_level0_1ph
     - xfmr_level2_1ph
     - xfmr_level0_1ph_1_2
+    - xfmr_level0_1ph_1_3
   - ground
 - Misc:
   - tags:
@@ -144,9 +160,9 @@
     - connector_b_3
     - connector_b_4
     - connector_f_2a
-    - connector_f_2A
+    - connector_f_2x
     - connector_f_2b
-    - connector_f_2B
+    - connector_f_2y
     - connector_f_3a
     - connector_f_3b
     - connector_f_3c

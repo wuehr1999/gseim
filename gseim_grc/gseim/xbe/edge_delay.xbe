@@ -261,7 +261,6 @@ source:
      }
      return;
    }
-
    if (G.flags[G.i_trns]) {
      if (flag_zero_delay == 1) {
        y0 = X.val_vr[nvr_x];
@@ -279,7 +278,6 @@ source:
            }
          }
        }
-
        if (l == -1) {
          y0 = X.val_vr[nvr_y];
        } else {

@@ -1,0 +1,122 @@
+id: decoder_2_4
+label: decoder
+
+parameters:
+-   id: x_high
+    label: x_high
+    dtype: float
+    default: '1.0'
+-   id: y00
+    label: y00
+    dtype: float
+    default: '0.0'
+-   id: y01
+    label: y01
+    dtype: float
+    default: '0.0'
+-   id: y02
+    label: y02
+    dtype: float
+    default: '0.0'
+-   id: y03
+    label: y03
+    dtype: float
+    default: '0.0'
+-   id: y10
+    label: y10
+    dtype: float
+    default: '0.0'
+-   id: y11
+    label: y11
+    dtype: float
+    default: '0.0'
+-   id: y12
+    label: y12
+    dtype: float
+    default: '0.0'
+-   id: y13
+    label: y13
+    dtype: float
+    default: '0.0'
+-   id: y20
+    label: y20
+    dtype: float
+    default: '0.0'
+-   id: y21
+    label: y21
+    dtype: float
+    default: '0.0'
+-   id: y22
+    label: y22
+    dtype: float
+    default: '0.0'
+-   id: y23
+    label: y23
+    dtype: float
+    default: '0.0'
+-   id: y30
+    label: y30
+    dtype: float
+    default: '0.0'
+-   id: y31
+    label: y31
+    dtype: float
+    default: '0.0'
+-   id: y32
+    label: y32
+    dtype: float
+    default: '0.0'
+-   id: y33
+    label: y33
+    dtype: float
+    default: '0.0'
+-   id: name
+    label: name
+    dtype: string
+    default: none
+-   id: rotate_strict
+    label: rotate_strict
+    dtype: string
+    default: 'no'
+-   id: mirror
+    label: mirror
+    dtype: string
+    default: 'none'
+-   id: drawing_scheme
+    label: drawing_scheme
+    dtype: string
+    default: 'name'
+-   id: port_sep_x
+    label: port_sep_x
+    dtype: string
+    default: '0'
+-   id: port_sep_y
+    label: port_sep_y
+    dtype: string
+    default: '4'
+-   id: port_block_x
+    label: port_block_x
+    dtype: string
+    default: '4'
+-   id: port_block_y
+    label: port_block_y
+    dtype: string
+    default: '4'
+
+inputs:
+-   label: x0
+-   label: x1
+
+outputs:
+-   label: y0
+-   label: y1
+-   label: y2
+-   label: y3
+
+outvars:
+- x0
+- x1
+- y0
+- y1
+- y2
+- y3
