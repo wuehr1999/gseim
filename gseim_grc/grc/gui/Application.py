@@ -327,7 +327,7 @@ class Application(Gtk.Application):
 
         dialog.destroy()
 
-    def outvar_add_outvar(self, widget, ov_dict, l_ov_values, block_name):
+    def outvar_add_outvar(self, widget, flow_graph_1, l_ov_values, block_name):
 
         if len(l_ov_values) == 0:
             print('outvar_add_outvar: the selected block has no outvars.')
@@ -335,7 +335,7 @@ class Application(Gtk.Application):
             return
 
 #       default name for the outvar:
-        ovname_next = self.get_next_outvar_name(ov_dict)
+        ovname_next = self.get_next_outvar_name(flow_graph_1.outvars)
 
         dialog = ov.AddOutvarOutvar(self.main_window, ovname_next, l_ov_values)
         response = dialog.run()
@@ -346,17 +346,17 @@ class Application(Gtk.Application):
                     break
             s_name = dialog.entry_name.get_text()
             s_value = l_ov_values[i_active]
-            if s_name in ov_dict.keys():
+            if s_name in flow_graph_1.outvars.keys():
                 self.display_message(s_name + ' already exists in outvars!')
             elif len(s_name.split()) != 1:
                 print(s_name, 'outvar name should be a single word.')
                 self.display_message('outvar name should be a single word.')
             else:
                 l = [block_name, s_value]
-                if l in list(map(lambda x: x[1] , ov_dict.values())):
+                if l in list(map(lambda x: x[1] , flow_graph_1.outvars.values())):
                     self.display_message('outvar already exists!')
                 else:
-                    ov_dict[s_name] = ['outvar',  [block_name, s_value]]
+                    flow_graph_1.outvars[s_name] = ['outvar',  [block_name, s_value]]
                     self.main_window.current_page.saved = False
 
         dialog.destroy()
@@ -992,14 +992,16 @@ class Application(Gtk.Application):
                     self.outvar_add_connection(self.main_window, flow_graph, e1)
                 else:
                     k = str(type(e1)).split("'")[-2].split('.')[-1]
+
                     l_outvars = self.dict_outvars[k]
+
                     self.outvar_add_outvar(self.main_window,
-                        flow_graph.outvars, l_outvars, e1.name)
+                        flow_graph, l_outvars, e1.name)
 
         elif action == Actions.OUTVAR_DEL:
             self.outvar_delete(self.main_window, flow_graph)
         elif action == Actions.OUTVAR_EDIT:
-            self.outvar_edit(self.main_window, flow_graph_1)
+            self.outvar_edit(self.main_window, flow_graph)
         elif action == Actions.SOLVEBLOCK_ADD:
             self.solve_add(self.main_window, flow_graph)
         elif action == Actions.SOLVEBLOCK_DEL:
