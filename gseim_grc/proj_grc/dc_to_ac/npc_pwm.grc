@@ -1390,12 +1390,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1415,12 +1415,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1440,12 +1440,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1465,12 +1465,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1490,12 +1490,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1515,12 +1515,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1540,12 +1540,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1565,12 +1565,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1590,12 +1590,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1615,12 +1615,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1640,12 +1640,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
@@ -1665,12 +1665,12 @@ blocks:
     drawing_scheme: symbol
     mirror: none
     name: none
-    port_block_x: '11'
-    port_block_y: '15'
-    port_offset_b: '-4'
+    port_block_x: '6'
+    port_block_y: '10'
+    port_offset_b: '-1'
     port_offset_l: '0'
     port_offset_r: '0'
-    port_offset_t: '-4'
+    port_offset_t: '-1'
     port_sep_x: '0'
     port_sep_y: '0'
     r_off: r_off
