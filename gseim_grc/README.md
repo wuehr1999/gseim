@@ -24,9 +24,8 @@ a Qt-python plotting GUI, and a few additional python programs.
 
 - Download the ```gseim_grc``` folder in your home directory.
 - ```cd ~/gseim_grc/gseim/cppsrc```
-- ```make -f mkgseim```
-- ```make -f mkfilter_so```
-- ```mv libfilter.so ~/gseim_grc/gseim/exec/.```
+- ```make```
+- ```make install_libfilter```
 - ```cd ~/gseim_grc/gseim```
 - ```mkdir output```
 - ```python3 ~/gseim_grc/grc/scripts/run_gseim```
