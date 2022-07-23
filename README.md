@@ -28,8 +28,8 @@ a Qt-python plotting GUI, and a few additional python programs.
 - ```make install_libfilter```
 - ```cd ../../gseim```
 - ```mkdir output```
-- ```cd ..```
-- ```python3 ~/gseim_grc/grc/scripts/run_gseim```
+- ```cd ../..```
+- ```python3 ./gseim_grc/grc/scripts/run_gseim```
 - The GSEIM GUI should show up. Change the window to full size;
   quit the GUI and run ```run_gseim``` again.
 - Follow instructions in the **Getting started** page of the
