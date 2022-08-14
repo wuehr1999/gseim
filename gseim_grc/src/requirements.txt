@@ -1,0 +1,13 @@
+importlib-resources==5.8.0
+matplotlib
+numpy==1.23.1
+platformdirs==2.5.2
+psutil==5.9.1
+pycairo==1.21.0
+PyGObject==3.42.1
+pyparsing==3.0.9
+pytest==7.1.2
+pytest-qt
+PyYAML==6.0
+appdirs
+pytest-xvfb

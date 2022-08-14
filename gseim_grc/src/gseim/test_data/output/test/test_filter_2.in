@@ -1,0 +1,34 @@
+title: test_filter_2.grc
+begin_circuit
+   xelement name=src_ac$0 type=src_ac y=n0_0 f_hz=100
+   xelement type=pole_complex_order_1 a=0.0000000e+00 b=-5.0251900e-03
++     alpha=-1.0000000e+01 beta=9.9498700e+01 x=n0_0 y=n0_1 y_st=0.0000000e+00
+   xelement type=pole_real_order_1 a=-1.0000000e+05 alpha=-1.0000000e+00 x=n0_1
++     y=n0_1_f_1_1 y_st=0.0000000e+00
+   xelement type=multscl x=n0_1 y=n0_1_f_1_2 k=1.0000000e+05
+   xelement type=sum_2 x1=n0_1_f_1_1 x2=n0_1_f_1_2 y=n0
+   outvar: x=xvar_of_n0_0
+   outvar: x1=xvar_of_n0_1
+   outvar: y=xvar_of_n0
+end_circuit
+begin_solve
+   solve_type=trns
+   initial_sol=initialize
+   method: algorithm_e=backward_euler
+   method: algorithm_ex=backward_euler
+   method: algorithm_x_startup=explicit
+   method: algorithm_x_trns=modified_euler
+   method: e_nr_check_delx_all=no
+   method: e_nr_spice_abstol=1.0e-12
+   method: e_nr_spice_vntol=1.0e-6
+   method: ex_nr_check_delx_all=no
+   method: t_end=1000m
+   method: t_start=0
+   method: tstep0_x=0.05m
+   method: x_nr_check_delx_all=no
+   begin_output
+     filename=out1.dat limit_lines=1000000
+     variables: x x1 y
+   end_output
+end_solve
+end_cf
