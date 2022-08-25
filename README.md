@@ -74,6 +74,19 @@ You're now ready to run GSEIM directly, or build a distributable wheel package.
 bazel run //grc:gseim_gui
 ```
 
+If you want to run GSEIM locally (without internet), first find your
+bazel version using
+
+```
+bazel --version
+```
+
+As an example, suppose the version number is 5.3.0. In that case, use
+
+```
+USE_BAZEL_VERSION=5.3.0 bazel run //grc:gseim_gui
+```
+
 The GSEIM GUI should show up. Follow instructions in the **Getting started**
 page of the [GSEIM manual](https://gseim.github.io).
 
