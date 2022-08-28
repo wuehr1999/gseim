@@ -1,0 +1,39 @@
+title: RC example with startup
+# used for coverage report
+
+begin_circuit
+   eelement name=v1 type=vsrc_dc p=b n=a vdc=10
+   eelement name=r1 type=r p=b n=c r=1k
+   eelement name=c1 type=c p=c n=a c=1u v0=5
+
+   eelement name=r2 type=r p=c n=d r=1k
+   eelement name=c2 type=c p=d n=a c=1u v0=2
+
+   ref_node=a
+   outvar:
++    vb=nodev_of_b
++    vc=nodev_of_c
++    vd=nodev_of_d
++    i_r1=i_of_r1
++    i_r2=i_of_r2
+end_circuit
+
+begin_solve
+   solve_type=startup
+   initial_sol=initialize
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol=previous
+   method: algorithm_e=backward_euler
+   method: t_start=0
+   method: t_end=20m
+   method: tstep0_e=0.1m
+   begin_output
+      filename=test_4.dat
+      variables: vc vd
+   end_output
+end_solve
+
+end_cf

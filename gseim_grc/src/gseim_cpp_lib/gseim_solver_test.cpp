@@ -55,6 +55,11 @@ int main() {
     test_solver("ac_controller_1.in");
     test_solver("buck.in");
     test_solver("controlled_rectifier_2.in");
+    test_solver("test_1.in");
+    test_solver("test_2.in");
+    test_solver("test_3.in");
+    test_solver("test_4.in");
+    test_solver("test_5.in");
 
     return 0;
 }

@@ -1,0 +1,230 @@
+title: test_1
+# used for coverage report
+
+begin_circuit
+  xelement type=const y=u k=0.4
+  xelement type=const y=v k=2
+  xelement type=mult_2 x1=u x2=v y=z
+  xelement type=integrator x=z y=z1
+
+  outvar: z1=xvar_of_z1
+end_circuit
+
+# simulate with these methods:
+# use these keywords:
+#   forward_euler
+#   RK4
+#   RKF45
+#   BS23
+#   modified_euler
+#   Heun
+#   backward_euler
+#   backward_euler_auto
+#   backward_euler_const
+#   trz
+#   trz_auto
+#   trz_const
+#   trbdf2
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=forward_euler
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=RK4
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=RKF45
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=BS23
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=modified_euler
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=Heun
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=backward_euler
+  method: x_nr_check_rhs2=yes
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=backward_euler_auto
+  method: x_nr_check_rhs2=yes
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=backward_euler_const
+  method: x_nr_check_rhs2=yes
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=trz
+  method: x_nr_check_rhs2=yes
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=trz_auto
+  method: x_nr_check_rhs2=yes
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=trz_const
+  method: x_nr_check_rhs2=yes
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+# begin_output
+#   filename=test_1.dat
+#   variables: z1
+# end_output
+end_solve
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+  method: algorithm_x_trns=trbdf2
+  method: x_nr_check_rhs2=yes
+
+  method: t_start=0
+  method: t_end=1
+  method: tstep0_x=0.2
+  begin_output
+    filename=test_1.dat
+    variables: z1
+  end_output
+end_solve
+end_cf

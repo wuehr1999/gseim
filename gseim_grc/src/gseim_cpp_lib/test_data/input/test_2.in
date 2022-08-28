@@ -1,0 +1,78 @@
+title: none
+# used for coverage_report
+begin_circuit
+   xelement type=clock y=clk
++    T1=0.8m
++    T2=0.2m
++    L1=0
++    L2=1
++    t0=0
++    delta1=0.001m
++    delta2=0.001m
+
+   xelement type=pulse10 y=j
++    n1=3
++    i0=0
++    t1=2.2m
++    t2=4.2m
++    t3=7.2m
++    y_low=0 y_high=1
++    t_rise=0.01m t_fall=0.01m
+
+   xelement type=pulse10 y=k
++    n1=2
++    i0=0
++    t1=3.2m
++    t2=6.2m
++    y_low=0 y_high=1
++    t_rise=0.01m t_fall=0.01m
+
+   xelement type=jkff j=j k=k clk=clk q=q qbar=qbar
++    active_pos_edge=1
++    active_neg_edge=0
++    x_high=1
++    dt=1u
++    q_st=1
+
+   outvar: j=xvar_of_j
+   outvar: k=xvar_of_k
+   outvar: q=xvar_of_q
+   outvar: qbar=xvar_of_qbar
+   outvar: clk=xvar_of_clk
+end_circuit
+
+begin_solve
+   solve_type=startup
+   initial_sol=initialize
+   method: algorithm_x_startup=explicit
+   method: t_startup=0
+   method: x_nr_check_rhs2=yes
+end_solve
+
+begin_solve
+   solve_type=startup
+   initial_sol=initialize
+   method: algorithm_x_startup=implicit
+   method: t_startup=0
+   method: x_nr_check_rhs2=yes
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol=previous
+   method: algorithm_x_trns=forward_euler
+
+   method: t_start=0
+   method: t_end=10m
+
+   method: tstep0_x=0.05m
+   method: delt_min_x=0.001m
+
+   method: x_nr_check_rhs2=yes
+   begin_output
+     filename=test_2.dat
+#    variables: clk j k q qbar
+     variables: q
+   end_output
+end_solve
+end_cf

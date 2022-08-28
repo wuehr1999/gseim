@@ -38,6 +38,21 @@ def test_buck():
 def test_controlled_rectifier_2():
     _test_solver('controlled_rectifier_2.in')
 
+def test_test_1():
+    _test_solver('test_1.in')
+
+def test_test_2():
+    _test_solver('test_2.in')
+
+def test_test_3():
+    _test_solver('test_3.in')
+
+def test_test_4():
+    _test_solver('test_4.in')
+
+def test_test_5():
+    _test_solver('test_5.in')
+
 if __name__ == '__main__':
     sys.exit(pytest.main(sys.argv))
 
