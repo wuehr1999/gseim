@@ -30,6 +30,7 @@ class XbeUsr {
   public:
    int index_xbel;
    std::string name;
+   std::string xbel_name;
 
    vector<int> iprm;
    vector<double> rprm;
