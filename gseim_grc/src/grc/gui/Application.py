@@ -116,14 +116,13 @@ class Application(Gtk.Application):
 
         # Setup the menu
         log.debug('Creating menu')
-        '''
         self.menu = Bars.Menu()
-        self.set_menu()
         if self.prefers_app_menu():
+            # Some Linux
             self.set_app_menu(self.menu)
         else:
+            # Mac, some Linux
             self.set_menubar(self.menu)
-        '''
 
     def do_activate(self):
         Gtk.Application.do_activate(self)

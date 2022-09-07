@@ -75,10 +75,11 @@ class MainWindow(Gtk.ApplicationWindow):
         # Create the menu bar and toolbar
         generate_modes = platform.get_generate_options()
 
-        # This needs to be replaced
-        # Have an option for either the application menu or this menu
-        self.menu_bar = Gtk.MenuBar.new_from_model(Bars.Menu())
-        vbox.pack_start(self.menu_bar, False, False, 0)
+        # Only show the application menu at the top of the window if it's not
+        # shown in the menu bar separately from the app.
+        if app.prefers_app_menu():
+            self.menu_bar = Gtk.MenuBar.new_from_model(app.get_app_menu())
+            vbox.pack_start(self.menu_bar, False, False, 0)
 
         self.tool_bar = Bars.Toolbar()
         self.tool_bar.set_hexpand(True)
