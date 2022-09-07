@@ -25,7 +25,7 @@ EbeLib::EbeLib(
    Global &global) {
 
    std::fstream inf;
-   vector<std::string> v1; 
+   vector<std::string> v1;
    int j1,pos,pos1,pos2,pos3;
    int i_stv;
    bool flag_1,flag_2,flag_3,flag_4,flag_5;

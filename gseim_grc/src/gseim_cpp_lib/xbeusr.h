@@ -30,7 +30,6 @@ class XbeUsr {
   public:
    int index_xbel;
    std::string name;
-   std::string xbel_name;
 
    vector<int> iprm;
    vector<double> rprm;
@@ -90,7 +89,10 @@ class XbeUsr {
    vector<vector<double> > vec2d_1;
    vector<vector<vector<double> > > vec3d_1;
 
+   vector<vector<bool> > vec2d_b1;
+
    queue<double> que1,que2;
+   deque<double> deq1,deq2,deq3;
   public:
    XbeUsr();
 

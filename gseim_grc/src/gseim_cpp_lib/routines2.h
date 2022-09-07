@@ -328,6 +328,11 @@ void xbe_modulo_implicit(
    vector<XbeLib> &xbe_lib,
    vector<XbeUsr> &xbe_usr,
    SysMat &smat);
+void xbe_modulo_exc(
+   Circuit &cct,
+   vector<XbeLib> &xbe_lib,
+   vector<XbeUsr> &xbe_usr,
+   SysMat &smat);
 void xbe_reset_1(
    const int flag_implicit,
    vector<XbeLib> &xbe_lib,

@@ -31,4 +31,5 @@ void user_function(
    double* x,
    double* y,
    vector<int> &iprm,
-   vector<double> &rprm);
+   vector<double> &rprm,
+   vector<vector<double> > &jac);

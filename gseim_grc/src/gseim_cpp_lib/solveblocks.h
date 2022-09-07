@@ -33,7 +33,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "xbeusr.h"
 #include "solveparm.h"
 
-using namespace std; 
+using namespace std;
 namespace fs = std::filesystem;
 
 class SolveBlocks {

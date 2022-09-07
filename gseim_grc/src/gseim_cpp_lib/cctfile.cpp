@@ -26,7 +26,7 @@ CctFile::CctFile(const std::string &filename) {
 
    std::fstream inf;
    bool flag_found_end_cf,flag_found_begin,flag_found_end;
-   vector<std::string> v1,v2; 
+   vector<std::string> v1,v2;
    std::string s1;
    int n_words;
    int n_lines;

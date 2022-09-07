@@ -80,24 +80,24 @@ void assign_all_complex_1(
    return;
 }
 // -----------------------------------------------------------------------------
-int isSubstring(const string &s1,const string &s2) { 
-// Returns position if s1 is substring of s2 
+int isSubstring(const string &s1,const string &s2) {
+// Returns position if s1 is substring of s2
 // (taken from https://www.geeksforgeeks.org/check-string-substring-another/)
 
-   int M = s1.length(); 
-   int N = s2.length(); 
-  
-   for (int i=0; i <= N - M; i++) { 
-     int j;  
+   int M = s1.length();
+   int N = s2.length();
+
+   for (int i=0; i <= N - M; i++) {
+     int j;
 /*   For current index i, check for pattern match */
-     for (j=0; j < M; j++) 
-       if (s2[i + j] != s1[j]) break; 
-  
-     if (j == M) return i;  
-   }   
-  
-   return -1; 
-} 
+     for (j=0; j < M; j++)
+       if (s2[i + j] != s1[j]) break;
+
+     if (j == M) return i;
+   }
+
+   return -1;
+}
 // -----------------------------------------------------------------------------
 vector<string> tokenize_string(
    const string &s,
@@ -105,7 +105,7 @@ vector<string> tokenize_string(
 
 // taken from
 // https://stackoverflow.com/questions/7621727/split-a-string-into-words-by-multiple-delimiters
-   const int dictSize = 256;    
+   const int dictSize = 256;
    static bool dict[dictSize] = { false};
 
    vector<string> res;
@@ -1322,7 +1322,7 @@ double exp_lmt(
    if (x > x1) {
      y1 = exp(x1);
      y = y1 + y1*(x-x1);
-   } else { 
+   } else {
      y = exp(x);
    }
 
@@ -1817,7 +1817,7 @@ void partial_fractions_1(
      delete[] A[k];
    }
    delete[] A;
-  
+
    for (int k = 0; k < pp_n_roots; k++) {
      delete[] Ainvrs[k];
    }
@@ -2239,7 +2239,7 @@ bool hasEnding(
      return (0 == fullString.compare(fullString.length() - ending.length(), ending.length(), ending));
    } else {
      return false;
-   }   
+   }
 }
 // -----------------------------------------------------------------------------
 double calc_avg_1(
@@ -2295,4 +2295,57 @@ double calc_avg_1(
 
    x_avg = sum/T;
    return x_avg;
+}
+// -----------------------------------------------------------------------------
+double calc_sum_1(
+   std::deque<double> q_t,
+   std::deque<double> q_x,
+   const double t_current,
+   const double x_current,
+   const double T) {
+
+   vector<double> t,x;
+   int n_t,n_x;
+   double delt,sum,x_interp;
+   double t_offset;
+
+   n_t = q_t.size();
+   n_x = q_x.size();
+
+   if (n_t != n_x) {
+     cout << "calc_sum_1: n_t: " << n_t << " n_x: " << n_x << endl;
+     cout << "  are not equal. Halting..." << endl; exit(1);
+   }
+   if (n_t < 2) {
+     cout << "calc_sum_1: n_t < 2? Halting..." << endl; exit(1);
+   }
+   sum = 0;
+
+   t_offset = -t_current + T;
+
+   while (!q_t.empty()){
+     t.push_back(q_t.front() + t_offset);
+     q_t.pop_front();
+     x.push_back(q_x.front());
+     q_x.pop_front();
+   }
+   t.push_back(T);
+   x.push_back(x_current);
+
+   for (int i=n_t; i > 0; i--) {
+     if (t[i-1] >= 0.0) {
+       delt = t[i] - t[i-1];
+       sum += 0.5*delt*(x[i-1] + x[i]);
+     } else{
+       if (t[i] > 0.0) {
+         delt = t[i];
+         x_interp = x[i] - ((x[i]-x[i-1])/(t[i]-t[i-1]))*delt;
+         sum += 0.5*delt*(x[i] + x_interp);
+       } else {
+         break;
+       }
+     }
+   }
+
+   return sum;
 }

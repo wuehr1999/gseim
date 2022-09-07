@@ -32,7 +32,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "ebelib.h"
 #include "ebeusr.h"
 
-using namespace std; 
+using namespace std;
 
 class Circuit {
 

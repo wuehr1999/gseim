@@ -33,7 +33,7 @@ Circuit::Circuit(
 // filename: name of the circuit file
 
    std::fstream inf;
-   vector<std::string> v1; 
+   vector<std::string> v1;
    std::string s1,s2,s3;
    int i_xbel,pos;
    int i_ebel,i_ebeu;
@@ -414,7 +414,7 @@ void Circuit::check_sampler_index(
    int i_xbeu,i_xbel,i_iprm;
    int index1,sampler_index1;
    std::string xbe_name;
-   vector<bool> tick; 
+   vector<bool> tick;
 
    tick.resize(global.sampler_index_max);
    for (int i=0; i < (global.sampler_index_max+1); i++) {

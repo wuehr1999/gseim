@@ -28,8 +28,8 @@ XbeLib::XbeLib(
 
    std::fstream inf;
    bool flag_1,flag_2;
-   vector<std::string> v1; 
-   vector<int> x1,x2; 
+   vector<std::string> v1;
+   vector<int> x1,x2;
    int pos,count1;
    std::string s1;
    int j1,n_gvar1,var_number,var_flag;

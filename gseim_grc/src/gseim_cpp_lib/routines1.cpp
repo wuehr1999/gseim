@@ -397,6 +397,7 @@ void solve_trns_x_rkf45(
    while (!flag_tend_reached) {
      slv.iter_trns_x++;
      global.iter_trns_x = slv.iter_trns_x;
+     global.flag_new_step = true;
      write_iter_x(slv);
 
      if (slv.iter_trns_x != 0) {
@@ -421,6 +422,7 @@ void solve_trns_x_rkf45(
        slv.rkf45_n_accept++;
      } else {
        slv.rkf45_n_reject++;
+       global.flag_new_step = false;
        if (slv.delt_x == slv.delt_min_x) {
          cout << "solve_trns_x_rkf45:" << endl;
          cout << "  tolerance not met even with" << endl;
@@ -542,6 +544,7 @@ void solve_trns_x_bs23(
    while (!flag_tend_reached) {
      slv.iter_trns_x++;
      global.iter_trns_x = slv.iter_trns_x;
+     global.flag_new_step = true;
      write_iter_x(slv);
 
      if (slv.iter_trns_x != 0) {
@@ -568,6 +571,7 @@ void solve_trns_x_bs23(
        slv.bs23_n_accept++;
      } else {
        slv.bs23_n_reject++;
+       global.flag_new_step = false;
        if (slv.delt_x == slv.delt_min_x) {
          cout << "solve_trns_x_bs23:" << endl;
          cout << "  tolerance not met even with" << endl;
@@ -610,7 +614,7 @@ void solve_trns_x_bs23(
 
 //   this is used to control LTE, rather than LTE/h
      delta = 0.7937*pow((slv.bs23_tolr/slv.bs23_norm2),0.3333333);
-  
+
      if (delta < slv.bs23_fctr_min) {
        slv.delt_x = slv.bs23_fctr_min*slv.delt_x;
      } else if (delta >= slv.bs23_fctr_max) {
@@ -1960,7 +1964,7 @@ void solve_trns_x_common(
    slv.delt_x = slv.delt0_x;
 
    slv.write_iter_n1_x = 0;
-   slv.iter_trns_x = -1; 
+   slv.iter_trns_x = -1;
    global.iter_trns_x = -1;
 
    if (cct.flag_limit_tstep_x) {
@@ -2575,7 +2579,7 @@ void update_meuler(
            } if (stage == 2) {
              xbe_usr[i_xbeu].val_vr[var_number]
              = xbe_usr[i_xbeu].val_vr_0[var_number]
-             + h1*( xbe_usr[i_xbeu].f0[i_func] 
+             + h1*( xbe_usr[i_xbeu].f0[i_func]
                   + xbe_usr[i_xbeu].f1[i_func]);
            }
          } else if (var_flag == global.I_XAUX) {
@@ -2586,7 +2590,7 @@ void update_meuler(
            } if (stage == 2) {
              xbe_usr[i_xbeu].val_aux[var_number]
              = xbe_usr[i_xbeu].val_aux_0[var_number]
-             + h1*( xbe_usr[i_xbeu].f0[i_func] 
+             + h1*( xbe_usr[i_xbeu].f0[i_func]
                   + xbe_usr[i_xbeu].f1[i_func]);
            }
          } else {
@@ -2630,7 +2634,7 @@ void update_meuler_al(
            } if (stage == 2) {
              xbe_usr[i_xbeu].val_vr[var_number]
              = xbe_usr[i_xbeu].val_vr_0[var_number]
-             + h1*( xbe_usr[i_xbeu].f0[i_func] 
+             + h1*( xbe_usr[i_xbeu].f0[i_func]
                   + xbe_usr[i_xbeu].f1[i_func]);
            }
            xbe_usr[i_xbeu].val_vr_u[var_number] =
@@ -2643,7 +2647,7 @@ void update_meuler_al(
            } if (stage == 2) {
              xbe_usr[i_xbeu].val_aux[var_number]
              = xbe_usr[i_xbeu].val_aux_0[var_number]
-             + h1*( xbe_usr[i_xbeu].f0[i_func] 
+             + h1*( xbe_usr[i_xbeu].f0[i_func]
                   + xbe_usr[i_xbeu].f1[i_func]);
            }
            xbe_usr[i_xbeu].val_aux_u[var_number] =
@@ -2690,7 +2694,7 @@ void update_heun(
            } if (stage == 2) {
              xbe_usr[i_xbeu].val_vr[var_number]
              = xbe_usr[i_xbeu].val_vr_0[var_number]
-             + h*( slv.heun_g0*xbe_usr[i_xbeu].f0[i_func] 
+             + h*( slv.heun_g0*xbe_usr[i_xbeu].f0[i_func]
                  + slv.heun_g1*xbe_usr[i_xbeu].f1[i_func]);
            }
          } else if (var_flag == global.I_XAUX) {
@@ -2701,7 +2705,7 @@ void update_heun(
            } if (stage == 2) {
              xbe_usr[i_xbeu].val_aux[var_number]
              = xbe_usr[i_xbeu].val_aux_0[var_number]
-             + h*( slv.heun_g0*xbe_usr[i_xbeu].f0[i_func] 
+             + h*( slv.heun_g0*xbe_usr[i_xbeu].f0[i_func]
                  + slv.heun_g1*xbe_usr[i_xbeu].f1[i_func]);
            }
          } else {
@@ -2746,7 +2750,7 @@ void update_heun_al(
            } if (stage == 2) {
              xbe_usr[i_xbeu].val_vr[var_number]
              = xbe_usr[i_xbeu].val_vr_0[var_number]
-             + h*( slv.heun_g0*xbe_usr[i_xbeu].f0[i_func] 
+             + h*( slv.heun_g0*xbe_usr[i_xbeu].f0[i_func]
                  + slv.heun_g1*xbe_usr[i_xbeu].f1[i_func]);
            }
            xbe_usr[i_xbeu].val_vr_u[var_number] =
@@ -2759,7 +2763,7 @@ void update_heun_al(
            } if (stage == 2) {
              xbe_usr[i_xbeu].val_aux[var_number]
              = xbe_usr[i_xbeu].val_aux_0[var_number]
-             + h*( slv.heun_g0*xbe_usr[i_xbeu].f0[i_func] 
+             + h*( slv.heun_g0*xbe_usr[i_xbeu].f0[i_func]
                  + slv.heun_g1*xbe_usr[i_xbeu].f1[i_func]);
            }
            xbe_usr[i_xbeu].val_aux_u[var_number] =
@@ -2826,6 +2830,8 @@ void solve_dc_linear_e(
    SolveBlocks &slv,
    Global &global) {
 
+   global.iter_nr = 0;
+
    form_jac_rhs_dc_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
 
    negative_double_1(smat.m_e.n_row,smat.rhs_m_e);
@@ -2865,7 +2871,7 @@ void solve_dc_nonlinear_e(
 
    for (i_newt=0; i_newt < slv.e_nr_itermax_a; i_newt++) {
      cout << "solve_dc_nonlinear_e: i_newt = " << i_newt << endl;
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
      form_jac_rhs_dc_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
 
      negative_double_1(smat.m_e.n_row,smat.rhs_m_e);
@@ -2986,6 +2992,8 @@ void solve_startup_linear_e(
    SolveBlocks &slv,
    Global &global) {
 
+   global.iter_nr = 0;
+
    form_jac_rhs_startup_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
 
    negative_double_1(smat.m_e.n_row,smat.rhs_m_e);
@@ -3025,7 +3033,7 @@ void solve_startup_nonlinear_e(
 
    for (i_newt=0; i_newt < slv.e_nr_itermax_a; i_newt++) {
      cout << "solve_startup_nonlinear_e: i_newt = " << i_newt << endl;
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
      form_jac_rhs_startup_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
 
      negative_double_1(smat.m_e.n_row,smat.rhs_m_e);
@@ -3160,6 +3168,8 @@ void solve_startup_linear_x(
    SolveBlocks &slv,
    Global &global) {
 
+   global.iter_nr = 0;
+
    form_jac_rhs_startup_x(xbe_lib,xbe_usr,xbe_jac,smat,cct,global);
 
    form_solvec_x(xbe_lib,xbe_usr,smat,cct);
@@ -3201,7 +3211,7 @@ void solve_startup_nonlinear_x(
 
    for (i_newt=0; i_newt < slv.x_nr_itermax_a; i_newt++) {
      cout << "solve_startup_nonlinear_x: i_newt = " << i_newt << endl;
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
      form_jac_rhs_startup_x(xbe_lib,xbe_usr,xbe_jac,smat,cct,global);
 
      negative_double_1(smat.m_x.n_row,smat.rhs_m_x);
@@ -3290,6 +3300,8 @@ void solve_startup_linear_exc(
    SolveBlocks &slv,
    Global &global) {
 
+   global.iter_nr = 0;
+
    form_jac_rhs_startup_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,
      smat,cct,global);
 
@@ -3332,7 +3344,7 @@ void solve_startup_nonlinear_exc(
 
    for (i_newt=0; i_newt < slv.ex_nr_itermax_a; i_newt++) {
      cout << "solve_startup_nonlinear_exc: i_newt = " << i_newt << endl;
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
      form_jac_rhs_startup_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,
        smat,cct,global);
 
@@ -3398,8 +3410,6 @@ void solve_trns(
      solve_trns_exc(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
        smat,cct,slv,cct_file,global);
    } else {
-     cout << "solve_trns: exs option not implemented. Halting..." << endl;
-     exit(1);
    }
 
    return;
@@ -3745,6 +3755,7 @@ void solve_trns_e_be_auto(
      if (!flag_repeat_step) {
        slv.iter_trns_e++;
        global.iter_trns_e = slv.iter_trns_e;
+       global.flag_new_step = true;
        write_iter_e(slv);
 
        iter_stepred = 0;
@@ -3794,6 +3805,7 @@ void solve_trns_e_be_auto(
            ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
 
            flag_repeat_step = true;
+           global.flag_new_step = false;
          }
        } else {
          if (slv.delt_e != slv.delt_max_e) {
@@ -3893,6 +3905,7 @@ void solve_trns_e_trz_auto(
      if (!flag_repeat_step) {
        slv.iter_trns_e++;
        global.iter_trns_e = slv.iter_trns_e;
+       global.flag_new_step = true;
        write_iter_e(slv);
 
        iter_stepred = 0;
@@ -3942,6 +3955,7 @@ void solve_trns_e_trz_auto(
            ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
 
            flag_repeat_step = true;
+           global.flag_new_step = false;
          }
        } else {
          if (slv.delt_e != slv.delt_max_e) {
@@ -4037,6 +4051,7 @@ void solve_trns_e_trbdf2(
      if (!flag_repeat_step) {
        slv.iter_trns_e++;
        global.iter_trns_e = slv.iter_trns_e;
+       global.flag_new_step = true;
        write_iter_e(slv);
 
        iter_trbdf2 = 0;
@@ -4103,6 +4118,7 @@ void solve_trns_e_trbdf2(
          ebeu_copy_stv_1(global.I_COPY_1_TO_0,ebe_lib,ebe_usr,cct,global);
 
          flag_repeat_step = true;
+         global.flag_new_step = false;
        }
      }
 
@@ -4158,6 +4174,7 @@ void solve_trns_e_trbdf2(
            ebeu_copy_stv_1(global.I_COPY_2_TO_0,ebe_lib,ebe_usr,cct,global);
 
            flag_repeat_step = true;
+           global.flag_new_step = false;
          }
        }
      }
@@ -4182,6 +4199,7 @@ void solve_trns_e_trbdf2(
          dcmp_solvec_e(ebe_lib,ebe_usr,smat,slv,cct);
 
          flag_repeat_step = true;
+         global.flag_new_step = false;
        }
      }
      if (!flag_repeat_step) {
@@ -4232,6 +4250,8 @@ void solve_trns_linear_e(
 
    bool flag_write;
 
+   global.iter_nr = 0;
+
    form_jac_rhs_trns_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,slv,global);
 
    add_trns_terms_e(ebe_usr,smat,slv);
@@ -4273,7 +4293,7 @@ void solve_trns_nonlinear_e(
    slv.get_dmp(cct);
 
    for (i_newt=0; i_newt < slv.e_nr_itermax_a; i_newt++) {
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
 
      form_jac_rhs_trns_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,slv,global);
      add_trns_terms_e(ebe_usr,smat,slv);
@@ -4681,6 +4701,7 @@ void solve_trns_x_be_auto(
      if (!flag_repeat_step) {
        slv.iter_trns_x++;
        global.iter_trns_x = slv.iter_trns_x;
+       global.flag_new_step = true;
        write_iter_x(slv);
 
        if (slv.iter_trns_x != 0) {
@@ -4736,6 +4757,7 @@ void solve_trns_x_be_auto(
 
            copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
            flag_repeat_step = true;
+           global.flag_new_step = false;
          }
        } else {
          if (slv.delt_x != slv.delt_max_x) {
@@ -4839,6 +4861,7 @@ void solve_trns_x_trz_auto(
      if (!flag_repeat_step) {
        slv.iter_trns_x++;
        global.iter_trns_x = slv.iter_trns_x;
+       global.flag_new_step = true;
        write_iter_x(slv);
 
        if (slv.iter_trns_x != 0) {
@@ -4895,6 +4918,7 @@ void solve_trns_x_trz_auto(
            copy_array_1<double>(smat.n_solvec_x,smat.svec_x,smat.svec_old_1_x);
 
            flag_repeat_step = true;
+           global.flag_new_step = false;
          }
        } else {
          if (slv.delt_x != slv.delt_max_x) {
@@ -4990,6 +5014,7 @@ void solve_trns_x_trbdf2(
      if (!flag_repeat_step) {
        slv.iter_trns_x++;
        global.iter_trns_x = slv.iter_trns_x;
+       global.flag_new_step = true;
        write_iter_x(slv);
 
        if (slv.iter_trns_x != 0) {
@@ -5067,6 +5092,7 @@ void solve_trns_x_trbdf2(
 
          copy_array_1<double>(smat.n_solvec_x,smat.svec_old_1_x,smat.svec_x);
          flag_repeat_step = true;
+         global.flag_new_step = false;
        }
      }
 
@@ -5121,6 +5147,7 @@ void solve_trns_x_trbdf2(
            copy_array_1<double>(smat.n_solvec_x,smat.svec_old_2_x,smat.svec_x);
 
            flag_repeat_step = true;
+           global.flag_new_step = false;
          }
        }
      }
@@ -5144,6 +5171,7 @@ void solve_trns_x_trbdf2(
          dcmp_solvec_x(xbe_lib,xbe_usr,smat,cct);
 
          flag_repeat_step = true;
+         global.flag_new_step = false;
        }
      }
      if (!flag_repeat_step) {
@@ -5199,6 +5227,8 @@ void solve_trns_linear_x(
 
    bool flag_write;
 
+   global.iter_nr = 0;
+
    form_jac_rhs_trns_x(xbe_lib,xbe_usr,xbe_jac,smat,cct,global);
    add_trns_terms_x(xbe_usr,smat,slv);
 
@@ -5237,7 +5267,7 @@ void solve_trns_nonlinear_x(
 
    for (i_newt=0; i_newt < slv.x_nr_itermax_a; i_newt++) {
 
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
 
      form_jac_rhs_trns_x(xbe_lib,xbe_usr,xbe_jac,smat,cct,global);
 
@@ -5292,6 +5322,8 @@ void solve_trns_linear_x_al(
 
    bool flag_write;
 
+   global.iter_nr = 0;
+
 // solve algebraic loop equations in only xbe's/explicit trns case.
 
    form_jac_rhs_trns_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,global);
@@ -5334,7 +5366,7 @@ void solve_trns_nonlinear_x_al(
    slv.get_dmp(cct);
 
    for (i_newt=0; i_newt < slv.x_nr_itermax_a; i_newt++) {
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
 
      form_jac_rhs_trns_x_al(xbe_lib,xbe_usr,xbe_jac,smat,cct,global);
 
@@ -5498,6 +5530,11 @@ void solve_trns_exc_be(
      global.iter_trns_x = slv.iter_trns_x;
      write_iter_e(slv);
 
+     if (slv.iter_trns_x != 0) {
+       if (cct.flag_modulo_x) {
+         xbe_modulo_exc(cct,xbe_lib,xbe_usr,smat);
+       }
+     }
      slv.time_next_e  = slv.time_present_e + slv.delt_e;
      slv.time_next_x  = slv.time_present_x + slv.delt_x;
      global.time_given_e = slv.time_next_e;
@@ -5670,6 +5707,11 @@ void solve_trns_exc_trz(
      global.iter_trns_x = slv.iter_trns_x;
      write_iter_e(slv);
 
+     if (slv.iter_trns_x != 0) {
+       if (cct.flag_modulo_x) {
+         xbe_modulo_exc(cct,xbe_lib,xbe_usr,smat);
+       }
+     }
      slv.time_next_e  = slv.time_present_e + slv.delt_e;
      slv.time_next_x  = slv.time_present_x + slv.delt_x;
      global.time_given_e = slv.time_next_e;
@@ -5819,9 +5861,15 @@ void solve_trns_exc_be_auto(
        slv.iter_trns_x++;
        global.iter_trns_e = slv.iter_trns_e;
        global.iter_trns_x = slv.iter_trns_x;
+       global.flag_new_step = true;
        write_iter_e(slv);
-
        iter_stepred = 0;
+
+       if (slv.iter_trns_x != 0) {
+         if (cct.flag_modulo_x) {
+           xbe_modulo_exc(cct,xbe_lib,xbe_usr,smat);
+         }
+       }
      }
      flag_repeat_step = false;
 
@@ -5875,6 +5923,7 @@ void solve_trns_exc_be_auto(
            ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
 
            flag_repeat_step = true;
+           global.flag_new_step = false;
          }
        } else {
          if (slv.delt_e != slv.delt_max_ex) {
@@ -6009,9 +6058,15 @@ void solve_trns_exc_trz_auto(
        slv.iter_trns_x++;
        global.iter_trns_e = slv.iter_trns_e;
        global.iter_trns_x = slv.iter_trns_x;
+       global.flag_new_step = true;
        write_iter_e(slv);
-
        iter_stepred = 0;
+
+       if (slv.iter_trns_x != 0) {
+         if (cct.flag_modulo_x) {
+           xbe_modulo_exc(cct,xbe_lib,xbe_usr,smat);
+         }
+       }
      }
      flag_repeat_step = false;
 
@@ -6067,6 +6122,7 @@ void solve_trns_exc_trz_auto(
            ebeu_copy_stv_1(global.I_COPY_0_TO_1,ebe_lib,ebe_usr,cct,global);
 
            flag_repeat_step = true;
+           global.flag_new_step = false;
          }
        } else {
          if (slv.delt_e != slv.delt_max_ex) {
@@ -6192,8 +6248,14 @@ void solve_trns_exc_trbdf2(
        slv.iter_trns_x++;
        global.iter_trns_e = slv.iter_trns_e;
        global.iter_trns_x = slv.iter_trns_x;
+       global.flag_new_step = true;
        write_iter_e(slv);
 
+       if (slv.iter_trns_x != 0) {
+         if (cct.flag_modulo_x) {
+           xbe_modulo_exc(cct,xbe_lib,xbe_usr,smat);
+         }
+       }
        iter_trbdf2 = 0;
        iter_trz = 0;
        iter_bdf2 = 0;
@@ -6268,6 +6330,7 @@ void solve_trns_exc_trbdf2(
          ebeu_copy_stv_1(global.I_COPY_1_TO_0,ebe_lib,ebe_usr,cct,global);
 
          flag_repeat_step = true;
+         global.flag_new_step = false;
        }
      }
 
@@ -6336,6 +6399,7 @@ void solve_trns_exc_trbdf2(
            ebeu_copy_stv_1(global.I_COPY_2_TO_0,ebe_lib,ebe_usr,cct,global);
 
            flag_repeat_step = true;
+           global.flag_new_step = false;
          }
        }
      }
@@ -6364,6 +6428,7 @@ void solve_trns_exc_trbdf2(
          dcmp_solvec_ex(xbe_lib,xbe_usr,ebe_lib,ebe_usr,smat,slv,cct);
 
          flag_repeat_step = true;
+         global.flag_new_step = false;
        }
      }
      if (!flag_repeat_step) {
@@ -6427,6 +6492,8 @@ void solve_trns_linear_exc(
 
    bool flag_write;
 
+   global.iter_nr = 0;
+
    form_jac_rhs_trns_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,
      smat,cct,slv,global);
 
@@ -6472,7 +6539,7 @@ void solve_trns_nonlinear_exc(
    slv.get_dmp(cct);
 
    for (i_newt=0; i_newt < slv.ex_nr_itermax_a; i_newt++) {
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
 
      form_jac_rhs_trns_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,
        smat,cct,slv,global);
@@ -9514,6 +9581,7 @@ void solve_ssw_1_e(
    for (i0=0; i0 < slv.itmax_trns; i0++) {
      slv.iter_trns_e = i0;
      global.iter_trns_e = i0;
+     global.flag_new_step = true;
 
      write_iter_e(slv);
      iter_stepred = 0;
@@ -9572,6 +9640,7 @@ void solve_ssw_1_e(
              copy_array_1<double>(smat.n_solvec_e,smat.svec_old_1_e,smat.svec_e);
              ebeu_copy_stv_1(global.I_COPY_1_TO_0,ebe_lib,ebe_usr,cct,global);
 
+             global.flag_new_step = false;
              goto jump_ssw1;
            }
          } else {
@@ -9681,6 +9750,8 @@ void solve_ssw_1_ex(
    slv.ex_algo_trz0 = slv.ex_algo_trz || slv.ex_algo_trz_auto;
    slv.ex_algo_auto = slv.ex_algo_be_auto || slv.ex_algo_trz_auto;
 
+   global.flag_new_step = true;
+
    if (l_write_1) {
      for (int i_file=0; i_file < slv.n_outfile; i_file++) {
        if (slv.flag_out_delt_fixed[i_file]) {
@@ -9741,6 +9812,7 @@ void solve_ssw_1_ex(
      slv.iter_trns_x = i0;
      global.iter_trns_e = i0;
      global.iter_trns_x = i0;
+     global.flag_new_step = true;
 
      write_iter_e(slv);
      iter_stepred = 0;
@@ -9809,6 +9881,7 @@ void solve_ssw_1_ex(
              copy_array_1<double>(smat.n_solvec_ex,smat.svec_old_1_ex,smat.svec_ex);
              ebeu_copy_stv_1(global.I_COPY_1_TO_0,ebe_lib,ebe_usr,cct,global);
 
+             global.flag_new_step = false;
              goto jump_ssw1;
            }
          } else {
@@ -9974,6 +10047,7 @@ void solve_ssw_1_x(
    for (i0=0; i0 < slv.itmax_trns; i0++) {
      slv.iter_trns_x = i0;
      global.iter_trns_x = i0;
+     global.flag_new_step = true;
 
      write_iter_x(slv);
      iter_stepred = 0;
@@ -10035,6 +10109,7 @@ void solve_ssw_1_x(
              slv.delt_x = max(slv.delt_x,slv.delt_min_x);
 
              copy_array_1<double>(smat.n_solvec_x,smat.svec_old_1_x,smat.svec_x);
+             global.flag_new_step = false;
              goto jump_ssw1;
            }
          } else {
@@ -10128,6 +10203,8 @@ void solve_linear_ssw_e(
 
    int i1;
 
+   global.iter_nr = 0;
+
    assign_all_double_1(smat.rhs_m_ssw,smat.m_ssw.n_row,0.0);
 
 // Sequel: add_ssw_terms(i_statevar,slv,mat);
@@ -10152,6 +10229,8 @@ void solve_linear_ssw_ex(
 
    int i1;
 
+   global.iter_nr = 0;
+
    assign_all_double_1(smat.rhs_m_ssw,smat.m_ssw.n_row,0.0);
 
 // Sequel: add_ssw_terms(i_statevar,slv,mat);
@@ -10175,6 +10254,8 @@ void solve_linear_ssw_x(
    Global &global) {
 
    int i1;
+
+   global.iter_nr = 0;
 
    assign_all_double_1(smat.rhs_m_ssw,smat.m_ssw.n_row,0.0);
 
@@ -11379,6 +11460,8 @@ void solve_ssw_trns_linear_e(
 
    bool flag_write;
 
+   global.iter_nr = 0;
+
    form_jac_rhs_ssw_trns_e(ebe_lib,ebe_usr,ebe_jac,
      smat,cct,slv,cct_file,global);
 
@@ -11416,6 +11499,8 @@ void solve_ssw_trns_linear_ex(
 
    bool flag_write;
 
+   global.iter_nr = 0;
+
    form_jac_rhs_ssw_trns_ex(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
      smat,cct,slv,cct_file,global);
 
@@ -11452,6 +11537,8 @@ void solve_ssw_trns_linear_x(
    Global &global) {
 
    bool flag_write;
+
+   global.iter_nr = 0;
 
    form_jac_rhs_ssw_trns_x(xbe_lib,xbe_usr,xbe_jac,
      smat,cct,slv,cct_file,global);
@@ -11498,7 +11585,7 @@ void solve_ssw_trns_newton_e(
    slv.get_dmp(cct);
 
    for (i_newt=0; i_newt < slv.e_nr_itermax_a; i_newt++) {
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
 
      form_jac_rhs_ssw_trns_e(ebe_lib,ebe_usr,ebe_jac,
        smat,cct,slv,cct_file,global);
@@ -11576,7 +11663,7 @@ void solve_ssw_trns_newton_ex(
    slv.get_dmp(cct);
 
    for (i_newt=0; i_newt < slv.ex_nr_itermax_a; i_newt++) {
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
 
      form_jac_rhs_ssw_trns_ex(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
        smat,cct,slv,cct_file,global);
@@ -11653,7 +11740,7 @@ void solve_ssw_trns_newton_x(
    slv.get_dmp(cct);
 
    for (i_newt=0; i_newt < slv.ex_nr_itermax_a; i_newt++) {
-     slv.iter_newton = i_newt;
+     slv.iter_newton = i_newt; global.iter_nr = i_newt;
 
      form_jac_rhs_ssw_trns_x(xbe_lib,xbe_usr,xbe_jac,
        smat,cct,slv,cct_file,global);
@@ -12025,7 +12112,7 @@ void add_ssw_trns_terms_e(
            } else {
              cout << "add_ssw_trns_terms_e: rhs_flag is not correct." << endl;
              cout << "  rhs_flag=" << rhs_flag << endl;
-             cout << "  Halting..." << endl; exit(1); 
+             cout << "  Halting..." << endl; exit(1);
            }
          }
        }
@@ -12070,7 +12157,7 @@ void add_ssw_trns_terms_e(
            } else {
              cout << "add_ssw_trns_terms_e: rhs_flag is not correct." << endl;
              cout << "  rhs_flag=" << rhs_flag << endl;
-             cout << "  Halting..." << endl; exit(1); 
+             cout << "  Halting..." << endl; exit(1);
            }
 //         mat->rhs_m[i_sysrhs] = mat->rhs_m[i_sysrhs] + f_1;
            smat.rhs_m_ssw[i_sysrhs] += f_1;
@@ -12148,7 +12235,7 @@ void add_ssw_trns_terms_ex(
            } else {
              cout << "add_ssw_trns_terms_ex: rhs_flag is not correct." << endl;
              cout << "  rhs_flag=" << rhs_flag << endl;
-             cout << "  Halting..." << endl; exit(1); 
+             cout << "  Halting..." << endl; exit(1);
            }
          }
        }
@@ -12201,7 +12288,7 @@ void add_ssw_trns_terms_ex(
            } else {
              cout << "add_ssw_trns_terms_ex: rhs_flag is not correct." << endl;
              cout << "  rhs_flag=" << rhs_flag << endl;
-             cout << "  Halting..." << endl; exit(1); 
+             cout << "  Halting..." << endl; exit(1);
            }
            smat.rhs_m_ssw[i_sysrhs] += f_1;
          }

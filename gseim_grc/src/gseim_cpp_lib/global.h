@@ -136,6 +136,8 @@ class Global {
    int iter_trns_x,iter_trns_e;
    double time_begin,time_end;
    bool flag_limit_tstep;
+   bool flag_new_step;
+   int iter_nr;
 
 // indices for method flags:
    int i_feuler,i_rk4,i_rkf45,i_bs23,i_meuler,i_heun;
@@ -156,9 +158,6 @@ class Global {
 
   public:
    Global();
-
-   std::string var_flag_string(
-    const int k);
 
 };
 #endif

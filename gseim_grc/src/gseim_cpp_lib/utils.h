@@ -30,6 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <vector>
 #include <queue>
+#include <deque>
 #include <string>
 #include <filesystem>
 
@@ -364,6 +365,13 @@ double calc_avg_1(
    const double x_current,
    const double T);
 
+double calc_sum_1(
+   std::deque<double> q_t,
+   std::deque<double> q_x,
+   const double t_current,
+   const double x_current,
+   const double T);
+
 template <typename T>
 void print_vec_2(const vector<T> &v1) {
    for (unsigned int i=0; i < v1.size(); i++) {
@@ -587,7 +595,7 @@ void print_queue(std::queue<T> q) {
    while (!q.empty()){
      cout << q.front() << endl;
      q.pop();
-   }   
+   }
 }
 
 #endif

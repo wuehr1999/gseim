@@ -192,8 +192,8 @@ void gauss_1(
                mo.l_occ_3[i_col] = true;
                w.n_nz++;
 
-               w.row.push_back(0); 
-               w.col.push_back(0); 
+               w.row.push_back(0);
+               w.col.push_back(0);
                w.prow.push_back(0);
                w.pcol.push_back(0);
                w.val.push_back(0.0);
@@ -748,8 +748,8 @@ void gauss_1a(
                mo.l_occ_3[i_col] =  true ;
                w.n_nz++;
 
-               w.row.push_back(0); 
-               w.col.push_back(0); 
+               w.row.push_back(0);
+               w.col.push_back(0);
                w.prow.push_back(0);
                w.pcol.push_back(0);
                w.val.push_back(0.0);

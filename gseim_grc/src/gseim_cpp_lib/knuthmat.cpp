@@ -32,11 +32,11 @@ void KnuthMat::allocate_1(
    n_row = n_row0;
    n_col = n_col0;
 
-   row.resize(n_nz); 
-   col.resize(n_nz); 
+   row.resize(n_nz);
+   col.resize(n_nz);
    prow.resize(n_nz);
    pcol.resize(n_nz);
-   val.resize(n_nz); 
+   val.resize(n_nz);
 
    if (flag_alloc) {
      srow = new int[n_row];

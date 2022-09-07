@@ -2332,6 +2332,52 @@ void xbe_modulo_implicit(
    return;
 } // end of xbe_modulo_implicit
 // -----------------------------------------------------------------------------
+void xbe_modulo_exc(
+   Circuit &cct,
+   vector<XbeLib> &xbe_lib,
+   vector<XbeUsr> &xbe_usr,
+   SysMat &smat) {
+
+   int i_xbeu;
+   int i_xbeu_vr,i_svec;
+   int n1,i_xbeu_1,i_vr_1;
+   double x1,x2,delx,x_old,x_new;
+
+   for (int i=0; i < cct.nttl_xbeu_modulo; i++) {
+     i_xbeu = cct.xbeu_modulo_map[i];
+
+     x1 = xbe_usr[i_xbeu].rprm[0];
+     x2 = xbe_usr[i_xbeu].rprm[1];
+     delx = x2-x1;
+
+     i_xbeu_vr = xbe_usr[i_xbeu].vr[0];
+     x_old = cct.val_xvr[i_xbeu_vr];
+
+     if (x_old > x1) {
+       x_new = x1 + fmod((x_old-x1),delx);
+     } else {
+       x_new = x2 - fmod((x1-x_old),delx);
+     }
+
+     if (x_old != x_new) {
+       cct.val_xvr[i_xbeu_vr] = x_new;
+
+       i_svec = cct.map_xbeuvr_to_svec[i_xbeu_vr];
+       smat.svec_old_1_ex[i_svec] = x_new;
+
+       n1 = cct.n_map_vr[i_xbeu_vr];
+
+       for (int i1=0; i1 < n1; i1++) {
+         i_xbeu_1 = cct.map_vr_1[i_xbeu_vr][i1];
+         i_vr_1   = cct.map_vr_2[i_xbeu_vr][i1];
+         xbe_usr[i_xbeu_1].val_vr[i_vr_1] = x_new;
+       }
+     }
+   }
+
+   return;
+} // end of xbe_modulo_exc
+// -----------------------------------------------------------------------------
 void xbe_reset_1(
    const int flag_implicit,
    vector<XbeLib> &xbe_lib,
@@ -2857,7 +2903,7 @@ void ebe_update_stv(
    int i_ebeu,i_ebel;
 
    global.flags[global.i_update_states] = true;
-  
+
    for (i_ebeu=0; i_ebeu < cct.n_ebeu; i_ebeu++) {
      i_ebel = ebe_usr[i_ebeu].index_ebel;
      if (ebe_lib[i_ebel].n_stv > 0) {

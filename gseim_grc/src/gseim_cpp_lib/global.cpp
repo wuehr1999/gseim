@@ -95,31 +95,8 @@ Global::Global() {
    sampler_index_max = 20;
    sampler_flag.resize(sampler_index_max + 1);
 
+   flag_new_step = true;
+   iter_nr = 0;
+
    return;
-}
-// -----------------------------------------------------------------------------
-std::string Global::var_flag_string(
-   const int k) {
-
-   std::string s;
-
-   if (k == I_XVR) {
-     s = "I_XVR";
-   } else if (k == I_XAUX) {
-     s = "I_XAUX";
-   } else if (k == I_NV) {
-     s = "I_NV";
-   } else if (k == I_ESTV) {
-     s = "I_ESTV";
-   } else if (k == I_EAUX) {
-     s = "I_EAUX";
-   } else if (k == I_EAUXS) {
-     s = "I_EAUXS";
-   } else if (k == I_NDCUR) {
-     s = "I_NDCUR";
-   } else {
-     s = "NOT_FOUND";
-   }
-
-   return s;
 }

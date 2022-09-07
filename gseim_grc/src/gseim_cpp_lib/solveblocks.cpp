@@ -34,7 +34,7 @@ void SolveBlocks::set_values_1(
 // filename: name of the circuit file
 
    std::fstream inf;
-   vector<std::string> v1; 
+   vector<std::string> v1;
    std::string s1,s2,s3,s4,s5,s6;
    int i_line,pos;
    double t_default = -1.0e3;
@@ -550,7 +550,7 @@ void SolveBlocks::set_values_1(
        exit(1);
      }
      if (cct.flag_e_only) {
-       flag_1 = 
+       flag_1 =
          (flag_algo_e == global.i_be       ) ||
          (flag_algo_e == global.i_be_auto  ) ||
          (flag_algo_e == global.i_be_const ) ||
@@ -558,7 +558,7 @@ void SolveBlocks::set_values_1(
          (flag_algo_e == global.i_trz_auto ) ||
          (flag_algo_e == global.i_trz_const);
      } else if (cct.flag_x_only) {
-       flag_1 = 
+       flag_1 =
          (flag_algo_x == global.i_be       ) ||
          (flag_algo_x == global.i_be_auto  ) ||
          (flag_algo_x == global.i_be_const ) ||
@@ -566,7 +566,7 @@ void SolveBlocks::set_values_1(
          (flag_algo_x == global.i_trz_auto ) ||
          (flag_algo_x == global.i_trz_const);
      } else {
-       flag_1 = 
+       flag_1 =
          (flag_algo_ex == global.i_be       ) ||
          (flag_algo_ex == global.i_be_auto  ) ||
          (flag_algo_ex == global.i_be_const ) ||
@@ -787,7 +787,7 @@ void SolveBlocks::method_default(
    string filename;
    std::fstream inf;
    int n_lines,n_parms;
-   vector<std::string> v1; 
+   vector<std::string> v1;
    std::string s2,s3;
    SolveParm parm0;
    bool flag_1;
@@ -823,8 +823,8 @@ void SolveBlocks::method_default(
    ex_trns_iter_debug = 0;
 
    e_nr_flag_check_rhs2 = false;
-   x_nr_flag_check_rhs2 = false;
    ex_nr_flag_check_rhs2 = false;
+   ssw_nr_flag_check_rhs2 = true;
 
    e_nr_flag_check_delx_volt = false;
    e_nr_flag_write_delx_volt = false;
@@ -1146,17 +1146,19 @@ void SolveBlocks::trns_constants_2_ex() {
 } // end of SolveBlocks::trns_constants_2_ex
 // -----------------------------------------------------------------------------
 void SolveBlocks::open_output_files() {
+
    string filename;
+
    for (int i=0; i < n_outfile; i++) {
      // Expect filename to be absolute path
      filename = outf_name[i];
 
      if (flag_append[i]) {
        f_output[i].open(filename,ios::app|ios::binary);
-       total_lines[i] = count_lines_1(filename); 
+       total_lines[i] = count_lines_1(filename);
      } else {
        f_output[i].open(filename,ios::out|ios::binary);
-       total_lines[i] = 0; 
+       total_lines[i] = 0;
      }
 
      f_output[i] << scientific;

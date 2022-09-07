@@ -82,8 +82,8 @@ void user_f_vctr_1(
    poles = iprm[0];
 
    sigma = rprm[0];
-   ls    = rprm[1];  
-   vdc   = rprm[2];  
+   ls    = rprm[1];
+   vdc   = rprm[2];
    tr    = rprm[3];
 
    wrm = x[0];
@@ -113,13 +113,127 @@ void user_f_vctr_1(
    return;
 }
 
+void user_f_pll_1(
+   double* x,
+   double* y,
+   vector< vector<double> > &jac) {
+
+   double x1,x2,x3,x4;
+
+   x1 = x[0];
+   x2 = x[1];
+   x3 = x[2];
+   x4 = x[3];
+
+   y[0] = x1*x4 + x2*x3;
+
+   jac[0][0] = x4;
+   jac[0][1] = x3;
+   jac[0][2] = x2;
+   jac[0][3] = x1;
+
+   y[1] = x2*x4 - x1*x3;
+
+   jac[1][0] = -x3;
+   jac[1][1] =  x4;
+   jac[1][2] = -x1;
+   jac[1][3] =  x2;
+
+   y[2] = x1*x4 - x2*x3;
+
+   jac[2][0] =  x4;
+   jac[2][1] = -x3;
+   jac[2][2] = -x2;
+   jac[2][3] =  x1;
+
+   y[3] = x2*x4 + x1*x3;
+
+   jac[3][0] = x3;
+   jac[3][1] = x4;
+   jac[3][2] = x1;
+   jac[3][3] = x2;
+
+   return;
+}
+
+void user_f_pll_2a(
+   double* x,
+   double* y,
+   vector< vector<double> > &jac) {
+
+   double x1,x2,x3,x4,x5,x6;
+
+   x1 = x[0];
+   x2 = x[1];
+   x3 = x[2];
+   x4 = x[3];
+   x5 = x[4];
+   x6 = x[5];
+
+   y[0] = x1 - x3*x6 - x4*x5;
+
+   jac[0][0] =  1.0;
+   jac[0][1] =  0.0;
+   jac[0][2] = -x6;
+   jac[0][3] = -x5;
+   jac[0][4] = -x4;
+   jac[0][5] = -x3;
+
+   y[1] = x2 + x3*x5 - x4*x6;
+
+   jac[1][0] =  0.0;
+   jac[1][1] =  1.0;
+   jac[1][2] =  x5;
+   jac[1][3] = -x6;
+   jac[1][4] =  x3;
+   jac[1][5] = -x4;
+
+   return;
+}
+
+void user_f_pll_2b(
+   double* x,
+   double* y,
+   vector< vector<double> > &jac) {
+
+   double x1,x2,x3,x4,x5,x6;
+
+   x1 = x[0];
+   x2 = x[1];
+   x3 = x[2];
+   x4 = x[3];
+   x5 = x[4];
+   x6 = x[5];
+
+   y[0] = x1 - x3*x6 + x4*x5;
+
+   jac[0][0] =  1.0;
+   jac[0][1] =  0.0;
+   jac[0][2] = -x6;
+   jac[0][3] =  x5;
+   jac[0][4] =  x4;
+   jac[0][5] = -x3;
+
+   y[1] = x2 - x3*x5 - x4*x6;
+
+   jac[1][0] =  0.0;
+   jac[1][1] =  1.0;
+   jac[1][2] = -x5;
+   jac[1][3] = -x6;
+   jac[1][4] = -x3;
+   jac[1][5] = -x4;
+
+   return;
+}
+
 void user_function(
    const int index_fn,
    const double time0,
    double* x,
    double* y,
    vector<int> &iprm,
-   vector<double> &rprm) {
+   vector<double> &rprm,
+   vector< vector<double> > &jac) {
 
 // allow up to 2 iprms and 10 rprms
 
@@ -138,6 +252,15 @@ void user_function(
       break;
    case 3 :
       user_f_vctr_1(x,y,iprm,rprm);
+      break;
+   case 4 :
+      user_f_pll_1(x,y,jac);
+      break;
+   case 5 :
+      user_f_pll_2a(x,y,jac);
+      break;
+   case 6 :
+      user_f_pll_2b(x,y,jac);
       break;
    default :
       cout << "user_function: Check index_fn. Halting..." << endl;

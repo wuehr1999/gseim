@@ -29,7 +29,7 @@ void IJMat::allocate_1(
    n_row = n_row0;
    n_col = n_col0;
 
-   val = new double*[n_row]; 
+   val = new double*[n_row];
    for (int i=0; i < n_row; i++) {
      val[i] = new double[n_col];
    }

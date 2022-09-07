@@ -41,8 +41,8 @@ class KnuthMat {
    int *erow;
    int *ecol;
 
-   vector<int> row; 
-   vector<int> col; 
+   vector<int> row;
+   vector<int> col;
    vector<int> prow;
    vector<int> pcol;
 

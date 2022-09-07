@@ -42,7 +42,7 @@ void EbeJac::initialise(
      dfdaux[i].resize(ebe_lib[i_ebel].n_aux);
      dfdxvr[i].resize(ebe_lib[i_ebel].n_xvr);
    }
- 
+
    assign_const_2d_1(0.0,dfdv);
    assign_const_2d_1(0.0,dfdaux);
    assign_const_2d_1(0.0,dfdxvr);
