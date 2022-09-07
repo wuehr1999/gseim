@@ -421,49 +421,6 @@ def extract_lines_1a(f_out, filename, keyword1, keyword2):
     for i in s1:
         f_out.write(i)
 
-def extract_lines_10(filename, keyword1, keyword2, string_list, flag_include_1, flag_include_2):
-
-    flag_keyword1 = False
-    flag_keyword2 = False
-    f = open(os.path.expanduser(filename), 'r')
-
-    for i in range(10000):
-        line = f.readline()
-        if (line == ""):
-            print('extract_lines_10: unexpected eof reached. Halting...')
-            sys.exit()
-        s2 = line.replace("\n","")
-        s1 = s2.split()
-        if (len(s1) > 0):
-            if s1[0].startswith(keyword2):
-                flag_keyword2 = True
-                if flag_include_2:
-                    string_list.append(line)
-                break
-        if (flag_keyword1):
-            string_list.append(line)
-            continue
-        if (len(s1) > 0):
-            if s1[0].startswith(keyword1):
-                flag_keyword1 = True
-                if flag_include_1:
-                    string_list.append(line)
-
-    f.close()
-
-    if (not flag_keyword1):
-        print('extract_lines_10: ',keyword1,' not found. Halting...')
-        sys.exit()
-    if (not flag_keyword2):
-        print('extract_lines_10: ',keyword2,' not found. Halting...')
-        sys.exit()
-
-def extract_lines_10a(f_out, filename, keyword1, keyword2, flag_include_1, flag_include_2):
-    s1 = []
-    extract_lines_10(filename, keyword1, keyword2, s1, flag_include_1, flag_include_2)
-    for i in s1:
-        f_out.write(i)
-
 def extract_int_1(filename, keyword):
 
     f = open(os.path.expanduser(filename), 'r')
@@ -483,48 +440,3 @@ def extract_int_1(filename, keyword):
     else:
         f.close()
         return int(s1[1])
-
-def get_parms_1(filename, d_parms):
-
-    f = open(os.path.expanduser(filename), 'r')
-    pos_in = f.tell()
-    pos_in, l_strings = next_line_1(f, pos_in)
-    if l_strings[0] != 'begin_file':
-        print('get_parms: expected begin_file. Halting...')
-        sys.exit()
-    while True:
-        pos_in, l_strings = next_line_1(f, pos_in)
-        if l_strings[0] == 'end_file':
-            f.close()
-            break
-        if l_strings[0] != 'begin_parm':
-            print('get_parms: expected begin_parm. Halting...')
-            sys.exit()
-        flag_force_write = True if 'force_write' in l_strings else False
-
-        pos_in, l_strings = next_line_1(f, pos_in)
-        if l_strings[0] != 'keyword:':
-            print('get_parms: expected keyword. Halting...')
-            sys.exit()
-        parm_name = l_strings[1]
-
-        pos_in, l_strings = next_line_1(f, pos_in)
-        if l_strings[0] != 'options:':
-            print('get_parms: expected options. Halting...')
-            sys.exit()
-        l_options = l_strings[1:]
-
-        pos_in, l_strings = next_line_1(f, pos_in)
-        if l_strings[0] != 'default:':
-            print('get_parms: expected default. Halting...')
-            sys.exit()
-        parm_default = l_strings[1]
-
-        pos_in, l_strings = next_line_1(f, pos_in)
-        if l_strings[0] != 'end_parm':
-            print('get_parms: expected end_parm. Halting...')
-            sys.exit()
-
-        d_parms[parm_name] = {'options': l_options, 'default': parm_default}
-        d_parms[parm_name]['flag_force_write'] = flag_force_write
-

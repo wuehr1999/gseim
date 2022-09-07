@@ -6,6 +6,7 @@ from importlib_resources import files
 import pytest
 
 from gseim import gseim_parser
+from test_support.compare_files import diff
 
 def _test_parser(folder, fname):
     gseim_parser.main(
@@ -13,7 +14,7 @@ def _test_parser(folder, fname):
         str(files('gseim').joinpath('test_data', 'input', folder, fname + '.grc')),
     )
 
-    assert filecmp.cmp(
+    diff(
         str(files('gseim').joinpath('test_data', 'input', folder, fname + '.in')),
         str(files('gseim').joinpath('test_data', 'output', folder, fname + '.in')),
     )
@@ -23,6 +24,9 @@ def test_parse_ac_controller_3():
 
 def test_cyclo_converter_1ph_1():
     _test_parser('ac_to_ac', 'cyclo_converter_1ph_1')
+
+def test_parse_CMLI_7level_1():
+    _test_parser('dc_to_ac', 'CMLI_7level_1')
 
 def test_parse_boost():
     _test_parser('dc_to_dc', 'boost')
