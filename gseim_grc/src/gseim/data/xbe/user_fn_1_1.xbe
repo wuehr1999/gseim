@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 xbe name=user_fn_1_1 evaluate=yes
-Jacobian: constant
+Jacobian: variable
 input_vars: x1
 output_vars: y1
 aux_vars:
@@ -23,6 +23,7 @@ iparms:
 +  iprm1=0
 +  iprm2=0
 +  index_fn=1
++  jac=0
 sparms:
 rparms:
 +  rprm1=0
@@ -40,7 +41,7 @@ igparms:
 outparms: y1
 n_f= 0
 n_g= 1
-g_1: y1
+g_1: y1 x1
 C:
 prototypes:
 variables:
@@ -50,8 +51,19 @@ variables:
    double time0;
    double x_uf[20];
    double y_uf[20];
+   const int NX=1;
+   const int NY=1;
 source:
    if (G.flags[G.i_one_time_parms]) {
+     X.vec2d_1.resize(NY);
+     for (int i = 0; i < NY; ++i) {
+       X.vec2d_1[i].resize(NX);
+     }
+     for (int i = 0; i < NY; ++i) {
+       for (int j = 0; j < NX; ++j) {
+         X.vec2d_1[i][j] = 0.0;
+       }
+     }
      return;
    }
    if (G.flags[G.i_outvar]) {
@@ -64,7 +76,7 @@ source:
    time0 = G.time_given_x;
    index_fn = X.iprm[ni_index_fn];
    x_uf[0] = X.val_vr[nvr_x1];
-   user_function(index_fn,time0,x_uf,y_uf,X.iprm,X.rprm);
+   user_function(index_fn,time0,x_uf,y_uf,X.iprm,X.rprm,X.vec2d_1);
 
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
@@ -75,6 +87,11 @@ source:
        }
        if (G.flags[G.i_jacobian]) {
          J.dgdvr[ng_1][nvr_y1] =  1.0;
+         if (X.iprm[ni_jac] == 1) {
+           J.dgdvr[ng_1][nvr_x1] = -X.vec2d_1[0][0];
+         } else {
+           J.dgdvr[ng_1][nvr_x1] = 0.0;
+         }
        }
      }
      return;

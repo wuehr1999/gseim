@@ -14,10 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-xbe name=user_fn_3_1 evaluate=yes
+xbe name=user_fn_4_4 evaluate=yes
 Jacobian: variable
-input_vars: x1 x2 x3
-output_vars: y1
+input_vars: x1 x2 x3 x4
+output_vars: y1 y2 y3 y4
 aux_vars:
 iparms:
 +  iprm1=0
@@ -38,10 +38,13 @@ rparms:
 +  rprm10=0
 stparms:
 igparms:
-outparms: y1
+outparms: y1 y2 y3 y4
 n_f= 0
-n_g= 1
-g_1: y1 x1 x2 x3
+n_g= 4
+g_1: y1 x1 x2 x3 x4
+g_2: y2 x1 x2 x3 x4
+g_3: y3 x1 x2 x3 x4
+g_4: y4 x1 x2 x3 x4
 C:
 prototypes:
 variables:
@@ -51,8 +54,8 @@ variables:
    double time0;
    double x_uf[20];
    double y_uf[20];
-   const int NX=3;
-   const int NY=1;
+   const int NX=4;
+   const int NY=4;
 source:
    if (G.flags[G.i_one_time_parms]) {
      X.vec2d_1.resize(NY);
@@ -68,6 +71,9 @@ source:
    }
    if (G.flags[G.i_outvar]) {
      X.outprm[no_y1] = X.val_vr[nvr_y1];
+     X.outprm[no_y2] = X.val_vr[nvr_y2];
+     X.outprm[no_y3] = X.val_vr[nvr_y3];
+     X.outprm[no_y4] = X.val_vr[nvr_y4];
      return;
    }
    if (G.flags[G.i_init_guess]) {
@@ -78,26 +84,73 @@ source:
    x_uf[0] = X.val_vr[nvr_x1];
    x_uf[1] = X.val_vr[nvr_x2];
    x_uf[2] = X.val_vr[nvr_x3];
+   x_uf[3] = X.val_vr[nvr_x4];
    user_function(index_fn,time0,x_uf,y_uf,X.iprm,X.rprm,X.vec2d_1);
 
    if (G.flags[G.i_trns] || G.flags[G.i_startup]) {
      if (G.flags[G.i_explicit]) {
        X.val_vr[nvr_y1] = y_uf[0];
+       X.val_vr[nvr_y2] = y_uf[1];
+       X.val_vr[nvr_y3] = y_uf[2];
+       X.val_vr[nvr_y4] = y_uf[3];
      } else if (G.flags[G.i_implicit]) {
        if (G.flags[G.i_function]) {
          X.g[ng_1] = X.val_vr[nvr_y1] - y_uf[0];
+         X.g[ng_2] = X.val_vr[nvr_y2] - y_uf[1];
+         X.g[ng_3] = X.val_vr[nvr_y3] - y_uf[2];
+         X.g[ng_4] = X.val_vr[nvr_y4] - y_uf[3];
        }
        if (G.flags[G.i_jacobian]) {
-         J.dgdvr[ng_1][nvr_y1] =  1.0;
          if (X.iprm[ni_jac] == 1) {
+           J.dgdvr[ng_1][nvr_y1] =  1.0;
            J.dgdvr[ng_1][nvr_x1] = -X.vec2d_1[0][0];
            J.dgdvr[ng_1][nvr_x2] = -X.vec2d_1[0][1];
            J.dgdvr[ng_1][nvr_x3] = -X.vec2d_1[0][2];
+           J.dgdvr[ng_1][nvr_x4] = -X.vec2d_1[0][3];
+
+           J.dgdvr[ng_2][nvr_y2] =  1.0;
+           J.dgdvr[ng_2][nvr_x1] = -X.vec2d_1[1][0];
+           J.dgdvr[ng_2][nvr_x2] = -X.vec2d_1[1][1];
+           J.dgdvr[ng_2][nvr_x3] = -X.vec2d_1[1][2];
+           J.dgdvr[ng_2][nvr_x4] = -X.vec2d_1[1][3];
+
+           J.dgdvr[ng_3][nvr_y3] =  1.0;
+           J.dgdvr[ng_3][nvr_x1] = -X.vec2d_1[2][0];
+           J.dgdvr[ng_3][nvr_x2] = -X.vec2d_1[2][1];
+           J.dgdvr[ng_3][nvr_x3] = -X.vec2d_1[2][2];
+           J.dgdvr[ng_3][nvr_x4] = -X.vec2d_1[2][3];
+
+           J.dgdvr[ng_4][nvr_y4] =  1.0;
+           J.dgdvr[ng_4][nvr_x1] = -X.vec2d_1[3][0];
+           J.dgdvr[ng_4][nvr_x2] = -X.vec2d_1[3][1];
+           J.dgdvr[ng_4][nvr_x3] = -X.vec2d_1[3][2];
+           J.dgdvr[ng_4][nvr_x4] = -X.vec2d_1[3][3];
          } else {
+           J.dgdvr[ng_1][nvr_y1] = 1.0;
            J.dgdvr[ng_1][nvr_x1] = 0.0;
            J.dgdvr[ng_1][nvr_x2] = 0.0;
            J.dgdvr[ng_1][nvr_x3] = 0.0;
+           J.dgdvr[ng_1][nvr_x4] = 0.0;
+
+           J.dgdvr[ng_2][nvr_y2] = 1.0;
+           J.dgdvr[ng_2][nvr_x1] = 0.0;
+           J.dgdvr[ng_2][nvr_x2] = 0.0;
+           J.dgdvr[ng_2][nvr_x3] = 0.0;
+           J.dgdvr[ng_2][nvr_x4] = 0.0;
+
+           J.dgdvr[ng_3][nvr_y3] = 1.0;
+           J.dgdvr[ng_3][nvr_x1] = 0.0;
+           J.dgdvr[ng_3][nvr_x2] = 0.0;
+           J.dgdvr[ng_3][nvr_x3] = 0.0;
+           J.dgdvr[ng_3][nvr_x4] = 0.0;
+
+           J.dgdvr[ng_4][nvr_y4] = 1.0;
+           J.dgdvr[ng_4][nvr_x1] = 0.0;
+           J.dgdvr[ng_4][nvr_x2] = 0.0;
+           J.dgdvr[ng_4][nvr_x3] = 0.0;
+           J.dgdvr[ng_4][nvr_x4] = 0.0;
          }
+
        }
      }
      return;
