@@ -361,6 +361,11 @@ GPARM_EDIT = actions.register("win.gparm_edit",
     tooltip='Edit Global Parameter',
     keypresses=[],
 )
+GPARM_DISP = actions.register("win.gparm_disp",
+    label='Show gparm',
+    tooltip='Show Global Parameters',
+    keypresses=[],
+)
 OUTVAR_ADD = actions.register("win.outvar_add",
     label='Add to outvars',
     tooltip='Add to outvars',
@@ -374,6 +379,11 @@ OUTVAR_DEL = actions.register("win.outvar_del",
 OUTVAR_EDIT = actions.register("win.outvar_edit",
     label='Edit outvar',
     tooltip='Edit Output Variable',
+    keypresses=[],
+)
+OUTVAR_DISP = actions.register("win.outvar_disp",
+    label='Show outvars',
+    tooltip='Show outvars',
     keypresses=[],
 )
 SOLVEBLOCK_ADD = actions.register("win.solveblock_add",
@@ -416,11 +426,11 @@ OUTPUTBLOCK_EDIT = actions.register("win.outputblock_edit",
     tooltip='Edit Output Block',
     keypresses=[],
 )
-OUTPUTBLOCK_OPS = [
-    OUTPUTBLOCK_ADD,
-    OUTPUTBLOCK_DEL,
-    OUTPUTBLOCK_EDIT,
-]
+OUTPUTBLOCK_DISP = actions.register("win.outputblock_disp",
+    label='Show Output Block',
+    tooltip='Show Output Block',
+    keypresses=[],
+)
 ELEMENT_DISPLAY = actions.register("win.element_display",
     label='Show Element Name',
     tooltip='Show Element Name',

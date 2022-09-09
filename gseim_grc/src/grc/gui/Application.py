@@ -151,6 +151,16 @@ class Application(Gtk.Application):
         Actions.APPLICATION_QUIT()
         return True
 
+    def pad_with_dashes(self, l):
+        nmax = 0
+        for l1 in l:
+            n2 = len(l1[0])
+            if n2 > nmax: nmax = n2
+            l1[0] += ' '
+        nmax1 = nmax + 7
+        for l1 in l:
+            l1[0] = ' ' + l1[0].ljust(nmax1, '-') + ' '
+
     def display_message(self, message):
         dialog_msg = Gtk.MessageDialog(
             transient_for=self.main_window,
@@ -356,6 +366,7 @@ class Application(Gtk.Application):
                     break
             s_name = dialog.entry_name.get_text()
             s_value = l_ov_values[i_active]
+
             if s_name in flow_graph_1.outvars.keys():
                 self.display_message(s_name + ' already exists in outvars!')
             elif len(s_name.split()) != 1:
@@ -490,6 +501,12 @@ class Application(Gtk.Application):
         flag_done = False
 
         while not flag_done:
+            l_out_slv_names = []
+            for out in flow_graph_1.l_output_blocks:
+                i_slv_1 = int(out.index_slv)
+                slv_name = flow_graph_1.l_solve_blocks[i_slv_1].name
+                l_out_slv_names.append(slv_name)
+
             response = dialog.run()
             if response == Gtk.ResponseType.OK:
 
@@ -517,6 +534,12 @@ class Application(Gtk.Application):
                         for slv in l_1:
                             flow_graph_1.l_solve_blocks.append(slv)
 
+                        for i_out, out in enumerate(flow_graph_1.l_output_blocks):
+                            slv_name = l_out_slv_names[i_out]
+                            for j_slv, slv in enumerate(flow_graph_1.l_solve_blocks):
+                                if slv.name == slv_name:
+                                    out.index_slv = str(j_slv)
+
                         flag_done = True
                         self.main_window.current_page.saved = False
             elif response == Gtk.ResponseType.CANCEL:
@@ -537,22 +560,41 @@ class Application(Gtk.Application):
             l_1 = [slv.name for i, slv in enumerate(flow_graph_1.l_solve_blocks)
                    if dialog.tick[i].get_active()]
 
+            for slv_name in l_1:
+                for i_slv, slv in enumerate(flow_graph_1.l_solve_blocks):
+                    if slv.name == slv_name:
+                        for out_name in flow_graph_1.l_solve_blocks[i_slv].l_out:
+                            l_out_names = list(map(lambda x: x.name, flow_graph_1.l_output_blocks))
+
+                            if out_name in l_out_names:
+                                i_out = l_out_names.index(out_name)
+                                del flow_graph_1.l_output_blocks[i_out]
+                            else:
+                                print('solve_delete: out_name not in l_out_names. Halting...')
+                                exit(0)
+
+            for slv_name in l_1:
+                l_slv_names = list(map(lambda x: x.name, flow_graph_1.l_solve_blocks))
+                if slv_name in l_slv_names:
+                    i_slv = l_slv_names.index(slv_name)
+                    del flow_graph_1.l_solve_blocks[i_slv]
+                else:
+                    print('solve_delete: slv_name not in l_slv_names. Halting...')
+                    exit(0)
+
             l_out_names = list(map(lambda x: x.name, flow_graph_1.l_output_blocks))
 
-            for name1 in l_1:
-                for i, slv in enumerate(flow_graph_1.l_solve_blocks):
-                    if slv.name == name1:
-                        for out_name in flow_graph_1.l_solve_blocks[i].l_out:
-                            i_out = l_out_names.index(out_name)
-                            del flow_graph_1.l_output_blocks[i_out]
+            for i_slv, slv in enumerate(flow_graph_1.l_solve_blocks):
+                for out_name in slv.l_out:
+                    i_out = l_out_names.index(out_name)
+                    flow_graph_1.l_output_blocks[i_out].index_slv = str(i_slv)
 
-                        del flow_graph_1.l_solve_blocks[i]
-                        break
             self.main_window.current_page.saved = False
 
         dialog.destroy()
 
     def solve_pick(self, widget, flow_graph_1, d_slv_categories):
+
         if len(flow_graph_1.l_solve_blocks) == 0:
             self.display_message('The solve blocks list\n is empty!')
             return
@@ -563,7 +605,6 @@ class Application(Gtk.Application):
                 flow_graph_1.l_solve_blocks[i_active], d_slv_categories)
             response = dialog1.run()
             if response == Gtk.ResponseType.OK:
-
                 gu.assign_parms_1(dialog1.d_widgets_1,
                    flow_graph_1.l_solve_blocks[i_active].d_parms)
                 flow_graph_1.l_solve_blocks[i_active].index = \
@@ -606,6 +647,13 @@ class Application(Gtk.Application):
 
                     for slv in l_1:
                         flow_graph_1.l_solve_blocks.append(slv)
+
+                    l_out_names = list(map(lambda x: x.name, flow_graph_1.l_output_blocks))
+
+                    for i_slv, slv in enumerate(flow_graph_1.l_solve_blocks):
+                        for out_name in slv.l_out:
+                            i_out = l_out_names.index(out_name)
+                            flow_graph_1.l_output_blocks[i_out].index_slv = str(i_slv)
 
                     self.main_window.current_page.saved = False
 
@@ -731,7 +779,6 @@ class Application(Gtk.Application):
 
                 gu.assign_parms_1(dialog1.d_widgets_1,
                    flow_graph_1.l_output_blocks[i_active].d_parms)
-
                 flow_graph_1.l_output_blocks[i_active].l_outvars.clear()
                 for i, button in enumerate(dialog1.l_ov_buttons):
                     if button.get_active():
@@ -751,7 +798,6 @@ class Application(Gtk.Application):
                     if dialog.l_buttons[i].get_active():
                         i_active = i
                         break
-                print('output_pick: i_active:', i_active)
 
                 out_name = dialog.l_names[i_active].split(' ')[-1]
                 i_output_block = -1
@@ -769,12 +815,12 @@ class Application(Gtk.Application):
                 response = dialog1.run()
                 if response == Gtk.ResponseType.OK:
                     gu.assign_parms_1(dialog1.d_widgets_1,
-                       flow_graph_1.l_output_blocks[i_active].d_parms)
+                       flow_graph_1.l_output_blocks[i_output_block].d_parms)
 
-                    flow_graph_1.l_output_blocks[i_active].l_outvars.clear()
+                    flow_graph_1.l_output_blocks[i_output_block].l_outvars.clear()
                     for i, button in enumerate(dialog1.l_ov_buttons):
                         if button.get_active():
-                            flow_graph_1.l_output_blocks[i_active].l_outvars.append(l_outvars[i])
+                            flow_graph_1.l_output_blocks[i_output_block].l_outvars.append(l_outvars[i])
 
                     self.main_window.current_page.saved = False
 
@@ -993,6 +1039,25 @@ class Application(Gtk.Application):
                     flow_graph.gparms['port_offset_b'] = '0'
 
             self.gparm_edit(self.main_window, flow_graph)
+        elif action == Actions.GPARM_DISP:
+            print('gparm disp clicked')
+
+            if len(flow_graph.gparms) == 0:
+                self.display_message('no gparms to show.')
+                return
+
+            l = []
+
+            for k, v in flow_graph.gparms.items():
+                l.append([k + ' ', str(v)])
+
+            self.pad_with_dashes(l)
+
+            window_W = 450
+            window_H = 600
+
+            slist1 = slist.ShowList(l, window_W, window_H, 'Gparms')
+            slist1.show_all()
         elif action == Actions.OUTVAR_ADD:
             n1 = len(flow_graph.selected_elements)
 
@@ -1012,6 +1077,25 @@ class Application(Gtk.Application):
             self.outvar_delete(self.main_window, flow_graph)
         elif action == Actions.OUTVAR_EDIT:
             self.outvar_edit(self.main_window, flow_graph)
+        elif action == Actions.OUTVAR_DISP:
+            print('outvar disp clicked')
+
+            if len(flow_graph.outvars) == 0:
+                self.display_message('no output variables to show.')
+                return
+
+            l = []
+
+            for k, v in flow_graph.outvars.items():
+                l.append([k + ' ', str(v).replace("'", '')])
+
+            self.pad_with_dashes(l)
+
+            window_W = 550
+            window_H = 600
+
+            slist1 = slist.ShowList(l, window_W, window_H, 'Output Variables')
+            slist1.show_all()
         elif action == Actions.SOLVEBLOCK_ADD:
             self.solve_add(self.main_window, flow_graph)
         elif action == Actions.SOLVEBLOCK_DEL:
@@ -1058,17 +1142,7 @@ class Application(Gtk.Application):
                         if i_ov < (n1-1): s2 += ', '
                     l.append([s1, s2])
 
-                nmax = 0
-                for l1 in l:
-                    n2 = len(l1[0])
-                    if n2 > nmax: nmax = n2
-                    l1[0] += ' '
-                print('nmax:', nmax)
-                nmax1 = nmax + 7
-                for l1 in l:
-                    l1[0] = ' ' + l1[0].ljust(nmax1, '-') + ' '
-
-                for l1 in l: print(l1)
+                self.pad_with_dashes(l)
 
                 window_W = 450
                 window_H = 600
@@ -1085,6 +1159,44 @@ class Application(Gtk.Application):
             l_outvars_1 = list(flow_graph.outvars.keys())
             self.output_pick(self.main_window, flow_graph,
                self.d_outparms, l_outvars_1)
+
+        elif action == Actions.OUTPUTBLOCK_DISP:
+            print('output disp clicked')
+
+            if len(flow_graph.l_output_blocks) == 0:
+                self.display_message('no output blocks to show.')
+                return
+
+            l = []
+
+            for out in flow_graph.l_output_blocks:
+                out_name = out.name
+
+                i_slv = int(out.index_slv)
+                s1 = out_name + ': solve block:'
+                s2 = flow_graph.l_solve_blocks[i_slv].name + \
+                     '(' + flow_graph.l_solve_blocks[i_slv].index + ')'
+                l.append([s1, s2])
+
+                for k, v in out.d_parms.items():
+                    l.append([out_name + ': ' + k, v])
+                n1 = len(out.l_outvars)
+                s1 = out_name + ': outvars:'
+                s2 = ''
+                for i_ov, ov_name in enumerate(out.l_outvars):
+                    s2 += ov_name
+                    if i_ov < (n1-1): s2 += ', '
+                l.append([s1, s2])
+                l.append(['-----', '-------------'])
+
+            self.pad_with_dashes(l)
+
+            window_W = 450
+            window_H = 600
+
+            slist1 = slist.ShowList(l, window_W, window_H, 'Output Blocks')
+            slist1.show_all()
+
         elif action == Actions.ELEMENT_DISPLAY:
             n1 = len(flow_graph.selected_elements)
 
@@ -1411,6 +1523,7 @@ class Application(Gtk.Application):
             cmd = 'python3 '
             cmd += str(files('gseim_plot').joinpath('main.py'))
             cmd += ' ' + os.path.join(self.config.gseim_cache_dir, 'plot_history.dat')
+            print('grc/gui/Application.py: cmd:', cmd)
             os.system(cmd)
             # p = Process(
             #     target=gseim_plot_main,
@@ -1419,6 +1532,7 @@ class Application(Gtk.Application):
             #     ),
             # )
             # p.start()
+
         elif action == Actions.PAGE_CHANGE:  # pass and run the global actions
             flow_graph_update()
         elif action == Actions.FIND_BLOCKS:

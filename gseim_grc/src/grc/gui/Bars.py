@@ -74,17 +74,18 @@ MENU_BAR_LIST = [
     [Actions.BLOCK_PARAM_MODIFY]
   ]),
   ('Gparms', [
-    [Actions.GPARM_ADD, Actions.GPARM_DEL, Actions.GPARM_EDIT],
+    [Actions.GPARM_ADD, Actions.GPARM_DEL, Actions.GPARM_EDIT, Actions.GPARM_DISP],
   ]),
   ('Outvars', [
-    [Actions.OUTVAR_DEL, Actions.OUTVAR_EDIT],
+    [Actions.OUTVAR_DEL, Actions.OUTVAR_EDIT, Actions.OUTVAR_DISP],
   ]),
   ('SolveBlocks', [
     [Actions.SOLVEBLOCK_ADD, Actions.SOLVEBLOCK_DEL, Actions.SOLVEBLOCK_EDIT,
      Actions.SOLVEBLOCK_RESET, Actions.SOLVEBLOCK_DISP],
   ]),
   ('OutputBlocks', [
-    [Actions.OUTPUTBLOCK_ADD, Actions.OUTPUTBLOCK_DEL, Actions.OUTPUTBLOCK_EDIT],
+    [Actions.OUTPUTBLOCK_ADD, Actions.OUTPUTBLOCK_DEL, Actions.OUTPUTBLOCK_EDIT,
+    Actions.OUTPUTBLOCK_DISP],
   ]),
   ('_View', [
     [Actions.TOGGLE_BLOCKS_WINDOW],
