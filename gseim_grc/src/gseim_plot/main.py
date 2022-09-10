@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+
 import sys
 import time
 import numpy as np
@@ -29,7 +30,6 @@ import matplotlib.pylab as plt
 from matplotlib.ticker import MaxNLocator
 
 from matplotlib.backends.qt_compat import QT_API, QT_API_PYQT5, QtCore, QtWidgets
-
 
 if QT_API == QT_API_PYQT5:
     print('Matplotlib selected PyQt5, so trying to import that version')
@@ -57,7 +57,6 @@ else:
         QTableWidget, QTableWidgetItem
         )
 
-import numpy as np
 import random
 from matplotlib.figure import Figure
 

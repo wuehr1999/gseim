@@ -1,7 +1,5 @@
-###################################################
 # Default Flow Graph:
 #   Include an options block and a variable for sample rate
-###################################################
 
 options:
   parameters:

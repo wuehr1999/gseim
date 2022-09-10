@@ -1560,17 +1560,17 @@ def main(gseim_file, cct_file):
                 bus_cct_node = cct_elem_assignments[bus_type]
 
                 if bus_type.startswith('bus_e_'):
-                     bus_type_to_search = bus_type
+                     l_bus_type_to_search = [bus_type]
                 elif bus_type.startswith('bus_f_i_'):
-                     bus_type_to_search = bus_type.replace('_i_', '_o_')
+                     l_bus_type_to_search = [bus_type, bus_type.replace('_i_', '_o_')]
                 elif bus_type.startswith('bus_f_o_'):
-                     bus_type_to_search = bus_type.replace('_o_', '_i_')
+                     l_bus_type_to_search = [bus_type, bus_type.replace('_o_', '_i_')]
 
                 for i1_line in range(i_line+1, len(cct_ast.cct_elems)):
                     l1_cct_elem_kind, l1_cct_elem_assignments = cct_ast.cct_elems[i1_line]
                     if l1_cct_elem_kind == 'belement':
                         bus1_type = l1_cct_elem_assignments['type']
-                        if bus1_type == bus_type_to_search:
+                        if bus1_type in l_bus_type_to_search:
                             bus1_cct_node = l1_cct_elem_assignments[bus1_type]
                             if bus1_cct_node == bus_cct_node:
                                 l_bus_line_no.append(i1_line)

@@ -456,4 +456,3 @@ class FlowGraph(Element):
         self.rewrite()  # global rewrite
         return had_connect_errors
 
-# edited by mbp

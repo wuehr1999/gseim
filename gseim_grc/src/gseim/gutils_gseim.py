@@ -377,7 +377,7 @@ def extract_dict_1(filename, keyword, d1):
 def write_elements_2(el_list,auxdir,filename,path,ext):
     outfile = os.path.join(auxdir, filename)
     f_el = open(os.path.expanduser(outfile), 'w')
-    
+
     for i in el_list:
         f_el.write(os.path.join(path, i + ext) + '\n')
     f_el.close()
@@ -440,3 +440,4 @@ def extract_int_1(filename, keyword):
     else:
         f.close()
         return int(s1[1])
+
