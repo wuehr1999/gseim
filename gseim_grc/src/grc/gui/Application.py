@@ -527,7 +527,7 @@ class Application(Gtk.Application):
                         self.display_message('solve block name should be a single word.')
                     else:
 
-                        slv = SolveBlock(flow_graph_1.d_slvparms, s_name, s_value)
+                        slv = SolveBlock(flow_graph_1.slvparms_ast, s_name, s_value)
                         flow_graph_1.l_solve_blocks.append(slv)
                         l_1 = sorted(flow_graph_1.l_solve_blocks, key=lambda x: x.index)
                         flow_graph_1.l_solve_blocks.clear()
@@ -678,8 +678,8 @@ class Application(Gtk.Application):
                             break
                 dialog.destroy()
 
-            for k, v in self.d_slvparms.items():
-                flow_graph_1.l_solve_blocks[i_active].d_parms[k] = v['default']
+            for k, v in self.slvparms_ast.parms.items():
+                flow_graph_1.l_solve_blocks[i_active].d_parms[k] = v.default
 
     def solve_pick_2(self, widget, flow_graph_1):
         if len(flow_graph_1.l_solve_blocks) == 0:
