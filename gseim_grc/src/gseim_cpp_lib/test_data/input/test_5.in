@@ -42,17 +42,21 @@ begin_solve
    initial_sol=previous
 
    method: algorithm_ex=backward_euler
+#  method: algorithm_ex=trz
    method: e_nr_check_spice=yes
    method: e_nr_spice_abstol=1.0e-6
    method: e_nr_spice_vntol=1.0e-3
    method: ex_nr_check_rhs2=yes
    method: ssw_period=1m
+   method: ssw_nr_itermax=10
 
    method: t_start=0
    method: tstep0_ex=1u
    begin_output
      filename=test_5.dat
+     control: out_tstart=1m
      control: fixed_interval=10u
+#    variables: v_out i_r
      variables: v_out
    end_output
 end_solve

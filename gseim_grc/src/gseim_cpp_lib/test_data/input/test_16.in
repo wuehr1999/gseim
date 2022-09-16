@@ -1,0 +1,37 @@
+title: testing of algebraic loop (using mult_2)
+# testing for coverage report
+
+begin_circuit
+   xelement type=const y=x1a k=2.5
+   xelement type=const y=x1b k=2
+   xelement type=mult_2 x1=x1a x2=x1b y=x1
+   xelement type=integrator name=int1
++   x=x1 y=x2 k=1 y_st=2
+   xelement type=sum_2 name=sum1 x1=x2 x2=x4 y=x3
+   xelement type=multscl x=x3 y=x4 k=0.6667
+
+   outvar:
++    x2=x1_of_sum1
++    x4=x2_of_sum1
++    x3=y_of_sum1
+end_circuit
+
+begin_solve
+   solve_type=startup
+   initial_sol initialize
+   method: algorithm_x_startup=implicit
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol previous
+   begin_output
+      filename=test_16.dat
+      variables: x2 x3
+   end_output
+   method:
++    algorithm_x_trns=forward_euler
++    t_start=0 t_end=3 tstep0_x=1.0
+end_solve
+
+end_cf

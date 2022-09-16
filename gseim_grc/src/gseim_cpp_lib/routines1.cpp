@@ -2780,137 +2780,6 @@ void update_heun_al(
    return;
 } // end of update_heun_al
 // -----------------------------------------------------------------------------
-void solve_dc(
-   vector<XbeLib> &xbe_lib,
-   vector<XbeUsr> &xbe_usr,
-   vector<XbeJac> &xbe_jac,
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Circuit &cct,
-   SolveBlocks &slv,
-   CctFile &cct_file,
-   Global &global) {
-
-// Note: With DC, xbe's are not allowed; only ebe's need to be considered.
-
-   init_sol_e(xbe_lib,xbe_usr,ebe_lib,ebe_usr,ebe_jac,slv,cct,smat,global);
-
-   smat.mat_dc_1_e(ebe_lib,ebe_usr,global,cct,cct_file);
-
-   assign_const_1<bool>(global.flags,false);
-   global.time_given_e = 0.0;
-
-   if (cct.flag_linear_e) {
-     solve_dc_linear_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,slv,global);
-   } else {
-     solve_dc_nonlinear_e(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,
-       smat,cct,slv,global);
-     if (!slv.flag_nr_converged) {
-       cout << "solve_dc: NR did not converge. Halting..." << endl;
-       slv.write_flags_failed();
-       exit(1);
-     }
-   }
-   cct_to_ebe_nd_all(ebe_lib,ebe_usr,cct);
-   find_ebe_cur_stv_dc(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
-   write_dc_startup(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
-     cct,slv,cct_file,global);
-
-   return;
-} // end of solve_dc
-// -----------------------------------------------------------------------------
-void solve_dc_linear_e(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Circuit &cct,
-   SolveBlocks &slv,
-   Global &global) {
-
-   global.iter_nr = 0;
-
-   form_jac_rhs_dc_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
-
-   negative_double_1(smat.m_e.n_row,smat.rhs_m_e);
-
-   smat.w_e.allocate_1(smat.m_e.n_nz,smat.m_e.n_row,smat.m_e.n_col);
-   smat.mo_e.allocate_1(smat.m_e.n_row);
-
-   solve_jac_1_e(smat,slv,global);
-
-   copy_array_1<double>(smat.m_e.n_row,smat.svec_orig_e,smat.delsvec_e);
-
-   add_arrays_1<double>(smat.m_e.n_row,smat.delsvec_e,smat.svec_e);
-   dcmp_solvec_e(ebe_lib,ebe_usr,smat,slv,cct);
-
-   return;
-} // end of solve_dc_linear_e
-// -----------------------------------------------------------------------------
-void solve_dc_nonlinear_e(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   vector<XbeLib> &xbe_lib,
-   vector<XbeUsr> &xbe_usr,
-   SysMat &smat,
-   Circuit &cct,
-   SolveBlocks &slv,
-   Global &global) {
-
-   int i_newt;
-   bool flag_nan_1;
-
-   check_convergence_count_e(slv);
-   slv.get_dmp(cct);
-
-   smat.w_e.allocate_1(smat.m_e.n_nz,smat.m_e.n_row,smat.m_e.n_col);
-   smat.mo_e.allocate_1(smat.m_e.n_row);
-
-   for (i_newt=0; i_newt < slv.e_nr_itermax_a; i_newt++) {
-     cout << "solve_dc_nonlinear_e: i_newt = " << i_newt << endl;
-     slv.iter_newton = i_newt; global.iter_nr = i_newt;
-     form_jac_rhs_dc_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
-
-     negative_double_1(smat.m_e.n_row,smat.rhs_m_e);
-
-     if (i_newt == 0) {
-       solve_jac_1_e(smat,slv,global);
-     } else {
-       solve_jac_2_e(smat,slv,global);
-     }
-     copy_array_1<double>(smat.m_e.n_row,smat.svec_orig_e,smat.delsvec_e);
-
-     if ((slv.e_nr_flag_dmp_a) && (i_newt <= slv.e_nr_dmp_itermax_a)) {
-       mult_array_1<double>(smat.m_e.n_row,smat.delsvec_e,slv.e_nr_dmp_k_a);
-     }
-     add_arrays_1<double>(smat.m_e.n_row,smat.delsvec_e,smat.svec_e);
-     check_array_for_nan_2(smat.m_e.n_row,smat.svec_e,flag_nan_1);
-     if (flag_nan_1) {
-       cout << "solve_dc_nonlinear_e: svec_e has a NaN" << endl;
-       slv.flag_nr_converged = false;
-       slv.flag_nr_norm_large = true;
-       break;
-     } else {
-       dcmp_solvec_e(ebe_lib,ebe_usr,smat,slv,cct);
-       if (slv.e_nr_flag_check_spice) {
-         find_ebe_cur_stv_dc(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
-       }
-       check_convergence_e(smat,slv,ebe_lib,ebe_usr,cct);
-       if (slv.flag_nr_converged) {
-         break;
-       }
-       if (slv.e_nr_flag_check_spice) {
-         copy_array_1<double>(smat.m_e.n_row,smat.svec_e,smat.svec_old_nr_1_e);
-         copy_cur_nd_nr_1(ebe_lib,ebe_usr,cct);
-       }
-     }
-   }
-   return;
-} // end of solve_dc_nonlinear_e
-// -----------------------------------------------------------------------------
 void solve_startup(
    vector<XbeLib> &xbe_lib,
    vector<XbeUsr> &xbe_usr,
@@ -6270,6 +6139,7 @@ void solve_trns_exc_trbdf2(
        cout << "  itmax_trbdf2=" << slv.itmax_trbdf2 << endl;
        cout << "  n_reject=" << n_reject << endl;
        cout << "  time_given=" << global.time_given_e << endl;
+       cout << "  bank_tolr=" << slv.bank_tolr << endl;
        cout << "  Halting..." << endl; exit(1);
      }
      delt_tmp = slv.delt_e;
@@ -7001,20 +6871,6 @@ void solve_jac(
    return;
 } //end of solve_jac
 // -----------------------------------------------------------------------------
-void form_jac_rhs_dc_e(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Circuit &cct,
-   Global &global) {
-
-   cct_to_ebe_nd_all(ebe_lib,ebe_usr,cct);
-   mat_dc_2_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
-
-   return;
-} // end of form_jac_rhs_dc_e
-// -----------------------------------------------------------------------------
 void form_jac_rhs_startup_e(
    vector<EbeLib> &ebe_lib,
    vector<EbeUsr> &ebe_usr,
@@ -7272,131 +7128,6 @@ void find_ebe_cur_ssw_trns_e(
 
    return;
 } // end of find_ebe_cur_ssw_trns_e
-// -----------------------------------------------------------------------------
-void mat_dc_2_e(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Circuit &cct,
-   Global &global) {
-
-   int i_ebeu,i_ebel;
-
-   global.flags[global.i_dc] = true;
-   global.flags[global.i_function] = true;
-   global.flags[global.i_jacobian] = true;
-
-   ebe_init_func_jac_dc_e(ebe_lib,ebe_usr,cct,smat);
-
-   for (i_ebeu=0; i_ebeu < cct.n_ebeu; i_ebeu++) {
-     i_ebel = ebe_usr[i_ebeu].index_ebel;
-     get_ebe(global,ebe_usr[i_ebeu],ebe_jac[i_ebel]);
-
-     mat_dc_3_e(i_ebeu,i_ebel,ebe_lib,ebe_usr,ebe_jac,smat,global);
-
-   }
-
-   global.flags[global.i_dc] = false;
-   global.flags[global.i_function] = false;
-   global.flags[global.i_jacobian] = false;
-
-   return;
-} // end of mat_dc_2_e
-// -----------------------------------------------------------------------------
-void mat_dc_3_e(
-   const int i_ebeu,
-   const int i_ebel,
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Global &global) {
-
-   int i_f,n_f1,n_nd1,n_fvar1,k,row0;
-   int var_flag,var_number;
-   double val;
-
-   n_f1 = ebe_lib[i_ebel].n_f;
-   n_nd1 = ebe_lib[i_ebel].n_nd;
-
-// KCL equations:
-   for (i_f=0; i_f < n_nd1; i_f++) {
-     n_fvar1 = ebe_lib[i_ebel].n_fvar[i_f];
-     for (int i_fvar=0; i_fvar < n_fvar1; i_fvar++) {
-       k = smat.map_fvar_to_ebe[i_ebeu][i_f][i_fvar];
-       if (k != -1) {
-         var_flag   = ebe_lib[i_ebel].fvar_flag [i_f][i_fvar];
-         var_number = ebe_lib[i_ebel].fvar_index[i_f][i_fvar];
-
-         if (var_flag == global.I_NV) {
-           val = ebe_jac[i_ebel].dfdv[i_f][var_number];
-         } else if (var_flag == global.I_EAUX) {
-           val = ebe_jac[i_ebel].dfdaux[i_f][var_number];
-         } else {
-           cout << "mat_dc_3_e: incorrect value of var_flag in f." << endl;
-           cout << "  i_f = " << i_f << ", i_favr = " << i_fvar << endl;
-           cout << "  ebe_lib is " << ebe_lib[i_ebel].name << ". Halting.." << endl;
-           exit(1);
-         }
-         smat.m_e.val[k] += val;
-       }
-     }
-     row0 = smat.ebe_f_to_row[i_ebeu][i_f];
-     if (row0 != -1) {
-       smat.rhs_m_e[row0] += ebe_usr[i_ebeu].f[i_f];
-     }
-   }
-// non-KCL equations:
-   for (i_f=n_nd1; i_f < n_f1; i_f++) {
-     n_fvar1 = ebe_lib[i_ebel].n_fvar[i_f];
-     for (int i_fvar=0; i_fvar < n_fvar1; i_fvar++) {
-       k = smat.map_fvar_to_ebe[i_ebeu][i_f][i_fvar];
-       if (k != -1) {
-         var_flag   = ebe_lib[i_ebel].fvar_flag [i_f][i_fvar];
-         var_number = ebe_lib[i_ebel].fvar_index[i_f][i_fvar];
-
-         if (var_flag == global.I_NV) {
-           val = ebe_jac[i_ebel].dfdv[i_f][var_number];
-         } else if (var_flag == global.I_EAUX) {
-           val = ebe_jac[i_ebel].dfdaux[i_f][var_number];
-         } else {
-           cout << "mat_dc_3_e: incorrect value of var_flag in f." << endl;
-           cout << "  i_f = " << i_f << ", i_favr = " << i_fvar << endl;
-           cout << "  ebe_lib is " << ebe_lib[i_ebel].name << ". Halting.." << endl;
-           exit(1);
-         }
-         smat.m_e.val[k] += val;
-       }
-     }
-     row0 = smat.ebe_f_to_row[i_ebeu][i_f];
-     smat.rhs_m_e[row0] = ebe_usr[i_ebeu].f[i_f];
-   }
-   return;
-} // end of mat_dc_3_e
-// -----------------------------------------------------------------------------
-void mat_dc_3b_e(
-   const int i_ebeu,
-   const int i_ebel,
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr) {
-
-   int i_f,i_g,n_nd1,n_g1;
-
-   n_nd1 = ebe_lib[i_ebel].n_nd;
-
-// get currents:
-   for (i_f=0; i_f < n_nd1; i_f++) {
-     ebe_usr[i_ebeu].cur_nd[i_f] = ebe_usr[i_ebeu].f[i_f];
-   }
-
-   n_g1 = ebe_lib[i_ebel].n_g;
-   for (i_g=0; i_g < n_g1; i_g++) {
-     ebe_usr[i_ebeu].val_stv[i_g] = ebe_usr[i_ebeu].g[i_g];
-   }
-
-   return;
-} // end of mat_dc_3b_e
 // -----------------------------------------------------------------------------
 void mat_startup_2_e(
    vector<EbeLib> &ebe_lib,
@@ -8803,35 +8534,6 @@ void add_trns_terms_exc_x(
    return;
 } // end of add_trns_terms_exc_x
 // -----------------------------------------------------------------------------
-void find_ebe_cur_stv_dc(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Circuit &cct,
-   Global &global) {
-
-   int i_ebeu,i_ebel;
-
-   global.flags[global.i_dc] = true;
-   global.flags[global.i_function] = true;
-   global.flags[global.i_jacobian] = true;
-
-   ebe_init_func_jac_dc_e(ebe_lib,ebe_usr,cct,smat);
-
-   for (i_ebeu=0; i_ebeu < cct.n_ebeu; i_ebeu++) {
-     i_ebel = ebe_usr[i_ebeu].index_ebel;
-     get_ebe(global,ebe_usr[i_ebeu],ebe_jac[i_ebel]);
-     mat_dc_3b_e(i_ebeu,i_ebel,ebe_lib,ebe_usr);
-   }
-
-   global.flags[global.i_dc] = false;
-   global.flags[global.i_function] = false;
-   global.flags[global.i_jacobian] = false;
-
-   return;
-} // end of find_ebe_cur_stv_dc
-// -----------------------------------------------------------------------------
 void find_ebe_cur_stv_startup(
    vector<EbeLib> &ebe_lib,
    vector<EbeUsr> &ebe_usr,
@@ -8860,49 +8562,6 @@ void find_ebe_cur_stv_startup(
 
    return;
 } // end of find_ebe_cur_stv_startup
-// -----------------------------------------------------------------------------
-void ebe_init_func_jac_dc_e(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   Circuit &cct,
-   SysMat &smat) {
-
-   int i_ebeu,i_ebel,i_f,n_f1,n_nd1,n_fvar1;
-   int k,row0;
-
-   for (i_ebeu=0; i_ebeu < cct.n_ebeu; i_ebeu++) {
-     i_ebel = ebe_usr[i_ebeu].index_ebel;
-
-     n_f1 = ebe_lib[i_ebel].n_f;
-     n_nd1 = ebe_lib[i_ebel].n_nd;
-
-//   KCL equations:
-     for (i_f=0; i_f < n_nd1; i_f++) {
-       n_fvar1 = ebe_lib[i_ebel].n_fvar[i_f];
-       for (int i_fvar=0; i_fvar < n_fvar1; i_fvar++) {
-         k = smat.map_fvar_to_ebe[i_ebeu][i_f][i_fvar];
-         if (k != -1) {
-           smat.m_e.val[k] = 0.0;
-         }
-       }
-       row0 = smat.ebe_f_to_row[i_ebeu][i_f];
-       if (row0 != -1) {
-         smat.rhs_m_e[row0] = 0.0;
-       }
-     }
-//   non-KCL equations:
-     for (i_f=n_nd1; i_f < n_f1; i_f++) {
-       n_fvar1 = ebe_lib[i_ebel].n_fvar[i_f];
-       for (int i_fvar=0; i_fvar < n_fvar1; i_fvar++) {
-         k = smat.map_fvar_to_ebe[i_ebeu][i_f][i_fvar];
-         if (k != -1) {
-           smat.m_e.val[k] = 0.0;
-         }
-       }
-     }
-   }
-   return;
-} // end of ebe_init_func_jac_dc_e
 // -----------------------------------------------------------------------------
 void ebe_init_func_jac_startup_e(
    vector<EbeLib> &ebe_lib,
@@ -9665,7 +9324,6 @@ void solve_ssw_1_e(
      }
      if (!l_write_1) {
        for (int i_statevar=0; i_statevar < smat.n_statevar; i_statevar++) {
-//       solve_linear_ssw in Sequel
          solve_linear_ssw_e(i_statevar,smat,cct,slv,global);
        }
      }
@@ -9907,7 +9565,6 @@ void solve_ssw_1_ex(
      }
      if (!l_write_1) {
        for (int i_statevar=0; i_statevar < smat.n_statevar; i_statevar++) {
-//       solve_linear_ssw in Sequel
          solve_linear_ssw_ex(i_statevar,smat,cct,slv,global);
        }
      }
@@ -10134,7 +9791,6 @@ void solve_ssw_1_x(
      }
      if (!l_write_1) {
        for (int i_statevar=0; i_statevar < smat.n_statevar; i_statevar++) {
-//       solve_linear_ssw in Sequel
          solve_linear_ssw_x(i_statevar,smat,cct,slv,global);
        }
      }
@@ -10207,7 +9863,6 @@ void solve_linear_ssw_e(
 
    assign_all_double_1(smat.rhs_m_ssw,smat.m_ssw.n_row,0.0);
 
-// Sequel: add_ssw_terms(i_statevar,slv,mat);
    add_ssw_terms_e(i_statevar,smat,cct,slv,global);
 
    solve_jac_3_ssw_e(smat,slv,global);
@@ -10233,7 +9888,6 @@ void solve_linear_ssw_ex(
 
    assign_all_double_1(smat.rhs_m_ssw,smat.m_ssw.n_row,0.0);
 
-// Sequel: add_ssw_terms(i_statevar,slv,mat);
    add_ssw_terms_ex(i_statevar,smat,cct,slv,global);
 
    solve_jac_3_ssw_ex(smat,slv,global);
@@ -10259,7 +9913,6 @@ void solve_linear_ssw_x(
 
    assign_all_double_1(smat.rhs_m_ssw,smat.m_ssw.n_row,0.0);
 
-// Sequel: add_ssw_terms(i_statevar,slv,mat);
    add_ssw_terms_x(i_statevar,smat,cct,slv,global);
 
    solve_jac_3_ssw_x(smat,slv,global);
@@ -10267,6 +9920,7 @@ void solve_linear_ssw_x(
    copy_array_1<double>(smat.m_ssw.n_row,smat.svec_orig_x,smat.delsvec_x);
 
    i1 = smat.offs_ssw[i_statevar];
+
    copy_array_1<double>(smat.m_ssw.n_row,smat.delsvec_x,&(smat.svec_ssw_1[i1]));
 
    return;
@@ -10421,7 +10075,6 @@ void find_functions_ssw_trns_e(
    CctFile &cct_file,
    Global &global) {
 
-// find_functions_ssw_trns in Sequel
 // todo remove unused arguments in the call
 
    int i_ebeu,i_ebel;
@@ -10527,9 +10180,6 @@ void find_ssw_trz_1_e(
    CctFile &cct_file,
    Global &global) {
 
-// find_ssw_trz_1 in Sequel
-// todo remove unused arguments in the call
-
    int i_ebeu,i_ebel;
 
    for (int i=0; i < smat.n_statevar; i++) {
@@ -10570,9 +10220,6 @@ void find_ssw_trz_1_ex(
    SolveBlocks &slv,
    CctFile &cct_file,
    Global &global) {
-
-// find_ssw_trz_1 in Sequel
-// todo remove unused arguments in the call
 
    int i_ebeu,i_ebel;
    int i_xbeu,i_xbel;
@@ -10668,7 +10315,6 @@ void mat_ssw_3_e(
    CctFile &cct_file,
    Global &global) {
 
-// ebce_mat_3_ssw in Sequel
 // todo remove unused arguments in the call
 
    int i_f,i_stv_l,i_stv_u,k;
@@ -11008,15 +10654,19 @@ void mat_ssw_3_ex_x(
 
        if (var_flag_g == global.I_XVR) {
          val = xbe_jac[i_xbel].dgdvr[i_g][var_number_g];
+
+         col_given = smat.offs[global.I_XVR] + xbe_usr[i_xbeu].vr[var_number_g];
        } else if (var_flag_g == global.I_XAUX) {
          val = xbe_jac[i_xbel].dgdaux[i_g][var_number_g];
+
+         col_given = smat.offs[global.I_XAUX] + xbe_usr[i_xbeu].aux[var_number_g];
        } else {
          cout << "mat_ssw_3_ex_x: incorrect value of var_flag." << endl;
          cout << "  i_g = " << i_g << ", i_gavr = " << i_gvar << endl;
          cout << "  xbe_lib is " << xbe_lib[i_xbel].name << ". Halting.." << endl;
          exit(1);
        }
-       col_given = smat.offs[var_flag_g] + var_number_g;
+
        for (int j_statevar=0; j_statevar < smat.n_statevar; j_statevar++) {
          offs_ssw_1 = smat.offs_ssw[j_statevar];
          smat.ssw_trz_1[i_statevar][j_statevar] +=
@@ -11080,6 +10730,7 @@ void mat_ssw_trns_3_e(
          } else if (slv.e_algo_trz0) {
            f_1 = smat.svec_old_1_e[i_sysvar_ndcur] - ebe_usr[i_ebeu].f_old_1[i_f];
            smat.rhs_m_ssw[row0+r0] += (-(slv.trz_1_e*(x_0-x_1) - f_1));
+
          }
        }
        n_fvar1 = ebe_lib[i_ebel].n_fvar[i_f];
@@ -11465,7 +11116,6 @@ void solve_ssw_trns_linear_e(
    form_jac_rhs_ssw_trns_e(ebe_lib,ebe_usr,ebe_jac,
      smat,cct,slv,cct_file,global);
 
-// add_ssw_trns_terms in Sequel
    add_ssw_trns_terms_e(ebe_lib,ebe_usr,ebe_jac,
      smat,cct,slv,cct_file,global);
 
@@ -11504,7 +11154,6 @@ void solve_ssw_trns_linear_ex(
    form_jac_rhs_ssw_trns_ex(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
      smat,cct,slv,cct_file,global);
 
-// add_ssw_trns_terms in Sequel
    add_ssw_trns_terms_ex(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
      smat,cct,slv,cct_file,global);
 
@@ -11543,7 +11192,6 @@ void solve_ssw_trns_linear_x(
    form_jac_rhs_ssw_trns_x(xbe_lib,xbe_usr,xbe_jac,
      smat,cct,slv,cct_file,global);
 
-// add_ssw_trns_terms in Sequel
    add_ssw_trns_terms_x(xbe_lib,xbe_usr,xbe_jac,
      smat,cct,slv,cct_file,global);
 
@@ -11590,7 +11238,6 @@ void solve_ssw_trns_newton_e(
      form_jac_rhs_ssw_trns_e(ebe_lib,ebe_usr,ebe_jac,
        smat,cct,slv,cct_file,global);
 
-//   add_ssw_trns_terms in Sequel
      add_ssw_trns_terms_e(ebe_lib,ebe_usr,ebe_jac,
        smat,cct,slv,cct_file,global);
 
@@ -11668,7 +11315,6 @@ void solve_ssw_trns_newton_ex(
      form_jac_rhs_ssw_trns_ex(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
        smat,cct,slv,cct_file,global);
 
-//   add_ssw_trns_terms in Sequel
      add_ssw_trns_terms_ex(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
        smat,cct,slv,cct_file,global);
 
@@ -11739,13 +11385,12 @@ void solve_ssw_trns_newton_x(
 
    slv.get_dmp(cct);
 
-   for (i_newt=0; i_newt < slv.ex_nr_itermax_a; i_newt++) {
+   for (i_newt=0; i_newt < slv.x_nr_itermax_a; i_newt++) {
      slv.iter_newton = i_newt; global.iter_nr = i_newt;
 
      form_jac_rhs_ssw_trns_x(xbe_lib,xbe_usr,xbe_jac,
        smat,cct,slv,cct_file,global);
 
-//   add_ssw_trns_terms in Sequel
      add_ssw_trns_terms_x(xbe_lib,xbe_usr,xbe_jac,
        smat,cct,slv,cct_file,global);
 
@@ -12620,6 +12265,7 @@ void trzbdf2_1_e(
    }
    for (i_rhs=0; i_rhs < smat.m_e.n_row; i_rhs++) {
      if (smat.ebe_rhs_ddt_flag[i_rhs]) {
+       i_ebeu = smat.ebe_rhs_ddt_i_ebeu[i_rhs];
        i_f = smat.ebe_rhs_ddt_i_f[i_rhs];
 
        f_0 = ebe_usr[i_ebeu].f      [i_f];
@@ -12739,6 +12385,7 @@ void trzbdf2_1_ex(
    for (i_rhs=0; i_rhs < smat.m_e.n_row; i_rhs++) {
      if (smat.ebe_rhs_ddt_flag[i_rhs]) {
        i_f = smat.ebe_rhs_ddt_i_f[i_rhs];
+       i_ebeu = smat.ebe_rhs_ddt_i_ebeu[i_rhs];
 
        f_0 = ebe_usr[i_ebeu].f      [i_f];
        f_1 = ebe_usr[i_ebeu].f_old_1[i_f];

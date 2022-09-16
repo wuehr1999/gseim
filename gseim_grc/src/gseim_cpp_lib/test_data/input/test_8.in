@@ -1,0 +1,119 @@
+title: half-wave rectifier
+begin_circuit
+   eelement type=vsrc_ac p=b n=a a=10 f_hz=50
+   eelement type=diode_r p=b n=c r_off=10M r_on=1m
+   eelement type=c p=c n=a c=1m v0=5
+   eelement type=r name=R p=c n=a r=200
+   ref_node=a
+   outvar: v_in=nodev_of_b
+   outvar: v_out=nodev_of_c
+   outvar: IR=i_of_R
+end_circuit
+
+begin_solve
+   solve_type=startup
+   initial_sol=initialize
+
+   method: e_nr_check_spice=yes
+
+#  begin_output
+#    filename=test_8.dat
+#    variables: v_in v_out IR
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol=initialize
+
+   method: algorithm_e=trz
+
+   method: e_nr_check_delx_all=no
+   method: e_nr_check_spice=yes
+   method: t_start=0
+   method: t_end=40m
+   method: tstep0_e=0.5m
+
+#  begin_output
+#    filename=test_8.dat
+#    variables: v_in v_out
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol=initialize
+
+   method: algorithm_e=backward_euler_auto
+
+   method: e_nr_check_delx_all=no
+   method: e_nr_check_spice=yes
+   method: t_start=0
+   method: t_end=40m
+   method: tstep0_e=0.1m
+   method: delt_max_e=1m
+
+#  begin_output
+#    filename=test_8.dat
+#    variables: v_in v_out
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol=initialize
+
+   method: algorithm_e=trz_auto
+
+   method: e_nr_check_delx_all=no
+   method: e_nr_check_spice=yes
+   method: t_start=0
+   method: t_end=40m
+   method: tstep0_e=0.1m
+   method: delt_max_e=1m
+
+#  begin_output
+#    filename=test_8.dat
+#    variables: v_in v_out
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol=initialize
+
+   method: algorithm_e=trbdf2
+
+   method: e_nr_check_delx_all=no
+   method: e_nr_check_spice=yes
+   method: t_start=0
+   method: t_end=40m
+   method: tstep0_e=0.1m
+   method: delt_max_e=1m
+
+#  begin_output
+#    filename=test_8.dat
+#    variables: v_in v_out
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol=initialize
+
+   method: algorithm_e=backward_euler
+
+   method: e_nr_check_delx_all=no
+   method: e_nr_check_spice=yes
+   method: t_start=0
+   method: t_end=40m
+   method: tstep0_e=0.5m
+
+   begin_output
+     filename=test_8.dat
+#    variables: v_in v_out
+     variables: v_out
+   end_output
+end_solve
+
+end_cf

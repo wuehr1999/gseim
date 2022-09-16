@@ -1,8 +1,10 @@
-title: RC example with startup
+title: RC example with startup, using vsrc_x
 # used for coverage report
 
 begin_circuit
-   eelement name=v1 type=vsrc_dc p=b n=a vdc=10
+#  eelement name=v1 type=vsrc_dc p=b n=a vdc=10
+   xelement type=const y=y k=10
+   eelement name=v1 type=vsrc_x  p=b n=a x_in=y
    eelement name=r1 type=r p=b n=c r=1k
    eelement name=c1 type=c p=c n=a c=1u v0=5
 
@@ -26,12 +28,12 @@ end_solve
 begin_solve
    solve_type=trns
    initial_sol=previous
-   method: algorithm_e=backward_euler
+   method: algorithm_ex=backward_euler
    method: t_start=0
    method: t_end=5m
-   method: tstep0_e=0.1m
+   method: tstep0_ex=0.1m
 #  begin_output
-#     filename=test_4.dat
+#     filename=test_14.dat
 #     variables: vc vd
 #  end_output
 end_solve
@@ -44,12 +46,12 @@ end_solve
 begin_solve
    solve_type=trns
    initial_sol=previous
-   method: algorithm_e=trbdf2
+   method: algorithm_ex=trbdf2
    method: t_start=0
    method: t_end=5m
-   method: tstep0_e=0.1m
+   method: tstep0_ex=0.1m
 #  begin_output
-#     filename=test_4.dat
+#     filename=test_14.dat
 #     variables: vc vd
 #  end_output
 end_solve
@@ -62,12 +64,12 @@ end_solve
 begin_solve
    solve_type=trns
    initial_sol=previous
-   method: algorithm_e=trz
+   method: algorithm_ex=trz
    method: t_start=0
    method: t_end=5m
-   method: tstep0_e=0.1m
+   method: tstep0_ex=0.1m
    begin_output
-      filename=test_4.dat
+      filename=test_14.dat
 #     variables: vc vd
       variables: vd
    end_output

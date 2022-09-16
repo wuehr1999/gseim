@@ -164,13 +164,6 @@ int solve(int argc, char** argv) {
        smat.ssw_allocate_2(ebe_lib,xbe_lib,ebe_usr,xbe_usr,cct);
      }
 
-     if (slv.flag_dc) {
-//     Note: solve_dc is allowed for circuits with ebe's only, but we
-//       have checked that separately. No need to check here.
-       cout << "main: calling solve_dc" << endl;
-       solve_dc(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,
-         smat,cct,slv,cct_file,global);
-     }
      if (slv.flag_startup) {
        cout << "main: calling solve_startup" << endl;
        solve_startup(xbe_lib,xbe_usr,xbe_jac,ebe_lib,ebe_usr,ebe_jac,

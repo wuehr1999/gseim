@@ -371,36 +371,6 @@ void update_heun_al(
    Circuit &cct,
    SolveBlocks &slv,
    Global &global);
-void solve_dc(
-   vector<XbeLib> &xbe_lib,
-   vector<XbeUsr> &xbe_usr,
-   vector<XbeJac> &xbe_jac,
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Circuit &cct,
-   SolveBlocks &slv,
-   CctFile &cct_file,
-   Global &global);
-void solve_dc_linear_e(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Circuit &cct,
-   SolveBlocks &slv,
-   Global &global);
-void solve_dc_nonlinear_e(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   vector<XbeLib> &xbe_lib,
-   vector<XbeUsr> &xbe_usr,
-   SysMat &smat,
-   Circuit &cct,
-   SolveBlocks &slv,
-   Global &global);
 void solve_startup(
    vector<XbeLib> &xbe_lib,
    vector<XbeUsr> &xbe_usr,
@@ -900,13 +870,6 @@ void solve_jac(
    double *svec,
    double *svec_orig,
    Global &global);
-void form_jac_rhs_dc_e(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Circuit &cct,
-   Global &global);
 void form_jac_rhs_startup_e(
    vector<EbeLib> &ebe_lib,
    vector<EbeUsr> &ebe_usr,
@@ -1017,26 +980,6 @@ void find_ebe_cur_ssw_trns_e(
    Circuit &cct,
    SolveBlocks &slv,
    Global &global);
-void mat_dc_2_e(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Circuit &cct,
-   Global &global);
-void mat_dc_3_e(
-   const int i_ebeu,
-   const int i_ebel,
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Global &global);
-void mat_dc_3b_e(
-   const int i_ebeu,
-   const int i_ebel,
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr);
 void mat_startup_2_e(
    vector<EbeLib> &ebe_lib,
    vector<EbeUsr> &ebe_usr,
@@ -1227,13 +1170,6 @@ void add_trns_terms_exc_x(
    vector<XbeUsr> &xbe_usr,
    SysMat &smat,
    SolveBlocks &slv);
-void find_ebe_cur_stv_dc(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   vector<EbeJac> &ebe_jac,
-   SysMat &smat,
-   Circuit &cct,
-   Global &global);
 void find_ebe_cur_stv_startup(
    vector<EbeLib> &ebe_lib,
    vector<EbeUsr> &ebe_usr,
@@ -1241,11 +1177,6 @@ void find_ebe_cur_stv_startup(
    SysMat &smat,
    Circuit &cct,
    Global &global);
-void ebe_init_func_jac_dc_e(
-   vector<EbeLib> &ebe_lib,
-   vector<EbeUsr> &ebe_usr,
-   Circuit &cct,
-   SysMat &smat);
 void ebe_init_func_jac_startup_e(
    vector<EbeLib> &ebe_lib,
    vector<EbeUsr> &ebe_usr,

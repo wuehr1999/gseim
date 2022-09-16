@@ -1,0 +1,50 @@
+title: RC example with SSW
+# used for coverage report
+
+begin_circuit
+   eelement name=v1 type=vsrc_ac p=b n=a a=10 f_hz=1k
+   eelement name=r1 type=r p=b n=c r=1k
+   eelement name=c1 type=c p=c n=a c=1u v0=5
+
+   eelement name=r2 type=r p=c n=d r=1k
+   eelement name=c2 type=c p=d n=a c=1u v0=2
+
+   ref_node=a
+   outvar:
++    vb=nodev_of_b
++    vc=nodev_of_c
++    vd=nodev_of_d
++    i_r1=i_of_r1
++    i_r2=i_of_r2
+
+   output ssw_mat
+end_circuit
+
+begin_solve
+   solve_type=ssw
+   initial_sol=initialize
+   method: algorithm_e=trz
+   method: t_start=0
+   method: ssw_frequency=1k
+   method: tstep0_e=0.05m
+#  begin_output
+#     filename=test_11.dat
+#     variables: vc vd
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=ssw
+   initial_sol=initialize
+   method: algorithm_e=backward_euler
+   method: t_start=0
+   method: ssw_frequency=1k
+   method: tstep0_e=0.05m
+   begin_output
+      filename=test_11.dat
+#     variables: vc vd
+      variables: vd
+   end_output
+end_solve
+
+end_cf

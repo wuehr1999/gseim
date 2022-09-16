@@ -53,6 +53,42 @@ def test_test_4():
 def test_test_5():
     _test_solver('test_5.in')
 
+def test_test_6():
+    _test_solver('test_6.in')
+
+def test_test_7():
+    _test_solver('test_7.in')
+
+def test_test_8():
+    _test_solver('test_8.in')
+
+def test_test_9():
+    _test_solver('test_9.in')
+
+def test_test_10():
+    _test_solver('test_10.in')
+
+def test_test_11():
+    _test_solver('test_11.in')
+
+def test_test_12():
+    _test_solver('test_12.in')
+
+def test_test_13():
+    _test_solver('test_13.in')
+
+def test_test_14():
+    _test_solver('test_14.in')
+
+def test_test_15():
+    _test_solver('test_15.in')
+
+def test_test_16():
+    _test_solver('test_16.in')
+
+def test_test_17():
+    _test_solver('test_17.in')
+
 if __name__ == '__main__':
     sys.exit(pytest.main(sys.argv))
 

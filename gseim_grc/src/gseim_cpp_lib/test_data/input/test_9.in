@@ -1,0 +1,52 @@
+title: diode rectifier with RL
+begin_circuit
+   eelement type=vsrc_ac p=a n=0 a=325.27 f_hz=50 phi_deg=90
+#  choose r_on, r_off values to avoid ringing due to trz algorithim
+   eelement type=diode_r p=a n=b r_on=10m r_off=100
+   eelement type=l p=c n=0 l=6.5m
+   eelement type=r name=R p=b n=c r=0.5
+   ref_node=0
+   outvar: v_in=nodev_of_a
+   outvar: v_out=nodev_of_b
+   outvar: il=i_of_R
+end_circuit
+
+begin_solve
+   solve_type=ssw
+   initial_sol=initialize
+   method: algorithm_e=trz
+
+   method: e_nr_check_delx_all=no
+   method: e_nr_check_spice=yes
+   method: ssw_period=20m
+   method: ssw_period_mult=1
+   method: t_start=0
+   method: tstep0_e=0.1m
+   method: ssw_nr_itermax=5
+
+#  begin_output
+#    filename=test_9.dat
+#    variables: v_in v_out il
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=ssw
+   initial_sol=initialize
+   method: algorithm_e=backward_euler
+
+   method: e_nr_check_delx_all=no
+   method: e_nr_check_spice=yes
+   method: ssw_period=20m
+   method: ssw_period_mult=1
+   method: t_start=0
+   method: tstep0_e=0.1m
+   method: ssw_nr_itermax=5
+
+   begin_output
+     filename=test_9.dat
+#    variables: v_in v_out il
+     variables: il
+   end_output
+end_solve
+end_cf

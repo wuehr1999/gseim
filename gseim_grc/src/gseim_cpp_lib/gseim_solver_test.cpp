@@ -60,6 +60,18 @@ int main() {
     test_solver("test_3.in");
     test_solver("test_4.in");
     test_solver("test_5.in");
+    test_solver("test_6.in");
+    test_solver("test_7.in");
+    test_solver("test_8.in");
+    test_solver("test_9.in");
+    test_solver("test_10.in");
+    test_solver("test_11.in");
+    test_solver("test_12.in");
+    test_solver("test_13.in");
+    test_solver("test_14.in");
+    test_solver("test_15.in");
+    test_solver("test_16.in");
+    test_solver("test_17.in");
 
     return 0;
 }

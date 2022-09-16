@@ -1,0 +1,68 @@
+title: SSW for circuit with only xbe elements
+# used for coverage report
+
+begin_circuit
+  xelement type=src_ac y=vs a=10 f_hz=1k
+  xelement type=diff x1=vs x2=vo y=v1
+  xelement type=multscl x=v1 y=v2
++   k=1e3
+#   k=1e2
+  xelement type=integrator x=v2 y=vo
++   k=1.0
+
+  outvar: vs=xvar_of_vs
+  outvar: vo=xvar_of_vo
+  outvar: v1=xvar_of_v1
+  outvar: v2=xvar_of_v2
+end_circuit
+
+begin_solve
+  solve_type=trns
+  initial_sol=initialize
+
+# method: algorithm_x_trns=backward_euler
+  method: algorithm_x_trns=trz
+
+  method: t_start=0
+  method: t_end=6m
+  method: tstep0_x=0.05m
+# begin_output
+#   filename=test_12.dat
+#   variables: vs vo
+# end_output
+end_solve
+
+begin_solve
+  solve_type=ssw
+  initial_sol=initialize
+
+  method: algorithm_x_trns=trz
+
+  method: ssw_nr_itermax=20
+  method: t_start=0
+  method: ssw_frequency=1k
+  method: ssw_period_mult=1
+  method: tstep0_x=0.05m
+# begin_output
+#   filename=test_12.dat
+#   variables: vs vo
+# end_output
+end_solve
+
+begin_solve
+  solve_type=ssw
+  initial_sol=initialize
+
+  method: algorithm_x_trns=backward_euler
+
+  method: t_start=0
+  method: ssw_frequency=1k
+  method: tstep0_x=0.02m
+  begin_output
+    filename=test_12.dat
+#   variables: vs vo
+    variables: vo
+  end_output
+end_solve
+
+end_cf

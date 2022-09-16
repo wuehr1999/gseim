@@ -1,0 +1,83 @@
+title: testing of algebraic loop
+# testing for coverage report
+
+begin_circuit
+   xelement type=const y=x1 k=5
+   xelement type=integrator name=int1
++   x=x1 y=x2 k=1 y_st=2
+   xelement type=sum_2 name=sum1 x1=x2 x2=x4 y=x3
+   xelement type=multscl x=x3 y=x4 k=0.6667
+
+   outvar:
++    x2=x1_of_sum1
++    x4=x2_of_sum1
++    x3=y_of_sum1
+end_circuit
+
+begin_solve
+   solve_type=trns
+   initial_sol initialize
+   method: t_start=0 t_end=3 tstep0_x=1.0
+   method: algorithm_x_trns=forward_euler
+#  begin_output
+#     filename=test_6.dat
+#     variables: x2 x3
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol initialize
+   method: t_start=0 t_end=3 tstep0_x=1.0
+   method: algorithm_x_trns=RK4
+#  begin_output
+#     filename=test_6.dat
+#     variables: x2 x3
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol initialize
+   method: t_start=0 t_end=3 tstep0_x=1.0
+   method: algorithm_x_trns=RKF45
+#  begin_output
+#     filename=test_6.dat
+#     variables: x2 x3
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol initialize
+   method: t_start=0 t_end=3 tstep0_x=1.0
+   method: algorithm_x_trns=BS23
+#  begin_output
+#     filename=test_6.dat
+#     variables: x2 x3
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol initialize
+   method: t_start=0 t_end=3 tstep0_x=1.0
+   method: algorithm_x_trns=modified_euler
+#  begin_output
+#     filename=test_6.dat
+#     variables: x2 x3
+#  end_output
+end_solve
+
+begin_solve
+   solve_type=trns
+   initial_sol initialize
+   method: t_start=0 t_end=3 tstep0_x=1.0
+   method: algorithm_x_trns=Heun
+   begin_output
+      filename=test_6.dat
+      variables: x2 x3
+   end_output
+end_solve
+
+end_cf
