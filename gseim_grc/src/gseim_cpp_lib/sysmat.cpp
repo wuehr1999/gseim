@@ -886,8 +886,12 @@ void SysMat::mat_trns_1_x0(
      n_col1 = n_solvec_ex;
    } else {
      n_col1 = n_solvec_x;
+     if (n_row1 != n_col1) {
+       cout << "SysMat::mat_trns_1_x0: n_row1 = " << n_row1
+         << " n_col1 = " << n_col1 << " are not equal. Halting..." << endl;
+       exit(1);
+     }
    }
-
    cout << "SysMat::mat_trns_1_x0: n_row1 = " << n_row1
      << " n_col1 = " << n_col1 << endl;
 
@@ -1713,7 +1717,6 @@ void SysMat::mat_ssw_1_x(
 
    for (i_xbeu=0; i_xbeu < cct.n_xbeu; i_xbeu++) {
      i_xbel = xbe_usr[i_xbeu].index_xbel;
-     cout << "mat_ssw_1_x: xbe name: " << xbe_lib[i_xbel].name << endl;
      n_f1 = xbe_lib[i_xbel].n_f;
      for (i_f=0; i_f < n_f1; i_f++) {
        ssw_flag1[n_statevar] = xbe_lib[i_xbel].ddt_varflag[i_f];

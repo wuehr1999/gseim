@@ -19,11 +19,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import sys
 import os
 
+def list_to_string_1(l, s_prefix, s_connecting):
+#   prepare a string from a list (typically a list of integers)
+    s1 = s_prefix
+    for k in l:
+        s1 += s_connecting + str(k)
+    s1 += s_connecting
+    return s1
+
 def list_unique_elements(l):
 #   remove repeating elements from a list
 #   Can use set instead, but iterating over a set does not
 #   seem to follow the same order from run to run.
-    l_new = [] 
+    l_new = []
     for k in l:
         if k not in l_new: l_new.append(k)
     return l_new

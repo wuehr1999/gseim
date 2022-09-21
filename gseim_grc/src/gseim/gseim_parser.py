@@ -31,6 +31,8 @@ from gseim import parse_filters
 
 flag_read_yml_once = True
 d_yml = {}
+s_prefix = 'S'
+s_connecting = '_'
 
 def lookup_subckt(subckt_name):
     dir_sub_user = os.environ.get('HIER_BLOCK_USER_DIR', None)
@@ -483,8 +485,11 @@ class cct:
             self.pos = []
             self.pos.append(0)
             self.pos.append(0)
+            self.pos_1 = []
+            self.pos_1.append(0)
         else:
             self.pos = []
+            self.pos_1 = []
         self.parent = None
         self.lib_map = -1
 
@@ -516,6 +521,9 @@ class cct:
 
         c.pos.append(self.pos[0] + 1)
         c.pos.append(len(self.children))
+
+        c.pos_1 = self.pos_1
+        c.pos_1 = c.pos_1 + [len(self.children)]
 
         self.children.append(c)
 
@@ -621,7 +629,7 @@ def make_lib(input_entity, l_lib, dir_block):
 def make_dict_1(input_entity, d1):
     if input_entity.flag_subckt:
         n_next = max(y for (x,y) in d1.items()) + 1
-        d1[input_entity.name] = n_next
+        d1[gu.list_to_string_1(input_entity.pos_1, s_prefix, s_connecting) + input_entity.name] = n_next
         for j in input_entity.children:
             make_dict_1(j, d1)
     else:
@@ -714,7 +722,7 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 if node0 in wire:
                     flag_found = True
                     node_name = 'n' \
-                      + str(d_names[i.parent.name]) \
+                      + str(d_names[gu.list_to_string_1(i.parent.pos_1, s_prefix, s_connecting) + i.parent.name]) \
                       + '_' + str(i_wire)
                     i.l_in_names.append(node_name)
             if not flag_found:
@@ -728,7 +736,7 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 if node0 in wire:
                     flag_found = True
                     node_name = 'n' \
-                      + str(d_names[i.parent.name]) \
+                      + str(d_names[gu.list_to_string_1(i.parent.pos_1, s_prefix, s_connecting) + i.parent.name]) \
                       + '_' + str(i_wire)
                     i.l_out_names.append(node_name)
             if not flag_found:
@@ -743,7 +751,7 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 if node0 in wire:
                     flag_found = True
                     node_name = 'n' \
-                      + str(d_names[i.parent.name]) \
+                      + str(d_names[gu.list_to_string_1(i.parent.pos_1, s_prefix, s_connecting) + i.parent.name]) \
                       + '_' + str(i_wire)
                     i.l_e_left_names.append(node_name)
             if not flag_found:
@@ -758,7 +766,7 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 if node0 in wire:
                     flag_found = True
                     node_name = 'n' \
-                      + str(d_names[i.parent.name]) \
+                      + str(d_names[gu.list_to_string_1(i.parent.pos_1, s_prefix, s_connecting) + i.parent.name]) \
                       + '_' + str(i_wire)
                     i.l_e_right_names.append(node_name)
             if not flag_found:
@@ -773,7 +781,7 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 if node0 in wire:
                     flag_found = True
                     node_name = 'n' \
-                      + str(d_names[i.parent.name]) \
+                      + str(d_names[gu.list_to_string_1(i.parent.pos_1, s_prefix, s_connecting) + i.parent.name]) \
                       + '_' + str(i_wire)
                     i.l_e_top_names.append(node_name)
             if not flag_found:
@@ -788,7 +796,7 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 if node0 in wire:
                     flag_found = True
                     node_name = 'n' \
-                      + str(d_names[i.parent.name]) \
+                      + str(d_names[gu.list_to_string_1(i.parent.pos_1, s_prefix, s_connecting) + i.parent.name]) \
                       + '_' + str(i_wire)
                     i.l_e_bottom_names.append(node_name)
             if not flag_found:
@@ -803,7 +811,7 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 if node0 in wire:
                     flag_found = True
                     node_name = 'n' \
-                      + str(d_names[i.parent.name]) \
+                      + str(d_names[gu.list_to_string_1(i.parent.pos_1, s_prefix, s_connecting) + i.parent.name]) \
                       + '_' + str(i_wire)
                     i.l_b_left_names.append(node_name)
             if not flag_found:
@@ -818,7 +826,7 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 if node0 in wire:
                     flag_found = True
                     node_name = 'n' \
-                      + str(d_names[i.parent.name]) \
+                      + str(d_names[gu.list_to_string_1(i.parent.pos_1, s_prefix, s_connecting) + i.parent.name]) \
                       + '_' + str(i_wire)
                     i.l_b_right_names.append(node_name)
             if not flag_found:
@@ -833,7 +841,7 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 if node0 in wire:
                     flag_found = True
                     node_name = 'n' \
-                      + str(d_names[i.parent.name]) \
+                      + str(d_names[gu.list_to_string_1(i.parent.pos_1, s_prefix, s_connecting) + i.parent.name]) \
                       + '_' + str(i_wire)
                     i.l_b_top_names.append(node_name)
             if not flag_found:
@@ -848,7 +856,7 @@ def assign_node_names(input_entity, l_lib, cct_file,
                 if node0 in wire:
                     flag_found = True
                     node_name = 'n' \
-                      + str(d_names[i.parent.name]) \
+                      + str(d_names[gu.list_to_string_1(i.parent.pos_1, s_prefix, s_connecting) + i.parent.name]) \
                       + '_' + str(i_wire)
                     i.l_b_bottom_names.append(node_name)
             if not flag_found:
@@ -1392,7 +1400,7 @@ def main(gseim_file, cct_file):
 
 # prepare dict (to be used in circuit node names):
     d_names = {}
-    d_names[cct1.name] = 0
+    d_names[gu.list_to_string_1(cct1.pos_1, s_prefix, s_connecting) + cct1.name] = 0
     for i in cct1.children:
         make_dict_1(i, d_names)
 

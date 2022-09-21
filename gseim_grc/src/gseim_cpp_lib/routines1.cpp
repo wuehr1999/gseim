@@ -2901,7 +2901,6 @@ void solve_startup_nonlinear_e(
    smat.mo_e.allocate_1(smat.m_e.n_row);
 
    for (i_newt=0; i_newt < slv.e_nr_itermax_a; i_newt++) {
-     cout << "solve_startup_nonlinear_e: i_newt = " << i_newt << endl;
      slv.iter_newton = i_newt; global.iter_nr = i_newt;
      form_jac_rhs_startup_e(ebe_lib,ebe_usr,ebe_jac,smat,cct,global);
 
@@ -3079,7 +3078,6 @@ void solve_startup_nonlinear_x(
    smat.mo_x.allocate_1(smat.m_x.n_row);
 
    for (i_newt=0; i_newt < slv.x_nr_itermax_a; i_newt++) {
-     cout << "solve_startup_nonlinear_x: i_newt = " << i_newt << endl;
      slv.iter_newton = i_newt; global.iter_nr = i_newt;
      form_jac_rhs_startup_x(xbe_lib,xbe_usr,xbe_jac,smat,cct,global);
 
@@ -3212,7 +3210,6 @@ void solve_startup_nonlinear_exc(
    smat.mo_ex.allocate_1(smat.m_ex.n_row);
 
    for (i_newt=0; i_newt < slv.ex_nr_itermax_a; i_newt++) {
-     cout << "solve_startup_nonlinear_exc: i_newt = " << i_newt << endl;
      slv.iter_newton = i_newt; global.iter_nr = i_newt;
      form_jac_rhs_startup_exc(ebe_lib,ebe_usr,ebe_jac,xbe_lib,xbe_usr,xbe_jac,
        smat,cct,global);
