@@ -78,7 +78,7 @@ TOKEN_TYPES = [
     (TokenKind.KeywordForceWrite, re.compile(r"force_write"), True),
     (TokenKind.Equals, re.compile(r"="), True),
     (TokenKind.Ident, re.compile(r"[A-Za-z][A-Za-z0-9_.$#]*"), True),
-    (TokenKind.Number, re.compile(r"-?\d[\d.e+-]*[umMpk]?"), True),
+    (TokenKind.Number, re.compile(r"-?\d[\d.e+-]*[umnMpk]?"), True),
     (TokenKind.Plus, re.compile(r"\+"), True),
     (TokenKind.Newline, re.compile(r"[\n\r]+"), True),
     # The whitespace token explicitly avoids capturing newlines. This is
